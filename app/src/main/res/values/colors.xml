@@ -3,4 +3,42 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="red">#ffff0000</color>
+    <color name="common_background_gray">#f5f5f5</color>
+    <color name="common_black">#333333</color>
+    <color name="common_white">#ffffff</color>
+    <color name="common_blue">#3389ff</color>
+    <color name="common_gold">#fc8e22</color>
+    <color name="common_gray">#a3a3a3</color>
+    <color name="common_green">#00c5b7</color>
+    <color name="common_hint">#b9b9b9</color>
+    <color name="common_divider_gray">#d3d3d3</color>
+    <color name="common_divider_light_gray">#dfeaf7</color>
+    <color name="white_gray">#bcd6ff</color>
+    <color name="black">#000000</color>
+    <color name="light_black">#555555</color>
+    <color name="transparent">#00000000</color>
+    <color name="deal_tab_gray">#5f6379</color>
+
+    <color name="bg_color">#edf1f6</color>
+
+    <color name="possible_result_points">#c0ffff00</color>
+
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="result_view">#B0000000</color>
+    <color name="viewfinder_frame">#90FFFFFF</color>
+    <color name="result_point_color">#C0FFFF00</color>
+    <color name="laser_color">#0F0</color>
+    <color name="corner_color">#00FF00</color>
+    <color name="yellow_text">#FEB748</color>
+    <color name="ls_bg_gray">#fafafa</color>
+    <color name="blue">#1AA3FF</color>
+    <color name="add_grey">#f0f0f0</color>
+    <color name="unread_bg_color">#f88f3c</color>
+
+
+    <color name="search_bg">#F5F5F5</color>
+    <color name="c_666666">#666666</color>
+    <color name="main_gray_bg">#f9f9f9</color>
 </resources>

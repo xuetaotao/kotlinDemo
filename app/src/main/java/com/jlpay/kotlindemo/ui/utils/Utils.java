@@ -8,6 +8,7 @@ import android.view.View;
 public class Utils {
 
     /**
+     * 自定义View绘制的时候参数都是px
      * dp转换为px
      */
     public static float dp2px(float value, View view) {

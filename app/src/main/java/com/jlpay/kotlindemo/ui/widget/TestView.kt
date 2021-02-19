@@ -2,7 +2,6 @@ package com.jlpay.kotlindemo.ui.widget
 
 import android.content.Context
 import android.graphics.*
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import com.jlpay.kotlindemo.ui.utils.px
@@ -10,9 +9,22 @@ import com.jlpay.kotlindemo.ui.utils.px
 //draw的时候单位必须是px
 val RADIUS = 200f.px
 
-class TestView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+    View(context, attrs, defStyleAttr) {
 
-    private val paint: Paint = Paint()
+    constructor(context: Context) : this(context, null) {
+
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
+
+    }
+
+    private val paint: Paint = Paint().apply {
+        strokeWidth = 10f
+        color = Color.BLUE
+        style = Paint.Style.FILL
+    }
 
     //    private val paint2: Paint = Paint(Paint.ANTI_ALIAS_FLAG)//开启抗锯齿
     private val path: Path = Path()
@@ -37,10 +49,10 @@ class TestView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        path.reset()
+//        path.reset()
 //        Path.Direction.CW：clockwise，顺时针
 //        Path.Direction.CCW：counter-clockwise，逆时针
-        path.addCircle(width / 2f, height / 2f, 180f.px, Path.Direction.CW)
+//        path.addCircle(width / 2f, height / 2f, 180f.px, Path.Direction.CW)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -117,12 +129,58 @@ class TestView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 //            canvas.drawArc(200f, 100f, 800f, 500f, 180f, 60f, false, paint)
 //        }
 
-        ////////////////////////drawPath画自定义图形///////////////////////////////////////////////////
+
+        /**
+         * drawPath()画自定义图形，一般是在绘制组合图形时才会用到的
+         * Path 可以描述直线、二次曲线、三次曲线、圆、椭圆、弧形、矩形、圆角矩形。把这些图形结合起来，就可以描述出很多复杂的图形
+         * Path 有两类方法，一类是直接描述路径的，另一类是辅助的设置或计算
+         */
         //用path画圆
-        paint.color = Color.BLUE//设置绘制内容的颜色
-        paint.style = Paint.Style.STROKE//设置绘制模式，画线模式（即勾边模式），画空心圆
-        paint.strokeWidth = 20f//设置线条宽度为20像素
-        paint.isAntiAlias = true//开启抗锯齿
+//        paint.color = Color.BLUE//设置绘制内容的颜色
+//        paint.style = Paint.Style.STROKE//设置绘制模式，画线模式（即勾边模式），画空心圆
+//        paint.strokeWidth = 20f//设置线条宽度为20像素
+//        paint.isAntiAlias = true//开启抗锯齿
+
+        //画个心形，不会画
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            path.addArc(200f, 200f, 400f, 400f, -225f, 225f)
+//            path.arcTo(400f, 200f, 600f, 400f, -180f, 225f, false)
+//        }
+//        path.lineTo(400f, 542f)
+//        canvas.drawPath(path, paint)
+
+        //Path方法第一类：直接描述路径；细分为两组：添加子图形和画线（直线或曲线）
+
+        //第一组：addXxx()-----添加子图形
+        //x, y, radius 这三个参数是圆的基本信息，最后一个参数 dir 是画圆的路径的方向
+        //其他的如：addOval(),addRect(),addRoundRect(),addPath()用法相似
+//        path.addCircle(width / 2f, height / 2f, 200f, Path.Direction.CW)
+//        canvas.drawPath(path, paint)
+
+        //第二组：xxxTo()-----画线（直线或者曲线）
+        //这一组和第一组addXxx()方法的区别在于，第一组是添加的完整封闭图形（除了addPath()），而这一组添加的只是一条线
+        //lineTo(float x, float y) / rLineTo(float x, float y) 画直线
+        //从当前位置向目标位置画一条直线， x 和 y 是目标位置的坐标。这两个方法的区别是，lineTo(x, y) 的参数是绝对坐标，而 rLineTo(x, y) 的参数是相对当前位置的相对坐标 （前缀 r 指的就是 relatively 「相对地」)。
+        //当前位置：所谓当前位置，即最后一次调用画 Path 的方法的终点位置。初始值为原点 (0, 0)
+//        paint.style = Paint.Style.STROKE
+//        path.lineTo(100f, 100f)// 由当前位置 (0, 0) 向 (100, 100) 画一条直线
+//        path.rLineTo(100f, 0f)// 由当前位置 (100, 100) 向正右方 100 像素的位置画一条直线
+//        canvas.drawPath(path, paint)
+
+        //quadTo(float x1, float y1, float x2, float y2) / rQuadTo(float dx1, float dy1, float dx2, float dy2) 画二次贝塞尔曲线
+        //这条二次贝塞尔曲线的起点就是当前位置，而参数中的 x1, y1 和 x2, y2 则分别是控制点和终点的坐标。和 rLineTo(x, y) 同理，rQuadTo(dx1, dy1, dx2, dy2) 的参数也是相对坐标
+//        path.quadTo(513f, 23f, 650f, 360f)
+//        canvas.drawPath(path, paint)//不了解这个贝塞尔曲线，随便看看
+        //cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) / rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3) 画三次贝塞尔曲线
+//        path.cubicTo(513f, 23f, 650f, 360f, 400f, 589f)
+//        canvas.drawPath(path, paint)
+
+        //不论是直线还是贝塞尔曲线，都是以当前位置作为起点，而不能指定起点。但你可以通过 moveTo(x, y) 或 rMoveTo() 来改变当前位置，从而间接地设置这些方法的起点。
+        //moveTo(x, y) 虽然不添加图形，但它会设置图形的起点，所以它是非常重要的一个辅助方法
+        paint.style = Paint.Style.STROKE
+        path.lineTo(100f, 100f)// 画斜线
+        path.moveTo(200f, 100f)// 我移~~，这里预览界面会多一条线，实际上没有的
+        path.lineTo(200f, 0f)// 画竖线
         canvas.drawPath(path, paint)
     }
 

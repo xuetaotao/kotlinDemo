@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="15dp"
     tools:context=".ui.main.MainActivity">
 
@@ -14,6 +16,9 @@
         android:textColor="@color/light_black"
         android:textSize="14sp" />
 
-
+    <com.jlpay.kotlindemo.ui.widget.TestView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:background_color="@color/common_white" />
 
 </LinearLayout>

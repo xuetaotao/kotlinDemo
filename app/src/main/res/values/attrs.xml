@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--所有自定义属性需要在文件中添加declare-styleable节点来声明，例如定义属性background_color设置背景色-->
+    <!--不同控件使用相同的自定义属性名时，两者会有冲突，需要将属性名提取到外面进行声明-->
+    <attr name="background_color" format="color" />
+
+    <declare-styleable name="TestView">
+        <attr name="background_color" />
+    </declare-styleable>
+
+    <declare-styleable name="TestCustomerUi">
+        <attr name="background_color" />
+    </declare-styleable>
+
+    <declare-styleable name="AttrDeclareView">
+        <attr name="background_color" />
+    </declare-styleable>
+
+</resources>

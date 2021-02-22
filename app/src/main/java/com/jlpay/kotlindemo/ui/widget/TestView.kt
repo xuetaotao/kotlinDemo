@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.utils.px
 
 //draw的时候单位必须是px
@@ -33,6 +34,8 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     private val rect: Rect = Rect(300, 300, 800, 800)
     private val rectF: RectF = RectF(300f, 300f, 800f, 800f)
     private val rectF2: RectF = RectF(400f, 50f, 700f, 200f)
+
+    private val bitmap = BitmapFactory.decodeResource(context.resources, R.mipmap.cashout)
 
     /**
      * 画笔初始化，存放公有信息
@@ -149,7 +152,9 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 //        path.lineTo(400f, 542f)
 //        canvas.drawPath(path, paint)
 
-        //Path方法第一类：直接描述路径；细分为两组：添加子图形和画线（直线或曲线）
+        /**
+         * Path方法第一类：直接描述路径；细分为两组：添加子图形和画线（直线或曲线）
+         */
 
         //第一组：addXxx()-----添加子图形
         //x, y, radius 这三个参数是圆的基本信息，最后一个参数 dir 是画圆的路径的方向
@@ -177,11 +182,75 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
         //不论是直线还是贝塞尔曲线，都是以当前位置作为起点，而不能指定起点。但你可以通过 moveTo(x, y) 或 rMoveTo() 来改变当前位置，从而间接地设置这些方法的起点。
         //moveTo(x, y) 虽然不添加图形，但它会设置图形的起点，所以它是非常重要的一个辅助方法
-        paint.style = Paint.Style.STROKE
-        path.lineTo(100f, 100f)// 画斜线
-        path.moveTo(200f, 100f)// 我移~~，这里预览界面会多一条线，实际上没有的
-        path.lineTo(200f, 0f)// 画竖线
-        canvas.drawPath(path, paint)
+//        paint.style = Paint.Style.STROKE
+//        path.lineTo(100f, 100f)// 画斜线
+//        path.moveTo(200f, 100f)// 我移~~，这里预览界面会多一条线，实际上没有的
+//        path.lineTo(200f, 0f)// 画竖线
+//        canvas.drawPath(path, paint)
+
+        //两个特殊的方法：arcTo() 和 addArc()，也是用来画线的，但并不使用当前位置作为弧线的起点
+        //这个方法和 Canvas.drawArc() 比起来，少了一个参数 useCenter，而多了一个参数 forceMoveTo
+        //少了 useCenter ，是因为 arcTo() 只用来画弧形而不画扇形，所以不再需要 useCenter 参数；
+        // 而多出来的这个 forceMoveTo 参数的意思是，绘制是要「抬一下笔移动过去」，还是「直接拖着笔过去」，区别在于是否留下移动的痕迹。
+//        paint.style = Paint.Style.STROKE
+//        path.lineTo(100f, 100f)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            path.arcTo(100f, 100f, 300f, 300f, -90f, 90f, true)// 强制移动到弧形起点（无痕迹）
+////            path.arcTo(100f,100f,300f,300f,-90f,90f, false)// 直接连线连到弧形起点（有痕迹）
+//        }
+//        canvas.drawPath(path, paint)
+
+        //addArc() 只是一个直接使用了 forceMoveTo = true 的简化版 arcTo()
+//        paint.style = Paint.Style.STROKE
+//        path.lineTo(100f, 100f)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            path.addArc(100f, 100f, 300f, 300f, -90f, 90f)
+//        }
+//        canvas.drawPath(path, paint)
+
+        //close() 封闭当前子图形，它的作用是把当前的子图形封闭，即由当前位置向当前子图形的起点绘制一条直线
+        //close() 和 lineTo(起点坐标) 是完全等价的
+//        paint.style = Paint.Style.STROKE
+//        path.moveTo(100f, 100f)
+//        path.lineTo(200f, 100f)
+//        path.lineTo(150f, 150f)//子图形未封闭
+//        path.close()//使用 close() 封闭子图形。等价于path.lineTo(100f, 100f)
+//        canvas.drawPath(path, paint)
+
+        //「子图形」：官方文档里叫做 contour 。前面说到，第一组方法是「添加子图形」，所谓「子图形」，指的就是一次不间断的连线。一个 Path 可以包含多个子图形。
+        // 当使用第一组方法，即 addCircle() addRect() 等方法的时候，每一次方法调用都是新增了一个独立的子图形；
+        // 而如果使用第二组方法，即 lineTo() arcTo() 等方法的时候，则是每一次断线（即每一次「抬笔」），都标志着一个子图形的结束，以及一个新的子图形的开始
+        //另外，不是所有的子图形都需要使用 close() 来封闭。当需要填充图形时（即 Paint.Style 为 FILL 或 FILL_AND_STROKE），Path 会自动封闭子图形
+//        paint.style = Paint.Style.FILL
+//        path.moveTo(100f, 100f)
+//        path.lineTo(200f, 100f)
+//        path.lineTo(150f, 150f)
+//        canvas.drawPath(path, paint)
+        // 这里只绘制了两条边，但由于 Style 是 FILL ，所以绘制时会自动封口
+
+
+        /**
+         * Path方法第二类：辅助的设置或计算。使用场景比较少
+         */
+        //Path.setFillType(Path.FillType ft) 设置图形自相交时的填充方式
+        //Path.FillType.WINDING：全填充
+        //Path.FillType.EVEN_ODD：交叉填充
+        //Path.FillType.INVERSE_WINDING：反色全填充
+        //Path.FillType.INVERSE_EVEN_ODD：反色交叉填充
+        //简单写个测试例子，原理较为复杂，暂不做深入研究
+//        paint.style = Paint.Style.FILL
+//        path.fillType = Path.FillType.EVEN_ODD
+//        path.addCircle(200f, 200f, 100f, Path.Direction.CW)
+//        path.addCircle(300f, 300f, 150f, Path.Direction.CW)
+//        canvas.drawPath(path, paint)
+
+        //绘制 Bitmap 对象，也就是把这个 Bitmap 中的像素内容贴过来。其中 left 和 top 是要把 bitmap 绘制到的位置坐标
+//        canvas.drawBitmap(bitmap, 200f, 100f, paint)
+
+        //绘制文字,drawText(String text, float x, float y, Paint paint)
+        //界面里所有的显示内容，都是绘制出来的，包括文字。 drawText() 这个方法就是用来绘制文字的。参数 text 是用来绘制的字符串，x 和 y 是绘制的起点坐标
+        paint.textSize = 60f//设置文字的大小
+        canvas.drawText("恭喜发财", 200f, 100f, paint)
     }
 
 

@@ -17,25 +17,7 @@ class MainActivity : BaseActivity() {
     override fun initView() {
         val btnWidgetLearn: Button = findViewById(R.id.btn_widget_learn)
         btnWidgetLearn.setOnClickListener {
-            val builder: CustomDialog.Builder = CustomDialog.Builder(this@MainActivity)
-            builder
-                .setTitle("温馨提示")
-                .setTitleVisible(true)
-                .setContent("测试一下")
-                .setPositiveButton(
-                    "确定"
-                ) { dialog, which ->
-                    Toast.makeText(this, "好的，确定了", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                }
-                .setNegativeButton(
-                    "取消了"
-                ) { dialog, which ->
-                    Toast.makeText(this, "那么，取消了", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
+            PracticeViewActivity.newInstance(this)
         }
     }
 
@@ -43,6 +25,27 @@ class MainActivity : BaseActivity() {
 
     }
 
+    fun showCustomDialog() {
+        val builder: CustomDialog.Builder = CustomDialog.Builder(this@MainActivity)
+        builder
+            .setTitle("温馨提示")
+            .setTitleVisible(true)
+            .setContent("测试一下")
+            .setPositiveButton(
+                "确定"
+            ) { dialog, which ->
+                Toast.makeText(this, "好的，确定了", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+            .setNegativeButton(
+                "取消了"
+            ) { dialog, which ->
+                Toast.makeText(this, "那么，取消了", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
 
     fun okHttpTest() {
         val client: OkHttpClient = OkHttpClient.Builder().build()

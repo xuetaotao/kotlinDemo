@@ -5,6 +5,9 @@ import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.View;
 
+/**
+ * 存放一些日常使用小方法的工具类
+ */
 public class Utils {
 
     /**

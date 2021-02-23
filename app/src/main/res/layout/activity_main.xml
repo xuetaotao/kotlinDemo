@@ -21,4 +21,9 @@
         android:layout_height="wrap_content"
         app:background_color="@color/common_white" />
 
+    <com.jlpay.kotlindemo.ui.widget.PracticeDrawView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:practice_view_text_size="14sp" />
+
 </LinearLayout>

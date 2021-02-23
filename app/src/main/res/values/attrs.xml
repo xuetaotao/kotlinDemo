@@ -17,4 +17,9 @@
         <attr name="background_color" />
     </declare-styleable>
 
+    <declare-styleable name="PracticeDrawView">
+        <attr name="background_color" />
+        <attr name="practice_view_text_size" format="dimension" />
+    </declare-styleable>
+
 </resources>

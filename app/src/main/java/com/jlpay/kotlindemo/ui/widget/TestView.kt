@@ -250,7 +250,7 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         //绘制文字,drawText(String text, float x, float y, Paint paint)
         //界面里所有的显示内容，都是绘制出来的，包括文字。 drawText() 这个方法就是用来绘制文字的。参数 text 是用来绘制的字符串，x 和 y 是绘制的起点坐标
         paint.textSize = 60f//设置文字的大小
-        canvas.drawText("恭喜发财", 200f, 100f, paint)
+        canvas.drawText("恭喜发财", width / 2f - 100f, height / 2f, paint)
     }
 
 

@@ -1,15 +1,46 @@
 package com.jlpay.kotlindemo.ui.main
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Button
+import android.widget.Toast
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.ui.base.BaseActivity
+import com.jlpay.kotlindemo.ui.widget.CustomDialog
 import okhttp3.*
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+class MainActivity : BaseActivity() {
+
+    override fun getResourceId(): Int {
+        return R.layout.activity_main
+    }
+
+    override fun initView() {
+        val btnWidgetLearn: Button = findViewById(R.id.btn_widget_learn)
+        btnWidgetLearn.setOnClickListener {
+            val builder: CustomDialog.Builder = CustomDialog.Builder(this@MainActivity)
+            builder
+                .setTitle("温馨提示")
+                .setTitleVisible(true)
+                .setContent("测试一下")
+                .setPositiveButton(
+                    "确定"
+                ) { dialog, which ->
+                    Toast.makeText(this, "好的，确定了", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+                .setNegativeButton(
+                    "取消了"
+                ) { dialog, which ->
+                    Toast.makeText(this, "那么，取消了", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
+        }
+    }
+
+    override fun initData() {
+
     }
 
 

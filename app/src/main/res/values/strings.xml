@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">kotlinDemo</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="hint">提示</string>
+
+
+    <!--权限获取提示语-->
+    <string name="permission_apply">权限申请</string>
+
+    <!--相机权限-->
+    <string name="camera_permission">\"APP\"想访问您的相机</string>
+    <!--相机权限-申请原因说明-->
+    <string name="camera_permission_message">照相设备将被用于扫码、拍照等需要使用相机的功能</string>
+    <!--相机权限申请-->
+    <string name="camera_permission_apply">请在设置-应用-APP-权限中开启相机权限</string>
+
+    <!--外部存储权限-->
+    <string name="external_storage_permission">\"APP\"想访问您的手机存储权限</string>
+    <!--外部存储权限-申请原因说明-->
+    <string name="external_storage_permission_message">手机存储权限将被用于读写文件系统业务，如图片缓存、主要功能的访问与使用</string>
+    <!--外部存储权限申请-->
+    <string name="external_storage_permission_apply">请在设置-应用-APP-权限中开启手机存储权限</string>
+
+    <!--定位权限-->
+    <string name="location_permission">\"APP\"想使用您的位置信息</string>
+    <!--定位权限-申请原因说明-->
+    <string name="location_permission_message">APP需要获取您的位置信息，用于工单处理等需要位置信息的功能</string>
+    <!--定位权限申请-->
+    <string name="location_permission_apply">请在设置-应用-APP-权限中开启定位权限</string>
+
 </resources>

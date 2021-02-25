@@ -7,9 +7,12 @@ import android.view.View
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.utils.px
 
-//draw的时候单位必须是px
+//绘制的时候单位必须是px，这里把 float型的200dp转为对应的px值
 val RADIUS = 200f.px
 
+/**
+ * canvas 和 Paint 基本API的实例学习
+ */
 class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     View(context, attrs, defStyleAttr) {
 
@@ -126,7 +129,12 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     private val composePathEffect: ComposePathEffect =
         ComposePathEffect(dashPathEffect, discretePathEffect)
 
+    //radius 参数是模糊的范围， style 是模糊的类型。一共有四种：NORMAL: 内外都模糊绘制； SOLID: 内部正常绘制，外部模糊；INNER: 内部模糊，外部不绘制; OUTER: 内部不绘制，外部模糊
     private val blurMaskFilter: BlurMaskFilter = BlurMaskFilter(50f, BlurMaskFilter.Blur.NORMAL)
+
+    //参数里， direction 是一个 3 个元素的数组，指定了光源的方向； ambient 是环境光的强度，数值范围是 0 到 1； specular 是炫光的系数； blurRadius 是应用光线的范围
+    private val embossMaskFilter: EmbossMaskFilter =
+        EmbossMaskFilter(floatArrayOf(0f, 1f, 1f), 0.2f, 8f, 10f)
 
     /**
      * 画笔初始化，存放公有信息
@@ -515,8 +523,34 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         //为之后的绘制设置 MaskFilter。上一个方法 setShadowLayer() 是设置的在绘制层下方的附加效果；而这个 MaskFilter 和它相反，设置的是在绘制层上方的附加效果
         //到现在已经有两个 setXxxFilter(filter) 了。前面有一个 setColorFilter(filter) ，是对每个像素的颜色进行过滤；而这里的 setMaskFilter(filter) 则是基于整个画面来进行过滤
         //2.7.1 BlurMaskFilter 模糊效果的 MaskFilter
-        paint.maskFilter = blurMaskFilter
+//        paint.maskFilter = blurMaskFilter
+//        canvas.drawBitmap(bitmap, 100f, 100f, paint)
+        //2.7.2 EmbossMaskFilter 浮雕效果的 MaskFilter
+        paint.maskFilter = embossMaskFilter
         canvas.drawBitmap(bitmap, 100f, 100f, paint)
+
+        //2.8 获取绘制的 Path
+        //2.8.1 getFillPath(Path src, Path dst)
+        //「实际 Path」。所谓实际 Path ，指的就是 drawPath() 的绘制内容的轮廓，要算上线条宽度和设置的 PathEffect
+        //默认情况下（线条宽度为 0、没有 PathEffect），原 Path 和实际 Path 是一样的；而在线条宽度不为 0 （并且模式为 STROKE 模式或 FLL_AND_STROKE ），或者设置了 PathEffect 的时候，实际 Path 就和原 Path 不一样了
+        //通过 getFillPath(src, dst) 方法就能获取这个实际 Path。方法的参数里，src 是原 Path ，而 dst 就是实际 Path 的保存位置。 getFillPath(src, dst) 会计算出实际 Path，然后把结果保存在 dst 里
+
+        //2.8.2 getTextPath(String text, int start, int end, float x, float y, Path path) / getTextPath(char[] text, int index, int count, float x, float y, Path path)
+        //「文字的 Path」。文字的绘制，虽然是使用 Canvas.drawText() 方法，但其实在下层，文字信息全是被转化成图形，对图形进行绘制的。 getTextPath() 方法，获取的就是目标文字所对应的 Path 。这个就是所谓「文字的 Path」
+        //这两个方法， getFillPath() 和 getTextPath() ，就是获取绘制的 Path 的方法。之所以把它们归类到「效果」类方法，是因为它们主要是用于图形和文字的装饰效果的位置计算，比如自定义的下划线效果
+
+        //3 drawText() 相关
+        //Paint 有些设置是文字绘制相关的，即和 drawText() 相关的
+        //比如设置文字大小，文字间隔，各种文字效果
+
+        //4 初始化类
+        //这一类方法很简单，它们是用来初始化 Paint 对象，或者是批量设置 Paint 的多个属性的方法
+        //4.1 reset()  重置 Paint 的所有属性为默认值。相当于重新 new 一个，不过性能当然高一些啦
+        //4.2 set(Paint src)  把 src 的所有属性全部复制过来。相当于调用 src 所有的 get 方法，然后调用这个 Paint 的对应的 set 方法来设置它们
+        //4.3 setFlags(int flags)  批量设置 flags。相当于依次调用它们的 set 方法，比如下面一行和后面两行是等效的
+//        paint.flags = (Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
+//        paint.isAntiAlias = true
+//        paint.isDither = true
     }
 
 

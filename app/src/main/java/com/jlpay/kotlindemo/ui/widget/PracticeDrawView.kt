@@ -16,7 +16,7 @@ class PracticeDrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int
     init {
         val typedArray = context.obtainStyledAttributes(attrs, R.styleable.PracticeDrawView)
         val color = typedArray.getColor(R.styleable.PracticeDrawView_background_color, Color.WHITE)
-        val dimensionPixelOffset = typedArray.getDimensionPixelOffset(
+        val dimensionPixelOffset = typedArray.getDimensionPixelSize(
             R.styleable.PracticeDrawView_practice_view_text_size,
             14
         )//这里获取的值，单位是 sp， 调用时候：setTextSize(TypedValue.COMPLEX_UNIT_PX, indicatorTextSize);

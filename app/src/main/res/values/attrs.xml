@@ -22,4 +22,9 @@
         <attr name="practice_view_text_size" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="DashBoardView">
+        <attr name="dash_width" format="dimension" />
+        <attr name="background_color" />
+    </declare-styleable>
+
 </resources>

@@ -2,6 +2,9 @@ package com.jlpay.kotlindemo.ui.widget
 
 import android.content.Context
 import android.graphics.*
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import com.jlpay.kotlindemo.R
@@ -135,6 +138,21 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     //参数里， direction 是一个 3 个元素的数组，指定了光源的方向； ambient 是环境光的强度，数值范围是 0 到 1； specular 是炫光的系数； blurRadius 是应用光线的范围
     private val embossMaskFilter: EmbossMaskFilter =
         EmbossMaskFilter(floatArrayOf(0f, 1f, 1f), 0.2f, 8f, 10f)
+
+    private val textPaint: TextPaint = TextPaint(paint.apply { textSize = 30f })
+
+    //参数里：width 是文字区域的宽度，文字到达这个宽度后就会自动换行；align 是文字的对齐方向；
+    //spacingmult 是行间距的倍数，通常情况下填 1 就好； spacingadd 是行间距的额外增加值，通常情况下填 0 就好；
+    //includepad 是指是否在文字上下添加额外的空间，来避免某些过高的字符的绘制出现越界
+    private val staticLayout: StaticLayout = StaticLayout(
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+        textPaint, 600, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, true
+    )
+
+    private val staticLayout2: StaticLayout = StaticLayout(
+        "a\nbc\ndefghi\njklm\nnopqrst\nuvwx\nyz",
+        textPaint, 600, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, true
+    )
 
     /**
      * 画笔初始化，存放公有信息
@@ -526,8 +544,8 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 //        paint.maskFilter = blurMaskFilter
 //        canvas.drawBitmap(bitmap, 100f, 100f, paint)
         //2.7.2 EmbossMaskFilter 浮雕效果的 MaskFilter
-        paint.maskFilter = embossMaskFilter
-        canvas.drawBitmap(bitmap, 100f, 100f, paint)
+//        paint.maskFilter = embossMaskFilter
+//        canvas.drawBitmap(bitmap, 100f, 100f, paint)
 
         //2.8 获取绘制的 Path
         //2.8.1 getFillPath(Path src, Path dst)
@@ -551,6 +569,39 @@ class TestView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 //        paint.flags = (Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
 //        paint.isAntiAlias = true
 //        paint.isDither = true
+
+
+        /**
+         * drawText() 文字的绘制
+         */
+        //1 Canvas 绘制文字的方式，Canvas 的文字绘制方法有三个：drawText() drawTextRun() 和 drawTextOnPath()
+        //1.1  drawText() 是 Canvas 最基本的绘制文字的方法：给出文字的内容和位置， Canvas 按要求去绘制文字
+        //text 是文字内容，x 和 y 是文字的坐标。但需要注意：这个坐标并不是文字的左上角，而是一个与左下角比较接近的位置
+        //drawText() 参数中的 y ，指的是文字的基线（ baseline ） 的位置； x 坐标在 "H" 的左边再往左一点点的位置
+//        paint.textSize = 60f
+//        canvas.drawText("Hello", 200f, 100f, paint)
+//        paint.color = Color.RED
+//        canvas.drawPoint(200f, 100f, paint)
+
+        //1.2 drawTextRun() 略过不看
+        //1.3 drawTextOnPath()  沿着一条 Path 来绘制文字。这是一个耍杂技的方法
+        //参数里，需要解释的只有两个： hOffset 和 vOffset。它们是文字相对于 Path 的水平偏移量和竖直偏移量，利用它们可以调整文字的位置。例如你设置 hOffset 为 5， vOffset 为 10，文字就会右移 5 像素和下移 10 像素
+//        paint.textSize = 30f
+//        canvas.drawPath(pathCircle, paint)
+//        canvas.drawTextOnPath("Hello World", pathCircle, 0f, 0f, paint)
+
+        //1.4 StaticLayout
+        //Canvas.drawText() 只能绘制单行的文字，而不能换行；不能在换行符 \n 处换行
+        //StaticLayout 支持换行，它既可以为文字设置宽度上限来让文字自动换行，也会在 \n 处主动换行
+        //Canvas.save() Canvas.translate() Canvas.restore() 配合起来可以对绘制的内容进行移动
+//        canvas.save()
+//        canvas.translate(50f, 100f)
+//        staticLayout.draw(canvas)
+//        canvas.translate(0f, 200f)
+//        staticLayout2.draw(canvas)
+//        canvas.restore()
+
+        //2 Paint 对文字绘制的辅助
     }
 
 

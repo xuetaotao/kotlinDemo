@@ -22,7 +22,7 @@ object AppUtils {
     /**
      * 创建APP存储目录结构
      */
-    private fun initFileDir() {
+    public fun initFileDir() {
         FileUtils.makeDirs(Constants.AUDIO_SAVE_DIR)
         FileUtils.makeDirs(Constants.FILE_SAVE_DIR)
         FileUtils.makeDirs(Constants.IMAGE_SAVE_DIR)

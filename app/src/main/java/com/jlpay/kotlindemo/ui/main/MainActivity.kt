@@ -4,11 +4,12 @@ import android.widget.Button
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseActivity
+import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.widget.CustomDialog
 import okhttp3.*
 import java.io.IOException
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseMediaActivity() {
 
     override fun getResourceId(): Int {
         return R.layout.activity_main
@@ -17,7 +18,9 @@ class MainActivity : BaseActivity() {
     override fun initView() {
         val btnWidgetLearn: Button = findViewById(R.id.btn_widget_learn)
         btnWidgetLearn.setOnClickListener {
-            PracticeViewActivity.newInstance(this)
+//            PracticeViewActivity.newInstance(this)
+//            openPhotoAlbum()
+            takePhoto()
         }
     }
 

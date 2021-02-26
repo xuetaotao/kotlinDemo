@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+
+    <!-- APP内部私有文件目录：context.getFilesDir()-->
+    <files-path
+        name="files_path"
+        path="." />
+
+    <!-- APP内部私有缓存目录：context.getFilesDir()-->
+    <cache-path
+        name="cache_path"
+        path="." />
+
+    <!-- APP外部私有文件目录：context.getExternalFilesDirs(context, null)-->
+    <external-files-path
+        name="external_files_path"
+        path="." />
+
+    <!-- APP外部私有缓存目录：context.getExternalCacheDirs(context, null)-->
+    <external-cache-path
+        name="external_cache_path"
+        path="." />
+
+    <!-- APP外部公有目录：Environment.getExternalStorageDirectory()-->
+    <external-path
+        name="external_path"
+        path="." />
+
+    <!-- context.getExternalMediaDirs()-->
+    <external-media-path
+        name="external_media_path"
+        path="." />s
+
+</paths>

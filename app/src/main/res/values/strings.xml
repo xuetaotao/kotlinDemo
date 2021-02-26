@@ -4,6 +4,8 @@
     <string name="cancel">取消</string>
     <string name="hint">提示</string>
 
+    <string name="file_not_exist">文件不存在</string>
+
 
     <!--权限获取提示语-->
     <string name="permission_apply">权限申请</string>

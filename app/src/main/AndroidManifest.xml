@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--指定该Android应用的包名，该包名可用于唯一地标志该应用-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jlpay.kotlindemo">
 
@@ -48,6 +48,7 @@
         android:name="android.hardware.nfc"
         android:required="false" />
 
+    <!--指定Android应用标签，图标-->
     <application
         android:name=".application.MyApplication"
         android:allowBackup="false"
@@ -58,8 +59,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
+                <!--  指定该Activity是程序的入口   -->
                 <action android:name="android.intent.action.MAIN" />
-
+                <!--  指定加载应用时运行该Activity   -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -68,6 +70,41 @@
             android:name=".ui.main.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+
+        <service android:name=".service.DownLoadService" />
+
+        <receiver
+            android:name=".broadcast_receiver.MyReceiver"
+            android:exported="false">
+
+        </receiver>
+
+        <!--        <provider-->
+        <!--            android:name=".provider.MyProvider"-->
+        <!--            android:authorities="com.jlpay.kotlindemo.MyProvider"-->
+        <!--            android:exported="false">-->
+
+        <!--        </provider>-->
+
+        <!-- authorities：一个标识，在当前系统内必须是唯一值，用来标识provider的唯一标识，一般用包名-->
+        <!-- android:exported 是Android中的四大组件 Activity，Service，Provider，Receiver 四大组件中都会有的一个属性       -->
+        <!-- 它的主要作用是：是否支持其它应用调用当前组件；如果包含有intent-filter 默认值为true; 没有intent-filter默认值为false       -->
+        <!-- 如果被设置为了false，那么这个组件将只会被当前应用或者拥有同样userID的应用组件调用       -->
+        <!-- granUriPermissions：是否允许授权文件的临时访问权限。如果 Content Provider 的 grantUriPermissions 属性值为“true”，则该Provider内所有的数据都能被授权访问。
+        可它如果设为“false”，则只有本元素指定的数据子集才能被授权。一个 Provider内可以包含任意数量的<grant-uri-permission>元素。其中每一个只能指定一条路径（三种可能的属性之一）-->
+        <!-- 在app开发过程中需要用到FileProvider的主要有：相机拍照以及图片裁剪；调用系统应用安装器安装apk（应用升级）       -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.jlpay.kotlindemo.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+
+        </provider>
+
 
     </application>
 

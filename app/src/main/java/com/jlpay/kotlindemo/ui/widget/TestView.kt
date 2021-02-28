@@ -11,7 +11,7 @@ import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.utils.px
 
 //绘制的时候单位必须是px，这里把 float型的200dp转为对应的px值
-val RADIUS = 200f.px
+private val RADIUS = 200f.px
 
 /**
  * canvas 和 Paint 基本API的实例学习

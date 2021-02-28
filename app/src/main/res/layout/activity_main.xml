@@ -16,12 +16,15 @@
         android:textColor="@color/light_black"
         android:textSize="14sp" />
 
+    <com.jlpay.kotlindemo.ui.widget.PieView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible" />
+
     <com.jlpay.kotlindemo.ui.widget.DashBoardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible">
-
-    </com.jlpay.kotlindemo.ui.widget.DashBoardView>
+        android:visibility="gone" />
 
     <com.jlpay.kotlindemo.ui.widget.TestView
         android:layout_width="match_parent"

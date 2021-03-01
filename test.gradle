@@ -1,0 +1,73 @@
+apply plugin: 'java'//应用名为java的插件，主要是为了引入 JavaCompile、JavaExec两个任务
+
+//Gradle的构建过程分为两个阶段：
+//第一阶段：配置阶段。在此阶段，Gradle会读取 build.gradle文件的全部内容来配置 Project 和 Task,比如设置 Project和Task的Property(属性)、处理Task之间的依赖关系等
+//第二阶段：按依赖关系执行指定Task
+//所以在配置阶段可以看到 hello1，hello2两个Task的配置代码的执行过程；在运行阶段，则只看到执行的指定任务
+
+//为Gradle构建文件创建Task方法一：调用Project的task()方法
+task hello1 {
+    println("config first task")
+}
+
+task hello2 {
+    println("config second task")//这里出现中文或者中文符号会乱码，应该是配置问题，暂时先忽略
+    //调用 doLast 方法为 Task 添加 Action
+    doLast {
+        //使用循环
+        for (i in 0..<5) {
+            println(i)
+        }
+    }
+    //调用 doFirst 方法为 Task 添加 Action
+    doFirst {
+        //定义变量
+        def s = "fkjava.org"
+        //输出字符串模板
+        println("start second task:$s")
+    }
+}
+
+//为Gradle构建文件创建Task方法二：调用TaskContainer的create()方法
+tasks.create(name: 'showTasks') {
+    //使用doLast为该Task添加一个Action，该Action用于访问tasks属性的类型，并遍历该构建文件所包含的Task
+    doLast {
+        //查看 Project的Tasks属性的类型
+        println("tasks property type: ${tasks.class}")
+        //遍历 tasks的属性
+        tasks.each {
+            e -> println(e)
+        }
+    }
+}
+
+/**
+ * 无论哪种方式创建Task，通常都可为其指定如下3个常用属性
+ * dependsOn：指定该Task所依赖的Task
+ * type：指定该Task的类型，如果不指定type属性，默认类型是Gradle实现的 DefaultTask类
+ * 通过传入的代码块参数配置Task
+ */
+//Copy类型：完成文件的复制,from方法指定被复制的源文件，into方法指定复制的目标位置，该任务的默认Action将会完成文件的复制
+//这里fkTask任务依赖hello2，因此在执行fkTask任务之前会先执行hello2，命令执行完后可以看到根目录下的README.md被复制到了dist目录下
+tasks.create(name: 'fkTask', dependsOn: 'hello2', type: Copy) {
+    from('README.md')
+    into('dist')
+}
+
+//使用 Project的task方法创建Task时也可指定type、dependsOn属性，例如下面的两个任务分别为JavaCompile、JavaExec类型，因此该构建文件
+//需要应用java插件（这里的两个任务跑起来有点问题，暂时没解决）
+//指定该任务的类型为 JavaCompile
+//task compile(type: JavaCompile) {
+//    source = fileTree('src/main/java/com.jlpay.kotlindemo/')//source指定源代码所在路径
+//    classpath = sourceSets.main.compileClasspath
+//    destinationDir = file('build/classes/main')//destinationDir指定变异后的字节码文件保存位置，该任务的默认Action是编译所有java源文件
+//    options.fork = true
+//    options.incremental = true
+//}
+
+//指定该任务的类型为 JavaExec，使用时需要通过main指定运行的主类
+//执行run任务，可以看到先执行compile，再执行run
+//task run(type: JavaExec, dependsOn: 'compile') {
+//    classpath = sourceSets.main.runtimeClasspath
+//    main = 'com.jlpay.kotlindemo.HelloWorld'
+//}

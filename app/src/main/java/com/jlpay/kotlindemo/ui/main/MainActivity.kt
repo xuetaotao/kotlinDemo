@@ -3,7 +3,6 @@ package com.jlpay.kotlindemo.ui.main
 import android.widget.Button
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.ui.base.BaseActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.widget.CustomDialog
 import okhttp3.*
@@ -18,9 +17,9 @@ class MainActivity : BaseMediaActivity() {
     override fun initView() {
         val btnWidgetLearn: Button = findViewById(R.id.btn_widget_learn)
         btnWidgetLearn.setOnClickListener {
-//            PracticeViewActivity.newInstance(this)
+            PracticeViewActivity.newInstance(this)
 //            openPhotoAlbum()
-            takePhoto()
+//            takePhoto()
         }
     }
 

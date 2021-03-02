@@ -31,6 +31,15 @@ android {
         sourceCompatibility(JavaVersion.VERSION_1_8)
         targetCompatibility(JavaVersion.VERSION_1_8)
     }
+
+    //配置被依赖的代码路径
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            jni.srcDirs = [] //ndk-build
+//            java.srcDirs = ['src/main/java']//可以没有这项，但是不能为空
+        }
+    }
 }
 
 dependencies {
@@ -40,8 +49,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation 'junit:junit:4.12'//项目测试代码(src/test/java)的依赖
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'//定义(src/androidTest)目录下的代码依赖
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9

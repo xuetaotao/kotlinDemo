@@ -1,9 +1,10 @@
 package com.jlpay.kotlindemo.ui.main
 
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.broadcast_receiver.MyReceiver
 import com.jlpay.kotlindemo.ui.base.BaseActivity
+import java.util.concurrent.Executor
 
 class PracticeViewActivity : BaseActivity() {
 
@@ -23,5 +24,49 @@ class PracticeViewActivity : BaseActivity() {
     }
 
     override fun initData() {
+    }
+
+    /**
+     * 广播注册：动态注册
+     */
+    fun registerBroadcastReceiver() {
+        val broadcastReceiver: BroadcastReceiver = MyReceiver()
+        val intentFilter: IntentFilter = IntentFilter("com.jlpay.kotlindemo.MyReceiver")
+        registerReceiver(broadcastReceiver, intentFilter)
+    }
+
+    /**
+     * 启动一个广播
+     * Intent封装了当前组件需要启动或触发的目标组件的信息
+     */
+    fun startBroadcast(context: Context) {
+        val intent: Intent = Intent()
+        intent.putExtra("state", "state")
+        context.sendBroadcast(intent)
+    }
+
+    fun startBroadcast(context: Context, receiverPermission: String) {
+        val intent: Intent = Intent()
+        intent.putExtra("state", "state")
+        context.sendOrderedBroadcast(intent, receiverPermission)
+    }
+
+    /**
+     * 启动一个Service
+     */
+    fun startService(context: Context) {
+        val intent: Intent = Intent()
+        intent.putExtra("URL", "www.baidu.com")
+        context.startService(intent)
+    }
+
+    fun startService2(
+        context: Context,
+        flags: Int,
+        executor: Executor,
+        serviceConnection: ServiceConnection
+    ) {
+        val intent: Intent = Intent()
+        context.bindService(intent, serviceConnection, flags)
     }
 }

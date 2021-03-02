@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 
 /**
+ * BroadcastReceiver监听的事件源是Android应用中的其他组件,相当于一个全局的事件监听器
  * 实现了自己的BroadcastReceiver后，有两种方式来注册这个系统级的“事件监听器”
  * 1.在Java代码中通过 Context.registerReceiver() 方法注册
  * 2.在 AndroidManifest文件中使用 <receiver../>元素完成注册

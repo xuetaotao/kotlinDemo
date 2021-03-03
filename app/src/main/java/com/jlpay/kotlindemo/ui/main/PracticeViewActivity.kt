@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.ui.main
 
 import android.content.*
+import android.widget.Button
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.broadcast_receiver.MyReceiver
 import com.jlpay.kotlindemo.ui.base.BaseActivity
@@ -21,6 +22,10 @@ class PracticeViewActivity : BaseActivity() {
     }
 
     override fun initView() {
+        val btnWidget = findViewById<Button>(R.id.btn_widget)
+        btnWidget.setOnClickListener {
+            FirstUiActivity.newInstance(this)
+        }
     }
 
     override fun initData() {

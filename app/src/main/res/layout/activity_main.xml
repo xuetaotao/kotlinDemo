@@ -8,28 +8,53 @@
     android:padding="15dp"
     tools:context=".ui.main.MainActivity">
 
-    <Button
-        android:id="@+id/btn_widget_learn"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="控件练习"
-        android:textColor="@color/light_black"
-        android:textSize="14sp" />
+        android:scrollbars="none">
 
-    <com.jlpay.kotlindemo.ui.widget.PieView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <com.jlpay.kotlindemo.ui.widget.DashBoardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+            <Button
+                android:id="@+id/btn_framelayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Framelayout"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
 
-    <com.jlpay.kotlindemo.ui.widget.TestView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:background_color="@color/common_white" />
+            <Button
+                android:id="@+id/btn_practiceview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Practiceview"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+
+            <com.jlpay.kotlindemo.ui.widget.PieView
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:visibility="visible" />
+
+            <com.jlpay.kotlindemo.ui.widget.DashBoardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <com.jlpay.kotlindemo.ui.widget.TestView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:background_color="@color/common_white" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

@@ -4,25 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.jlpay.kotlindemo.ui.widget.DashBoardView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible" />
+        android:scrollbars="none">
 
-    <TableLayout
-        android:id="@+id/table_layout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/common_white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </TableLayout>
+            <!-- 关闭英文字母全大写：textAllCaps="false" -->
+            <Button
+                android:id="@+id/btn_widget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CustomerView"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <include layout="@layout/table_layout" />
+
+            <com.jlpay.kotlindemo.ui.widget.DrawView
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <com.jlpay.kotlindemo.ui.widget.DashBoardView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="visible" />
 
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        </LinearLayout>
 
-    </androidx.viewpager.widget.ViewPager>
+    </ScrollView>
+
 
 </LinearLayout>

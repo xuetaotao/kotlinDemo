@@ -15,11 +15,15 @@ class MainActivity : BaseMediaActivity() {
     }
 
     override fun initView() {
-        val btnWidgetLearn: Button = findViewById(R.id.btn_widget_learn)
-        btnWidgetLearn.setOnClickListener {
-            PracticeViewActivity.newInstance(this)
+        val btnFramelayout: Button = findViewById(R.id.btn_framelayout)
+        btnFramelayout.setOnClickListener {
+            FrameLayoutActitivy.newInstance(this)
 //            openPhotoAlbum()
 //            takePhoto()
+        }
+        val btnPracticeview: Button = findViewById(R.id.btn_practiceview)
+        btnPracticeview.setOnClickListener {
+            PracticeViewActivity.newInstance(this)
         }
     }
 

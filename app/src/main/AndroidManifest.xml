@@ -65,10 +65,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.main.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.FirstUiActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.FrameLayoutActitivy"
+            android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />

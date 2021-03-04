@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--相对定位：部件对于另一个位置的约束   -->
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/common_gray"
+        android:text="TextView1"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:background="@color/common_blue"
+        android:text="TextView2"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@+id/textview1"
+        app:layout_constraintTop_toTopOf="@+id/textview1" />
+
+    <TextView
+        android:id="@+id/textview3"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/yellow_text"
+        android:gravity="center"
+        android:text="TextView3......"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@+id/textview1"
+        app:layout_constraintTop_toBottomOf="@+id/textview1" />
+
+    <TextView
+        android:id="@+id/textview4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:background="@color/common_green"
+        android:text="TextView4"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textview3"
+        app:layout_constraintLeft_toRightOf="@+id/textview3" />
+
+    <!--角度定位：可以用一个角度和一个距离来约束两个空间的中心    -->
+    <TextView
+        android:id="@+id/textview5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:text="TextView5"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintCircle="@+id/textview4"
+        app:layout_constraintCircleAngle="120"
+        app:layout_constraintCircleRadius="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textview4" />
+
+    <!--边距：控件在ConstraintLayout里面要实现margin，必须先约束该控件在ConstraintLayout里的位置，否则不生效    -->
+    <TextView
+        android:id="@+id/textview6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="200dp"
+        android:background="@color/common_gold"
+        android:text="TextView6"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--goneMargin主要用于约束的控件可见性被设置为gone的时候使用的margin值    -->
+    <TextView
+        android:id="@+id/textview7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:background="@color/white_gray"
+        android:text="TextView7"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@+id/textview6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="100dp" />
+
+    <!--居中-->
+    <TextView
+        android:id="@+id/textview8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:background="@color/colorAccent"
+        android:text="TextView8"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--水平偏移 ：layout_constraintHorizontal_bias    -->
+    <TextView
+        android:id="@+id/textview9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="TextView9"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--垂直偏移：layout_constraintVertical_bias -->
+    <TextView
+        android:id="@+id/textview10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="TextView10"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <!--尺寸约束 ：使用 0dp配合约束代替match_parent   -->
+    <TextView
+        android:id="@+id/textview11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="300dp"
+        android:background="@color/colorAccent"
+        android:text="TextView11"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <!--尺寸约束 ：app:layout_constraintDimensionRatio="W,8:1"指的是 宽:高=8:1   -->
+    <TextView
+        android:id="@+id/textview12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="250dp"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="宽:高=8:1"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="W,8:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <!--链：可以在链头中设置 layout_constraintHorizontal_chainStyle来改变整条链的样式-->
+    <!--设置横向权重layout_constraintHorizontal_weight(constraintVertical为纵向)来创建一个权重链    -->
+    <TextView
+        android:id="@+id/textview13"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="210dp"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="TextView13"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/textview14" />
+
+    <TextView
+        android:id="@+id/textview14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="210dp"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="TextView14"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintLeft_toRightOf="@+id/textview13"
+        app:layout_constraintRight_toLeftOf="@+id/textview15" />
+
+    <TextView
+        android:id="@+id/textview15"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="210dp"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="TextView15"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintLeft_toRightOf="@+id/textview14" />
+    <!-- 链：layout_constraintHorizontal_chainStyle用着感觉有点问题，暂时略过   -->
+
+
+    <!--Barrier：使用Barrier可以在多个控件的一侧建立一个屏障    -->
+    <!--app:barrierDirection为屏障所在的位置，可设置的值有：bottom、end、left、right、start、top-->
+    <!--app:constraint_referenced_ids为屏障引用的控件，可设置多个(用“,”隔开)-->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="textview1,textview3" />
+
+    <TextView
+        android:id="@+id/textview16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:text="TextView16"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@+id/barrier"
+        app:layout_constraintTop_toBottomOf="@+id/textview1" />
+
+    <!--Group可以把多个控件归为一组，方便隐藏或显示一组控件    -->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="textview13,textview15" />
+
+    <!--Placeholder指的是占位符。在Placeholder中可使用setContent()设置另一个控件的id，使这个控件移动到占位符的位置-->
+    <!--没有app:content="@+id/textview"这个属性，忽略    -->
+    <androidx.constraintlayout.widget.Placeholder
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <!--Guildline像辅助线一样，在预览的时候帮助你完成布局（不会显示在界面上-->
+    <!--Guildline的主要属性：-->
+    <!--android:orientation 垂直vertical，水平horizontal-->
+    <!--layout_constraintGuide_begin 开始位置-->
+    <!--layout_constraintGuide_end 结束位置-->
+    <!--layout_constraintGuide_percent 距离顶部的百分比(orientation = horizontal时则为距离左边)-->
+    <!--guideline1为水平辅助线，开始位置是距离顶部50dp-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="50dp" />
+
+    <!--guideline2位垂直辅助线，开始位置为屏幕宽的0.5(中点位置)-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

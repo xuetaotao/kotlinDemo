@@ -65,6 +65,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--在Activity中添加了 android:configChanges属性，目的是当所指定属性(Configuration Changes)发生改变时，通知程序调用 onConfigurationChanged()函数就不会重启activity-->
         <activity
             android:name=".ui.main.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -76,6 +77,10 @@
         <activity
             android:name=".ui.main.FrameLayoutActitivy"
             android:configChanges="screenSize|orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.ConstraintLayoutActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />

@@ -30,9 +30,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/common_divider_gray" />
+
             <com.jlpay.kotlindemo.ui.widget.DashBoardView
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="500dp"
+                android:visibility="visible" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/common_divider_gray" />
+
+            <com.jlpay.kotlindemo.ui.widget.PieView
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
                 android:visibility="visible" />
 
 

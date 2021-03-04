@@ -18,12 +18,19 @@ class MainActivity : BaseMediaActivity() {
         val btnFramelayout: Button = findViewById(R.id.btn_framelayout)
         btnFramelayout.setOnClickListener {
             FrameLayoutActitivy.newInstance(this)
-//            openPhotoAlbum()
-//            takePhoto()
+        }
+        val btnConstraintlayout: Button = findViewById(R.id.btn_constraintlayout)
+        btnConstraintlayout.setOnClickListener {
+            ConstraintLayoutActivity.newInstance(this)
         }
         val btnPracticeview: Button = findViewById(R.id.btn_practiceview)
         btnPracticeview.setOnClickListener {
             PracticeViewActivity.newInstance(this)
+        }
+        val btnPermission: Button = findViewById(R.id.btn_permission)
+        btnPermission.setOnClickListener {
+            openPhotoAlbum()
+//            takePhoto()
         }
     }
 

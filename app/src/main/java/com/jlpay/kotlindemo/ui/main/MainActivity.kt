@@ -15,6 +15,10 @@ class MainActivity : BaseMediaActivity() {
     }
 
     override fun initView() {
+        val btnLinearlayout: Button = findViewById(R.id.btn_linearLayout)
+        btnLinearlayout.setOnClickListener {
+            LinearLayoutActivity.newInstance(this)
+        }
         val btnFramelayout: Button = findViewById(R.id.btn_framelayout)
         btnFramelayout.setOnClickListener {
             FrameLayoutActitivy.newInstance(this)

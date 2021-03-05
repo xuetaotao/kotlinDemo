@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--字号：20pt，文本框结尾处绘制图片    -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@mipmap/ic_launcher"
+            android:text="练习TextView"
+            android:textSize="20pt" />
+
+        <!--设置中间省略，所有字母大写    -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text="这是FrameLayout这是FrameLayout这是FrameLayout这是FrameLayout这是FrameLayout"
+            android:textAllCaps="true"
+            android:textSize="18sp" />
+
+        <!--    为邮件、电话增加链接-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoLink="email|phone"
+            android:singleLine="true"
+            android:text="邮箱是 1021403597@qq.com，电话是 16898556688" />
+
+        <!--    设置文字颜色、大小，并使用阴影-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:shadowColor="#00f"
+            android:shadowDx="10.0"
+            android:shadowDy="8.0"
+            android:shadowRadius="3.0"
+            android:text="测试文字"
+            android:textColor="#f00"
+            android:textSize="18pt" />
+
+        <!--可勾选的文本  TODO：有点问题，点击不了，暂时先略过  -->
+        <CheckedTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:text="可勾选的文本"
+            android:textSize="18sp" />
+
+        <!--指定背景    -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_border"
+            android:text="带边框的文本"
+            android:textSize="24pt" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_border2"
+            android:text="圆角边框，渐变背景的文本"
+            android:textSize="24pt" />
+
+        <!--文字带阴影的按钮        -->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:shadowColor="#aa5"
+            android:shadowDx="5"
+            android:shadowDy="5"
+            android:shadowRadius="1"
+            android:text="文字带阴影的按钮"
+            android:textSize="12pt" />
+
+        <!--普通文字按钮        -->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/blue"
+            android:text="普通文字按钮"
+            android:textSize="10pt" />
+
+        <!--带文字的图片按钮        -->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_pressed"
+            android:text="带文字的图片按钮"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/common_divider_gray" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--增加一行-->
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="性别：" />
+
+                <!--定义一组单选按钮  -->
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rb_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="男" />
+
+                    <RadioButton
+                        android:id="@+id/rb_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="女" />
+
+                </RadioGroup>
+
+            </TableRow>
+
+            <!--增加一行-->
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="喜欢的颜色：" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!--定义三个复选框，可以组成多选-->
+                    <CheckBox
+                        android:id="@+id/cb_red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="红" />
+
+                    <CheckBox
+                        android:id="@+id/cb_blue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/bg_checked"
+                        android:text="蓝" />
+
+                    <CheckBox
+                        android:id="@+id/cb_green"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="绿" />
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TextView
+                android:id="@+id/tv_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+        </TableLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/common_divider_gray" />
+
+        <!--定义一个ToggleButton -->
+        <ToggleButton
+            android:id="@+id/btn_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:textOff="横向排列"
+            android:textOn="纵向排列" />
+
+        <!--定义一个Switch -->
+        <Switch
+            android:id="@+id/btn_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:textOff="横向排列"
+            android:textOn="纵向排列"
+            android:thumb="@drawable/bg_checked" />
+
+        <LinearLayout
+            android:id="@+id/ll_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_border"
+                android:text="普通按钮1"
+                android:textSize="10sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_border"
+                android:text="普通按钮2"
+                android:textSize="10sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_border"
+                android:text="普通按钮3"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/common_divider_gray" />
+
+        <!--模拟时钟：已过时 -->
+        <AnalogClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!--数字时钟        -->
+        <!-- android:format24Hour="yyyy/MM/dd H:mm"，yyyy/MM/dd可以换成yyyy-MM-dd，H：mm和h:mm的区别就是一个是12小时格式，一个是24小时格式-->
+        <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format24Hour="yyyy-MM-dd H:mm"
+            android:textColor="#f0f"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <!--计时器        -->
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/bg_border"
+                android:text="开始计时"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

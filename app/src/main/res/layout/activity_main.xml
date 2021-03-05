@@ -19,6 +19,15 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/btn_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LinearLayout"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
                 android:id="@+id/btn_framelayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +72,8 @@
             <com.jlpay.kotlindemo.ui.widget.DashBoardView
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:test_reference_format="@drawable/bg_border" />
 
             <com.jlpay.kotlindemo.ui.widget.TestView
                 android:layout_width="match_parent"

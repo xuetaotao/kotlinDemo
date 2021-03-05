@@ -22,9 +22,11 @@
         <attr name="practice_view_text_size" format="dimension" />
     </declare-styleable>
 
+    <!--reference：参考某一资源ID（使用另一个资源的id -->
     <declare-styleable name="DashBoardView">
         <attr name="dash_width" format="dimension" />
         <attr name="background_color" />
+        <attr name="test_reference_format" format="reference" />
     </declare-styleable>
 
 </resources>

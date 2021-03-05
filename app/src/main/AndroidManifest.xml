@@ -82,6 +82,10 @@
             android:name=".ui.main.ConstraintLayoutActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.LinearLayoutActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

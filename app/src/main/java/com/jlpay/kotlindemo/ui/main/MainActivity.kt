@@ -36,6 +36,10 @@ class MainActivity : BaseMediaActivity() {
             openPhotoAlbum()
 //            takePhoto()
         }
+        val btnThread: Button = findViewById(R.id.btn_thread)
+        btnThread.setOnClickListener {
+            ThreadActivity.newInstance(this)
+        }
     }
 
     override fun initData() {

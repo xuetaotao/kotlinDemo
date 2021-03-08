@@ -31,6 +31,10 @@ class MainActivity : BaseMediaActivity() {
         btnPracticeview.setOnClickListener {
             PracticeViewActivity.newInstance(this)
         }
+        val btnImageview: Button = findViewById(R.id.btn_imageview)
+        btnImageview.setOnClickListener {
+            ImageViewActivity.newInstance(this)
+        }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--android:divider //在列表条目之间显示的drawable或color-->
+        <!--android:dividerHeight //用来指定divider的高度-->
+        <!--android:entries //构成ListView的数组资源的引用。对于某些固定的资源，这个属性提供了比在程序中添加资源更加简便的方式-->
+        <!--android:footerDividersEnabled //当设为false时，ListView将不会在各个footer之间绘制divider.默认为true。-->
+        <!--android:headerDividersEnabled //当设为false时，ListView将不会在各个header之间绘制divider.默认为true-->
+        <ListView
+            android:id="@+id/list1"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:divider="#f00"
+            android:dividerHeight="1dp"
+            android:headerDividersEnabled="false" />
+
+        <ListView
+            android:id="@+id/list2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:divider="#0f0"
+            android:dividerHeight="1dp"
+            android:headerDividersEnabled="false" />
+
+        <ListView
+            android:id="@+id/mylist"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:divider="#f0f" />
+
+    </LinearLayout>
+
+</ScrollView>

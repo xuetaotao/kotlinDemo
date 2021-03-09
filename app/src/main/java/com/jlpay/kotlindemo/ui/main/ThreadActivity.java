@@ -37,7 +37,9 @@ public class ThreadActivity extends AppCompatActivity {
 //        runnable();
 //        threadFactory();
 //        executor();
-        callable();
+//        callable();
+
+        runSynchronized1Demo();
     }
 
 
@@ -143,6 +145,49 @@ public class ThreadActivity extends AppCompatActivity {
 
 
     /*****************线程同步与线程安全*****************************************************/
+
+    private void runSynchronized1Demo() {
+        new Synchronized1Demo().runTest();
+    }
+
+    /**
+     * 内部静态类不需要有指向外部类的引用。但非静态内部类需要持有对外部类的引用。非静态内部类能够访问外部类的静态和非静态成员。
+     * 静态类不能访问外部类的非静态成员。他只能访问外部类的静态成员。一个非静态内部类不能脱离外部类实体被创建，
+     * 一个非静态内部类可以访问外部类的数据和方法，因为他就在外部类里面
+     */
+    static class Synchronized1Demo implements ThreadDemp {
+
+        private volatile boolean running = true;
+
+        private void stop() {
+            running = false;
+        }
+
+        //不需要外部类的引用，可以直接调用
+        private static void hhh() {
+            Log.e("hhh", "hhh");
+        }
+
+        @Override
+        public void runTest() {
+            new Thread() {
+                @Override
+                public void run() {
+                    while (running) {
+
+                    }
+                }
+            }.start();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            stop();
+        }
+    }
+
 
     /**********************************************************************/
 }

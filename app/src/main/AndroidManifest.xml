@@ -98,6 +98,10 @@
             android:name=".ui.main.AdapterViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.RxJavaActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

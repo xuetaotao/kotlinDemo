@@ -91,6 +91,15 @@
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
+            <Button
+                android:id="@+id/btn_rxjava2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RxJava2"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
 
             <com.jlpay.kotlindemo.ui.widget.PieView
                 android:layout_width="match_parent"

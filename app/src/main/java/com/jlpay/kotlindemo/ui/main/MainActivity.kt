@@ -48,6 +48,10 @@ class MainActivity : BaseMediaActivity() {
         btnThread.setOnClickListener {
             ThreadActivity.newInstance(this)
         }
+        val btnRxjava2: Button = findViewById(R.id.btn_rxjava2)
+        btnRxjava2.setOnClickListener {
+            RxJavaActivity.newInstance(this)
+        }
     }
 
     override fun initData() {

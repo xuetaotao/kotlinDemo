@@ -1,9 +1,9 @@
 package com.jlpay.kotlindemo.ui.base
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : RxAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

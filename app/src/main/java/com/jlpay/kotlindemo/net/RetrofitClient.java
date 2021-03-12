@@ -3,8 +3,6 @@ package com.jlpay.kotlindemo.net;
 import android.util.Log;
 
 import com.jlpay.kotlindemo.bean.WxArticleBean;
-import com.trello.rxlifecycle2.RxLifecycle;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.BehaviorSubject;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -82,7 +79,7 @@ public class RetrofitClient {
     public Observable<WxArticleBean> getWxarticle2() {
         return service.getWxarticle2()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(RxLifecycle.bindUntilEvent(BehaviorSubject.create(), ActivityEvent.DESTROY));//在Activity onDestroy时解除订阅，防止内存泄漏
+                .observeOn(AndroidSchedulers.mainThread());
+//                .compose(RxLifecycle.bindUntilEvent(BehaviorSubject.create(), ActivityEvent.DESTROY));//在Activity onDestroy时解除订阅，防止内存泄漏
     }
 }

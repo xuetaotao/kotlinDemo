@@ -1,6 +1,8 @@
 package com.jlpay.kotlindemo.ui.base
 
 import android.os.Bundle
+import com.trello.rxlifecycle2.LifecycleTransformer
+import com.trello.rxlifecycle2.android.ActivityEvent
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 
 abstract class BaseActivity : RxAppCompatActivity() {
@@ -20,5 +22,10 @@ abstract class BaseActivity : RxAppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    open fun <T> getActivityLifecycleProvider(): LifecycleTransformer<T> {
+//        return bindToLifecycle() //可以绑定Activity生命周期
+        return bindUntilEvent(ActivityEvent.DESTROY);//可以绑定Activity生命周期
     }
 }

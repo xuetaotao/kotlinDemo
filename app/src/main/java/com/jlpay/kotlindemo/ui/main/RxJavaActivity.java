@@ -13,8 +13,10 @@ import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.bean.BResponse;
 import com.jlpay.kotlindemo.bean.WxArticleBean;
 import com.jlpay.kotlindemo.net.RetrofitClient;
+import com.jlpay.kotlindemo.ui.base.BaseMvpActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -28,12 +30,30 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-public class RxJavaActivity extends RxAppCompatActivity {
+/**
+ * 测试 RxLifeCycle
+ * 那 ButterKnife 是 JakeWharton 写的 views 注入框架，配合 mvp 后让代码更简洁
+ * 如果 activity 里的 view 都释放了，很容易出现空指针。特别像使用了 view 注入框架的项目中。因为 view 注入框架中会对 view 在 activity 生命周期中进行注册和注销操作。
+ * 一般会在 onCreate 中注册，在 onDestory 中注销，这样在 onDestory 之后访问 view 就肯定会出现空指针
+ * 以下摘自：https://github.com/trello/RxLifecycle
+ * <p>
+ * RxLifecycle does not actually unsubscribe the sequence. Instead it terminates the sequence. The way in which it does so varies based on the type:
+ * RxLifecycle实际上并没有取消订阅该序列。相反，它根据不同的类型采取不同的终止方式
+ * <p>
+ * Observable, Flowable and Maybe - emits onCompleted()
+ * Single and Completable - emits onError(CancellationException)
+ * If a sequence requires the Subscription.unsubscribe() behavior, then it is suggested that you manually handle the Subscription yourself and call unsubscribe() when appropriate.
+ * 如果一个序列需要取消订阅，建议您手动处理订阅，并在适当的时候调用unsubscribe()
+ * <p>
+ * 上面这种方式与使用CompositeDisposable不一样，调用dispose()会将两根管道切断, 从而导致下游收不到事件，并不会导致上游不再继续发送事件, 上游会继续发送剩余的事件.
+ */
+public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> implements RxJavaContract.View {
 
     //    private final String TAG = RxJavaActivity.class.getSimpleName();
     private final String TAG = "RxJava2--------------";
 
     private TextView tv_rxjava2;
+//    private RxJavaPresenter presenter;
 
     public static void newInstance(Context context) {
         Intent intent = new Intent(context, RxJavaActivity.class);
@@ -43,29 +63,56 @@ public class RxJavaActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rxjava2);
+//        setContentView(R.layout.activity_rxjava2);
 
-        initView();
-        initData();
     }
 
-    private void initView() {
+    @Override
+    public int getResourceId() {
+        return R.layout.activity_rxjava2;
+    }
+
+    @NotNull
+    @Override
+    public RxJavaContract.Presenter createPresenter() {
+        return new RxJavaPresenter(this, this);
+    }
+
+    @Override
+    public void initView() {
         tv_rxjava2 = findViewById(R.id.tv_rxjava2);
+//        presenter = new RxJavaPresenter(this, this);
     }
 
-    private void initData() {
-        basicUse();
+    @Override
+    public void initData() {
+//        basicUse();
 //        mapUse();
 //        getWanWxarticle();
 //        getWanWxarticle2();
 //        intervalUse();
+//        presenter.netRequest();
+        mPresenter.netRequest();
+    }
+
+    @Override
+    public void onNetRequest() {
+        Log.e(TAG, "返回RxJavaActivity层");
+        tv_rxjava2.setText("返回RxJavaActivity层");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(TAG, "onDestroy");
+        Log.e(TAG, "onDestroy了");
+        tv_rxjava2 = null;
     }
+
+//    @Override
+//    public <T> LifecycleTransformer<T> getActivityLifecycleProvider() {
+//        return bindToLifecycle();//可以绑定Activity生命周期
+////        return bindUntilEvent(ActivityEvent.DESTROY);//可以绑定Activity生命周期
+//    }
 
     private void getWanWxarticle2() {
         RetrofitClient.get()
@@ -119,8 +166,9 @@ public class RxJavaActivity extends RxAppCompatActivity {
         Observable.interval(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-//                .compose(bindUntilEvent(ActivityEvent.STOP))
-                .compose(bindToLifecycle())
+//                .compose(RxLifecycle.bindUntilEvent(BehaviorSubject.create(), ActivityEvent.DESTROY))//不可以实现绑定Activity生命周期，因为BehaviorSubject压根没有发射事件
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))//可以绑定Activity生命周期
+//                .compose(bindToLifecycle())//可以绑定Activity生命周期
                 .subscribe(new Observer<Long>() {
                     Disposable disposable;
 

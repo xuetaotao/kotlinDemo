@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
 
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.bean.BResponse;
@@ -15,6 +16,8 @@ import com.jlpay.kotlindemo.bean.WxArticleBean;
 import com.jlpay.kotlindemo.net.RetrofitClient;
 import com.jlpay.kotlindemo.ui.base.BaseMvpActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -167,8 +170,10 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 //                .compose(RxLifecycle.bindUntilEvent(BehaviorSubject.create(), ActivityEvent.DESTROY))//不可以实现绑定Activity生命周期，因为BehaviorSubject压根没有发射事件
-                .compose(bindUntilEvent(ActivityEvent.DESTROY))//可以绑定Activity生命周期
+//                .compose(bindUntilEvent(ActivityEvent.DESTROY))//可以绑定Activity生命周期
 //                .compose(bindToLifecycle())//可以绑定Activity生命周期
+//                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(this)))//使用AutoDispose来绑定生命周期一
+                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(this, Lifecycle.Event.ON_DESTROY)))//使用AutoDispose来绑定生命周期二
                 .subscribe(new Observer<Long>() {
                     Disposable disposable;
 

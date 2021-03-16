@@ -3,6 +3,11 @@ package com.jlpay.kotlindemo.ui.main;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.Lifecycle;
+
+import com.uber.autodispose.AutoDispose;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
+
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -56,6 +61,8 @@ public class RxJavaPresenter implements RxJavaContract.Presenter {
 //                .compose(((BaseActivity) mContext).getActivityLifecycleProvider())//方式一RxLifeCycle：可以绑定Activity生命周期：不推荐
 //                .compose(mView.getActivityLifecycleProvider())//方式一RxLifeCycle：可以绑定Activity生命周期  TODO 考虑一下怎么把这行通用代码移出来；另外就是这行代码必须得放在subscribe之前
 //                .compose(CommonTransformer.getLifeTransformer((BaseActivity) mContext))//方式一RxLifeCycle：可以绑定Activity生命周期，不推荐
+//                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(mView.getLifecycleOwner())))//使用AutoDispose来绑定生命周期一
+//                .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(mView.getLifecycleOwner(), Lifecycle.Event.ON_DESTROY)))//使用AutoDispose来绑定生命周期二
                 .doOnSubscribe(new Consumer<Disposable>() {//方式二：doOnSubscribe是事件被订阅之前(也就是事件源发起之前)会调用的方法，这个方法一般用于修改、添加或者删除事件源的数据流
                     @Override
                     public void accept(Disposable disposable) throws Exception {

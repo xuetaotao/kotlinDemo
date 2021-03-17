@@ -49,7 +49,8 @@ public class ThreadActivity extends AppCompatActivity {
 //        runSynchronized3Demo();
 
         //线程间通信
-        new ThreadInteractionDemo().runTest();
+//        new ThreadInteractionDemo().runTest();
+        new WaitDemo().runTest();
     }
 
 
@@ -381,21 +382,89 @@ public class ThreadActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     for (int i = 0; i < 1_000_000; i++) {
-                        if (isInterrupted()) {//检查线程中断状态，一般在耗时操作前来结束线程
+//                        if (Thread.interrupted()) {//会把中断标志重置为 false，故而只能判断一次
+                        if (isInterrupted()) {//检查线程中断状态，一般在耗时操作前来结束线程，可以判断多次
+                            Log.e(TAG, "线程终止");
                             return;
                         }
-                        Log.e(TAG, i + "");
+                        Log.e(TAG, "线程运行中：" + i + "");
+
+                        try {
+                            Thread.sleep(10000);
+                        } catch (InterruptedException e) {
+                            //当一个线程想要在线程睡眠的时候调用interrupt()结束当前线程，会触发这个异常，中断状态不会置为true，只能在这里完成需要完成的工作
+                            Log.e(TAG, "线程Exception中终止了");
+                            e.printStackTrace();
+                        }
                     }
                 }
             };
             thread.start();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 //            thread.stop();//不可预测，会崩溃
             thread.interrupt();//不是立即的，不是强制的，需要线程自己去支持
+        }
+    }
+
+
+    static class WaitDemo implements ThreadDemp {
+
+        private String shareString;
+
+        private synchronized void initString() {
+            shareString = "rengwuxian";
+            notifyAll();
+        }
+
+        private synchronized void printString() {
+            while (shareString == null) {
+                try {
+                    wait();//wait()和notify()/notifyAll() 都需要放在同步代码块里，且它们两必须是同一个 monitor
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.e(TAG, "shareString is：" + shareString);
+        }
+
+        @Override
+        public void runTest() {
+            Thread thread1 = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+//                    yield();//暂时让出自己的时间片给同优先级的线程 TODO 没太懂
+                    printString();
+                }
+            };
+            thread1.start();
+
+            Thread thread2 = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    initString();
+                }
+            };
+            thread2.start();
+            try {
+                thread1.join();//线程1插到主线程之前
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Log.e(TAG, "主线程完了");
         }
     }
 

@@ -1,10 +1,10 @@
 package com.jlpay.kotlindemo.application
 
-import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDexApplication
 import com.jlpay.kotlindemo.ui.utils.AppUtils
 
-class MyApplication : Application() {
+class MyApplication : MultiDexApplication() {
 
 
     override fun onCreate() {

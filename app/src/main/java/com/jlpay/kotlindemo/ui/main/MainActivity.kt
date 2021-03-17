@@ -52,6 +52,14 @@ class MainActivity : BaseMediaActivity() {
         btnRxjava2.setOnClickListener {
             RxJavaActivity.newInstance(this)
         }
+        val btnLibtestJava: Button = findViewById(R.id.btn_libtest_java)
+        btnLibtestJava.setOnClickListener {
+            LibTestJavaActivity.newInstance(this)
+        }
+        val btnLibtestKotlin: Button = findViewById(R.id.btn_libtest_kotlin)
+        btnLibtestKotlin.setOnClickListener {
+            LibTestKotlinActivity.newInstance(this)
+        }
     }
 
     override fun initData() {

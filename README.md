@@ -5,6 +5,8 @@
 * 程序名称：kotlinDemo
 * 更新时间：2021.02.03
 * 更新人员：薛涛涛
+* Key_Store_Password & Key_Password ：fit1
+* Key_alias：mySignKey
 
 ## 程序功能
 * Kotlin的日常练习

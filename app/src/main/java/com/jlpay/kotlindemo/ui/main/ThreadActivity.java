@@ -36,15 +36,20 @@ public class ThreadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thread);
 
+        //多线程的使用
 //        thread();
 //        runnable();
 //        threadFactory();
 //        executor();
 //        callable();
 
+        //线程同步与线程安全
 //        runSynchronized1Demo();
 //        runSynchronized2Demo();
-        runSynchronized3Demo();
+//        runSynchronized3Demo();
+
+        //线程间通信
+        new ThreadInteractionDemo().runTest();
     }
 
 
@@ -362,6 +367,35 @@ public class ThreadActivity extends AppCompatActivity {
         @Override
         public void runTest() {
 
+        }
+    }
+
+    /**********************************************************************/
+
+    /************************线程间通信**********************************************/
+
+    static class ThreadInteractionDemo implements ThreadDemp {
+        @Override
+        public void runTest() {
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 1_000_000; i++) {
+                        if (isInterrupted()) {//检查线程中断状态，一般在耗时操作前来结束线程
+                            return;
+                        }
+                        Log.e(TAG, i + "");
+                    }
+                }
+            };
+            thread.start();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+//            thread.stop();//不可预测，会崩溃
+            thread.interrupt();//不是立即的，不是强制的，需要线程自己去支持
         }
     }
 

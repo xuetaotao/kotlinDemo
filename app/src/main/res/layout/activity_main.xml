@@ -100,6 +100,24 @@
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
+            <Button
+                android:id="@+id/btn_libtest_java"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LibTestJava"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_libtest_kotlin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LibTestKotlin"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
 
             <com.jlpay.kotlindemo.ui.widget.PieView
                 android:layout_width="match_parent"

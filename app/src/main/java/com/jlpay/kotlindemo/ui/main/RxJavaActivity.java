@@ -1,5 +1,6 @@
 package com.jlpay.kotlindemo.ui.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -117,6 +118,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
 ////        return bindUntilEvent(ActivityEvent.DESTROY);//可以绑定Activity生命周期
 //    }
 
+    @SuppressLint("AutoDispose")
     private void getWanWxarticle2() {
         RetrofitClient.get()
                 .getWxarticle2()
@@ -209,6 +211,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
     /**
      * map 操作符
      */
+    @SuppressLint("AutoDispose")
     private void mapUse() {
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
@@ -249,6 +252,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
      * Rxjava2 基本使用
      * delay 操作符：延时接收 Observable 发送的消息 (使用时好像会切换线程，不了解，慎用)
      */
+    @SuppressLint("AutoDispose")
     private void basicUse() {
         //1.创建被观察者
         Observable<String> observable = Observable

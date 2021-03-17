@@ -27,7 +27,7 @@
     <!--定位权限-->
     <string name="location_permission">\"APP\"想使用您的位置信息</string>
     <!--定位权限-申请原因说明-->
-    <string name="location_permission_message">APP需要获取您的位置信息，用于工单处理等需要位置信息的功能</string>
+    <string name="location_permission_message">APP需要获取您的位置信息，用于业务处理等需要位置信息的功能</string>
     <!--定位权限申请-->
     <string name="location_permission_apply">请在设置-应用-APP-权限中开启定位权限</string>
 

@@ -26,6 +26,22 @@ buildscript {
 //allprojects里的repositories是项目本身需要的依赖
 allprojects {
     repositories {
+        //JL自定义组件库
+        maven {
+            url 'http://sharesdk.jlpay.com/repository/android-private/'       //生产
+            credentials {
+                username = 'public'
+                password = 'P1ic223zk'
+            }
+        }
+        maven {
+            url 'http://sharesdk.jlpay.com/repository/android-private-snapshot/'       //测试
+            credentials {
+                username = 'report'
+                password = 'R86c12893x'
+            }
+        }
+
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url 'https://maven.aliyun.com/repository/public/' }
         maven { url 'https://maven.aliyun.com/repository/google' }

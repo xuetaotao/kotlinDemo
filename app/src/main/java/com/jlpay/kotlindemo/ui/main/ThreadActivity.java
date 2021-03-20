@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -467,6 +468,44 @@ public class ThreadActivity extends AppCompatActivity {
             Log.e(TAG, "主线程完了");
         }
     }
+
+    /**********************************************************************/
+
+    /*************************Android的多线程*********************************************/
+
+    static class CustomerThread extends Thread {
+        private CustomerLooper looper = new CustomerLooper();
+
+        @Override
+        public void run() {
+            looper.loop();
+        }
+
+        static class CustomerLooper {
+            private Runnable task;
+            private AtomicBoolean quit = new AtomicBoolean(false);
+
+            synchronized void setTask(Runnable task) {
+                this.task = task;
+            }
+
+            void quit() {
+                quit.set(true);
+            }
+
+            void loop() {
+                while (!quit.get()) {
+                    synchronized (this) {
+                        if (task != null) {
+                            task.run();
+                            task = null;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     /**********************************************************************/
 }

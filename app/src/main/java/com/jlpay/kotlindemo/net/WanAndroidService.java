@@ -3,6 +3,7 @@ package com.jlpay.kotlindemo.net;
 import com.jlpay.kotlindemo.bean.WxArticleBean;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,4 +17,7 @@ public interface WanAndroidService {
 
     @GET("wxarticle/chapters/json")
     Observable<WxArticleBean> getWxarticle2();
+
+    @GET("wxarticle/chapters/json")
+    Single<WxArticleBean> getWxarticle3();
 }

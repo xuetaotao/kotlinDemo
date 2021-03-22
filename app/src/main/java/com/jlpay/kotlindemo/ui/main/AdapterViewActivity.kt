@@ -20,6 +20,7 @@ class AdapterViewActivity : AppCompatActivity() {
 
     private val names = arrayOf("韩非", "张良", "弄玉", "紫女")
     private val descs = arrayOf("老大", "擅长谋略", "擅长音律的女孩", "擅长经营的女孩")
+    private val books = arrayOf("AA", "BB", "CC", "DD", "EE")
 
     //    private val imageIds = arrayOf(1, 2, 3)
     private val imageIds =
@@ -31,7 +32,33 @@ class AdapterViewActivity : AppCompatActivity() {
 
         arrayAdapter()
         simpleAdapter()
+        autoComplete()
+        expandable()
     }
+
+
+    /**
+     *
+     */
+    fun expandable() {
+        val expandableListView: ExpandableListView = findViewById(R.id.expandableListView)
+
+    }
+
+
+    /**
+     * 自动完成文本框
+     */
+    fun autoComplete() {
+        val arrayAdapter = ArrayAdapter(this, R.layout.item_array, books)
+        val autoComplete: AutoCompleteTextView = findViewById(R.id.autoComplete)
+        autoComplete.setAdapter(arrayAdapter)
+        val multiply: MultiAutoCompleteTextView = findViewById(R.id.multiply)
+        multiply.setAdapter(arrayAdapter)
+        //为MultiAutoCompleteTextView设置分隔符
+        multiply.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
+    }
+
 
     /**
      *  SimpleAdapter创建ListView

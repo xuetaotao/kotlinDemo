@@ -36,6 +36,33 @@
             android:layout_height="400dp"
             android:divider="#f0f" />
 
+        <!--定义一个自动完成文本框，指定输入一个字符后进行提示        -->
+        <AutoCompleteTextView
+            android:id="@+id/autoComplete"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:completionHint="请选择您喜欢的图书："
+            android:completionThreshold="1"
+            android:dropDownHorizontalOffset="10dp" />
+
+        <MultiAutoCompleteTextView
+            android:id="@+id/multiply"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:completionThreshold="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ExpandableListView
+                android:id="@+id/expandableListView"
+                android:layout_width="match_parent"
+                android:layout_height="500dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

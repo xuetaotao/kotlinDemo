@@ -25,7 +25,30 @@
 * chore：构建过程或辅助工具的变动。
 * perf：优化相关，比如提升性能、体验
 
-### 
+### tinker热更新使用指南
+
+* 1.若开启混淆：则需要关闭R8，在gradle.properties文件中，加入android.enableR8.libraries=false，android.enableR8=false
+两行代码
+
+* 2.使用 assemblePro 命令打出生产验证的release包，在tinker-support.gradle文件中bakPath目录下生成基准包，
+，直接删除其中的debug相关文件(apk文件和R文件)，将apk改名为app-pro-release.apk，然后复制保存bakApk目录下的文件
+
+* 3.clean项目
+
+* 4.创建app/build 目录，把保存的bakApk 拷贝进来
+
+* 5.修改bug代码
+
+* 6.修改tinker-support.gradle文件中两处地方：(1)def baseApkDir改成bakApk下面的文件名(第9行) (2)def customBaseApk
+取有值的那一行代码(注释15行，放开16行)
+
+* 7.执行 tinker-support命令下的 buildTinkerPatchProRelease 命令，然后在 app\build\outputs\patch\pro\release
+目录下得到 patch_signed_7zip.apk包，即为补丁包
+
+* 8.将上面获取到的补丁包上传Bugly平台进行测试，测试没问题后即可进行全量设备下发
+
+* 注：Tinker的补丁包只针对特定的基准包tinkerId实现补丁，因为这里设置的tinkerId是自动生成的，所以即便代码相同，两次打出的基准包也是
+不同的
 
 
 ```JSON

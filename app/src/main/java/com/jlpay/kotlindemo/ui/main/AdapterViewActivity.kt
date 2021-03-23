@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
@@ -41,8 +42,72 @@ class AdapterViewActivity : AppCompatActivity() {
      *
      */
     fun expandable() {
-        val expandableListView: ExpandableListView = findViewById(R.id.expandableListView)
+        val expandableListAdapter: ExpandableListAdapter = object : BaseExpandableListAdapter() {
 
+            var logos: IntArray = intArrayOf(R.mipmap.zhizhuxia, R.mipmap.dog, R.mipmap.baby)
+            var armTypes = arrayOf("letter", "number", "characters")
+            var arms = arrayOf(
+                arrayOf("AA", "BB", "CC"),
+                arrayOf("11", "22", "33"),
+                arrayOf("嗯嗯", "好呢", "是的")
+            )
+
+            //获取指定组位置处的组数据
+            override fun getGroup(groupPosition: Int): Any {
+                return armTypes[groupPosition]
+            }
+
+            override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun hasStableIds(): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun getGroupView(
+                groupPosition: Int,
+                isExpanded: Boolean,
+                convertView: View?,
+                parent: ViewGroup?
+            ): View {
+                TODO("Not yet implemented")
+            }
+
+            override fun getChildrenCount(groupPosition: Int): Int {
+                TODO("Not yet implemented")
+            }
+
+            override fun getChild(groupPosition: Int, childPosition: Int): Any {
+                TODO("Not yet implemented")
+            }
+
+            override fun getGroupId(groupPosition: Int): Long {
+                TODO("Not yet implemented")
+            }
+
+            override fun getChildView(
+                groupPosition: Int,
+                childPosition: Int,
+                isLastChild: Boolean,
+                convertView: View?,
+                parent: ViewGroup?
+            ): View {
+                TODO("Not yet implemented")
+            }
+
+            override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+                TODO("Not yet implemented")
+            }
+
+            override fun getGroupCount(): Int {
+                TODO("Not yet implemented")
+            }
+        }
+
+
+        val expandableListView: ExpandableListView = findViewById(R.id.expandableListView)
+//        expandableListView.setAdapter()
     }
 
 

@@ -15,6 +15,27 @@ import com.jlpay.kotlindemo.R
 import kotlinx.android.synthetic.main.activity_image_view.*
 import kotlin.math.roundToLong
 
+/**
+ * ImageView 的 scaleType属性值：（摘自疯狂Android第四版）
+ * matrix：使用 matrix 方式（矩阵缩放）进行缩放
+ * fit_xy：对图片横向、纵向独立缩放，使得该图片完全适用于该 ImageView，图片的纵横比可能会改变
+ * fit_start：保持纵横比缩放图片，直到该图片能完全显示在ImageView中（图片较长的边长与ImageView相应的边长相等），缩放完成后将该图片放在ImageView的左上角
+ * fit_center：保持纵横比缩放图片，直到该图片能完全显示在ImageView中（图片较长的边长与ImageView相应的边长相等），缩放完成后将该图片放在ImageView的中央
+ * fit_end：保持纵横比缩放图片，直到该图片能完全显示在ImageView中（图片较长的边长与ImageView相应的边长相等），缩放完成后将该图片放在ImageView的右下角
+ * center:将图片放在ImageView的中间，但不进行任何缩放
+ * center_crop：保持纵横比缩放图片，以使得图片能完全覆盖ImageView。只要图片的最短边能显示出来即可
+ * center_inside：保持纵横比缩放图片，以使得ImageView能完全显示该图片
+ *
+ * 以下摘自网络：
+ * CENTER /center 按图片的原来size居中显示，当图片长/宽超过View的长/宽，则截取图片的居中部分显示
+ * CENTER_CROP / centerCrop 按比例扩大图片的size居中显示，使得图片长(宽)等于或大于View的长(宽)
+ * CENTER_INSIDE / centerInside 将图片的内容完整居中显示，通过按比例缩小或原来的size使得图片长/宽等于或小于View的长/宽
+ * FIT_CENTER / fitCenter 把图片按比例扩大/缩小到View的宽度，居中显示
+ * FIT_END / fitEnd 把图片按比例扩大/缩小到View的宽度，显示在View的下部分位置
+ * FIT_START / fitStart 把图片按比例扩大/缩小到View的宽度，显示在View的上部分位置
+ * FIT_XY / fitXY 把图片不按比例扩大/缩小到View的大小显示
+ * MATRIX / matrix 用矩阵来绘制，动态缩小放大图片来显示。
+ */
 class ImageViewActivity : AppCompatActivity() {
 
     private val images: IntArray = intArrayOf(

@@ -28,6 +28,9 @@ class AdapterViewActivity : AppCompatActivity() {
     private val imageIds =
         intArrayOf(R.mipmap.hanfei, R.mipmap.liang, R.mipmap.nongyu, R.mipmap.zinv)
 
+    private lateinit var flipper: AdapterViewFlipper
+    private lateinit var stackView: StackView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adapter_view)
@@ -36,13 +39,108 @@ class AdapterViewActivity : AppCompatActivity() {
         simpleAdapter()
         autoComplete()
         expandable()
+
+        flipper = findViewById(R.id.flipper)
+        adapterViewFlipperPractice()
+
+        stackView = findViewById(R.id.stackview)
+        stackViewPractice()
     }
 
 
     /**
-     *
+     * StackView实现叠在一起的图片
      */
-    fun expandable() {
+    private fun stackViewPractice() {
+        val imageIds: IntArray =
+            intArrayOf(R.mipmap.ic_launcher, R.mipmap.zhizhuxia, R.mipmap.hanfei)
+
+        //第四个参数：该参数决定提取Map<String,?>对象中哪些key对应的value来生成列表项
+        //第五个参数：该参数应该是一个int[]类型的参数，该参数决定填充哪些组件
+
+        val listItems = ArrayList<Map<String, Any>>()
+        for ((index, image) in imageIds.withIndex()) {
+            val listItem = HashMap<String, Any>()
+            listItem.put("image", imageIds[index])
+            listItems.add(listItem)
+        }
+        val simpleAdapter: SimpleAdapter = SimpleAdapter(
+            this, listItems, R.layout.item_simple,
+            arrayOf("image"), intArrayOf(R.id.header)
+        )
+        stackView.adapter = simpleAdapter
+    }
+
+    fun prevStack(view: View) {
+        stackView.showPrevious()//显示上一个组件
+    }
+
+    fun nextStack(view: View) {
+        stackView.showNext()//显示下一个组件
+    }
+
+
+    /**
+     * AdapterViewFlipper实现自动播放的图片库
+     */
+    private fun adapterViewFlipperPractice() {
+        val imageIds: IntArray =
+            intArrayOf(R.mipmap.ic_launcher, R.mipmap.zhizhuxia, R.mipmap.hanfei)
+
+        //创建一个BaseAdapter对象，该对象负责提供 AdapterViewFlipper 所显示的列表项
+        val baseAdapter: BaseAdapter = object : BaseAdapter() {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+                val imageView: ImageView = if (convertView == null) {
+                    ImageView(this@AdapterViewActivity)
+                } else {
+                    convertView as ImageView
+                }
+                imageView.setImageResource(imageIds[position])
+
+                imageView.scaleType = ImageView.ScaleType.FIT_XY
+                //为ImageView设置布局参数
+                val layoutParam: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                imageView.layoutParams = layoutParam
+                return imageView
+            }
+
+            override fun getItem(position: Int): Any {
+                return position
+            }
+
+            override fun getItemId(position: Int): Long {
+                return position.toLong()
+            }
+
+            override fun getCount(): Int {
+                return imageIds.size
+            }
+        }
+
+        flipper.adapter = baseAdapter
+    }
+
+    fun prev(source: View) {
+        flipper.showPrevious()//显示上一个组件
+        flipper.stopFlipping()//停止自动播放
+    }
+
+    fun next(source: View) {
+        flipper.showNext()//显示下一个组件
+        flipper.stopFlipping()//停止自动播放
+    }
+
+    fun auto(source: View) {
+        flipper.startFlipping()//开始自动播放。每一秒更换一个图片
+    }
+
+    /**
+     * 可展开的列表组件（ExpandableListView）
+     */
+    private fun expandable() {
         val logos: IntArray =
             intArrayOf(R.mipmap.ic_launcher, R.mipmap.zhizhuxia, R.mipmap.hanfei)
         val armTypes = arrayOf("letter", "number", "characters")
@@ -195,7 +293,7 @@ class AdapterViewActivity : AppCompatActivity() {
     /**
      * 自动完成文本框
      */
-    fun autoComplete() {
+    private fun autoComplete() {
         val arrayAdapter = ArrayAdapter(this, R.layout.item_array, books)
         val autoComplete: AutoCompleteTextView = findViewById(R.id.autoComplete)
         autoComplete.setAdapter(arrayAdapter)
@@ -209,7 +307,7 @@ class AdapterViewActivity : AppCompatActivity() {
     /**
      *  SimpleAdapter创建ListView
      */
-    fun simpleAdapter() {
+    private fun simpleAdapter() {
         val listItems = ArrayList<Map<String, Any>>()
         for ((index, name) in names.withIndex()) {
             val listItem = HashMap<String, Any>()
@@ -261,7 +359,7 @@ class AdapterViewActivity : AppCompatActivity() {
     /**
      * ArrayAdapter创建ListView
      */
-    fun arrayAdapter() {
+    private fun arrayAdapter() {
         val list1: ListView = findViewById(R.id.list1)
         val arr1 = arrayOf("Sun", "Zhu", "Sha")
         //ArrayAdapter 的每个列表项只能是TextView

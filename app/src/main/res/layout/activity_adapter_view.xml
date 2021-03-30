@@ -63,6 +63,33 @@
 
         </LinearLayout>
 
+        <include layout="@layout/item_adapter_view" />
+
+        <StackView
+            android:id="@+id/stackview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:loopViews="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="prevStack"
+                android:text="上一个" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="nextStack"
+                android:text="下一个" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

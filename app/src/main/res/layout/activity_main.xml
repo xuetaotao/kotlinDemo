@@ -72,6 +72,14 @@
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
+            <Button
+                android:id="@+id/btn_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RecyclerView"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btn_permission"

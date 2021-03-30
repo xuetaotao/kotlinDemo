@@ -39,6 +39,10 @@ class MainActivity : BaseMediaActivity() {
         btnAdapterview.setOnClickListener {
             AdapterViewActivity.newInstance(this)
         }
+        val btnRecyclerview: Button = findViewById(R.id.btn_recyclerView)
+        btnRecyclerview.setOnClickListener {
+            RecyclerViewActivity.newInstance(this)
+        }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

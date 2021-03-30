@@ -110,6 +110,10 @@
             android:name=".ui.main.LibTestKotlinActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.RecyclerViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--定义轨道的背景    -->
+    <item
+        android:id="@android:id/background"
+        android:drawable="@mipmap/tqxj_slider_gray" />
+
+    <!--定义轨道上已完成部分的样式    -->
+    <!--使用自定义背景进度时要使用<scale/>子项，否则进度条会一直显示满的状态(secondaryProgress也要)；background不加-->
+    <item android:id="@android:id/progress">
+        <scale
+            android:drawable="@color/common_blue"
+            android:scaleWidth="100%" />
+    </item>
+
+
+    <!--    <item android:id="@android:id/background"-->
+    <!--        android:drawable="@mipmap/tqxj_slider_gray"/>-->
+    <!--    <item android:id="@android:id/secondaryProgress">-->
+    <!--        <scale android:scaleWidth="100%">-->
+    <!--            <selector>-->
+    <!--                <item android:state_enabled="false">-->
+    <!--                    <color android:color="@android:color/transparent"/>-->
+    <!--                </item>-->
+    <!--                <item android:drawable="@mipmap/tqxj_slider_gray"/>-->
+    <!--            </selector>-->
+    <!--        </scale>-->
+    <!--    </item>-->
+    <!--    <item android:id="@android:id/progress">-->
+    <!--        <scale android:scaleWidth="100%">-->
+    <!--            <selector>-->
+    <!--                <item android:state_enabled="false">-->
+    <!--                    <color android:color="@android:color/transparent"/>-->
+    <!--                </item>-->
+    <!--                <item android:drawable="@color/common_blue"/>-->
+    <!--            </selector>-->
+    <!--        </scale>-->
+    <!--    </item>-->
+
+</layer-list>

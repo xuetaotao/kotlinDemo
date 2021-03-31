@@ -1,5 +1,6 @@
 package com.jlpay.kotlindemo.ui.main
 
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
@@ -43,6 +44,12 @@ class MainActivity : BaseMediaActivity() {
         btnRecyclerview.setOnClickListener {
             RecyclerViewActivity.newInstance(this)
         }
+        val btnProgressbar: Button = findViewById(R.id.btn_progressBar)
+        btnProgressbar.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                ProgressBarActivity.newInstance(this@MainActivity)
+            }
+        })
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

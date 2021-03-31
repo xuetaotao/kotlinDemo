@@ -114,6 +114,10 @@
             android:name=".ui.main.RecyclerViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.ProgressBarActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

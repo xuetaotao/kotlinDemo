@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.RatingBar
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import java.lang.ref.WeakReference
@@ -49,6 +52,35 @@ class ProgressBarActivity : AppCompatActivity() {
             }
         }
         thread.start()
+
+
+        //SeekBar
+        val image: ImageView = findViewById(R.id.image)
+        val seekbar: SeekBar = findViewById(R.id.seekbar)
+        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                image.imageAlpha = progress
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+            }
+        })
+        val seekbar2: SeekBar = findViewById(R.id.seekbar2)
+
+
+        //RatingBar
+        val image2: ImageView = findViewById(R.id.image2)
+        val ratingbar: RatingBar = findViewById(R.id.ratingbar)
+        ratingbar.setOnRatingBarChangeListener(object : RatingBar.OnRatingBarChangeListener {
+            override fun onRatingChanged(ratingBar: RatingBar?, rating: Float, fromUser: Boolean) {
+                image2.imageAlpha = (rating * 255 / 5).toInt()
+            }
+        })
     }
 
     /**

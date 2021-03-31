@@ -55,14 +55,57 @@
         android:max="100"
         android:progressDrawable="@drawable/my_bar" />
 
-    <!--定义一个水平进度条，并改变轨道外观    -->
-    <!--    <ProgressBar-->
-    <!--        style="@android:style/Widget.ProgressBar.Horizontal"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="15dp"-->
-    <!--        android:max="100"-->
-    <!--        android:progress="80"-->
-    <!--        android:progressDrawable="@drawable/my_bar" />-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="拖动条SeekBar" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/zhizhuxia" />
+
+    <!--定义一个拖动条，并改变它的滑块外观    -->
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:max="255"
+        android:progress="255"
+        android:thumb="@mipmap/add_one" />
+
+    <!--定义一个拖动条，并改变它的刻度图标   -->
+    <SeekBar
+        android:id="@+id/seekbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:max="10"
+        android:tickMark="@mipmap/add_two" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="星级评分条RatingBar" />
+
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/hanfei" />
+
+    <!--定义一个星级评分条，注意这里的宽度要为 wrap_content，不然星星会多   -->
+    <RatingBar
+        android:id="@+id/ratingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:max="255"
+        android:numStars="5"
+        android:progress="255"
+        android:stepSize="0.5" />
 
 </LinearLayout>

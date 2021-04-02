@@ -91,6 +91,15 @@
                 android:textSize="14sp" />
 
             <Button
+                android:id="@+id/btn_viewSwitcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ViewSwitcher"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
                 android:id="@+id/btn_permission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,6 +113,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Thread"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_io"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="IO"
                 android:textAllCaps="false"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />

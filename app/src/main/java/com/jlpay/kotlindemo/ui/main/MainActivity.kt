@@ -50,6 +50,10 @@ class MainActivity : BaseMediaActivity() {
                 ProgressBarActivity.newInstance(this@MainActivity)
             }
         })
+        val btnViewswitcher: Button = findViewById(R.id.btn_viewSwitcher)
+        btnViewswitcher.setOnClickListener {
+            ViewSwitcherActivity.newInstance(this)
+        }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()
@@ -59,6 +63,12 @@ class MainActivity : BaseMediaActivity() {
         btnThread.setOnClickListener {
             ThreadActivity.newInstance(this)
         }
+        val btnIo: Button = findViewById(R.id.btn_io)
+        btnIo.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                IOActivity.newInstance(this@MainActivity)
+            }
+        })
         val btnRxjava2: Button = findViewById(R.id.btn_rxjava2)
         btnRxjava2.setOnClickListener {
             RxJavaActivity.newInstance(this)

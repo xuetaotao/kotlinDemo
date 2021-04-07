@@ -54,6 +54,12 @@ class MainActivity : BaseMediaActivity() {
         btnViewswitcher.setOnClickListener {
             ViewSwitcherActivity.newInstance(this)
         }
+        val btnImageswitcher: Button = findViewById(R.id.btn_imageSwitcher)
+        btnImageswitcher.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                ImageSwitcherActivity.newInstance(this@MainActivity)
+            }
+        })
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

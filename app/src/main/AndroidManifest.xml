@@ -126,6 +126,10 @@
             android:name=".ui.main.ViewSwitcherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.ImageSwitcherActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

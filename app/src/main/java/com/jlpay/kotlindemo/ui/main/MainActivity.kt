@@ -66,6 +66,12 @@ class MainActivity : BaseMediaActivity() {
                 ViewFlipperActivity.newInstance(this@MainActivity)
             }
         })
+        val btnOtherUiModule: Button = findViewById(R.id.btn_other_ui_module)
+        btnOtherUiModule.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                OtherUIModuleActivity.newInstance(this@MainActivity)
+            }
+        })
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

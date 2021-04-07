@@ -60,6 +60,12 @@ class MainActivity : BaseMediaActivity() {
                 ImageSwitcherActivity.newInstance(this@MainActivity)
             }
         })
+        val btnViewflipper: Button = findViewById(R.id.btn_viewFlipper)
+        btnViewflipper.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                ViewFlipperActivity.newInstance(this@MainActivity)
+            }
+        })
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

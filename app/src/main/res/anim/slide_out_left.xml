@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--res/anim/ 目录下放的是视图动画的XML实现和布局动画（LayoutAnimation）
+    res/animations/ 目录下存放的是属性动画的XML实现
+    帧动画XML实现存放在res/drawable/ 目录下    -->
+
+    <!--设置从右边拖进来的动画    -->
+    <!--android:duration 指定动画持续时间    -->
+    <translate
+        android:duration="@android:integer/config_mediumAnimTime"
+        android:fromXDelta="100%p"
+        android:toXDelta="0" />
+
+</set>

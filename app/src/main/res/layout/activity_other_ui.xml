@@ -1,26 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_simple_toast"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="显示简单Toast"
-        android:textAllCaps="false"
-        android:textColor="@color/light_black"
-        android:textSize="14sp" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_img_toast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="显示带图片的Toast"
-        android:textAllCaps="false"
-        android:textColor="@color/light_black"
-        android:textSize="14sp" />
+        <Button
+            android:id="@+id/btn_simple_toast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="显示简单Toast"
+            android:textAllCaps="false"
+            android:textColor="@color/light_black"
+            android:textSize="14sp" />
 
+        <Button
+            android:id="@+id/btn_send_notify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="send"
+            android:text="sendNotify"
+            android:textAllCaps="false"
+            android:textColor="@color/light_black"
+            android:textSize="14sp" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_del_notify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="del"
+            android:text="delNotify"
+            android:textAllCaps="false"
+            android:textColor="@color/light_black"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_img_toast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="显示带图片的Toast"
+            android:textAllCaps="false"
+            android:textColor="@color/light_black"
+            android:textSize="14sp" />
+
+        <!--android:firstDayOfWeek 设置以星期二作为每周第一天
+           android:shownWeekCount="4" 设置该组件总共显示4个星期-->
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:firstDayOfWeek="3"
+            android:focusedMonthDateColor="#f00"
+            android:selectedWeekBackgroundColor="#aff"
+            android:shownWeekCount="4"
+            android:unfocusedMonthDateColor="#f9f"
+            android:weekSeparatorLineColor="#ff0" />
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:calendarViewShown="true"
+            android:endYear="2021"
+            android:headerBackground="#f0f"
+            android:spinnersShown="true"
+            android:startYear="2010" />
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+    </LinearLayout>
+
+</ScrollView>

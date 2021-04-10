@@ -1,16 +1,27 @@
 package com.jlpay.kotlindemo.ui.main
 
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
+import java.util.*
 
 class OtherUIModuleActivity : AppCompatActivity() {
+
+    private val CHANNEL_ID: String = "crazyit"
+    private val NOTIFICATION_ID: Int = 0x123
+
+    private lateinit var notificationManager: NotificationManager
 
     companion object {
         @JvmStatic
@@ -29,6 +40,171 @@ class OtherUIModuleActivity : AppCompatActivity() {
 
     fun initView() {
         toastPractice()
+        calendarViewPractice()
+        datePickerAndtimePicker()
+        searchViewPractice()
+        notificationPractice()
+    }
+
+    /**
+     * 通知
+     */
+    fun notificationPractice() {
+        //1.调用getSystemService(Context.NOTIFICATION_SERVICE)方法获取系统的NotificationManager服务
+        //程序一般通过NotificationManager服务来发送Notification
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val name: String = "测试Channel"//设置通知Channel的名字
+        //2.创建NotificationChannel对象，并在NotificationManager上创建该Channel对象
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//Android8.0加入了通知Channel帮助用户来统一管理通知
+            val channel: NotificationChannel =
+                NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH)
+            channel.description = "测试Channel的描述信息"//设置通知Channel的描述信息
+            channel.enableLights(true)//设置通知出现时的闪光灯
+            channel.lightColor = Color.RED
+            channel.enableVibration(true)//设置通知出现时震动
+            channel.vibrationPattern = longArrayOf(0, 50, 100, 150)
+//            channel.setSound()
+            notificationManager.createNotificationChannel(channel)
+
+        } else {
+            TODO()
+        }
+    }
+
+    fun send(view: View) {
+        val intent: Intent = Intent(this@OtherUIModuleActivity, PracticeViewActivity::class.java)
+        val pi: PendingIntent = PendingIntent.getActivity(this@OtherUIModuleActivity, 0, intent, 0)
+        val p = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Person.Builder()
+                .setName("孙悟空")
+                .setIcon(Icon.createWithResource(this, R.mipmap.hanfei))
+                .build()
+        } else {
+            TODO("VERSION.SDK_INT < P")
+        }
+        //设置通知参与者
+        val messageStyle: Notification.MessagingStyle = Notification.MessagingStyle(p)
+        messageStyle.conversationTitle = "一条新通知"//设置消息标题
+        val message: Notification.MessagingStyle.Message =
+            Notification.MessagingStyle.Message("恭喜您", System.currentTimeMillis(), p)//创建一条消息
+//        message.setData("image/jpeg", Uri.parse())//设置额外的数据
+        messageStyle.addMessage(message)//添加一条消息
+
+        val notify: Notification = Notification.Builder(this, CHANNEL_ID)
+            .setAutoCancel(true)//设置打开该通知，该通知自动消失
+            .setSmallIcon(R.mipmap.hanfei)//设置通知的图标
+            .setStyle(messageStyle)
+            .setContentIntent(pi)//设置通知将要启动程序的Intent
+            .build()
+        notificationManager.notify(NOTIFICATION_ID, notify)//发送通知
+    }
+
+    fun del(view: View) {
+        notificationManager.cancel(NOTIFICATION_ID)
+    }
+
+    /**
+     * 搜索框(SearchView)的功能与用法
+     */
+    fun searchViewPractice() {
+        val searchView: SearchView = findViewById(R.id.searchView)
+        val listView: ListView = findViewById(R.id.listView)
+        val mStrings = arrayOf("aaaaa", "bbbbb", "ccccc")
+        val adapter = ArrayAdapter(this, R.layout.item_array, mStrings)
+        listView.adapter = adapter
+        listView.isTextFilterEnabled = true//设置ListView启用过滤
+        searchView.isIconifiedByDefault = false//设置该SearchView默认是否自动缩小为图标
+        searchView.isSubmitButtonEnabled = true//设置该SearchView显示搜索按钮
+        searchView.queryHint = "查找"//设置该SearchView内默认显示的提示文本
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            //单击搜索按钮时触发该方法
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                //实际应用中应该在该方法内执行实际查询
+                //此处仅使用Toast显示用户输入的查询内容
+                Toast.makeText(this@OtherUIModuleActivity, "您的选择是：$query", Toast.LENGTH_SHORT)
+                    .show()
+                return false
+            }
+
+            //用户输入字符时触发该方法
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (TextUtils.isEmpty(newText)) {
+                    listView.clearTextFilter()//清除ListView的过滤
+                } else {
+                    listView.setFilterText(newText)//使用用户输入的内容对ListView的列表项进行过滤
+                }
+                return true
+            }
+        })
+    }
+
+
+    fun datePickerAndtimePicker() {
+        val datePicker: DatePicker = findViewById(R.id.datePicker)
+        val timePicker: TimePicker = findViewById(R.id.timePicker)
+        //获取当前的年，月，日，小时，分钟
+        val calendar: Calendar = Calendar.getInstance()
+        var year = calendar.get(Calendar.YEAR)
+        var month = calendar.get(Calendar.MONTH)
+        var day = calendar.get(Calendar.DAY_OF_MONTH)
+        var hour = calendar.get(Calendar.HOUR)
+        var minute = calendar.get(Calendar.MINUTE)
+        val second = calendar.get(Calendar.SECOND)
+        //初始化 datePicker 组件，初始化时指定监听器
+        datePicker.init(year, month, day, object : DatePicker.OnDateChangedListener {
+            override fun onDateChanged(
+                view: DatePicker?,
+                year1: Int,
+                monthOfYear1: Int,
+                dayOfMonth1: Int
+            ) {
+                year = year1
+                month = monthOfYear1
+                day = dayOfMonth1
+                Toast.makeText(
+                    this@OtherUIModuleActivity,
+                    "日期为：" + year1 + "年" + (monthOfYear1 + 1) + "月" + dayOfMonth1 + "日" + hour + "时" +
+                            minute + "分" + second + "秒",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+        //为timePicker指定监听器
+        timePicker.setOnTimeChangedListener(object : TimePicker.OnTimeChangedListener {
+            override fun onTimeChanged(view: TimePicker?, hourOfDay1: Int, minute1: Int) {
+                hour = hourOfDay1
+                minute = minute1
+                Toast.makeText(
+                    this@OtherUIModuleActivity,
+                    "日期为：" + year + "年" + (month + 1) + "月" + day + "日" + hour + "时" +
+                            minute + "分" + second + "秒",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+
+    /**
+     * 日历视图
+     */
+    fun calendarViewPractice() {
+        val calendarView: CalendarView = findViewById(R.id.calendarView)
+        calendarView.setOnDateChangeListener(object : CalendarView.OnDateChangeListener {
+            override fun onSelectedDayChange(
+                view: CalendarView,
+                year: Int,
+                month: Int,
+                dayOfMonth: Int
+            ) {
+                Toast.makeText(
+                    this@OtherUIModuleActivity,
+                    "你的生日是：" + year + "年" + (month + 1) + "月" + dayOfMonth + "日",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
 
 

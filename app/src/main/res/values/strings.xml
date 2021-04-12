@@ -5,6 +5,12 @@
     <string name="hint">提示</string>
 
     <string name="file_not_exist">文件不存在</string>
+    <string name="warm_tip">温馨提示</string>
+    <string name="not_use">暂不使用</string>
+    <string name="agree_and_continue">同意并继续</string>
+    <string name="permission_nofify">感谢您使用KotlinDemo！为了帮助您安全使用产品和服务，在您同意并授权的基础上，
+        我们可能会收集您的身份信息、联系信息、交易信息、位置信息、设备信息等，请您在使用前务必仔细阅读并充分理解《KotlinDemo隐私政策》。
+        \n\n当您点击同意，并开始使用产品和服务，即代表您已理解并同意全部条款。</string>
 
 
     <!--权限获取提示语-->

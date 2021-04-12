@@ -72,6 +72,12 @@ class MainActivity : BaseMediaActivity() {
                 OtherUIModuleActivity.newInstance(this@MainActivity)
             }
         })
+        val btnDialog: Button = findViewById(R.id.btn_dialog)
+        btnDialog.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                DialogActivity.newInstance(this@MainActivity)
+            }
+        })
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

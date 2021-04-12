@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_customDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CustomDialog"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_simpleDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SimpleDialog"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_itemDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ItemDialog"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_singleChoiceDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SingleChoiceDialog"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_multiChoiceDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MultiChoiceDialog"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_customItemsDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CustomItemsAlertDialog"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_customViewAlertDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="customViewAlertDialog"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finish"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_popupWindow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PopupWindow"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_popupWindow2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PopupWindow2"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+
+
+</LinearLayout>

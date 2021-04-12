@@ -140,6 +140,10 @@
             android:name=".ui.main.OtherUIModuleActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.DialogActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

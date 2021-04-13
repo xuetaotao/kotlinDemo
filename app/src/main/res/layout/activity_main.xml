@@ -136,6 +136,15 @@
                 android:textSize="14sp" />
 
             <Button
+                android:id="@+id/btn_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Menu"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
                 android:id="@+id/btn_permission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

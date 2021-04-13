@@ -44,6 +44,26 @@ class OtherUIModuleActivity : AppCompatActivity() {
         datePickerAndtimePicker()
         searchViewPractice()
         notificationPractice()
+        numberPickerTest()
+    }
+
+    fun numberPickerTest() {
+        var minValue: Int = 25
+        val numberPicker: NumberPicker = findViewById(R.id.number_picker)
+        numberPicker.minValue = 60
+        numberPicker.maxValue = 100
+        numberPicker.value = 80
+        numberPicker.setOnValueChangedListener(object : NumberPicker.OnValueChangeListener {
+            override fun onValueChange(picker: NumberPicker?, oldVal: Int, newVal: Int) {
+                minValue = newVal
+                Toast.makeText(
+                    this@OtherUIModuleActivity,
+                    "您选择的最低价格是：$minValue",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        })
     }
 
     /**

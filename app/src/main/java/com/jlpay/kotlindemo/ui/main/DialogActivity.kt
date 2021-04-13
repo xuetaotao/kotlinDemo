@@ -1,7 +1,9 @@
 package com.jlpay.kotlindemo.ui.main
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -13,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
+import java.util.*
 
 class DialogActivity : AppCompatActivity() {
 
@@ -71,6 +74,55 @@ class DialogActivity : AppCompatActivity() {
 
         popUpWindowTest()
         popUpWindowTest2()
+
+        val btnDatepickerdialog: Button = findViewById(R.id.btn_datePickerDialog)
+        btnDatepickerdialog.setOnClickListener {
+            datepickerdialogTest()
+        }
+        val btnTimepickerdialog: Button = findViewById(R.id.btn_timePickerDialog)
+        btnTimepickerdialog.setOnClickListener {
+            timepickerdialogTest()
+        }
+    }
+
+    fun timepickerdialogTest() {
+        val calendar: Calendar = Calendar.getInstance()
+        val timePickerDialog: TimePickerDialog =
+            TimePickerDialog(this, object : TimePickerDialog.OnTimeSetListener {
+                override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+                    Toast.makeText(
+                        this@DialogActivity,
+                        "您选择了：" + hourOfDay + "时" + minute + "分",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true)
+        timePickerDialog.show()
+    }
+
+    fun datepickerdialogTest() {
+        val calendar: Calendar = Calendar.getInstance()
+        val datePickerDialog: DatePickerDialog = DatePickerDialog(
+            this,
+            object : DatePickerDialog.OnDateSetListener {
+                override fun onDateSet(
+                    view: DatePicker?,
+                    year: Int,
+                    month: Int,
+                    dayOfMonth: Int
+                ) {
+                    Toast.makeText(
+                        this@DialogActivity,
+                        "您选择了：" + year + "年" + (month + 1) + "月" + dayOfMonth + "日",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
     }
 
     fun popUpWindowTest2() {

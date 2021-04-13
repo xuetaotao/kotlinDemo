@@ -47,6 +47,14 @@
             android:textColor="@color/light_black"
             android:textSize="14sp" />
 
+        <NumberPicker
+            android:id="@+id/number_picker"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+
         <!--android:firstDayOfWeek 设置以星期二作为每周第一天
            android:shownWeekCount="4" 设置该组件总共显示4个星期-->
         <CalendarView

@@ -148,6 +148,10 @@
             android:name=".ui.main.MenuActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.XmlMenuActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

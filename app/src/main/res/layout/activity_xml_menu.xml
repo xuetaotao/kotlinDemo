@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/tv_contextMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="上下文菜单：ContextMenu"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_popupMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:onClick="popUpMenuClick"
+        android:text="PopUpMenu"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black" />
+
+</LinearLayout>

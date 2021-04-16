@@ -82,6 +82,10 @@ class MainActivity : BaseMediaActivity() {
         btnMenu.setOnClickListener {
             MenuActivity.newInstance(this)
         }
+        val btnXmlMenu: Button = findViewById(R.id.btn_xml_menu)
+        btnXmlMenu.setOnClickListener {
+            XmlMenuActivity.newInstance(this)
+        }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

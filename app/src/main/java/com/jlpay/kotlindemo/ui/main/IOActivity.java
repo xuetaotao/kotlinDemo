@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.Constants;
+import com.jlpay.kotlindemo.ui.utils.DataUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -51,6 +52,15 @@ public class IOActivity extends AppCompatActivity {
 //        io5();
 //        io6();
         io7();
+
+        testDataUtils();
+    }
+
+    private void testDataUtils() {
+        double aa = Double.parseDouble("11");
+        Log.e(TAG, "测试：" + aa);
+        double bb = DataUtils.stringToDouble("aa");
+        Log.e(TAG, "测试：" + bb);
     }
 
 

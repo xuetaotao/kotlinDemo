@@ -90,6 +90,10 @@ class MainActivity : BaseMediaActivity() {
         btnActionbar.setOnClickListener {
             ActionBarActivity.newInstance(this)
         }
+        val btnPlaneview: Button = findViewById(R.id.btn_planeView)
+        btnPlaneview.setOnClickListener {
+            PlaneViewActivity.newInstance(this@MainActivity)
+        }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()

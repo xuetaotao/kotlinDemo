@@ -156,6 +156,10 @@
             android:name=".ui.main.ActionBarActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.PlaneViewActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

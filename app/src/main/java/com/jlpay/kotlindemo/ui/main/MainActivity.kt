@@ -5,6 +5,8 @@ import android.widget.Button
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
+import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
+import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.widget.CustomDialog
 import okhttp3.*
 import java.io.IOException
@@ -93,6 +95,14 @@ class MainActivity : BaseMediaActivity() {
         val btnPlaneview: Button = findViewById(R.id.btn_planeView)
         btnPlaneview.setOnClickListener {
             PlaneViewActivity.newInstance(this@MainActivity)
+        }
+        val btnEventlistener: Button = findViewById(R.id.btn_eventListener)
+        btnEventlistener.setOnClickListener {
+            EventListenerActivity.newInstance(this)
+        }
+        val btnConfiguration: Button = findViewById(R.id.btn_configuration)
+        btnConfiguration.setOnClickListener {
+            ConfigurationActivity.newInstance(this)
         }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {

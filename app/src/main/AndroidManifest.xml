@@ -67,7 +67,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--在Activity中添加了 android:configChanges属性，目的是当所指定属性(Configuration Changes)发生改变时，通知程序调用 onConfigurationChanged()函数就不会重启activity-->
+        <!--在Activity中添加了 android:configChanges属性，目的是当所指定属性(Configuration Changes)发生改变时，通知程序调用 onConfigurationChanged()函数
+        就不会重启activity，同时能够监听系统设置的更改-->
         <activity
             android:name=".ui.main.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -160,6 +161,14 @@
             android:name=".ui.main.PlaneViewActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.chapter3.EventListenerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <!-- screenSize|orientation属性值指定该Activity可以监听屏幕方向改变的事件，这样当程序改变手机屏幕方向时，Activity的onConfigurationChanged()方法就会被回调       -->
+        <activity
+            android:name=".ui.main.chapter3.ConfigurationActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden" />
 
         <service android:name=".service.DownLoadService" />
 

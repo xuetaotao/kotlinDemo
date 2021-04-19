@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入收件人地址"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="请输入短信内容"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="发送"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_eventdeliver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="基于回调的事件传播"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <com.jlpay.kotlindemo.ui.widget.DrawView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

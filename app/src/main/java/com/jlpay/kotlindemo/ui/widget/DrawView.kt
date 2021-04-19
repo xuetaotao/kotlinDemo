@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.jlpay.kotlindemo.ui.utils.px
@@ -40,7 +41,14 @@ class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         currentY = event.y
         //通知当前组件重绘自己
         invalidate()
-        //返回true表明该处理方法已经处理该事件
+        Log.e("eventDeliver：", "DrawView： onTouchEvent")
+        //返回true表明该处理方法已经处理该事件，不会向外传播
         return true
     }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        return super.dispatchTouchEvent(event)
+    }
+
+
 }

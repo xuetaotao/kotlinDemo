@@ -14,6 +14,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.ui.utils.NotificationUtils
 import java.util.*
 
 class OtherUIModuleActivity : AppCompatActivity() {
@@ -122,6 +123,18 @@ class OtherUIModuleActivity : AppCompatActivity() {
     fun del(view: View) {
         notificationManager.cancel(NOTIFICATION_ID)
     }
+
+    fun send2(view: View) {
+        val notificationUtils: NotificationUtils = NotificationUtils(this)
+        val notificationManager2 = notificationUtils.getNotificationManager(this)
+        val notification = notificationUtils.getNotification(
+            notificationManager2,
+            notificationUtils.CHANNEL_ID,
+            notificationUtils.CHANNEL_NAME
+        )
+        notificationManager2.notify(notificationUtils.NOTIFICATION_ID, notification)
+    }
+
 
     /**
      * 搜索框(SearchView)的功能与用法

@@ -148,3 +148,19 @@ task showJVMProp {
         println "添加的JVM属性：${p1}"
     }
 }
+
+task showNum {
+    doFirst {
+        println 5
+    }
+    doLast {
+        println 6
+    }
+    doFirst {
+        println 7
+    }
+    doLast {
+        println 8
+    }
+}
+println(rootProject.buildDir)

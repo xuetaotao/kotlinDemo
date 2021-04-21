@@ -39,6 +39,37 @@ android {
         }
     }
 
+    //两层维度
+//    flavorDimensions 'paid'
+//    productFlavors {
+//        free {
+//
+//        }
+//        paid {
+//
+//        }
+//    }
+
+    //三维度
+//    flavorDimensions 'paid', 'environment'
+//    productFlavors {
+//        free {
+//            dimension 'paid'
+//        }
+//        paid {
+//            dimension 'paid'
+//        }
+//        dev {
+//            dimension 'environment'
+//        }
+//        pre {
+//            dimension 'environment'
+//        }
+//        pro {
+//            dimension 'environment'
+//        }
+//    }
+
     compileOptions {
         sourceCompatibility(JavaVersion.VERSION_1_8)
         targetCompatibility(JavaVersion.VERSION_1_8)
@@ -62,6 +93,7 @@ configurations.all {
 }
 
 dependencies {
+    //implementation：不会传递依赖；complie/api：会传递依赖；api是compile的替代品，效果完全等同；当依赖被传递时，二级依赖的改动会导致0级项目重新编译；当依赖不传递时，二级依赖的改动不会导致0级项目重新编译
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'

@@ -15,8 +15,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.0"
+//        classpath "com.android.tools.build:gradle:4.0.0"//Android Gradle 插件版本，与Gradle版本对应关系：https://developer.android.google.cn/studio/releases/gradle-plugin.html#updating-plugin
+        classpath "com.android.tools.build:gradle:3.5.1"//tinker热更新使用，不要乱升暂时
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.tencent.tinker:tinker-patch-gradle-plugin:1.9.14.7'//Tinker组件依赖
+        classpath "com.tencent.bugly:tinker-support:1.2.0"//第一步：添加插件依赖 tinker-support插件
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

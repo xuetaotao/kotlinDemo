@@ -23,6 +23,9 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <!-- 安装应用程序 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!--以下为Tinker热更新需要的权限    -->
+    <!-- 读取系统底层日志 -->
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
 
     <!-- 运行时权限申请，Android6.0以后 -->
@@ -36,6 +39,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!--以下为Tinker热更新需要的权限    -->
+    <!-- 手机信息 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
 
     <!-- 声明App在运行时所依赖的外部的硬件或软件特征 -->
@@ -52,7 +58,7 @@
 
     <!--指定Android应用标签，图标-->
     <application
-        android:name=".application.MyApplication"
+        android:name=".application.SampleApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -169,6 +175,10 @@
         <activity
             android:name=".ui.main.chapter3.ConfigurationActivity"
             android:configChanges="screenSize|orientation|keyboardHidden" />
+        <activity
+            android:name="com.tencent.bugly.beta.ui.BetaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:theme="@android:style/Theme.Translucent" />
 
         <service android:name=".service.DownLoadService" />
 

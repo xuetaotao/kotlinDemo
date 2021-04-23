@@ -5,7 +5,7 @@
 * 程序名称：kotlinDemo
 * 更新时间：2021.02.03
 * 更新人员：薛涛涛
-* Key_Store_Password & Key_Password ：fit1
+* Key_Store_Password & Key_Password ：kotlinDemo
 * Key_alias：mySignKey
 
 ## 程序功能
@@ -49,6 +49,9 @@
 
 * 注：Tinker的补丁包只针对特定的基准包tinkerId实现补丁，因为这里设置的tinkerId是自动生成的，所以即便代码相同，两次打出的基准包也是
 不同的
+
+* 常见问题1：打包apk时没有同步生成R.txt文件，在低版本的gradle中可以生成    
+* 解决：路径 变了 /build/intermediates/runtime_symbol_list/prodRelease/R.txt
 
 
 ```JSON

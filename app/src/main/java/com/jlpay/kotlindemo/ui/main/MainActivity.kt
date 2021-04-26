@@ -7,6 +7,9 @@ import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
+import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
+import com.jlpay.kotlindemo.ui.main.rxjava.RxJavaActivity
+import com.jlpay.kotlindemo.ui.main.rxjava.RxLifecycleActivity
 import com.jlpay.kotlindemo.ui.widget.CustomDialog
 import okhttp3.*
 import java.io.IOException
@@ -104,6 +107,10 @@ class MainActivity : BaseMediaActivity() {
         btnConfiguration.setOnClickListener {
             ConfigurationActivity.newInstance(this)
         }
+        val btnHandler: Button = findViewById(R.id.btn_handler)
+        btnHandler.setOnClickListener {
+            HandlerActivity.newInstance(this)
+        }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {
             openPhotoAlbum()
@@ -122,6 +129,10 @@ class MainActivity : BaseMediaActivity() {
         val btnRxjava2: Button = findViewById(R.id.btn_rxjava2)
         btnRxjava2.setOnClickListener {
             RxJavaActivity.newInstance(this)
+        }
+        val btnRxlifecycle: Button = findViewById(R.id.btn_rxlifecycle)
+        btnRxlifecycle.setOnClickListener {
+            RxLifecycleActivity.newInstance(this)
         }
         val btnLibtestJava: Button = findViewById(R.id.btn_libtest_java)
         btnLibtestJava.setOnClickListener {

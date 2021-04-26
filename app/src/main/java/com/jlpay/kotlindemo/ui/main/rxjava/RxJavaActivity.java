@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main;
+package com.jlpay.kotlindemo.ui.main.rxjava;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -165,6 +165,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
     /**
      * interval 操作符
      * 创建一个每隔给定的时间间隔发射一个递增整数的Observable
+     * 每隔一段时间就会发送一个事件，这个事件是从0开始，不断增1的数字
      * 可以用来设置定时器
      */
     private void intervalUse() {
@@ -210,6 +211,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
 
     /**
      * map 操作符
+     * map 可以将被观察者发送的数据类型转变成其他的类型
      */
     @SuppressLint("AutoDispose")
     private void mapUse() {

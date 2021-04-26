@@ -1,12 +1,7 @@
-package com.jlpay.kotlindemo.ui.main;
+package com.jlpay.kotlindemo.ui.main.rxjava;
 
 import android.content.Context;
 import android.util.Log;
-
-import androidx.lifecycle.Lifecycle;
-
-import com.uber.autodispose.AutoDispose;
-import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import java.util.concurrent.TimeUnit;
 
@@ -66,6 +61,7 @@ public class RxJavaPresenter implements RxJavaContract.Presenter {
                 .doOnSubscribe(new Consumer<Disposable>() {//方式二：doOnSubscribe是事件被订阅之前(也就是事件源发起之前)会调用的方法，这个方法一般用于修改、添加或者删除事件源的数据流
                     @Override
                     public void accept(Disposable disposable) throws Exception {
+                        //doOnSubscribe：Observable 每发送 onSubscribe() 之前都会回调这个方法
                         Log.e(TAG, "doOnSubscribe");
                         addDisposable(disposable);
                     }

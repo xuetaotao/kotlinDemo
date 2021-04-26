@@ -190,6 +190,15 @@
                 android:textSize="14sp" />
 
             <Button
+                android:id="@+id/btn_handler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Handler"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
                 android:id="@+id/btn_permission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -221,6 +230,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="RxJava2"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_rxlifecycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="RxLifecycle"
                 android:textAllCaps="false"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />

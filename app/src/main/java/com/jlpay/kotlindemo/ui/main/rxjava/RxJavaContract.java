@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main;
+package com.jlpay.kotlindemo.ui.main.rxjava;
 
 import com.jlpay.kotlindemo.ui.base.BasePresenter;
 import com.jlpay.kotlindemo.ui.base.BaseView;

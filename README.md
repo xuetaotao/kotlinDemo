@@ -51,7 +51,7 @@
 不同的
 
 * 常见问题1：打包apk时没有同步生成R.txt文件，在低版本的gradle中可以生成    
-* 解决：路径 变了 /build/intermediates/runtime_symbol_list/prodRelease/R.txt
+* 解决：路径 变了 /build/intermediates/runtime_symbol_list/prodRelease/R.txt，可以调用build.gradle中的copyTinkerRTxtFile任务执行复制
 
 
 ```JSON

@@ -1,0 +1,105 @@
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+    maven { url 'https://jitpack.io' }
+    google()
+    jcenter()
+}
+
+dependencies {
+    implementation('com.android.tools.build:gradle:4.0.0')
+}
+
+//写一个插件
+//class HenCoderPlugin implements Plugin<Project> {
+//    @Override
+//    void apply(Project target) {
+//        //创建扩展对象(.class可以省略)，target是当前项目
+//        def extension = target.extensions.create("hencoder", HenCoderExtension.class)
+//        target.afterEvaluate {//在阶段之间插入代码，先执行扩展的初始化
+//            println("Hello ${extension.name}!")
+//        }
+//    }
+//}
+
+//写一个扩展
+//class HenCoderExtension {
+//    def name = "rengwuxian12345"
+//}
+
+//测试扩展
+//def extension = new HenCoderExtension()
+//extension.name = 'zhukai'
+//println("Hi, ${extension.name}")
+
+//使用插件
+//apply plugin: HenCoderPlugin
+apply plugin: 'com.jlpay.henCoder'
+
+//配置扩展
+hencoder {
+    name 'zhukai2333~~'
+}
+
+
+
+
+task eachMyFile {
+    doLast {
+//        def dir = new File("${buildDir}")//遍历项目下的build目录
+        def dir = new File("app/build/bakApk")//遍历app目录下的build目录
+        files(dir.listFiles()).each {
+            file -> println(file.name)
+        }
+
+        //遍历符合规则的文件
+        files(dir.listFiles(new FilenameFilter() {
+            @Override
+            boolean accept(File file, String name) {
+                //自定义过滤规则
+                return name.endsWith(".apk")//TODO 无效
+            }
+        })).each {
+            file -> println(file.name)
+        }
+    }
+}
+
+task eachMyFile2 {
+    doLast {
+        //fileTree
+        fileTree("app/build/bakApk").each {
+            file -> println(file.name)
+        }
+    }
+}
+
+task eachMyFile3 {
+    doLast {
+        //fileTree
+        def outputs = file("app/build/bakApk")
+        fileTree(outputs) {
+            //自定义过滤规则
+            include("*.*")//TODO 无效
+        }.each { file ->
+            println file.name
+        }
+    }
+}
+
+//摘自Tinker源码，仅做参考使用
+task buildTinkerSdk(type: Copy, dependsOn: [clean]) {
+    group = "tinker"
+    from('build/libs') {
+        include '*.jar'
+        exclude '*-javadoc.jar'
+        exclude '*-sources.jar'
+    }
+    from('./tool_output') {
+        include '*.*'
+    }
+    into(rootProject.file("buildSdk/build"))
+}
+

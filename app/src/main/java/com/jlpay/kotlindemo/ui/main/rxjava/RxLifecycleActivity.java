@@ -32,6 +32,7 @@ import io.reactivex.functions.Predicate;
  * 为了解决这个问题，就产生了RxLifecycle，让RxJava变得有生命周期感知，使得其能及时取消订阅，避免出现内存泄漏问题。
  * 参考：https://juejin.cn/post/6844903617124630535#heading-56
  * https://juejin.cn/post/6844903634963185672#heading-13
+ * https://juejin.cn/post/6844903614775820296
  */
 public class RxLifecycleActivity extends RxAppCompatActivity {
 

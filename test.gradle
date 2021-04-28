@@ -54,6 +54,7 @@ tasks.create(name: 'showTasks') {
 tasks.create(name: 'fkTask', dependsOn: 'hello2', type: Copy) {
     from('README.md')
     into('dist')
+    rename('README.md', 'rename.md') //重命名
 }
 
 //使用 Project的task方法创建Task时也可指定type、dependsOn属性，例如下面的两个任务分别为JavaCompile、JavaExec类型，因此该构建文件
@@ -96,7 +97,7 @@ task showProps {
         println(project.description)
         println(project.name)//项目的名字，只读属性
         println(project.path)//项目的绝对路径，只读
-        println(project.buildDir)//项目的构建结果的存放路径
+        println(project.buildDir)//项目的构建结果的存放路径：C:\AndroidProgram\kotlinDemo\build
         println(project.version)//项目的版本号
     }
 }

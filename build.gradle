@@ -1,6 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: 'config.gradle'
 apply from: 'test.gradle'
+apply from: 'gradlePluginTest.gradle'
 
 //buildscript里的repositories是gradle脚本执行所需依赖,分别是对应的maven库和插件
 buildscript {
@@ -15,8 +16,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-//        classpath "com.android.tools.build:gradle:4.0.0"//Android Gradle 插件版本，与Gradle版本对应关系：https://developer.android.google.cn/studio/releases/gradle-plugin.html#updating-plugin
-        classpath "com.android.tools.build:gradle:3.5.1"//tinker热更新使用，不要乱升暂时
+        classpath "com.android.tools.build:gradle:4.0.0"//Android Gradle 插件版本，与Gradle版本对应关系：https://developer.android.google.cn/studio/releases/gradle-plugin.html#updating-plugin
+//        classpath "com.android.tools.build:gradle:3.5.1"//tinker热更新使用，不要乱升暂时
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.tencent.tinker:tinker-patch-gradle-plugin:1.9.14.7'//Tinker组件依赖
         classpath "com.tencent.bugly:tinker-support:1.2.0"//第一步：添加插件依赖 tinker-support插件

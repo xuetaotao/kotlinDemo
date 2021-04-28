@@ -73,7 +73,7 @@ public class RxJavaPresenter implements RxJavaContract.Presenter {
                     public void onSubscribe(Disposable d) {
                         disposable = d;
 //                        addDisposable(d);//方式二：订阅后取消
-                        Log.e(TAG, "Disposable");
+                        Log.e(TAG, "onSubscribe");
                     }
 
                     @Override

@@ -107,6 +107,16 @@ configurations.all {
     }
 }
 
+//Tinker针对高版本gradle执行复制R文件的操作
+tasks.create(name: 'copyTinkerRTxtFile', dependsOn: 'assembleRelease', type: Copy) {
+    from "${buildDir}/intermediates/runtime_symbol_list/proRelease/R.txt"
+    from("${buildDir}/bakApk") {
+        include("*_release_pro.apk")
+    }
+    into "${buildDir}/bakApk/app-0113-16-12-10/pro"
+    rename('R.txt', 'app-pro-release-R.txt')
+}
+
 dependencies {
     //implementation：不会传递依赖；complie/api：会传递依赖；api是compile的替代品，效果完全等同；当依赖被传递时，二级依赖的改动会导致0级项目重新编译；当依赖不传递时，二级依赖的改动不会导致0级项目重新编译
     implementation fileTree(dir: "libs", include: ["*.jar"])

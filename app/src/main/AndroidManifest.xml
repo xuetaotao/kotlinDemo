@@ -187,6 +187,10 @@
             android:name=".ui.main.rxjava.RxLifecycleActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.rxjava.RxAutoDisposeActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

@@ -53,6 +53,21 @@
 * 常见问题1：打包apk时没有同步生成R.txt文件，在低版本的gradle中可以生成    
 * 解决：路径 变了 /build/intermediates/runtime_symbol_list/prodRelease/R.txt，可以调用build.gradle中的copyTinkerRTxtFile任务执行复制
 
+### ANT style pattern
+Ant path 匹配原则
+* 路径匹配原则(Path Matching) Spring MVC中的路径匹配要比标准的web.xml要灵活的多。默认的策略实现了 org.springframework.util.AntPathMatcher，就像名字提示的那样，
+路径模式是使用了Apache Ant的样式路径，Apache Ant样式的路径有三种通配符匹配方法.这些可以组合出很多种灵活的路径模式
+
+* ? 匹配任何单字符  
+* * 匹配0或者任意数量的字符  
+* ** 匹配0或者更多的目录 
+
+* Example Ant-Style Path Patterns
+* /app/*.x 匹配(Matches)所有在app路径下的.x文件  
+* /app/p?ttern 匹配(Matches) /app/pattern 和 /app/pXttern,但是不包括/app/pttern  
+* /**/example 匹配(Matches) /app/example, /app/foo/example, 和 /example  
+* /app/**/dir/file. 匹配(Matches) /app/dir/file.jsp, /app/foo/dir/file.html,/app/foo/bar/dir/file.pdf, 和 /app/dir/file.java  
+* /**/*.jsp 匹配(Matches)任何的.jsp 文件
 
 ```JSON
 {

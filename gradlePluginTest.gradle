@@ -44,9 +44,9 @@ hencoder {
 }
 
 
-
-
 task eachMyFile {
+//    group("customerTask")//两种方式都行，方便在右侧的 Gradle 面板中就可以找到自行指定的 group 中的所有 task
+    group = "customerTask"
     doLast {
 //        def dir = new File("${buildDir}")//遍历项目下的build目录
         def dir = new File("app/build/bakApk")//遍历app目录下的build目录
@@ -54,12 +54,12 @@ task eachMyFile {
             file -> println(file.name)
         }
 
-        //遍历符合规则的文件
+        //遍历符合规则的文件，只能遍历到直接目录下的文件，不能遍历到最底层目录
         files(dir.listFiles(new FilenameFilter() {
             @Override
             boolean accept(File file, String name) {
                 //自定义过滤规则
-                return name.endsWith(".apk")//TODO 无效
+                return name.endsWith("-10")
             }
         })).each {
             file -> println(file.name)
@@ -68,25 +68,84 @@ task eachMyFile {
 }
 
 task eachMyFile2 {
+    group("customerTask")
     doLast {
         //fileTree
         fileTree("app/build/bakApk").each {
             file -> println(file.name)
         }
+        println("eachMyFile2:A message which is logged at QUIET level")//默认级别
+        logger.quiet("eachMyFile2:this is a quiet message")
+        logger.error("eachMyFile2:this is a error message")
+        logger.log(LogLevel.DEBUG, "eachMyFile2:debug")
+        logger.log(LogLevel.INFO, "eachMyFile2:info")
+        logger.log(LogLevel.LIFECYCLE, "eachMyFile2:lifecycle")
+        logger.log(LogLevel.WARN, "eachMyFile2:warn")
+        logger.log(LogLevel.QUIET, "eachMyFile2:quiet")
+        logger.log(LogLevel.ERROR, "eachMyFile2:error")//红色显示
     }
 }
 
 task eachMyFile3 {
+    group("customerTask")
     doLast {
         //fileTree
         def outputs = file("app/build/bakApk")
         fileTree(outputs) {
-            //自定义过滤规则
-            include("*.*")//TODO 无效
+            //自定义过滤规则，关于ANT style pattern匹配规则见README
+//            include("**/*.apk")
+            include("**/*_release_pro.apk")
         }.each { file ->
             println file.name
+            println file.path
         }
     }
+}
+
+task tinkerCopy(type: Copy) {
+    group = "customerTask"
+    from("app/build/bakApk") {
+        include("**/*pro-release.apk")//使用ANT通配符匹配过滤文件，TODO 但是这样复制会把没有该文件的各个目录也复制过来
+    }
+//    rename("(.+)-pro-release(.+)", 'kotlin-pro-release$2')//使用正则表达式映射文件名
+//    rename("(.+)-pro-release(.+)", '$1$2')//使用正则表达式映射文件名:app.apk
+    rename("(.+)-pro-release(.+)", 'kotlinDemo-pro-release.apk')//使用正则表达式映射文件名
+    from("app/build/intermediates/runtime_symbol_list/proRelease") {
+        rename("R.txt", "app-pro-release-R.txt")
+    }
+    into("app/bakApk/app-0113-16-12-10/pro")
+}
+
+task tinkerCopy2(type: Copy) {//解决上面的TODO问题
+    group = "customerTask"
+    def appBuildDir = "app/build/"
+    fileTree("${appBuildDir}/bakApk") {
+        include("**/*pro-release.apk")
+    }.each { file ->
+        println(file.name + "\n" + file.path)
+        rename(file.name, 'kotlinDemo-pro-release.apk')
+        from(file.path)
+    }
+    from("${appBuildDir}/intermediates/runtime_symbol_list/proRelease") {
+        rename("(.*)R.txt", "app-pro-release-R.txt")
+    }
+    into("${appBuildDir}/bakApk/app-0113-16-12-10/pro")
+}
+
+task tinkerCopy3(type: Copy) {//TODO 依赖assembleRelease任务打出的apk等目标文件再进行复制操作任务
+    group = "customerTask"
+    def appBuildDir = "app/build/"
+    fileTree("${appBuildDir}/bakApk") {
+        include("**/*pro-release.apk")
+    }.each { file ->
+        println(file.name + "\n" + file.path)
+        rename(file.name, 'kotlinDemo-pro-release.apk')
+        from(file.path)
+    }
+    from("${appBuildDir}/intermediates/runtime_symbol_list/proRelease") {
+        rename("(.*)R.txt", "app-pro-release-R.txt")
+    }
+    into("${appBuildDir}/bakApk/app-0113-16-12-10/pro")
 }
 
 //摘自Tinker源码，仅做参考使用

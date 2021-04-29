@@ -108,13 +108,20 @@ configurations.all {
 }
 
 //Tinker针对高版本gradle执行复制R文件的操作
-tasks.create(name: 'copyTinkerRTxtFile', dependsOn: 'assembleRelease', type: Copy) {
-    from "${buildDir}/intermediates/runtime_symbol_list/proRelease/R.txt"
-    from("${buildDir}/bakApk") {
-        include("*_release_pro.apk")
+task tinkerCopyFile(type: Copy) {
+    group = "customerTask"
+    def appBuildDir = "${buildDir}"
+    fileTree("${appBuildDir}/bakApk") {
+        include("**/*pro-release.apk")
+    }.each { file ->
+        println(file.name + "\n" + file.path)
+        rename(file.name, 'kotlinDemo-pro-release.apk')
+        from(file.path)
     }
-    into "${buildDir}/bakApk/app-0113-16-12-10/pro"
-    rename('R.txt', 'app-pro-release-R.txt')
+    from("${appBuildDir}/intermediates/runtime_symbol_list/proRelease") {
+        rename("(.*)R.txt", "app-pro-release-R.txt")
+    }
+    into("${appBuildDir}/bakApk/app-0113-16-12-10/pro")
 }
 
 dependencies {

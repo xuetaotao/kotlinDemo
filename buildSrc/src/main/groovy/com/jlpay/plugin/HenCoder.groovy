@@ -12,5 +12,8 @@ class HenCoder implements Plugin<Project> {
         target.afterEvaluate {//在阶段之间插入代码，先执行扩展的初始化
             println("Hello ${extension.name}!")
         }
+//        def transform = new HenCoderTransform()
+//        def baseExtension = target.extensions.getByType(BaseExtension)
+//        baseExtension.registerTransform(transform)
     }
 }

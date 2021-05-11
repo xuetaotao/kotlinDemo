@@ -25,6 +25,17 @@
 * chore：构建过程或辅助工具的变动。
 * perf：优化相关，比如提升性能、体验
 
+## 项目练习方向(完整高仿项目)
+* 仿全民TVhttps://github.com/jenly1314/KingTV
+* 仿淘宝https://github.com/gnehsuy/TaoBaoUI
+* 仿美拍https://github.com/diycoder/MeiPai
+* 仿微信(一)https://github.com/motianhuo/wechat
+* 仿微信(二)https://github.com/GitLqr/LQRWeChat
+* 仿微信(三)https://github.com/Naoki2015/CircleDemo
+* 仿网易云音乐https://github.com/aa112901/remusic
+* 仿今日头条https://github.com/chaychan/TouTiao
+* 仿美团https://github.com/cachecats/LikeMeiTuan
+
 ### tinker热更新使用指南
 
 * 1.若开启混淆：则需要关闭R8，在gradle.properties文件中，加入android.enableR8.libraries=false，android.enableR8=false

@@ -55,13 +55,13 @@ android {
     flavorDimensions 'environment'
     productFlavors {
         dev {
-
+            buildConfigField("String", "ENVIRONMENT", "\"0\"")
         }
         pre {
-
+            buildConfigField("String", "ENVIRONMENT", "\"1\"")
         }
         pro {
-
+            buildConfigField("String", "ENVIRONMENT", "\"2\"")
         }
     }
 
@@ -202,4 +202,27 @@ dependencies {
     implementation('com.tencent.bugly:crashreport_upgrade:1.5.0')//升级SDK已经集成crash上报功能
     implementation('com.tencent.bugly:nativecrashreport:3.9.1')
     api("com.tencent.tinker:tinker-android-anno-support:1.9.14.7")
+
+
+    /***************************************这部分放暂时没用到但是可以用的第三方库*************************************************************************************/
+
+    //实用工具类的库：Android封装最全面的工具类(加密、文件、网络、bitmap、正则、屏幕、时间等等) https://github.com/Blankj/AndroidUtilCode
+//    implementation 'com.blankj:utilcode:1.26.0'
+
+    //依赖注入框架 Dragger
+//    implementation 'com.google.dagger:dagger-android:2.15'
+
+    //butterknife
+//    implementation 'com.jakewharton:butterknife:10.1.0'
+//    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+
+    //内存泄露检测工具 LeakCanary
+//    implementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+
+    /****************************************************************************************************************************/
+
+
+    /**************************************这部分放只是想查看源码的第三方库**************************************************************************************/
+    //供查看源码使用
+    compileOnly('com.android.tools.build:gradle:4.0.0')//compileOnly：只参与编译不会参与打包
 }

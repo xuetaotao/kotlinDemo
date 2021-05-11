@@ -253,6 +253,15 @@
                 android:textSize="14sp" />
 
             <Button
+                android:id="@+id/btn_qrCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="QRCode"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
                 android:id="@+id/btn_libtest_java"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

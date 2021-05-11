@@ -191,6 +191,10 @@
             android:name=".ui.main.rxjava.RxAutoDisposeActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.QRCodeActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

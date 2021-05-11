@@ -139,6 +139,10 @@ class MainActivity : BaseMediaActivity() {
         btnRxautodispose.setOnClickListener {
             RxAutoDisposeActivity.newInstance(this)
         }
+        val btnQrcode: Button = findViewById(R.id.btn_qrCode)
+        btnQrcode.setOnClickListener {
+            QRCodeActivity.newInstance(this)
+        }
         val btnLibtestJava: Button = findViewById(R.id.btn_libtest_java)
         btnLibtestJava.setOnClickListener {
             LibTestJavaActivity.newInstance(this)

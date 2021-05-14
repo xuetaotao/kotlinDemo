@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.ui.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.View;
@@ -9,6 +10,18 @@ import android.view.View;
  * 存放一些日常使用小方法的工具类
  */
 public class Utils {
+
+    /**
+     * 启动Activity
+     *
+     * @param packageContext 上下文
+     * @param clss           要启动的
+     */
+    public static void launchActivity(Context packageContext, Class<?> clss) {
+        Intent intent = new Intent(packageContext, clss);
+        packageContext.startActivity(intent);
+    }
+
 
     /**
      * 自定义View绘制的时候参数都是px

@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.jlpay.kotlindemo"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -203,6 +203,8 @@ dependencies {
     implementation('com.tencent.bugly:nativecrashreport:3.9.1')
     api("com.tencent.tinker:tinker-android-anno-support:1.9.14.7")
 
+    //扫码第三方库，个人维护，不建议使用，这里仅做测试
+    implementation('com.github.amggg:YXing:V1.0.6')
 
     /***************************************这部分放暂时没用到但是可以用的第三方库*************************************************************************************/
 

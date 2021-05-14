@@ -4,4 +4,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/iv_show"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_white_button"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="下面是子线程计算质数："
+        android:textColor="@color/common_black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/et_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="请输入一个数值"
+        android:textColor="@color/common_blue"
+        android:textSize="14sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_button"
+        android:onClick="cal"
+        android:text="计算"
+        android:textColor="@color/common_blue"
+        android:textSize="14sp" />
+
 </LinearLayout>

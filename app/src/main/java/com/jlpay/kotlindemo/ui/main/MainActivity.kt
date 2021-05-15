@@ -5,12 +5,14 @@ import android.widget.Button
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
+import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxJavaActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxLifecycleActivity
+import com.jlpay.kotlindemo.ui.utils.Utils
 import com.jlpay.kotlindemo.ui.widget.CustomDialog
 import okhttp3.*
 import java.io.IOException
@@ -111,6 +113,10 @@ class MainActivity : BaseMediaActivity() {
         val btnHandler: Button = findViewById(R.id.btn_handler)
         btnHandler.setOnClickListener {
             HandlerActivity.newInstance(this)
+        }
+        val btnAsynctask: Button = findViewById(R.id.btn_asyncTask)
+        btnAsynctask.setOnClickListener {
+            Utils.launchActivity(this, AsyncTaskActivity::class.java)
         }
         val btnPermission: Button = findViewById(R.id.btn_permission)
         btnPermission.setOnClickListener {

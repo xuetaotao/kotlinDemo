@@ -74,7 +74,7 @@ class HandlerActivity : AppCompatActivity() {
                 override fun handleMessage(msg: Message) {
                     if (msg.what == 0x1235) {
                         val upper: Int = msg.data.getInt("upper")
-                        var nums: ArrayList<Int> = ArrayList<Int>()
+                        val nums: ArrayList<Int> = ArrayList<Int>()
                         for (i in 2..upper) {//[2,upper]，计算从2开始，到upper的所有质数
                             var j: Int = 2
                             while (j <= sqrt(i.toDouble())) {

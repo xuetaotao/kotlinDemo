@@ -199,6 +199,15 @@
             android:name=".ui.main.QRCodeActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.hencoder.mvcdemo.MvcDemoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <!--TODO 想办法搞一个组件自动注册的方法-->
+        <activity
+            android:name=".ui.main.hencoder.mvpdemo.MvpDemoActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

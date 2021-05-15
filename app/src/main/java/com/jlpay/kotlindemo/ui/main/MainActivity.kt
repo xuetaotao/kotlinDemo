@@ -2,6 +2,7 @@ package com.jlpay.kotlindemo.ui.main
 
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
@@ -9,6 +10,8 @@ import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.mvcdemo.MvcDemoActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.mvpdemo.MvpDemoActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxJavaActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxLifecycleActivity
@@ -19,11 +22,14 @@ import java.io.IOException
 
 class MainActivity : BaseMediaActivity() {
 
+    private lateinit var llMain: LinearLayout
+
     override fun getResourceId(): Int {
         return R.layout.activity_main
     }
 
     override fun initView() {
+        llMain = findViewById(R.id.ll_main)
         val btnLinearlayout: Button = findViewById(R.id.btn_linearLayout)
         btnLinearlayout.setOnClickListener {
             LinearLayoutActivity.newInstance(this)
@@ -157,10 +163,30 @@ class MainActivity : BaseMediaActivity() {
         btnLibtestKotlin.setOnClickListener {
             LibTestKotlinActivity.newInstance(this)
         }
+        addButton("MvcDemo", MvcDemoActivity::class.java)
+        addButton("MvpDemo", MvpDemoActivity::class.java)
     }
 
     override fun initData() {
 
+    }
+
+
+    /**
+     * Java 中用?表示通配符，由于参数值是未知类型的容器类，所以只能读取其中元素，不能向其中添加元素， 因为，其类型是未知，所以编译器无法识别添加元素的类型和容器的类型是否兼容，
+     * 唯一的例外是NULL
+     * Kotlin中用* 表示通配符，又称星号投射，表示你并不知道类型参数的任何信息, 但是仍然希望能够安全地使用它. 这里所谓"安全地使用"是指, 对泛型类型定义一个类型投射,
+     * 要求这个泛型类型的所有的实体实例, 都是这个投射的子类型。其实就是*代指了所有类型，相当于Any?
+     */
+    private fun addButton(clssName: String, clss: Class<*>) {
+        val button: Button = Button(this)
+        button.isAllCaps = false
+        button.setTextColor(resources.getColor(R.color.light_black))
+        button.text = clssName
+        button.setOnClickListener {
+            Utils.launchActivity(this, clss)
+        }
+        llMain.addView(button)
     }
 
     fun showCustomDialog() {

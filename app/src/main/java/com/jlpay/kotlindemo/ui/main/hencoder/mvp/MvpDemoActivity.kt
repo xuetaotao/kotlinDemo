@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.hencoder.mvpdemo
+package com.jlpay.kotlindemo.ui.main.hencoder.mvp
 
 import android.os.Bundle
 import android.widget.EditText

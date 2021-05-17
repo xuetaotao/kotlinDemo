@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.hencoder.mvpdemo
+package com.jlpay.kotlindemo.ui.main.hencoder.mvp
 
 //也可以是接口
 class Presenter(private val iView: IView) {

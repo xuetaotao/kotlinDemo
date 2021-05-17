@@ -18,7 +18,8 @@ abstract class BaseMediaActivity : BaseActivity() {
         PermissionUtils.getStoragePermission(
             this
         ) {
-            val intent: Intent = Intent(Intent.ACTION_PICK)
+//            val intent: Intent = Intent(Intent.ACTION_PICK)//TODO 小米10 Android11有问题,Intent会为空
+            val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
             //type属性可以用于对文件类型进行过滤，
             //如过滤只显示图像类型文件("image/*")，文件类型("text/plain")，设置为"*/*"表示显示所有类型的文件，type属性必须要指定，否则会产生崩溃
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")

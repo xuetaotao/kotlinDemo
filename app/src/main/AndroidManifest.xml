@@ -200,13 +200,21 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.hencoder.mvcdemo.MvcDemoActivity"
+            android:name=".ui.main.hencoder.mvc.MvcDemoActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <!--TODO 想办法搞一个组件自动注册的方法-->
         <activity
-            android:name=".ui.main.hencoder.mvpdemo.MvpDemoActivity"
+            android:name=".ui.main.hencoder.mvp.MvpDemoActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.hencoder.mvvm.MvvmDemoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />

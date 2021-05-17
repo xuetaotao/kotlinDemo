@@ -10,8 +10,10 @@ import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
-import com.jlpay.kotlindemo.ui.main.hencoder.mvcdemo.MvcDemoActivity
-import com.jlpay.kotlindemo.ui.main.hencoder.mvpdemo.MvpDemoActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.mvp.MvpDemoActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.mvvm.MvvmDemoActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxJavaActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxLifecycleActivity
@@ -165,6 +167,8 @@ class MainActivity : BaseMediaActivity() {
         }
         addButton("MvcDemo", MvcDemoActivity::class.java)
         addButton("MvpDemo", MvpDemoActivity::class.java)
+        addButton("MvcAdvanceDemo", MvcAdvanceDemoActivity::class.java)
+        addButton("MvvmDemo", MvvmDemoActivity::class.java)
     }
 
     override fun initData() {

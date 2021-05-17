@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.hencoder.mvpdemo
+package com.jlpay.kotlindemo.ui.main.hencoder.mvp
 
 class DataCenter {
 

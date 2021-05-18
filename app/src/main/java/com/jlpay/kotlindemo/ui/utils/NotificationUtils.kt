@@ -11,7 +11,7 @@ import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.ui.main.PracticeViewActivity
+import com.jlpay.kotlindemo.ui.main.chapter1and2.PracticeViewActivity
 
 /**
  * Android通知栏微技巧，那些你所没关注过的小细节:

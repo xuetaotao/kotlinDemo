@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main
+package com.jlpay.kotlindemo.ui.main.chapter1and2
 
 import android.content.Context
 import android.content.Intent
@@ -69,7 +69,11 @@ class ViewSwitcherActivity : AppCompatActivity() {
                         .inflate(R.layout.item_labelicon, null)
                     val iv_image: ImageView = view.findViewById(R.id.iv_image)
                     val tv_text: TextView = view.findViewById(R.id.tv_text)
-                    viewHolder = ViewHolder(iv_image, tv_text)
+                    viewHolder =
+                        ViewHolder(
+                            iv_image,
+                            tv_text
+                        )
                     view.tag = viewHolder
 
                 } else {

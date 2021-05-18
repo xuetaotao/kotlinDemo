@@ -6,10 +6,16 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
+import com.jlpay.kotlindemo.ui.main.chapter1and2.*
 import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
+import com.jlpay.kotlindemo.ui.main.dailytest.LibTestJavaActivity
+import com.jlpay.kotlindemo.ui.main.dailytest.LibTestKotlinActivity
+import com.jlpay.kotlindemo.ui.main.dailytest.QRCodeActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.IOActivity
+import com.jlpay.kotlindemo.ui.main.hencoder.ThreadActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvp.MvpDemoActivity

@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main
+package com.jlpay.kotlindemo.ui.main.chapter1and2
 
 import android.content.Context
 import android.content.Intent
@@ -39,7 +39,12 @@ class ProgressBarActivity : AppCompatActivity() {
         bar = findViewById(R.id.bar)
         bar2 = findViewById(R.id.bar2)
 
-        myHandler = MyHandler(WeakReference<ProgressBarActivity>(this))
+        myHandler =
+            MyHandler(
+                WeakReference<ProgressBarActivity>(
+                    this
+                )
+            )
 
         //启动线程来执行任务
         val thread: Thread = object : Thread() {

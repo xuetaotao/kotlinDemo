@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main
+package com.jlpay.kotlindemo.ui.main.chapter1and2
 
 import android.content.Context
 import android.content.Intent
@@ -26,7 +26,12 @@ class FrameLayoutActitivy : AppCompatActivity() {
 
     private var views = arrayOfNulls<TextView>(6)
 
-    private var handler: MyHandler = MyHandler(WeakReference<FrameLayoutActitivy>(this))
+    private var handler: MyHandler =
+        MyHandler(
+            WeakReference<FrameLayoutActitivy>(
+                this
+            )
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

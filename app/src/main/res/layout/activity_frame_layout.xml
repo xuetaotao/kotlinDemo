@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.FrameLayoutActitivy">
+    tools:context=".ui.main.chapter1and2.FrameLayoutActitivy">
 
     <!--依次定义6个TextView，先定义的位于底层，后定义的位于上层    -->
     <TextView

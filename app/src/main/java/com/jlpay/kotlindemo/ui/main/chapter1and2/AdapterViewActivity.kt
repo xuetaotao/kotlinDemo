@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main
+package com.jlpay.kotlindemo.ui.main.chapter1and2
 
 import android.content.Context
 import android.content.Intent
@@ -191,7 +191,11 @@ class AdapterViewActivity : AppCompatActivity() {
                     ll.addView(imageView)
                     val textView: TextView = TextView(this@AdapterViewActivity)
                     ll.addView(textView)
-                    viewHolder = ViewHolder(imageView, textView)
+                    viewHolder =
+                        ViewHolder(
+                            imageView,
+                            textView
+                        )
                     ll.tag = viewHolder
 
                 } else {

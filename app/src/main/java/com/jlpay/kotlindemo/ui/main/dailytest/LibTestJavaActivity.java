@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main;
+package com.jlpay.kotlindemo.ui.main.dailytest;
 
 import android.content.Context;
 import android.content.Intent;

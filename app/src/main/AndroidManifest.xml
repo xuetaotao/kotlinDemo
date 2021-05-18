@@ -76,35 +76,35 @@
         <!--在Activity中添加了 android:configChanges属性，目的是当所指定属性(Configuration Changes)发生改变时，通知程序调用 onConfigurationChanged()函数
         就不会重启activity，同时能够监听系统设置的更改-->
         <activity
-            android:name=".ui.main.PracticeViewActivity"
+            android:name=".ui.main.chapter1and2.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.FirstUiActivity"
+            android:name=".ui.main.chapter1and2.FirstUiActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.FrameLayoutActitivy"
+            android:name=".ui.main.chapter1and2.FrameLayoutActitivy"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ConstraintLayoutActivity"
+            android:name=".ui.main.chapter1and2.ConstraintLayoutActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.LinearLayoutActivity"
+            android:name=".ui.main.chapter1and2.LinearLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ThreadActivity"
+            android:name=".ui.main.hencoder.ThreadActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ImageViewActivity"
+            android:name=".ui.main.chapter1and2.ImageViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.AdapterViewActivity"
+            android:name=".ui.main.chapter1and2.AdapterViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -112,59 +112,59 @@
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.LibTestJavaActivity"
+            android:name=".ui.main.dailytest.LibTestJavaActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.LibTestKotlinActivity"
+            android:name=".ui.main.dailytest.LibTestKotlinActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.RecyclerViewActivity"
+            android:name=".ui.main.chapter1and2.RecyclerViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ProgressBarActivity"
+            android:name=".ui.main.chapter1and2.ProgressBarActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.IOActivity"
+            android:name=".ui.main.hencoder.IOActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ViewSwitcherActivity"
+            android:name=".ui.main.chapter1and2.ViewSwitcherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ImageSwitcherActivity"
+            android:name=".ui.main.chapter1and2.ImageSwitcherActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ViewFlipperActivity"
+            android:name=".ui.main.chapter1and2.ViewFlipperActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.OtherUIModuleActivity"
+            android:name=".ui.main.chapter1and2.OtherUIModuleActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.DialogActivity"
+            android:name=".ui.main.chapter1and2.DialogActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.MenuActivity"
+            android:name=".ui.main.chapter1and2.MenuActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.XmlMenuActivity"
+            android:name=".ui.main.chapter1and2.XmlMenuActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.ActionBarActivity"
+            android:name=".ui.main.chapter1and2.ActionBarActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.PlaneViewActivity"
+            android:name=".ui.main.chapter1and2.PlaneViewActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
@@ -196,7 +196,7 @@
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.QRCodeActivity"
+            android:name=".ui.main.dailytest.QRCodeActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity

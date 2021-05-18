@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main
+package com.jlpay.kotlindemo.ui.main.chapter1and2
 
 import android.content.Context
 import android.content.Intent
@@ -38,7 +38,11 @@ class RecyclerViewActivity : AppCompatActivity() {
         val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         recyclerview.layoutManager = linearLayoutManager
-        recyclerview.adapter = MyRecyclerAdapter(this, personList)
+        recyclerview.adapter =
+            MyRecyclerAdapter(
+                this,
+                personList
+            )
     }
 
     private fun initData() {
@@ -61,7 +65,10 @@ class RecyclerViewActivity : AppCompatActivity() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val view: View =
                 LayoutInflater.from(context).inflate(R.layout.item_simple, parent, false)
-            val viewHolder: MyViewHolder = MyViewHolder(view)
+            val viewHolder: MyViewHolder =
+                MyViewHolder(
+                    view
+                )
 //            val position:Int = viewHolder.adapterPosition
 
             viewHolder.llRoot.setOnClickListener(object : View.OnClickListener {

@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main;
+package com.jlpay.kotlindemo.ui.main.hencoder;
 
 import android.content.Context;
 import android.content.Intent;

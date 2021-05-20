@@ -46,15 +46,15 @@
 
 * 3.clean项目
 
-* 4.创建app/build 目录，把保存的bakApk 拷贝进来
+* 4.创建app/build 目录，把保存的bakApk 拷贝进来（目录结构为：app\build\bakApk\app-0113-16-12-10\pro，下面包含"app-pro-release.apk"和"app-pro-release-R.txt"两个文件）
 
 * 5.修改bug代码
 
 * 6.修改tinker-support.gradle文件中两处地方：(1)def baseApkDir改成bakApk下面的文件名(第9行) (2)def customBaseApk
 取有值的那一行代码(注释15行，放开16行)
 
-* 7.执行 tinker-support命令下的 buildTinkerPatchProRelease 命令，然后在 app\build\outputs\patch\pro\release
-目录下得到 patch_signed_7zip.apk包，即为补丁包
+* 7.执行 tinker-support命令下的 buildTinkerPatchProRelease 命令（或者执行buildAllFlavorsTinkerPatchRelease生成所有渠道补丁包），然后在 
+app\build\outputs\patch\pro\release目录下得到 patch_signed_7zip.apk包，即为补丁包
 
 * 8.将上面获取到的补丁包上传Bugly平台进行测试，测试没问题后即可进行全量设备下发
 

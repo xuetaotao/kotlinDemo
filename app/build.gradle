@@ -187,6 +187,9 @@ dependencies {
     implementation('com.tencent.bugly:nativecrashreport:3.9.1')
     api("com.tencent.tinker:tinker-android-anno-support:1.9.14.7")
 
+    //自己写的：利用反射实现 BindView的库
+    implementation(project(':lib-reflection'))
+
     //扫码第三方库，个人维护，不建议使用，这里仅做测试
     implementation('com.github.amggg:YXing:V1.0.6')
 

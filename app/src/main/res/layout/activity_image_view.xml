@@ -125,6 +125,30 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_getImg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="下载图片"
+            android:textColor="@color/common_black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_htmlView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/common_black"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp" />
+
     </LinearLayout>
 
 </ScrollView>

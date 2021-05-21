@@ -82,4 +82,10 @@ public class RetrofitClient {
                 .observeOn(AndroidSchedulers.mainThread());
 //                .compose(RxLifecycle.bindUntilEvent(BehaviorSubject.create(), ActivityEvent.DESTROY));//在Activity onDestroy时解除订阅，防止内存泄漏
     }
+
+    public Observable<ResponseBody> getImg(String url) {
+        return service.getImg(url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

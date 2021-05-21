@@ -1,2 +1,3 @@
+include ':lib-reflection'
 include ':app'
 rootProject.name = "kotlinDemo"

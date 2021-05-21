@@ -4,15 +4,29 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Html
+import android.text.Html.ImageGetter
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.QuickContactBadge
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.net.RetrofitClient
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
+import io.reactivex.functions.Function
 import kotlinx.android.synthetic.main.activity_image_view.*
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.ResponseBody
 import kotlin.math.roundToLong
 
 /**
@@ -38,6 +52,8 @@ import kotlin.math.roundToLong
  */
 class ImageViewActivity : AppCompatActivity() {
 
+    private val TAG: String = ImageViewActivity::class.java.simpleName
+
     private val images: IntArray = intArrayOf(
         R.mipmap.zhizhuxia,
         R.mipmap.baby,
@@ -62,6 +78,98 @@ class ImageViewActivity : AppCompatActivity() {
         imgBrowser()
         quickContactbadge()
         //可折叠的悬浮按钮略，FloatingActionButton
+        downLoadImg()
+    }
+
+    /**
+     * 富文本填充
+     * TODO 未完成
+     */
+    fun htmlText() {
+        val tv_htmlView: TextView = findViewById(R.id.tv_htmlView)
+        val htmlStr =
+            "\"\\u003Cp\\u003E尊敬的嘉联合伙人：\\u003C/p\\u003E\\n\\u003Cdiv style = \\\"margin-left: 2em;\\\"\\u003E\\n\\u003Cp\\u003E为保障您与嘉联支付业务合作的健康稳定发展，防范分润提现中存在的虚开、多开增值税发票现象，近期平台开票政策将做出如下调整：\\u003C/p\\u003E\\n\\u003Cp\\u003E1.自通知发布之日起，嘉联支付对预开发票金额将按“本月预开发票额度不得超过1.5倍上月分润金额”标准进行严格审核。\\u003C/p\\u003E\\n\\u003Cp\\u003E2.自2021年5月1日起，您在平台提现分润收益前（含分润账户、合作账户、直发账户、合作直发账户），需提供同等金额的含6%税率的增值税专用发票。否则嘉联支付有权退回您所提交的分润发票或从分润收益中扣除税额差额。\\u003C/p\\u003E\\n\\u003Cp\\u003E请您知悉。如有疑问，请垂询952005客服热线。\\u003C/p\\u003E\\n\\u003Cp\\u003E感谢您的支持！\\u003C/p\\u003E\\n\\u003Cp\\u003E\\u003Cimg src = \\\"https://iknow-pic.cdn.bcebos.com/d53f8794a4c27d1e904d81311ad5ad6edcc438df?x-bce-process%3Dimage%2Fresize%2Cm_lfit%2Cw_600%2Ch_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_jpg\\\"/\\u003E\\u003C/p\\u003E\\n\\u003C/div\\u003E                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \""
+
+        //        tv_content.setText(Html.fromHtml(content));
+//        tv_content.setText(Html.fromHtml(content, new ImageGetterUtils.MyImageGetter(mActivity, tv_content), null));
+        Thread(Runnable {
+            val spanned = Html.fromHtml(htmlStr, ImageGetter { source ->
+                Log.e("测试：", "测试：$source")
+                //                        OkHttpClient okHttpClient = OkHttpClient
+                try {
+                    //                            URL url = new URL(source);
+                    //                            URLConnection urlConnection = url.openConnection();
+                    //                            InputStream inputStream = urlConnection.getInputStream();
+                    //                            Drawable drawable = Drawable.createFromStream(inputStream, null);
+                    //                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    //                            inputStream.close();
+                    val okHttpClient = OkHttpClient.Builder().build()
+                    val request = Request.Builder()
+                        .url(source)
+                        .build()
+                    val call = okHttpClient.newCall(request)
+                    val response = call.execute()
+                    var drawable: Drawable? = null
+                    if (response.body != null) {
+                        drawable =
+                            Drawable.createFromStream(response.body!!.byteStream(), null)
+                        drawable.setBounds(
+                            0,
+                            0,
+                            drawable.intrinsicWidth,
+                            drawable.intrinsicHeight
+                        )
+                    }
+                    return@ImageGetter drawable!!
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                null
+            }, null)
+            runOnUiThread(Runnable { tv_htmlView.text = spanned })
+        }).start()
+    }
+
+
+    @SuppressLint("AutoDispose")
+    fun downLoadImg() {
+        val btnGetimg: Button = findViewById(R.id.btn_getImg)
+        val imageView: ImageView = findViewById(R.id.imageView)
+        val imgUri =
+            "https://iknow-pic.cdn.bcebos.com/d53f8794a4c27d1e904d81311ad5ad6edcc438df?x-bce-process%3Dimage%2Fresize%2Cm_lfit%2Cw_600%2Ch_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_jpg"
+        btnGetimg.setOnClickListener {
+            RetrofitClient.get()
+                .getImg(imgUri)
+                .map(object : Function<ResponseBody, Bitmap> {
+                    override fun apply(responseBody: ResponseBody): Bitmap {
+                        val byteStream = responseBody.byteStream()
+                        return BitmapFactory.decodeStream(byteStream)
+                    }
+                })
+                .doOnSubscribe(object : Consumer<Disposable> {
+                    override fun accept(t: Disposable?) {
+                        //TODO
+                    }
+                })
+                .subscribe(object : Observer<Bitmap> {
+                    override fun onComplete() {
+                        Log.e(TAG, "downLoadImg:onComplete")
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Log.e(TAG, "downLoadImg:onSubscribe")
+                    }
+
+                    override fun onNext(t: Bitmap) {
+                        Log.e(TAG, "downLoadImg:onNext")
+                        imageView.setImageBitmap(t)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e(TAG, "downLoadImg:onError")
+                    }
+                })
+        }
     }
 
 

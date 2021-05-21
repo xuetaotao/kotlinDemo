@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.Constants;
 import com.jlpay.kotlindemo.ui.utils.DataUtils;
+import com.jlpay.lib_reflection.MyBindView;
+import com.jlpay.lib_reflection.MyBinding;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -28,12 +31,26 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Objects;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * 该部分文件相关操作都在APP私有目录下进行，因此不需要进行文件存储权限访问
  */
 public class IOActivity extends AppCompatActivity {
 
+    @BindView(R.id.textView)
+    TextView textView;
+    //    @MyBindView(id = R.id.textView2, name = "rengwuxian")
+//    TextView textView5;
+//    @MyBindView(id = R.id.textView2, name = "rengwuxian", age = "haha")//有默认值时可以不填
+//    TextView textView3;
+    @MyBindView(R.id.textView2)
+    TextView textView2;
+
     private final String TAG = IOActivity.class.getSimpleName();
+    private Unbinder unbinder;
 
     public static void newInstance(Context context) {
         Intent intent = new Intent(context, IOActivity.class);
@@ -45,6 +62,11 @@ public class IOActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_io);
 
+        unbinder = ButterKnife.bind(this);
+        MyBinding.bind(this);
+        MyInnerBinding.bind(this);
+        textView2.setText("Rengwuxian");
+
 //        io1();
 //        io2();
 //        io3();
@@ -54,6 +76,12 @@ public class IOActivity extends AppCompatActivity {
         io7();
 
         testDataUtils();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     private void testDataUtils() {

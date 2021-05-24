@@ -68,6 +68,9 @@ public class RxLifecycleActivity extends RxAppCompatActivity {
     }
 
 
+    /**
+     * doOn**()这一系列方法都是可以在观察者回调之前执行操作
+     */
     @SuppressLint("AutoDispose")
     private void test2() {
         //interval()：每隔一段时间就会发送一个事件，这个事件是从0开始，不断增1的数字
@@ -78,6 +81,7 @@ public class RxLifecycleActivity extends RxAppCompatActivity {
                     @Override
                     public void run() throws Exception {
                         //doOnDispose：当调用 Disposable 的 dispose() 之后回调该方法
+                        //doOn**()这一系列方法都是可以在观察者回调之前执行操作
                         Log.e(TAG, "=======" + "doOnDispose：" + "=========");
                         Log.e(TAG, "=======" + "doOnDispose，Thread：" + Thread.currentThread().getName() + "=========");
                     }

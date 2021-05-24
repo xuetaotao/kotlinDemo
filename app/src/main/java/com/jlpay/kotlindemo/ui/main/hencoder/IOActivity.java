@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.Constants;
 import com.jlpay.kotlindemo.ui.utils.DataUtils;
-import com.jlpay.lib_reflection.MyBindView;
-import com.jlpay.lib_reflection.MyBinding;
+import com.jlpay.lib_mybinding.MyBindView;
+import com.jlpay.lib_mybinding.MyBinding;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -64,7 +64,7 @@ public class IOActivity extends AppCompatActivity {
 
         unbinder = ButterKnife.bind(this);
         MyBinding.bind(this);
-        MyInnerBinding.bind(this);
+//        MyInnerBinding.bind(this);
         textView2.setText("Rengwuxian");
 
 //        io1();

@@ -160,6 +160,9 @@ dependencies {
     //图片压缩 https://github.com/Curzibn/Luban
     implementation 'top.zibin:Luban:1.1.8'
 
+    //glide https://github.com/bumptech/glide
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+
     //高德定位
     implementation 'com.amap.api:location:5.1.0'
 
@@ -188,7 +191,9 @@ dependencies {
     api("com.tencent.tinker:tinker-android-anno-support:1.9.14.7")
 
     //自己写的：利用反射实现 BindView的库
-    implementation(project(':lib-reflection'))
+//    implementation(project(':lib-reflection'))
+    implementation(project(':lib-mybinding'))
+//    annotationProcessor(project('lib-processor'))
 
     //扫码第三方库，个人维护，不建议使用，这里仅做测试
     implementation('com.github.amggg:YXing:V1.0.6')

@@ -1,5 +1,7 @@
 package com.jlpay.kotlindemo.bean;
 
+import com.jlpay.kotlindemo.ui.base.ResultCode;
+
 public class BResponse {
 
     private String msg;
@@ -27,5 +29,9 @@ public class BResponse {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public boolean isSuccess() {
+        return ResultCode.REQUEST_SUCCESS.equals(code);
     }
 }

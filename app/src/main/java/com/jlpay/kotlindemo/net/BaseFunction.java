@@ -64,13 +64,13 @@ public class BaseFunction<T> implements Function<ResponseBody, T> {
      * @return
      */
     private Type getType() {
-        Type genericSuperclass = getClass().getGenericSuperclass();
+        Type genericSuperclass = getClass().getGenericSuperclass();//获取带泛型参数的父类，返回值为：BaseDao<Employee, String>
         if (genericSuperclass instanceof Class) {
             throw new RuntimeException("须传入指定类型");
         }
         if (genericSuperclass instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
-            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();//Type的子接口：ParameterizedType 的 getActualTypeArguments()获取泛型参数的数组
             if (actualTypeArguments[0] instanceof Class) {
                 return actualTypeArguments[0];
             }

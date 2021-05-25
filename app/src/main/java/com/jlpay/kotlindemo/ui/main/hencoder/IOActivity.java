@@ -2,8 +2,10 @@ package com.jlpay.kotlindemo.ui.main.hencoder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.Constants;
 import com.jlpay.kotlindemo.ui.utils.DataUtils;
-import com.jlpay.lib_mybinding.MyBindView;
+import com.jlpay.lib_annotations.MyBindView;
 import com.jlpay.lib_mybinding.MyBinding;
 
 import java.io.BufferedOutputStream;
@@ -48,6 +50,8 @@ public class IOActivity extends AppCompatActivity {
 //    TextView textView3;
     @MyBindView(R.id.textView2)
     TextView textView2;
+    @MyBindView(R.id.linearLayout)
+    LinearLayout linearLayout;
 
     private final String TAG = IOActivity.class.getSimpleName();
     private Unbinder unbinder;
@@ -66,6 +70,7 @@ public class IOActivity extends AppCompatActivity {
         MyBinding.bind(this);
 //        MyInnerBinding.bind(this);
         textView2.setText("Rengwuxian");
+        linearLayout.setBackgroundColor(Color.GRAY);
 
 //        io1();
 //        io2();

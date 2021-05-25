@@ -8,13 +8,14 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;
 
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.net.BaseObserver;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +26,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-public class RxAutoDisposeActivity extends AppCompatActivity {
+public class RxAutoDisposeActivity extends BaseNewMvpActivity<RxAutoDisposeContract.Presenter> implements RxAutoDisposeContract.View {
 
     public final String TAG = RxAutoDisposeActivity.class.getSimpleName();
 
@@ -40,10 +41,9 @@ public class RxAutoDisposeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "=======" + "onCreate()" + "=========");
-        setContentView(R.layout.activity_rx_auto_dispose);
         textview = findViewById(R.id.textview);
 
-        test2();
+//        test2();
     }
 
     @Override
@@ -57,6 +57,7 @@ public class RxAutoDisposeActivity extends AppCompatActivity {
         super.onResume();
         Log.e(TAG, "=======" + "onResume()" + "=========");
 //        test();
+        presenter.netRequest();
     }
 
     @Override
@@ -77,6 +78,32 @@ public class RxAutoDisposeActivity extends AppCompatActivity {
         Log.e(TAG, "=======" + "onDestroy()" + "=========");
     }
 
+    @NotNull
+    @Override
+    public RxAutoDisposeContract.Presenter createPresenter() {
+        return new RxAutoDisposePresenter(this, this);
+    }
+
+    @Override
+    public void onNetRequest(long aLong) {
+        textview.setText(String.valueOf(aLong));
+    }
+
+    @Override
+    public int getResourceId() {
+        return R.layout.activity_rx_auto_dispose;
+    }
+
+    @Override
+    public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
     private void test() {
         Observable.interval(0, 1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
@@ -89,6 +116,7 @@ public class RxAutoDisposeActivity extends AppCompatActivity {
                         Log.e(TAG, "=======" + "doOnDispose，Thread：" + Thread.currentThread().getName() + "=========");
                     }
                 })
+                //AutoDispose在被订阅时，获取到Activity当前的生命周期，并找到对应需要结束订阅的生命周期事件
                 .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(this)))//方式一，自动绑定，在哪里注册，那么就在它的对立时期解除绑定
                 .subscribe(new Observer<Long>() {
 

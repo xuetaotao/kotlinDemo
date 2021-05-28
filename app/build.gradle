@@ -52,38 +52,52 @@ android {
     }
 
     //两层维度
-    flavorDimensions 'environment'
+//    flavorDimensions 'environment'
+//    productFlavors {
+//        dev {
+//            buildConfigField("String", "ENVIRONMENT", "\"0\"")
+//        }
+//        pre {
+//            buildConfigField("String", "ENVIRONMENT", "\"1\"")
+//        }
+//        pro {
+//            buildConfigField("String", "ENVIRONMENT", "\"2\"")
+//        }
+//    }
+
+    //三维度
+    flavorDimensions 'paid', 'environment'
     productFlavors {
+        free {
+            dimension 'paid'
+        }
+        paid {
+            dimension 'paid'
+        }
         dev {
-            buildConfigField("String", "ENVIRONMENT", "\"0\"")
+            dimension 'environment'
         }
         pre {
-            buildConfigField("String", "ENVIRONMENT", "\"1\"")
+            dimension 'environment'
         }
         pro {
-            buildConfigField("String", "ENVIRONMENT", "\"2\"")
+            dimension 'environment'
         }
     }
 
-    //三维度
-//    flavorDimensions 'paid', 'environment'
-//    productFlavors {
-//        free {
-//            dimension 'paid'
-//        }
-//        paid {
-//            dimension 'paid'
-//        }
-//        dev {
-//            dimension 'environment'
-//        }
-//        pre {
-//            dimension 'environment'
-//        }
-//        pro {
-//            dimension 'environment'
-//        }
-//    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            //两层维度
+//            outputFileName = project.name + "_" + variant.versionName + "_" + variant.versionCode + "_" +
+//                    variant.buildType.name + "_" + variant.flavorName + ".apk"
+
+            //三维度
+            outputFileName = project.name + "_" + variant.versionName + "_" + variant.versionCode + "_" +
+                    variant.buildType.name + "_" + variant.productFlavors[0].name + "_" +
+                    variant.productFlavors[1].name + ".apk"
+        }
+
+    }
 
     compileOptions {
         sourceCompatibility(JavaVersion.VERSION_1_8)
@@ -256,7 +270,46 @@ task tinkerCopy(dependsOn: "assembleRelease") {
     }
 }
 
-task tinerRTxtCopyAdvanced(dependsOn: "assembleRelease") {
+//两层维度
+task tinerRTxtCopyAdvanced2(dependsOn: "assembleRelease") {
+    group("customerTask")
+    android.applicationVariants.all { variant ->
+        println("variant:${variant.name}")//lishuaPreRelease
+        println("variant2:${variant.dirName}")//lishuaPre/release
+        println("variant3:${variant.flavorName}")//lishuaPre
+        println("variant4:${project.name}")//app
+        println("variant5:${buildDir}")//Users/jlpay/op-app-android/app/build
+        println("variant6:${variant.buildType.name}")//release
+        println("variant7:${variant.baseName}")//lishua-pre-release
+        println("variant8:${variant.name.capitalize()}")//LishuaPreRelease
+        println("variant9:${it.name}")//tinerRTxtCopy
+        doLast {
+            def bakPath = "${buildDir}/bakApk/"
+            def dirName = variant.name
+            def destDirFileName = "${variant.buildType.name}_${variant.flavorName}.apk"
+            def fileNamePrefix = "${project.name}-${variant.baseName}"
+
+            copy {
+                fileTree(bakPath) {
+                    include("**/*${destDirFileName}")
+                }.each { file ->
+                    from "${buildDir}/intermediates/symbols/${dirName}/R.txt"
+                    from "${buildDir}/intermediates/symbol_list/${dirName}/R.txt"
+                    from "${buildDir}/intermediates/runtime_symbol_list/${dirName}/R.txt"
+                    into file.parent
+                    rename { String fileName ->
+                        fileName.replace("R.txt", "${fileNamePrefix}-R.txt")
+                    }
+                    println("destPath2:filename:${file.name}")
+                    println("destPath2:${file.parent}")
+                }
+            }
+        }
+    }
+}
+
+//三维度
+task tinerRTxtCopyAdvanced3(dependsOn: "assembleRelease") {
     group("customerTask")
     android.applicationVariants.all { variant ->
         println("variant:${variant.name}")//lishuaPreRelease
@@ -285,6 +338,7 @@ task tinerRTxtCopyAdvanced(dependsOn: "assembleRelease") {
                     rename { String fileName ->
                         fileName.replace("R.txt", "${fileNamePrefix}-R.txt")
                     }
+                    println("destPath2:filename:${file.name}")
                     println("destPath2:${file.parent}")
                 }
             }

@@ -112,6 +112,10 @@ android {
 //            java.srcDirs = ['src/main/java']//可以没有这项，但是不能为空
         }
     }
+
+    dataBinding {
+        enabled true
+    }
 }
 
 //依赖库强制使用某个版本和强制一分钟更新一次版本缓存

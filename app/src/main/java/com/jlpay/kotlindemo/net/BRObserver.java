@@ -61,6 +61,14 @@ public abstract class BRObserver<T extends BResponse> implements Observer<Respon
 
     public abstract void onError(String msg, String code);
 
+    /**
+     * 获取父类的泛型参数
+     * getGenericSuperclass() : 获得带有泛型的父类，返回值为：BaseDao<Employee, String>
+     * ParameterizedType ： 参数化类型，即泛型
+     * getActualTypeArguments()[] : 获取参数化类型的数组，泛型可能有多个
+     *
+     * @return
+     */
     public Type getType() {
         Type genericSuperclass = getClass().getGenericSuperclass();//获取当前类带泛型参数的父类，返回值为：BaseDao<Employee, String>
         if (genericSuperclass instanceof Class) {

@@ -44,6 +44,7 @@ public class RxAutoDisposeActivity extends BaseNewMvpActivity<RxAutoDisposeContr
         textview = findViewById(R.id.textview);
 
 //        test2();
+//        LifecycleScopes.resolveScopeFromLifecycle();//TODO RxAutoDispose 核心代码位置
     }
 
     @Override

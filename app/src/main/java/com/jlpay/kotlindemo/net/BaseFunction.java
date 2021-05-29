@@ -60,6 +60,9 @@ public class BaseFunction<T> implements Function<ResponseBody, T> {
 
     /**
      * 获取父类的泛型参数
+     * getGenericSuperclass() : 获得带有泛型的父类，返回值为：BaseDao<Employee, String>
+     * ParameterizedType ： 参数化类型，即泛型
+     * getActualTypeArguments()[] : 获取参数化类型的数组，泛型可能有多个
      *
      * @return
      */

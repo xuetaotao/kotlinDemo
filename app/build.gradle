@@ -337,6 +337,12 @@ task tinerRTxtCopyAdvanced3(dependsOn: "assembleRelease") {
                 fileTree(bakPath) {
                     include("**/*${destDirFileName}")
                 }.each { file ->
+                    from file.path
+                    into file.parent
+                    rename { String fileName ->
+                        fileName.replace(file.name, "${fileNamePrefix}.apk")
+                    }
+
                     from "${buildDir}/intermediates/symbols/${dirName}/R.txt"
                     from "${buildDir}/intermediates/symbol_list/${dirName}/R.txt"
                     from "${buildDir}/intermediates/runtime_symbol_list/${dirName}/R.txt"
@@ -344,9 +350,22 @@ task tinerRTxtCopyAdvanced3(dependsOn: "assembleRelease") {
                     rename { String fileName ->
                         fileName.replace("R.txt", "${fileNamePrefix}-R.txt")
                     }
-                    println("destPath2:filename:${file.name}")
+
+                    from("${buildDir}/outputs/mapping/${dirName}/mapping.txt")
+                    into file.parent
+                    rename { String fileName ->
+                        fileName.replace("mapping.txt", "${fileNamePrefix}-mapping.txt")
+                    }
+
+                    println("ç:${file.name}")
                     println("destPath2:${file.parent}")
                 }
+            }
+
+            fileTree(bakPath) {
+                include("**/*${destDirFileName}")
+            }.each { file ->
+                delete file
             }
         }
     }

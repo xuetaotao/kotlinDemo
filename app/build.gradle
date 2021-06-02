@@ -194,13 +194,13 @@ dependencies {
     //腾讯定位
     implementation 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.2.6'
 
-
+    //定位模块库
+    //对应 测试库 Java版本：'com.jlpay.opensdk:location:1.0.3'
+    implementation project(":location")
     //测试库 Java版本
-    implementation 'com.jlpay.opensdk:location:1.0.3'
-
+//    implementation 'com.jlpay.opensdk:location:1.0.3'
     //测试库 Kotlin版本
 //    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
-
 
 
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9

@@ -3,4 +3,5 @@ include ':lib-processor'
 include ':lib-mybinding'
 include ':lib-reflection'
 include ':app'
+include ':location'
 rootProject.name = "kotlinDemo"

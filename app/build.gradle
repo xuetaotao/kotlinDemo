@@ -113,8 +113,13 @@ android {
         }
     }
 
-    dataBinding {
-        enabled true
+    //dataBinding开关
+    //已过时
+//    dataBinding {
+//        enabled true
+//    }
+    buildFeatures {
+        dataBinding = true
     }
 }
 
@@ -190,9 +195,11 @@ dependencies {
 
     //测试库 Java版本
 //    implementation 'com.jlpay.opensdk:location:1.0.3'
-    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
 
     //测试库 Kotlin版本
+    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
+
+
 
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     //腾讯Bugly https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20170912151050
@@ -369,6 +376,16 @@ task tinerRTxtCopyAdvanced3(dependsOn: "assembleRelease") {
             }
         }
     }
+}
+
+task productFlavorsTest {
+    group("customerTask")
+    List<String> flavors = new ArrayList<>();
+    project.android.productFlavors.each { flavor ->
+        flavors.add(flavor.name)
+        println("flavor.name:" + flavor.name)
+    }
+//    boolean hasFlavors = flavors.size() > 0
 }
 
 task tinerRTxtCopyUnfinished(dependsOn: "assembleRelease") {

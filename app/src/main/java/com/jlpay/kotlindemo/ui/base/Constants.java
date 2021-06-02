@@ -17,6 +17,8 @@ public class Constants {
 
     public static final String BUGLY_APP_ID = "445be59d72";//腾讯Bugly APPID
     public static final String BUGLY_APP_KEY = "69458a34-fd2c-47d7-8286-69eef612476f";//腾讯Bugly APPKEY
+    public static final int BUGLY_RELEASE_TAG = 194584;//BUGLY生产标签
+    public static final int BUGLY_DEBUG_TAG = 194586;//BUGLY测试标签
 
     public static final String APP_RELEASE_SHA1 = "A6:4D:1C:3D:8C:33:05:6E:A3:04:F1:F0:1D:FF:2F:8F:03:93:85:EE";//发布版安全码SHA1，命令行：keytool -v -list -keystore C:\AndroidProgram\kotlinDemo\mySignKey.jks，密钥库口令：fit1
     public static final String APP_DEBUG_SHA1 = "12:52:5C:FA:1B:55:32:6C:29:6A:B1:AB:AF:A3:05:0E:A2:12:9D:D4";//发布版安全码SHA1，命令行：keytool -v -list -keystore C:\Users\xuetaotao\.android\debug.keystore，密钥库口令：android

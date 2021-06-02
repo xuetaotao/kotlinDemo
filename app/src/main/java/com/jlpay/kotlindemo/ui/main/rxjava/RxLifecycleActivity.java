@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.jlpay.kotlindemo.R;
+import com.jlpay.kotlindemo.net.BaseObserver;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -25,6 +26,7 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * 目的：解决RxJava使用中的内存泄漏问题
@@ -65,6 +67,58 @@ public class RxLifecycleActivity extends RxAppCompatActivity {
 //        intervalRangeTest();
 //        zipTest();
 //        onErrorReturnTest();
+//        behaviorSubjectTest();
+    }
+
+    /**
+     * BehaviorSubject
+     * 当Observer订阅了一个BehaviorSubject，它一开始就会释放Observable最近释放的一个数据对象，当还没有任何数据释放时，它则是一个默认值。接下来就会释放
+     * Observable释放的所有数据。如果Observable因异常终止，BehaviorSubject将不会向后续的Observer释放数据，但是会向Observer传递一个异常通知
+     * 简单来说，就是释放订阅前最后一个数据和订阅后接收到的所有数据
+     */
+    @SuppressLint("AutoDispose")
+    private void behaviorSubjectTest() {
+        Observer<String> observer = new BaseObserver<String>() {
+            @Override
+            public void onSuccess(String data) {
+                Log.e(TAG, "=======" + "onSuccess：" + data + "=========");
+            }
+
+            @Override
+            public void onError(String msg, String code) {
+                Log.e(TAG, "=======" + "onError：" + msg + "=========");
+            }
+        };
+
+        // observer will receive all 4 events (including "default").
+        BehaviorSubject<String> behaviorSubject1 = BehaviorSubject.createDefault("default");
+        behaviorSubject1.subscribe(observer);
+        behaviorSubject1.onNext("one");
+        behaviorSubject1.onNext("two");
+        behaviorSubject1.onNext("three");
+
+        // observer will receive the "one", "two" and "three" events, but not "zero"
+//        BehaviorSubject<String> behaviorSubject2 = BehaviorSubject.create();
+//        behaviorSubject2.onNext("zero");
+//        behaviorSubject2.onNext("one");
+//        behaviorSubject2.subscribe(observer);
+//        behaviorSubject2.onNext("two");
+//        behaviorSubject2.onNext("three");
+
+        // observer will receive only onComplete
+//        BehaviorSubject<String> behaviorSubject3 = BehaviorSubject.create();
+//        behaviorSubject3.onNext("zero");
+//        behaviorSubject3.onNext("one");
+//        behaviorSubject3.onComplete();
+//        behaviorSubject3.subscribe(observer);
+
+
+        // observer will receive only onError
+//        BehaviorSubject<String> behaviorSubject4 = BehaviorSubject.create();
+//        behaviorSubject4.onNext("zero");
+//        behaviorSubject4.onNext("one");
+//        behaviorSubject4.onError(new RuntimeException("error"));
+//        behaviorSubject4.subscribe(observer);
     }
 
 

@@ -8,10 +8,13 @@ import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
+import com.jlpay.kotlindemo.BuildConfig
+import com.jlpay.kotlindemo.net.ExceptionHandle
 import com.jlpay.kotlindemo.ui.base.Constants
 import com.jlpay.kotlindemo.ui.utils.AppUtils
 import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.Beta
+import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.tinker.entry.DefaultApplicationLike
 
 /**
@@ -72,11 +75,16 @@ class MyApplication(
     private fun initLib() {
         AppUtils.initAppUtils(mContext)
 
+        initBuglyHotFix()
         initBugly()
+        ExceptionHandle.rxjavaExceptionCapture()
     }
 
 
-    private fun initBugly() {
+    /**
+     * 热更新相关初始化
+     */
+    private fun initBuglyHotFix() {
         setStrictMode()
         // 设置是否开启热更新能力，默认为true
         Beta.enableHotfix = true
@@ -88,6 +96,15 @@ class MyApplication(
         Beta.canAutoPatch = true
         // 这里实现SDK初始化，appId替换成你的在Bugly平台申请的appId。调试时，将第三个参数改为true
         Bugly.init(application, Constants.BUGLY_APP_ID, false)
+    }
+
+    private fun initBugly() {
+        val sceneTag = if (BuildConfig.DEBUG) {
+            Constants.BUGLY_DEBUG_TAG
+        } else {
+            Constants.BUGLY_RELEASE_TAG
+        }
+        CrashReport.setUserSceneTag(mContext, sceneTag)
     }
 
 

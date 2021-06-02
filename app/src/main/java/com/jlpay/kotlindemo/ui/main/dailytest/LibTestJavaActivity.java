@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,8 @@ import java.util.List;
 
 public class LibTestJavaActivity extends BaseActivity {
 
+    private TextView tv_result;
+
     public static void newInstance(Context context) {
         Intent intent = new Intent(context, LibTestJavaActivity.class);
         context.startActivity(intent);
@@ -34,15 +37,17 @@ public class LibTestJavaActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        TextView tv_result = findViewById(R.id.tv_result);
+        tv_result = findViewById(R.id.tv_result);
+    }
 
+    public void locationTest(View view) {
         PermissionUtils.getLocationPermission(this, new PermissionUtils.PermissionListener() {
             @Override
             public void allow() {
                 LocationManager
                         .with(LibTestJavaActivity.this)
                         .autoSwitchLocation(false)
-                        .defaultLocationType(ILocation.LocationType.GAODE)
+                        .defaultLocationType(ILocation.LocationType.BAIDU)
                         .locationListener(new LocationListener() {
                             @Override
                             public void onLocation(@org.jetbrains.annotations.Nullable LocationData locationData) {

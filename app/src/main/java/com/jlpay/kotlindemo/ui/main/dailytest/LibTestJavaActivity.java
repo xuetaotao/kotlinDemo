@@ -41,13 +41,14 @@ public class LibTestJavaActivity extends BaseActivity {
     }
 
     public void locationTest(View view) {
+        tv_result.setText("开始定位：");
         PermissionUtils.getLocationPermission(this, new PermissionUtils.PermissionListener() {
             @Override
             public void allow() {
                 LocationManager
                         .with(LibTestJavaActivity.this)
                         .autoSwitchLocation(false)
-                        .defaultLocationType(ILocation.LocationType.BAIDU)
+                        .defaultLocationType(ILocation.LocationType.GAODE)
                         .locationListener(new LocationListener() {
                             @Override
                             public void onLocation(@org.jetbrains.annotations.Nullable LocationData locationData) {

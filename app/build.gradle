@@ -28,6 +28,8 @@ android {
         ]
     }
 
+    //不要随意换签名文件，会影响百度和高德地图定位
+    //这里debug和release均使用这个签名文件
     signingConfigs {
         release {
             storeFile file('kotlinDemoKey.jks')

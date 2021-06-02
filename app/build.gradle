@@ -194,10 +194,10 @@ dependencies {
 
 
     //测试库 Java版本
-//    implementation 'com.jlpay.opensdk:location:1.0.3'
+    implementation 'com.jlpay.opensdk:location:1.0.3'
 
     //测试库 Kotlin版本
-    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
+//    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
 
 
 

@@ -17,7 +17,7 @@ import com.jlpay.kotlindemo.ui.base.BaseActivity;
 import com.jlpay.kotlindemo.ui.utils.PermissionUtils;
 import com.jlpay.opensdk.location.LocationManager;
 import com.jlpay.opensdk.location.bean.LocationData;
-import com.jlpay.opensdk.location.impl.LocationType;
+import com.jlpay.opensdk.location.impl.ILocation;
 import com.jlpay.opensdk.location.listener.LocationListener;
 
 import java.util.ArrayList;
@@ -41,7 +41,8 @@ public class LibTestJavaActivity extends BaseActivity {
             public void allow() {
                 LocationManager
                         .with(LibTestJavaActivity.this)
-                        .defaultLocationType(LocationType.TENCENT)
+                        .autoSwitchLocation(false)
+                        .defaultLocationType(ILocation.LocationType.GAODE)
                         .locationListener(new LocationListener() {
                             @Override
                             public void onLocation(@org.jetbrains.annotations.Nullable LocationData locationData) {

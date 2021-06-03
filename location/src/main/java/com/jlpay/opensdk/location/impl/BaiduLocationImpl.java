@@ -80,16 +80,16 @@ public class BaiduLocationImpl extends BDAbstractLocationListener implements ILo
 
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
-        //如果定位失败且定位还没超时（listener 不为空)
-        if (!isLocationValid(bdLocation) || locationListener == null) {
+        if (locationListener == null) {
             return;
         }
-        stop();
-        if (locationListener != null) {
-            locationListener.onLocation(changeLocation(bdLocation));
-            locationListener = null;
+        if (!isLocationValid(bdLocation)) {
+            locationListener.onFail(LocationError.ERR_OTHER, LocationError.ERR_OTHER_DESC);
+            stop();
+            return;
         }
-
+        locationListener.onLocation(changeLocation(bdLocation));
+        stop();
     }
 
 
@@ -129,9 +129,11 @@ public class BaiduLocationImpl extends BDAbstractLocationListener implements ILo
 
     @Override
     public void stop() {
-
         if (mLocationClient != null) {
             mLocationClient.stop();
+        }
+        if (locationListener != null) {
+            locationListener = null;
         }
         if (timer != null) {
             timer.cancel();

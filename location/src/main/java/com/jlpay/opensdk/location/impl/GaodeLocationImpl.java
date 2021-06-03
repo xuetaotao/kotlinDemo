@@ -66,10 +66,12 @@ public class GaodeLocationImpl implements ILocation, AMapLocationListener {
         }
         if (!isLocationValid(aMapLocation)) {
             locationListener.onFail(LocationError.ERR_OTHER, LocationError.ERR_OTHER_DESC);
+            stop();
             return;
         }
         if (aMapLocation.getErrorCode() != AMapLocation.LOCATION_SUCCESS) {
             locationListener.onFail(aMapLocation.getErrorCode(), aMapLocation.getErrorInfo());
+            stop();
             return;
         }
 

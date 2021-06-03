@@ -27,7 +27,7 @@
 
 ### 2.add implemtion in module:
 
-        implementation 'com.jlpay.opensdk:location:1.0.3'
+        implementation 'com.jlpay.opensdk:location:1.0.4'
 
         //腾讯定位，按需添加
         implementation 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.2.6'

@@ -96,10 +96,12 @@ public class TencentLocationImpl implements ILocation, TencentLocationListener {
         }
         if (!isLocationValid(tencentLocation)) {
             locationListener.onFail(LocationError.ERR_OTHER, LocationError.ERR_OTHER_DESC);
+            stop();
             return;
         }
         if (errorCode != TencentLocation.ERROR_OK) {
             locationListener.onFail(LocationError.ERR_OTHER, reason);
+            stop();
             return;
         }
 

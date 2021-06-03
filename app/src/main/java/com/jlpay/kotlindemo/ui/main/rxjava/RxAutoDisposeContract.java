@@ -8,5 +8,7 @@ public class RxAutoDisposeContract {
 
     interface Presenter extends IPresenter {
         void netRequest();
+
+        void anotherNetRequest();
     }
 }

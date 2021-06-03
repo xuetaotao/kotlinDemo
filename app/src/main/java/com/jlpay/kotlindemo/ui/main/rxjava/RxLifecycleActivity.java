@@ -32,7 +32,11 @@ import io.reactivex.subjects.BehaviorSubject;
  * 目的：解决RxJava使用中的内存泄漏问题
  * 例如，当使用RxJava订阅并执行耗时任务后，当Activity被finish时，如果耗时任务还未完成，没有及时取消订阅，就会导致Activity无法被回收，从而引发内存泄漏。
  * 为了解决这个问题，就产生了RxLifecycle，让RxJava变得有生命周期感知，使得其能及时取消订阅，避免出现内存泄漏问题。
- * 参考：https://juejin.cn/post/6844903617124630535#heading-56
+ * 参考资料整理：
+ * RxLifecycle详解及原理分析：https://www.jianshu.com/p/8311410de676
+ * RxLifecycle详细解析：https://juejin.cn/post/6844903634963185672#heading-14
+ * Android 开发中 RxJava 生命周期简易管理：https://juejin.cn/post/6844903933928816648
+ * https://juejin.cn/post/6844903617124630535#heading-56
  * https://juejin.cn/post/6844903634963185672#heading-13
  * https://juejin.cn/post/6844903614775820296
  */

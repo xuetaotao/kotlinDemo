@@ -24,7 +24,7 @@ abstract class BaseNewActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun <T> bindLifecycle(): AutoDisposeConverter<T>? {
+    fun <T> bindLifecycle(): AutoDisposeConverter<T> {
         return AutoDispose.autoDisposable<T>(AndroidLifecycleScopeProvider.from(lifecycle))
 
 //        return AutoDispose.autoDisposable<T>(

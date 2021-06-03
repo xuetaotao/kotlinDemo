@@ -13,7 +13,6 @@ abstract class BaseNewPresenter :
     private lateinit var lifecycleOwner: LifecycleOwner
 
     override fun onCreate(owner: LifecycleOwner) {
-        //doOnDispose：当调用 Disposable 的 dispose() 之后回调该方法
         Log.e("LifecycleOwner", "=======" + "onCreate：" + "=========")
         this.lifecycleOwner = owner
     }
@@ -34,10 +33,7 @@ abstract class BaseNewPresenter :
 //
 //    }
 
-    fun <T> bindLifecycle(): AutoDisposeConverter<T>? {
-        if (null == lifecycleOwner) {
-            throw NullPointerException("lifecycleOwner == null")
-        }
+    fun <T> bindLifecycle(): AutoDisposeConverter<T> {
         return AutoDispose.autoDisposable<T>(AndroidLifecycleScopeProvider.from(lifecycleOwner))
 
 //        return AutoDispose.autoDisposable<T>(

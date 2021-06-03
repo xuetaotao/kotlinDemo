@@ -50,4 +50,9 @@ public class RxAutoDisposePresenter extends BaseNewPresenter implements RxAutoDi
                     }
                 });
     }
+
+    @Override
+    public void anotherNetRequest() {
+
+    }
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--    与正常的XML布局文件不同的是，根标签改成了layout标签，内部有data标签和具体的布局。-->
+    <!--    data标签内存放Databinding的数据类。除了需要用到的Image类之外，-->
+    <!--    这里还声明了一个Presenter类用来对界面的用户行为做统一的管理-->
+    <!-- XML文件的作用应该只是进行数据的显示和用户的交互，而访问数据这种和业务相关的操作不应出现在XML文件中   -->
+
+    <data>
+
+        <variable
+            name="imageBean"
+            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.Image" />
+
+        <variable
+            name="presenter"
+            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity.Presenter" />
+
+        <import type="com.jlpay.kotlindemo.net.UrlConfig" />
+
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:url="@{UrlConfig.JETPACK_MVVM_IMG_BASE_URL+imageBean.url}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_previous"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{presenter::onClick}"
+                android:text="上一张" />
+
+            <Button
+                android:id="@+id/btn_load"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{presenter.onClick}"
+                android:text="加载" />
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{presenter.onClick}"
+                android:text="下一张" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply from: 'tinker-support.gradle'
 
 android {
@@ -145,6 +146,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'//项目测试代码(src/test/java)的依赖
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'//定义(src/androidTest)目录下的代码依赖
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //Android Jetpack 组件
+
 
     //okhttp3
 //    implementation 'com.squareup.okhttp3:okhttp:3.12.0'

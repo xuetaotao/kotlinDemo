@@ -221,6 +221,10 @@
             android:name=".ui.main.jetpack.mvvm.learn1.ImageMvvmActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.jetpack.mvvm.learn2.WanActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.DownLoadService" />
 

@@ -21,6 +21,7 @@ import com.jlpay.kotlindemo.ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvp.MvpDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvvm.MvvmDemoActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity
+import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn2.WanActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxJavaActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxLifecycleActivity
@@ -177,6 +178,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("MvcAdvanceDemo", MvcAdvanceDemoActivity::class.java)
         addButton("MvvmDemo", MvvmDemoActivity::class.java)
         addButton("ImageMvvmActivity", ImageMvvmActivity::class.java)
+        addButton("WanActivity", WanActivity::class.java)
     }
 
     override fun initData() {

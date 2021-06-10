@@ -1,5 +1,6 @@
 package com.jlpay.kotlindemo.ui.utils
 
+import android.app.Application
 import android.content.Context
 import com.jlpay.kotlindemo.ui.base.Constants
 
@@ -17,6 +18,11 @@ object AppUtils {
     @JvmStatic
     fun getContext(): Context {
         return mContext
+    }
+
+    @JvmStatic
+    fun getApplication(): Application {
+        return mContext as Application
     }
 
     /**

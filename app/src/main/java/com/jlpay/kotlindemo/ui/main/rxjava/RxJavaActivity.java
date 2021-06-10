@@ -124,7 +124,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
                 .getWxarticle2()
                 .delay(5, TimeUnit.SECONDS)
                 .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                .compose(bindToLifecycle())
+//                .compose(bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WxArticleBean>() {
                     @Override

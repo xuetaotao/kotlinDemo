@@ -11,6 +11,7 @@ import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
+import com.jlpay.kotlindemo.ui.main.dailytest.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.main.dailytest.LibTestJavaActivity
 import com.jlpay.kotlindemo.ui.main.dailytest.LibTestKotlinActivity
 import com.jlpay.kotlindemo.ui.main.dailytest.QRCodeActivity
@@ -179,6 +180,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("MvvmDemo", MvvmDemoActivity::class.java)
         addButton("ImageMvvmActivity", ImageMvvmActivity::class.java)
         addButton("WanActivity", WanActivity::class.java)
+        addButton("KotlinTestActivity", KotlinTestActivity::class.java)
     }
 
     override fun initData() {

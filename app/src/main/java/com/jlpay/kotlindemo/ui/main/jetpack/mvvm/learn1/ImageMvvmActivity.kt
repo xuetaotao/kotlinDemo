@@ -54,6 +54,7 @@ class ImageMvvmActivity : AppCompatActivity() {
         mProgressDialog = ProgressDialog(this)
         mProgressDialog.setMessage("加载中")
 
+        //LiveData可以理解为带有Activity生命周期的Observable = RxLifecycle(或者AutoDispose) + RxJava的Observable
         mViewModel.getImage().observe(this, object : Observer<Data<Image>> {
             override fun onChanged(t: Data<Image>?) {
                 if (t?.errorMsg != null) {

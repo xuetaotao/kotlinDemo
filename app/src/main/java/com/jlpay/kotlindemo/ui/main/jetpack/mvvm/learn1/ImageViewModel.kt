@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers
  *
  * <p>
  * 1.首先这个类要继承自android.arch.lifecycle.ViewModel这个类，以便在创建时与View层的生命周期相关联
+ * 2.LiveData可以理解为带有Activity生命周期的Observable = RxLifecycle(或者AutoDispose) + RxJava的Observable
  */
 class ImageViewModel() : ViewModel() {
 

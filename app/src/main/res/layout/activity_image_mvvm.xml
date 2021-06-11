@@ -17,6 +17,10 @@
             name="presenter"
             type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity.Presenter" />
 
+        <variable
+            name="viewModel"
+            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageViewModel" />
+
         <import type="com.jlpay.kotlindemo.net.UrlConfig" />
 
     </data>
@@ -62,6 +66,17 @@
                 android:text="下一张" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_liveData_viewModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="@{viewModel.noObserveLiveData}"
+            android:textColor="@color/common_black"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

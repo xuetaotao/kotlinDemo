@@ -71,6 +71,15 @@ class ImageMvvmActivity : AppCompatActivity() {
         mBinding.presenter = Presenter()
         mProgressDialog.show()
         mViewModel.loadImage()
+
+        //不监听LiveData，通过DataBinding实现页面更新的方式
+        mBinding.viewModel = mViewModel
+        mBinding.lifecycleOwner = this
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mViewModel.getNoObserveLiveData().postValue("不需要observe的LiveData")
     }
 
     inner class Presenter {

@@ -1,3 +1,4 @@
+include ':eyepetizer'
 include ':lib-annotations'
 include ':lib-processor'
 include ':lib-mybinding'

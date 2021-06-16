@@ -6,3 +6,4 @@ include ':lib-reflection'
 include ':app'
 include ':location'
 rootProject.name = "kotlinDemo"
+include ':mvvm'

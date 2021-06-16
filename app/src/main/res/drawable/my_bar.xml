@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- layer-list：Android中layer-list使用详解: https://www.cnblogs.com/yongdaimi/p/9674710.html   -->
+    <!-- 使用layer-list可以将多个drawable按照顺序层叠在一起显示，默认情况下，所有的item中的drawable都会自动根据它附上view的大小而进行缩放，-->
+    <!-- layer-list中的item是按照顺序从下往上叠加的，即先定义的item在下面，后面的依次往上面叠放-->
     <!--定义轨道的背景    -->
     <item
         android:id="@android:id/background"

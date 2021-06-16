@@ -1,0 +1,6 @@
+
+## 简介
+[MvvM](https://github.com/jzh1996/mvvm) 采用 `Kotlin` 语言编写，结合 `MVVM` + `协程` + `Retrofit` + `Glide` + `JetPack`部分功能 等架构设计的项目，项目代码结构清晰。
+
+## 说明
+**项目中的 API 均来自于 [www.wanandroid.com](http://www.wanandroid.com/) 网站，纯属学习交流使用，不得用于商业用途。**

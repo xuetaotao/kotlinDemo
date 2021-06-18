@@ -32,7 +32,7 @@ public class LogInterceptor implements Interceptor {
         //因为response.body().string()之后，response中的流会被关闭，程序会报错，我们需要创建出一个新的response给应用层处理
         ResponseBody peekBody = response.peekBody(1024 * 1024);
         String formatResponseBody = String.format("接收响应：%s %n 返回数据：\n%s\n 响应头：\n%s\n", response.request().url(), peekBody.string(), response.headers());
-//        Log.e(TAG, formatResponseBody);
+        Log.d(TAG, formatResponseBody);
 
         return response;
     }

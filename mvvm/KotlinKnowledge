@@ -1,0 +1,63 @@
+## Kotlin知识点整理
+* 1.when 也可以用来取代 if-else if链。 如果不提供参数，所有的分支条件都是简单的布尔表达式，而当一个分支的条件为真时则执行该分支
+(https://www.runoob.com/kotlin/kotlin-condition-control.html)
+
+* 2.内置函数let、also、with、run、apply: (https://cloud.tencent.com/developer/article/1591238)
+    - let:明确一个变量所处特定的作用域范围内，可使用一个可null的对象统一做判空处理
+        // 方便了统一判空的处理 & 确定了mVar变量的作用域
+        mVar?.let {
+               it.function1()
+               it.function2()
+               it.function3()
+        }
+    - also:类似let函数，但区别在于返回值; let函数：返回值 = 最后一行 / return的表达式; also函数：返回值 = 传入的对象的本身
+        // let函数
+        var result = mVar.let {
+                       it.function1()
+                       it.function2()
+                       it.function3()
+                       999
+        }
+        // 最终结果 = 返回999给变量result
+
+        // also函数
+        var result = mVar.also {
+                       it.function1()
+                       it.function2()
+                       it.function3()
+                       999
+        }
+        // 最终结果 = 返回一个mVar对象给变量result
+    - with:调用同一个对象的多个方法 / 属性时，可以省去对象名重复，直接调用方法名 / 属性即可
+        // 此处要调用people的name 和 age属性
+        // kotlin
+        val people = People("carson", 25)
+        with(people) {
+        println("my name is $name, I am $age years old")
+        }
+    - run:结合了let、with两个函数的作用，即：1.调用同一个对象的多个方法 / 属性时，可以省去对象名重复，直接调用方法名 / 属性即可 2.定义一个变量在特定作用域内 3.统一做判空处理
+        // 此处要调用people的name 和 age属性，且要判空
+        // kotlin
+        val people = People("carson", 25)
+        people?.run{
+            println("my name is $name, I am $age years old")
+        }
+    -apply:与run函数类似，但区别在于返回值：run函数返回最后一行的值 / 表达式; apply函数返回传入的对象的本身
+        // run函数
+        val people = People("carson", 25)
+        val result = people?.run{
+            println("my name is $name, I am $age years old")
+            999
+        }
+        // 最终结果 = 返回999给变量result
+
+        // apply
+        val people = People("carson", 25)
+        val result = people?.apply{
+            println("my name is $name, I am $age years old")
+            999
+        }
+        // 最终结果 = 返回一个people对象给变量result
+
+* 3.如何理解Kotlin泛型中的in和out？(https://blog.csdn.net/weixin_38261570/article/details/112637337)
+    - ava的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取; Java的 ? super T  对应  Kotlin的 in T， 只可以被读取

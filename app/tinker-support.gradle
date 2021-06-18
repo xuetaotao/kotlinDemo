@@ -14,6 +14,7 @@ def baseApkDir = "app-0322-16-50-22"
  */
 def customBaseApk = ""
 //def customBaseApk = "${bakPath}/${baseApkDir}/pro/app-pro-release.apk"
+//def customBaseApk = "${bakPath}/${baseApkDir}/app-release.apk"
 
 /**
  * 对于插件各参数的详细解析请参考

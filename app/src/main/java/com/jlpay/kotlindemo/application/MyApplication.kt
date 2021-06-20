@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
+import com.github.moduth.blockcanary.BlockCanary
+import com.github.moduth.blockcanary.BlockCanaryContext
 import com.jlpay.kotlindemo.BuildConfig
 import com.jlpay.kotlindemo.net.ExceptionHandle
 import com.jlpay.kotlindemo.ui.base.Constants
@@ -75,9 +77,18 @@ class MyApplication(
     private fun initLib() {
         AppUtils.initAppUtils(mContext)
 
+        ExceptionHandle.rxjavaExceptionCapture()
+        initLibNeedAgree()
+    }
+
+    /**
+     * 需要同意隐私协议后初始化的第三方库
+     */
+    private fun initLibNeedAgree() {
         initBuglyHotFix()
         initBugly()
-        ExceptionHandle.rxjavaExceptionCapture()
+        //卡顿监控分析
+        BlockCanary.install(mContext, BlockCanaryContext()).start()
     }
 
 

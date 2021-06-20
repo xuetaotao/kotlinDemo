@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,10 @@ public class LibTestJavaActivity extends BaseActivity {
         });
     }
 
+    public void testBlockCanary(View view) {
+        SystemClock.sleep(2000);
+    }
+
     @Override
     public int getResourceId() {
         return R.layout.activity_libtest_java;
@@ -71,7 +76,7 @@ public class LibTestJavaActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        checkNeedPermission(initPermissionList());
     }
 
 
@@ -82,7 +87,9 @@ public class LibTestJavaActivity extends BaseActivity {
     private List<String> initPermissionList() {
         String[] permissions = new String[]{
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
         return new ArrayList<>(Arrays.asList(permissions));
     }

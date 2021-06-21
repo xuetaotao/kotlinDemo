@@ -8,8 +8,6 @@ import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
-import com.github.moduth.blockcanary.BlockCanary
-import com.github.moduth.blockcanary.BlockCanaryContext
 import com.jlpay.kotlindemo.BuildConfig
 import com.jlpay.kotlindemo.net.ExceptionHandle
 import com.jlpay.kotlindemo.ui.base.Constants
@@ -87,8 +85,8 @@ class MyApplication(
     private fun initLibNeedAgree() {
         initBuglyHotFix()
         initBugly()
-        //卡顿监控分析
-        BlockCanary.install(mContext, BlockCanaryContext()).start()
+        //卡顿监控分析 (暂时屏蔽，影响 assembleRelease 命令执行，而且实际也未生效，原因待查询)
+//        BlockCanary.install(mContext, BlockCanaryContext()).start()
     }
 
 

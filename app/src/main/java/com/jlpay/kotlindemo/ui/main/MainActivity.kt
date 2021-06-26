@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
+import com.jlpay.kotlindemo.ui.main.chapter10.SimpleServiceActivity
 import com.jlpay.kotlindemo.ui.main.chapter1and2.*
 import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
@@ -181,6 +182,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("ImageMvvmActivity", ImageMvvmActivity::class.java)
         addButton("WanActivity", WanActivity::class.java)
         addButton("KotlinTestActivity", KotlinTestActivity::class.java)
+        addButton("SimpleServiceActivity", SimpleServiceActivity::class.java)
     }
 
     override fun initData() {

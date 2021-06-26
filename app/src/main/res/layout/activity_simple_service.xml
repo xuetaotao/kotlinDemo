@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="startService"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="stopService"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_bind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="bindService"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_unbind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="unbindService"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="getServiceRunStatus"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+</LinearLayout>

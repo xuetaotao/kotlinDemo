@@ -1,3 +1,4 @@
+include ':remoteservice'
 include ':eyepetizer'
 include ':lib-annotations'
 include ':lib-processor'

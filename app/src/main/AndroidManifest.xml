@@ -231,6 +231,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".ui.main.chapter10.SimpleServiceActivity" />
         <activity android:name=".ui.main.chapter10.IntentServiceActivity" />
+        <activity android:name=".ui.main.chapter10.AidlServiceActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

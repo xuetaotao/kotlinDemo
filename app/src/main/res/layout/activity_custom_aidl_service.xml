@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获取远程Service的状态"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="15dp"
+        android:text="请输入用户名：只能输入sun或者bai"
+        android:textColor="@color/common_gray"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/et_person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="请输入用户名"
+        android:inputType="textNoSuggestions"
+        android:padding="15dp"
+        android:text=""
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="15dp"
+        android:text=""
+        android:textColor="@color/common_gray"
+        android:textSize="14sp" />
+
+    <ListView
+        android:id="@+id/show"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="30dp" />
+
+</LinearLayout>

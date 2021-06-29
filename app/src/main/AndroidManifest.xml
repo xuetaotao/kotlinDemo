@@ -232,6 +232,7 @@
         <activity android:name=".ui.main.chapter10.SimpleServiceActivity" />
         <activity android:name=".ui.main.chapter10.IntentServiceActivity" />
         <activity android:name=".ui.main.chapter10.AidlServiceActivity" />
+        <activity android:name=".ui.main.chapter10.CustomAidlServiceActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

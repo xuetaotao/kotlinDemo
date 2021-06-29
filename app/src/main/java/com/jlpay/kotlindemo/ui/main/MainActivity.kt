@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.AidlServiceActivity
+import com.jlpay.kotlindemo.ui.main.chapter10.CustomAidlServiceActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.IntentServiceActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.SimpleServiceActivity
 import com.jlpay.kotlindemo.ui.main.chapter1and2.*
@@ -187,6 +188,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("SimpleServiceActivity", SimpleServiceActivity::class.java)
         addButton("IntentServiceActivity", IntentServiceActivity::class.java)
         addButton("AidlServiceActivity", AidlServiceActivity::class.java)
+        addButton("CustomAidlServiceActivity", CustomAidlServiceActivity::class.java)
     }
 
     override fun initData() {

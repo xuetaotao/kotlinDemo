@@ -61,3 +61,9 @@
 
 * 3.如何理解Kotlin泛型中的in和out？(https://blog.csdn.net/weixin_38261570/article/details/112637337)
     - ava的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取; Java的 ? super T  对应  Kotlin的 in T， 只可以被读取
+
+* 4.kotlin中==比较的是数值是否相等, 而===比较的是两个对象的地址是否相等
+
+* 5.Kotlin中init代码块和构造方法以及伴生对象中代码的调用时机及执行顺序:https://blog.csdn.net/yuzhiqiang_1993/article/details/87863589
+    - a.Kotlin中的init代码块就相当于Java中的普通代码块，在创建对象的时候代码块会先执行。注意是每次创建都会执行一遍
+    - b.Kotlin中的伴生对象相当于Java中的Static关键字。伴生对象里的init代码块就相当于Java中的静态代码块。在类加载的时候会优先执行且只会执行一次

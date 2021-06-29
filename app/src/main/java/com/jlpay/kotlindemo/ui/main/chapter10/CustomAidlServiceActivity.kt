@@ -7,10 +7,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import com.jlpay.remotecustomservice.IPet
@@ -24,12 +21,12 @@ class CustomAidlServiceActivity : AppCompatActivity() {
     private val conn: ServiceConnection = object : ServiceConnection {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Log.e("CustomAidlService", "--Service Connected--")
+            Log.e("CustomAidlService", "--ParcelableService Connected--")
             petService = IPet.Stub.asInterface(service)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            Log.e("CustomAidlService", "--Service Disconnected--")
+            Log.e("CustomAidlService", "--ParcelableService Disconnected--")
             petService = null
         }
     }
@@ -60,9 +57,9 @@ class CustomAidlServiceActivity : AppCompatActivity() {
                 val pet: Pet = pets!!.get(0)
                 tv_service.text = pet.name + ":" + pet.year
                 //将程序返回的List包装成ArrayAdapter
-//                val adapter: ArrayAdapter<Pet> =
-//                    ArrayAdapter(this, android.R.layout.simple_list_item_1, pets)
-//                show.adapter = adapter
+                val adapter: ArrayAdapter<Pet> =
+                    ArrayAdapter(this, android.R.layout.simple_list_item_1, pets)
+                show.adapter = adapter
             } catch (e: Exception) {
                 e.printStackTrace()
             }

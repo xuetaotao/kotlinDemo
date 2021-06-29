@@ -27,12 +27,12 @@ class AidlServiceActivity : AppCompatActivity() {
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             //获取远程Service的onBind()方法所返回的对象的代理
-            Log.e("AidlServiceActivity", "--Service Connected--")
+            Log.e("AidlServiceActivity", "--AidlService Connected--")
             catService = ICat.Stub.asInterface(service)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            Log.e("AidlServiceActivity", "--Service Disconnected--")
+            Log.e("AidlServiceActivity", "--AidlService Disconnected--")
             catService = null
         }
     }

@@ -3,10 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'//kapt是kotlin的注解处理器
 apply from: 'tinker-support.gradle'
+//apply plugin: 'com.jakewharton.hugo'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.jlpay.kotlindemo"

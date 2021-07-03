@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.ui.base
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import com.trello.rxlifecycle2.LifecycleTransformer
 import com.trello.rxlifecycle2.android.ActivityEvent
@@ -32,5 +33,9 @@ abstract class BaseActivity : RxAppCompatActivity() {
 
     fun getLifecycleOwner(): LifecycleOwner {
         return this
+    }
+
+    fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }

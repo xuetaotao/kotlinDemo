@@ -6,7 +6,7 @@
         name="files_path"
         path="." />
 
-    <!-- APP内部私有缓存目录：context.getFilesDir()-->
+    <!-- APP内部私有缓存目录：context.getCacheDir()-->
     <cache-path
         name="cache_path"
         path="." />

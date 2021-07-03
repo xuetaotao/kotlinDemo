@@ -429,4 +429,52 @@ public class MediaStoreUtils {
     public static void deleteFile(Context context, Uri uri) {
         context.getContentResolver().delete(uri, null, null);
     }
+
+
+    /**
+     * 该工具类主要用于实现 访问共享目录下其他应用创建的非media文件
+     * 使用系统存储访问框架
+     * 需要存储权限
+     */
+    static class SAFUtils {
+
+//    //通过系统的文件浏览器选择一个文件，注意Intent的action和category都是固定不变的
+//    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//    //筛选，只显示可以“打开”的结果，如文件(而不是联系人或时区列表)
+//    intent.addCategory(Intent.CATEGORY_OPENABLE);
+//    //type属性可以用于对文件类型进行过滤，如过滤只显示图像类型文件，设置为"*/*"表示显示所有类型的文件，type属性必须要指定，否则会产生崩溃
+//    intent.setType("image/*");// 文件类型："text/plain"
+//    startActivityForResult(intent, REQUEST_CODE_FOR_SINGLE_FILE);
+//
+//
+//    private final String[] IMAGE_PROJECTION = {
+//            MediaStore.Images.Media.DISPLAY_NAME,
+//            MediaStore.Images.Media.SIZE,
+//            MediaStore.Images.Media._ID};
+//
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+//        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            Uri uri = null;
+//            if (resultData != null) {
+//                // 获取选择文件Uri
+//                uri = resultData.getData();
+//                //获取文件流，可以用来读取操作
+//                InputStream inputStream = this.getContentResolver().openInputStream(uri);
+//                // 获取图片信息
+//                Cursor cursor = this.getContentResolver()
+//                        .query(uri, IMAGE_PROJECTION, null, null, null, null);
+//
+//                if (cursor != null && cursor.moveToFirst()) {
+//                    String displayName = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
+//                    String size = cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
+//                    Log.i(TAG, "Uri: " + uri.toString());
+//                    Log.i(TAG, "Name: " + displayName);
+//                    Log.i(TAG, "Size: " + size);
+//                }
+//                cursor.close();
+//            }
+//        }
+//    }
+    }
 }

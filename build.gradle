@@ -21,6 +21,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.tencent.tinker:tinker-patch-gradle-plugin:1.9.14.7'//Tinker组件依赖
         classpath "com.tencent.bugly:tinker-support:1.2.0"//第一步：添加插件依赖 tinker-support插件
+//        classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'//可以在Logcat日志中显示方法的参数值，返回值，方法耗时时间
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

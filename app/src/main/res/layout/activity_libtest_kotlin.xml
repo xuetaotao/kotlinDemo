@@ -92,6 +92,17 @@
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
+            <Button
+                android:id="@+id/btn_saf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:onClick="safTest"
+                android:text="测试SAF文件访问框架"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"

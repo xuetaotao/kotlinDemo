@@ -2,11 +2,13 @@ package com.jlpay.kotlindemo.ui.main.dailytest
 
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -18,6 +20,7 @@ import com.jlpay.opensdk.location.LocationManager
 import com.jlpay.opensdk.location.bean.LocationData
 import com.jlpay.opensdk.location.listener.LocationListener
 import java.io.File
+import java.io.InputStream
 
 class LibTestKotlinActivity : BaseActivity() {
 
@@ -211,6 +214,16 @@ class LibTestKotlinActivity : BaseActivity() {
         }
     }
 
+    fun safTest(view: View) {
+        //通过系统的文件浏览器选择一个文件，注意Intent的action和category都是固定不变的
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        //筛选，只显示可以“打开”的结果，如文件(而不是联系人或时区列表)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        //type属性可以用于对文件类型进行过滤，如过滤只显示图像类型文件，设置为"*/*"表示显示所有类型的文件，type属性必须要指定，否则会产生崩溃
+        intent.type = "image/*"// 文件类型："text/plain"
+        startActivityForResult(intent, 0x1006)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != RESULT_OK) {
@@ -298,6 +311,7 @@ class LibTestKotlinActivity : BaseActivity() {
             Log.e("LibTestKotlinActivity", "测试拍照保存到APP外部私有目录成功了:$photoUri")
             showToast("拍照保存到APP外部私有目录成功了")
             Glide.with(this).load(photoUri).into(imageView)
+
         } else if (requestCode == 0x1003) {
             if (data == null) {
                 Log.e("LibTestKotlinActivity", "拍照的 data is null")
@@ -305,6 +319,36 @@ class LibTestKotlinActivity : BaseActivity() {
             Log.e("LibTestKotlinActivity", "测试拍照保存到外部Pic目录成功了:$photoUri")
             showToast("测试拍照保存到外部Pic目录成功了")
             Glide.with(this).load(photoUri).into(imageView)
+
+        } else if (requestCode == 0x1006) {
+            if (data == null) {
+                Log.e("LibTestKotlinActivity", "data is null")
+                return
+            }
+            // 获取选择文件Uri
+            val uri: Uri? = data.data
+            val IMAGE_PROJECTION = arrayOf(
+                MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.SIZE,
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DATA)
+            uri?.let { it ->
+                //方式一：获取文件流，可以用来读取操作
+                val inputStream: InputStream? = contentResolver.openInputStream(it)
+                //方式二： 获取图片信息
+                val cursor: Cursor? = contentResolver.query(it, IMAGE_PROJECTION, null, null, null)
+                cursor?.let {
+                    if (cursor.moveToFirst()) {
+                        val displayName =
+                            cursor.getString(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[0]))
+                        val size = cursor.getInt(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[1]))
+                        val path = cursor.getInt(cursor.getColumnIndexOrThrow(IMAGE_PROJECTION[3]))
+                        Log.e("TAG", "Uri:$it\tDisplay:$displayName\tSize:$size\tPath:$path")
+                    }
+                    cursor.close()
+                }
+            }
+
         }
     }
 

@@ -15,10 +15,7 @@ import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
-import com.jlpay.kotlindemo.ui.main.dailytest.KotlinTestActivity
-import com.jlpay.kotlindemo.ui.main.dailytest.LibTestJavaActivity
-import com.jlpay.kotlindemo.ui.main.dailytest.LibTestKotlinActivity
-import com.jlpay.kotlindemo.ui.main.dailytest.QRCodeActivity
+import com.jlpay.kotlindemo.ui.main.dailytest.*
 import com.jlpay.kotlindemo.ui.main.hencoder.IOActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.ThreadActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity
@@ -189,6 +186,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("IntentServiceActivity", IntentServiceActivity::class.java)
         addButton("AidlServiceActivity", AidlServiceActivity::class.java)
         addButton("CustomAidlServiceActivity", CustomAidlServiceActivity::class.java)
+        addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
     }
 
     override fun initData() {

@@ -15,14 +15,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_result"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textColor="@color/common_black"
-                android:textSize="14sp" />
-
-            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
@@ -39,36 +31,40 @@
                 android:layout_marginTop="15dp"
                 android:text="测试外部目录(非共享目录)文件夹创建，结论：targetSdkVersion在Android10以下可以成功，以上不能成功"
                 android:textAllCaps="false"
+                android:onClick="createDir"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
             <Button
-                android:id="@+id/btn_media"
+                android:id="@+id/btn_copy1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="选择相册图片复制到APP外部私有目录"
                 android:textAllCaps="false"
+                android:onClick="copy1"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
             <Button
-                android:id="@+id/btn_media2"
+                android:id="@+id/btn_copy2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="选择相册图片复制到外部Pic目录"
                 android:textAllCaps="false"
+                android:onClick="copy2"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
             <Button
-                android:id="@+id/btn_media3"
+                android:id="@+id/btn_copy3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="APP外部私有目录复制到外部Pic目录：操作之前请先操作第一个(复制一个图片到外部APP私有目录，然后删除外部的图片)"
+                android:text="APP外部私有目录复制到外部Pic目录：操作之前请先操作第一个"
                 android:textAllCaps="false"
+                android:onClick="copy3"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -79,6 +75,7 @@
                 android:layout_marginTop="15dp"
                 android:text="测试拍照保存到APP外部私有目录"
                 android:textAllCaps="false"
+                android:onClick="photo"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -89,6 +86,7 @@
                 android:layout_marginTop="15dp"
                 android:text="测试拍照保存到外部Pic目录"
                 android:textAllCaps="false"
+                android:onClick="photo_pic"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -101,5 +99,6 @@
         </LinearLayout>
 
     </ScrollView>
+
 
 </LinearLayout>

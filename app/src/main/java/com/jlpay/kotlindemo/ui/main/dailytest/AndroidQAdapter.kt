@@ -1,38 +1,41 @@
 package com.jlpay.kotlindemo.ui.main.dailytest
 
 import android.Manifest
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
-import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
-import com.jlpay.kotlindemo.ui.utils.IAndroid11Upgrade
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import androidx.core.content.FileProvider
+import java.io.*
 import java.util.*
 
-class AndroidQAdapter(@NonNull imgDirName: String) : IAndroid11Upgrade {
+class AndroidQAdapter {
 
+    private lateinit var imgDirName: String
 
-    constructor() : this("jlpay")
+    constructor() : this(DEFAULT_EXTERN_DIR_NAME)
 
-    override fun getImgFromPubPic(context: Context, uri: Uri): InputStream? {
+    constructor(imgDirName: String?) {
+        this.imgDirName = imgDirName ?: DEFAULT_EXTERN_DIR_NAME
+    }
+
+    fun getImgFromPubPic(context: Context, uri: Uri): InputStream? {
         return Images.getImageFromPic(context, uri)
     }
 
-    override fun imgSaveToPubPic(context: Context, inputStream: InputStream): String? {
-        return Images.insertImageToPic(context, inputStream, DEFAULT_EXTERN_DIR_NAME)
+    fun imgSaveToPubPic(context: Context, inputStream: InputStream): Uri? {
+        return Images.insertImageToPic(context, inputStream, imgDirName)
     }
 
-    override fun copyImgFromPubPic(context: Context, uri: Uri): String? {
-        return Images.copyImgFromPicToAppDir(context, uri)
+    fun copyImgFromPicToAppPic(context: Context, uri: Uri): String? {
+        return Images.copyImgFromPicToAppPic(context, uri)
     }
 
 
@@ -91,38 +94,40 @@ class AndroidQAdapter(@NonNull imgDirName: String) : IAndroid11Upgrade {
 
 
             /**
-             * 保存图片到外部共享目录
+             * 保存图片到外部共享目录Pic下
+             * @return 保存到的外部共享目录Pic下的Uri或者null
              */
             fun insertImageToPic(
                 context: Context,
                 inputStream: InputStream,
                 imgDirName: String
-            ): String? {
+            ): Uri? {
                 val contentResolver = context.contentResolver
-                val pendingUri = createImgPicUri(context, imgDirName)
+                val pendingUri: Uri? = createImgPicUri(context, imgDirName)
                 //3.执行图片数据插入操作
-                return if (pendingUri != null) {
+                if (pendingUri != null) {
                     try {
                         val outputStream: OutputStream? =
                             contentResolver.openOutputStream(pendingUri)
                         if (outputStream != null) {
                             copy(inputStream, outputStream)
                         }
-                        pendingUri.toString()
                     } catch (e: Exception) {
                         e.printStackTrace()
                         contentResolver.delete(pendingUri, null, null)
-                        null
+                        return null
                     }
-                } else {
-                    null
                 }
+                return pendingUri
             }
 
             /**
              * 从外部共享目录获取图片
              */
             fun getImageFromPic(context: Context, uri: Uri): InputStream? {
+                if (!checkPermission(context)) {
+                    return null
+                }
                 return try {
                     context.contentResolver.openInputStream(uri)
                 } catch (e: Exception) {
@@ -132,13 +137,104 @@ class AndroidQAdapter(@NonNull imgDirName: String) : IAndroid11Upgrade {
             }
 
             /**
-             * 复制外部共享目录下图片到外部APP私有目录
+             * 将图片路径转换为Uri
+             * 注：若为外部共享目录下的图片，可以直接转化
+             * 若为APP外部私有目录下的图片，则(方式一：先插入外部共享目录下)（方式二：返回图片的Uri地址），然后返回Uri
+             * @return Uri
              */
-            fun copyImgFromPicToAppDir(context: Context, uri: Uri): String? {
+            fun getImageContentUri(context: Context, imagePath: String, authority: String): Uri? {
+                if (!checkPermission(context)) {
+                    return null
+                }
+                val cursor: Cursor? = context.contentResolver.query(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    arrayOf(MediaStore.Images.ImageColumns._ID),
+                    MediaStore.Images.ImageColumns.DATA + "=? ",
+                    arrayOf(imagePath), null
+                )
+                var uri: Uri? = null
+                if (cursor != null && cursor.moveToFirst()) {
+                    //若为外部共享目录下的图片，可以直接把路径转化为Uri
+                    val id =
+                        cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID))
+                    if (-1 != id) {
+                        uri =
+                            ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                id.toLong())
+                    }
+                } else {
+                    //操作一：如果图片不在外部共享目录图片数据库，就先把它插入
+//                    val inputStream = FileInputStream(imagePath)
+//                    uri = insertImageToPic(context,
+//                        inputStream,
+//                        DEFAULT_EXTERN_DIR_NAME)//TODO 这里固定写了，若使用该方式可以考虑改为变量
+                    //操作二：返回图片的Uri地址
+                    val file = File(imagePath)
+                    uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        FileProvider.getUriForFile(context,
+                            authority,
+                            file)// content://com.jlpay.kotlindemo.FileProvider/external_files_path/Image/IMG1625475923370.jpg
+                    } else {
+                        Uri.fromFile(file)// file://storage/emulated/0/Android/data/com.jlpay.kotlindemo/files/Image/IMG1625477375523.jpg
+                    }
+                }
+                cursor?.close()
+                return uri
+            }
+
+
+            /**
+             * 创建图片Uri
+             * @param isPubPicUri 是否为外部共享目录创建的图片Uri
+             * @return
+             */
+            fun createImageContentUri(
+                context: Context, isPubPicUri: Boolean, imgDirName: String?, authority: String?
+            ): Uri? {
+                if (!checkPermission(context)) {
+                    return null
+                }
+                if (isPubPicUri) {
+                    return imgDirName?.let {
+                        createImgPicUri(context,
+                            it)
+                    }//直接通过MediaStore API操作即可，也可以和FileProvider一起使用(在10.0版本下)
+                } else {
+                    var uri: Uri? = null
+                    val IMG_APP_EXTERNAL: String =
+                        context.getExternalFilesDir(null)
+                            .toString() + File.separator + "Image" + File.separator
+                    if (createDirs(context, IMG_APP_EXTERNAL)) {
+                        val file =
+                            File(IMG_APP_EXTERNAL + "IMG" + System.currentTimeMillis() + ".jpg")
+                        uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            authority?.let {
+                                FileProvider.getUriForFile(context,
+                                    authority,
+                                    file)// content://com.jlpay.kotlindemo.FileProvider/external_files_path/Image/IMG1625475923370.jpg
+                            }
+                        } else {
+                            Uri.fromFile(file)// file://storage/emulated/0/Android/data/com.jlpay.kotlindemo/files/Image/IMG1625477375523.jpg
+                        }
+                    }
+                    return uri
+                }
+            }
+
+
+            /**
+             * 复制外部共享目录下图片到外部APP私有目录Image下
+             * @return 外部APP私有目录Image下的保存路径
+             */
+            fun copyImgFromPicToAppPic(context: Context, uri: Uri): String? {
+                if (!checkPermission(context)) {
+                    return null
+                }
                 //外部存储APP私有目录
                 val IMG_APP_EXTERNAL: String =
                     context.getExternalFilesDir(null)
                         .toString() + File.separator + "Image" + File.separator
+                var imgPath: String? = null
                 if (createDirs(context, IMG_APP_EXTERNAL)) {
                     val imgFileName = "IMG" + System.currentTimeMillis() + ".jpg"
                     val file = File(IMG_APP_EXTERNAL, imgFileName)
@@ -147,18 +243,33 @@ class AndroidQAdapter(@NonNull imgDirName: String) : IAndroid11Upgrade {
                         val fileOutputStream = FileOutputStream(file)
                         if (inputStream != null) {
                             copy(inputStream, fileOutputStream)
-                            return file.absolutePath
+                            imgPath = file.absolutePath
                         }
-                        return null
                     } catch (e: Exception) {
                         e.printStackTrace()
                         return null
                     }
                 }
-                return null
+                return imgPath
             }
 
-            fun getImgMimeType(imgFileName: String): String {
+            /**
+             * 复制外部APP私有目录下图片到外部共享目录下
+             * @return 外部共享目录下Img的Uri地址
+             */
+            fun copyImgFromAppPicToPic(
+                context: Context,
+                imgPath: String,
+                imgDirName: String
+            ): Uri? {
+                if (!checkPermission(context)) {
+                    return null
+                }
+                val inputStream = FileInputStream(imgPath)
+                return insertImageToPic(context, inputStream, imgDirName)
+            }
+
+            private fun getImgMimeType(imgFileName: String): String {
                 val toLowerCase = imgFileName.toLowerCase(Locale.ROOT)
                 if (toLowerCase.endsWith("jpg") || toLowerCase.endsWith("jpeg")) {
                     return "image/jpeg"

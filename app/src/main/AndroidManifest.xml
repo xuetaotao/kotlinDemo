@@ -233,6 +233,7 @@
         <activity android:name=".ui.main.chapter10.IntentServiceActivity" />
         <activity android:name=".ui.main.chapter10.AidlServiceActivity" />
         <activity android:name=".ui.main.chapter10.CustomAidlServiceActivity" />
+        <activity android:name=".ui.main.dailytest.MediaUtilsActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

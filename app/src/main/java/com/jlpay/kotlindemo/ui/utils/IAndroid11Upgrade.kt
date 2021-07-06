@@ -27,10 +27,20 @@ interface IAndroid11Upgrade {
     fun getImgFromPubPic(context: Context, uri: Uri): InputStream?
 
     //将图片保存到外部共享目录Picture下
-    fun imgSaveToPubPic(context: Context, inputStream: InputStream): String?
+    fun imgSaveToPubPic(context: Context, inputStream: InputStream): Uri?
 
     //将外部共享目录图片复制到APP外部私有目录
-    fun copyImgFromPubPic(context: Context, uri: Uri): String?
+    fun copyImgFromPicToAppPic(context: Context, uri: Uri): String?
 
-    //String、Uri、File之间的转换
+    //将APP外部私有目录复制到外部共享目录
+    fun copyImgFromAppPicToPic(context: Context, imgPath: String): Uri?
+
+    //拍照保存到外部共享目录
+    fun createImgContentPicUri(context: Context): Uri?
+
+    //拍照保存到APP外部私有目录
+    fun createImgContentAppPicUri(context: Context, authority: String?): Uri?
+
+    //String路径与Uri之间的转换
+    fun getImageContentUri(context: Context, imagePath: String, authority: String): Uri?
 }

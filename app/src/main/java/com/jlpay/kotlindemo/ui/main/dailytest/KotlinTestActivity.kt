@@ -22,6 +22,18 @@ class KotlinTestActivity : AppCompatActivity() {
 
     private fun initData() {
         arrayTest()
+        exceptionTest()
+    }
+
+    private fun exceptionTest() {
+        try {
+            throw Exception("测试异常")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        Log.e("LibTestKotlinActivity", "测试异常")
+        Log.e("LibTestKotlinActivity", "测试异常222")
+        Log.e("LibTestKotlinActivity", "测试异常333")
     }
 
     /**

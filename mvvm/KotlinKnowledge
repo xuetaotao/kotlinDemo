@@ -10,6 +10,7 @@
                it.function2()
                it.function3()
         }
+
     - also:类似let函数，但区别在于返回值; let函数：返回值 = 最后一行 / return的表达式; also函数：返回值 = 传入的对象的本身
         // let函数
         var result = mVar.let {
@@ -28,6 +29,7 @@
                        999
         }
         // 最终结果 = 返回一个mVar对象给变量result
+
     - with:调用同一个对象的多个方法 / 属性时，可以省去对象名重复，直接调用方法名 / 属性即可
         // 此处要调用people的name 和 age属性
         // kotlin
@@ -35,6 +37,7 @@
         with(people) {
         println("my name is $name, I am $age years old")
         }
+
     - run:结合了let、with两个函数的作用，即：1.调用同一个对象的多个方法 / 属性时，可以省去对象名重复，直接调用方法名 / 属性即可 2.定义一个变量在特定作用域内 3.统一做判空处理
         // 此处要调用people的name 和 age属性，且要判空
         // kotlin
@@ -42,6 +45,7 @@
         people?.run{
             println("my name is $name, I am $age years old")
         }
+
     -apply:与run函数类似，但区别在于返回值：run函数返回最后一行的值 / 表达式; apply函数返回传入的对象的本身
         // run函数
         val people = People("carson", 25)

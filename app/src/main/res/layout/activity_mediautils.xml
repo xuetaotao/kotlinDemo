@@ -24,14 +24,42 @@
                 android:textColor="@color/common_blue"
                 android:textSize="16sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_pick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="action_pick"
+                    android:text="Intent.ACTION_PICK"
+                    android:textAllCaps="false"
+                    android:textColor="@color/light_black"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_getContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="action_get_content"
+                    android:text="Intent.ACTION_GET_CONTENT"
+                    android:textAllCaps="false"
+                    android:textColor="@color/light_black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_createDir"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:onClick="createDir"
                 android:text="测试外部目录(非共享目录)文件夹创建，结论：targetSdkVersion在Android10以下可以成功，以上不能成功"
                 android:textAllCaps="false"
-                android:onClick="createDir"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -40,9 +68,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:onClick="copy1"
                 android:text="选择相册图片复制到APP外部私有目录"
                 android:textAllCaps="false"
-                android:onClick="copy1"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -51,9 +79,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:onClick="copy2"
                 android:text="选择相册图片复制到外部Pic目录"
                 android:textAllCaps="false"
-                android:onClick="copy2"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -62,9 +90,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:onClick="copy3"
                 android:text="APP外部私有目录复制到外部Pic目录：操作之前请先操作第一个"
                 android:textAllCaps="false"
-                android:onClick="copy3"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -73,9 +101,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:onClick="photo"
                 android:text="测试拍照保存到APP外部私有目录"
                 android:textAllCaps="false"
-                android:onClick="photo"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
@@ -84,9 +112,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:onClick="photo_pic"
                 android:text="测试拍照保存到外部Pic目录"
                 android:textAllCaps="false"
-                android:onClick="photo_pic"
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 

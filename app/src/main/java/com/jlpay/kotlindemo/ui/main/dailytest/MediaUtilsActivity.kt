@@ -28,6 +28,7 @@ class MediaUtilsActivity : BaseActivity() {
 
     private var copyImgFromPubPic: String? = null
     private var photoUri: Uri? = null
+    private var intentAction: String = Intent.ACTION_GET_CONTENT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,8 @@ class MediaUtilsActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != RESULT_OK) {
+            Log.e("TAG", "resultCode!=RESULT_OK，为:$resultCode")
+            showToast("resultCode!=RESULT_OK，回调失败")
             return
         }
         when (requestCode) {
@@ -75,7 +78,10 @@ class MediaUtilsActivity : BaseActivity() {
                 Glide.with(this).load(photoUri).into(imageView)
             }
             0x1002 -> {
-                if (data == null || data.data == null) return
+                if (data == null || data.data == null) {
+                    Log.e("TAG", "data is null")
+                    return
+                }
                 val uri = data.data
                 val aa: IAndroid11Upgrade = MediaUtils("miHaYou")
                 if (uri != null) {
@@ -85,7 +91,10 @@ class MediaUtilsActivity : BaseActivity() {
                 }
             }
             0x1004 -> {
-                if (data == null || data.data == null) return
+                if (data == null || data.data == null) {
+                    Log.e("TAG", "data is null")
+                    return
+                }
                 val uri = data.data
                 val aa: IAndroid11Upgrade = MediaUtils("JLPay")
                 if (uri != null) {
@@ -175,9 +184,19 @@ class MediaUtilsActivity : BaseActivity() {
         }
     }
 
+    fun action_pick(view: View) {
+        intentAction = Intent.ACTION_PICK
+        showToast("切换为:Intent.ACTION_PICK")
+    }
+
+    fun action_get_content(view: View) {
+        intentAction = Intent.ACTION_GET_CONTENT
+        showToast("切换为:Intent.ACTION_GET_CONTENT")
+    }
+
     fun getImageContent(requestCode: Int) {
         PermissionUtils.getStoragePermission(this) {
-            val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
+            val intent: Intent = Intent(intentAction)
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
             startActivityForResult(intent, requestCode)
         }

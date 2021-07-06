@@ -71,7 +71,7 @@ class MediaUtils : IAndroid11Upgrade {
              * 保存图片到外部共享Pic(暂时没有优先DCIM)目录下
              * @return 创建图片的URL地址(eg: content://media/external/images/media/6612)或null
              */
-            private fun createImgPicUri(context: Context, imgDirName: String): Uri? {
+            fun createImgPicUri(context: Context, imgDirName: String): Uri? {
                 if (!checkPermission(context)) {
                     return null
                 }

@@ -234,17 +234,29 @@
         <activity android:name=".ui.main.chapter10.AidlServiceActivity" />
         <activity android:name=".ui.main.chapter10.CustomAidlServiceActivity" />
         <activity android:name=".ui.main.dailytest.MediaUtilsActivity" />
+        <activity android:name=".ui.main.chapter10.BroadcastReceiverActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />
         <service android:name=".ui.main.chapter10.IntentServiceActivity$MyService" />
 
         <!--广播注册：静态注册-->
+        <!--android:exported指定该receiver能否接收其他APP发出的广播，如果配置了<intent-filter>，则默认为true        -->
         <receiver
             android:name=".broadcast_receiver.MyReceiver"
             android:exported="false">
 
-            <intent-filter>
+            <intent-filter android:priority="20">
+                <action android:name="com.jlpay.kotlindemo.MyReceiver" />
+            </intent-filter>
+
+        </receiver>
+
+        <receiver
+            android:name=".broadcast_receiver.MyReceiver2"
+            android:exported="false">
+
+            <intent-filter android:priority="0">
                 <action android:name="com.jlpay.kotlindemo.MyReceiver" />
             </intent-filter>
 

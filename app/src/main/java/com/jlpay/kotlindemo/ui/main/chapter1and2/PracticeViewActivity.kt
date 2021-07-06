@@ -41,12 +41,14 @@ class PracticeViewActivity : BaseActivity() {
     }
 
     /**
-     * 启动一个广播
+     * 启动一个广播（必须是显示Intent）
      * Intent封装了当前组件需要启动或触发的目标组件的信息
      */
     fun startBroadcast(context: Context) {
-        val intent: Intent = Intent()
-        intent.putExtra("state", "state")
+//        val intent = Intent(context, MyReceiver::class.java)
+        val intent: Intent = Intent("com.jlpay.kotlindemo.MyReceiver")
+        intent.setPackage("com.jlpay.kotlindemo")
+        intent.putExtra("state", "简单的状态测试")
         context.sendBroadcast(intent)
     }
 

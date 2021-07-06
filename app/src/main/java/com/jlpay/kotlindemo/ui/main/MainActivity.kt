@@ -6,10 +6,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
-import com.jlpay.kotlindemo.ui.main.chapter10.AidlServiceActivity
-import com.jlpay.kotlindemo.ui.main.chapter10.CustomAidlServiceActivity
-import com.jlpay.kotlindemo.ui.main.chapter10.IntentServiceActivity
-import com.jlpay.kotlindemo.ui.main.chapter10.SimpleServiceActivity
+import com.jlpay.kotlindemo.ui.main.chapter10.*
 import com.jlpay.kotlindemo.ui.main.chapter1and2.*
 import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
@@ -187,6 +184,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("AidlServiceActivity", AidlServiceActivity::class.java)
         addButton("CustomAidlServiceActivity", CustomAidlServiceActivity::class.java)
         addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
+        addButton("BroadcastReceiverActivity", BroadcastReceiverActivity::class.java)
     }
 
     override fun initData() {

@@ -1,8 +1,15 @@
 package com.jlpay.kotlindemo.ui.main.chapter10
 
+import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.AudioManager
 import android.os.Bundle
+import android.telephony.SmsManager
+import android.telephony.TelephonyManager
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
@@ -43,5 +50,18 @@ class BroadcastReceiverActivity : AppCompatActivity() {
         val intentFilter = IntentFilter("com.jlpay.kotlindemo.MyReceiver")
         val receiver = MyReceiver()
         registerReceiver(receiver, intentFilter)
+    }
+
+    fun telephonyService(view: View) {
+        val telephony_service: TelephonyManager =
+            getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val smsManager = SmsManager.getDefault()
+        val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
+        //手势
+        GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onLongPress(e: MotionEvent?) {
+                super.onLongPress(e)
+            }
+        })
     }
 }

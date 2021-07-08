@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseActivity
 import com.jlpay.kotlindemo.ui.utils.IAndroid11Upgrade
+import com.jlpay.kotlindemo.ui.utils.MediaUtils
 import com.jlpay.kotlindemo.ui.utils.PermissionUtils
 import java.io.File
 

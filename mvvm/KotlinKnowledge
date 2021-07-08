@@ -64,7 +64,7 @@
         // 最终结果 = 返回一个people对象给变量result
 
 * 3.如何理解Kotlin泛型中的in和out？(https://blog.csdn.net/weixin_38261570/article/details/112637337)
-    - ava的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取; Java的 ? super T  对应  Kotlin的 in T， 只可以被读取
+    - Java的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取; Java的 ? super T  对应  Kotlin的 in T， 只可以被读取
 
 * 4.kotlin中==比较的是数值是否相等, 而===比较的是两个对象的地址是否相等
 

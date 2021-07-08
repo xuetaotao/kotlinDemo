@@ -235,6 +235,7 @@
         <activity android:name=".ui.main.chapter10.CustomAidlServiceActivity" />
         <activity android:name=".ui.main.dailytest.MediaUtilsActivity" />
         <activity android:name=".ui.main.chapter10.BroadcastReceiverActivity" />
+        <activity android:name=".ui.main.dailytest.ImagePickerActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

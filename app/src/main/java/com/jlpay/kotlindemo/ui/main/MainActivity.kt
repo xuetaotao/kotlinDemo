@@ -185,6 +185,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("CustomAidlServiceActivity", CustomAidlServiceActivity::class.java)
         addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
         addButton("BroadcastReceiverActivity", BroadcastReceiverActivity::class.java)
+        addButton("ImagePickerActivity", ImagePickerActivity::class.java)
     }
 
     override fun initData() {

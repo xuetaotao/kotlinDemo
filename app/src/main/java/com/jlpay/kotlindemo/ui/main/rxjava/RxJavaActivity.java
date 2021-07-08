@@ -33,6 +33,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * 测试 RxLifeCycle
@@ -96,7 +97,8 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
 //        getWanWxarticle2();
 //        intervalUse();
 //        presenter.netRequest();
-        mPresenter.netRequest();
+//        mPresenter.netRequest();
+        publishSubjectTest();
     }
 
     @Override
@@ -206,6 +208,40 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
                         Log.e(TAG, "onComplete");
                     }
                 });
+    }
+
+    /**
+     * PublishSubject  与普通的Subject不同，在订阅时并不立即触发订阅事件，而是允许我们在任意时刻手动调用onNext(),onError(),onCompleted来触发事件。
+     * 可以看到PublishSubject与普通的Subject最大的不同就是其可以先订阅事件，然后在某一时刻手动调用方法来触发事件
+     * https://blog.csdn.net/qq1026291832/article/details/51006746
+     */
+    @SuppressLint("AutoDispose")
+    private void publishSubjectTest() {
+        PublishSubject<Integer> publishSubject = PublishSubject.create();
+        publishSubject.subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                Log.e("TAG", "收到了：" + integer);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        publishSubject.onNext(1);
+        publishSubject.onNext(2);
+        publishSubject.onNext(3);
     }
 
 

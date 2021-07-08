@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.dailytest
+package com.jlpay.kotlindemo.ui.utils
 
 import android.Manifest
 import android.content.ContentUris
@@ -13,7 +13,6 @@ import android.provider.MediaStore
 import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import com.jlpay.kotlindemo.ui.utils.IAndroid11Upgrade
 import java.io.*
 import java.util.*
 
@@ -306,7 +305,7 @@ class MediaUtils : IAndroid11Upgrade {
 
     companion object {
 
-        private val DEFAULT_EXTERN_DIR_NAME = "JLPay"
+        private val DEFAULT_EXTERN_DIR_NAME = "MediaPic"
 
         //Android10以下版本使用
         private var EXTERN_STORAGE_PATH: String =

@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.ui.utils
 
 import android.app.Activity
+import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -16,8 +17,10 @@ class ImagePicker private constructor(builder: Builder) {
 
     val TAG: String = ImagePicker::class.java.simpleName
 
-    val imgDirName: String? = builder.imgDirName
+    val imgDirName: String = builder.imgDirName
     val compress: Boolean = builder.compress
+    val compressType: ImageCompress.ImageCompressType = builder.compressType
+    val compressIgnoreSize: Int = builder.compressIgnoreSize
     val crop: Boolean = builder.crop
     val listener: ImagePicker.ImagePickerListener? = builder.listener
     val fragmentActivity: FragmentActivity = builder.fragmentActivity
@@ -87,6 +90,10 @@ class ImagePicker private constructor(builder: Builder) {
         return Observable.concat(Observable.fromIterable(list))
     }
 
+    private fun setLogging(logging: Boolean) {
+        this.mImagePickerFragment.get().setLogging(logging)
+    }
+
     private fun takePhotoRequestFromFragment(
         imageOperationKind: String,
         uri: Uri
@@ -136,7 +143,15 @@ class ImagePicker private constructor(builder: Builder) {
                         ) {
                             listener?.onFailed("拍照照片复制到APP外部私有目录失败", "01")
                         } else {
-                            listener?.onSuccess(copyImgFromPicToAppPic)
+                            if (compress) {
+                                imageCompress(fragmentActivity,
+                                    copyImgFromPicToAppPic,
+                                    compressType,
+                                    compressIgnoreSize,
+                                    listener)
+                            } else {
+                                listener?.onSuccess(copyImgFromPicToAppPic)
+                            }
                         }
                     }
                 } else {
@@ -173,7 +188,15 @@ class ImagePicker private constructor(builder: Builder) {
                             ) {
                                 listener?.onFailed("选择的图片复制到APP外部私有目录失败", "02")
                             } else {
-                                listener?.onSuccess(copyImgFromPicToAppPic)
+                                if (compress) {
+                                    imageCompress(fragmentActivity,
+                                        copyImgFromPicToAppPic,
+                                        compressType,
+                                        compressIgnoreSize,
+                                        listener)
+                                } else {
+                                    listener?.onSuccess(copyImgFromPicToAppPic)
+                                }
                             }
                         } else {
                             listener?.onFailed("ImagePickerResult返回Uri为空",
@@ -187,11 +210,36 @@ class ImagePicker private constructor(builder: Builder) {
                 { t -> listener?.onFailed(t?.message ?: "未知错误", "02") })
     }
 
+    fun imageCompress(
+        context: Context,
+        imagePath: String,
+        type: ImageCompress.ImageCompressType,
+        ignoreSize: Int,
+        listener: ImagePicker.ImagePickerListener?
+    ) {
+        ImageCompress(imgDirName).compress(context,
+            imagePath,
+            type,
+            ignoreSize,
+            object : ImageCompress.ImageCompressListener {
+                override fun onSuccess(imageCompressPath: String) {
+                    listener?.onSuccess(imageCompressPath)
+                }
+
+                override fun onFailed(msg: String, code: String) {
+                    listener?.onFailed(msg, code)
+                }
+            })
+    }
+
 
     class Builder(internal var fragmentActivity: FragmentActivity) {
 
-        internal var imgDirName: String? = "MediaImage"
+        internal var imgDirName: String = "MediaImage"
         internal var compress: Boolean = false//压缩
+        internal var compressType: ImageCompress.ImageCompressType =
+            ImageCompress.ImageCompressType.LuBan//默认使用LuBan压缩
+        internal var compressIgnoreSize: Int = 1024//默认压缩阈值:单位KB
         internal var crop: Boolean = false//裁剪
         internal var listener: ImagePicker.ImagePickerListener? = null
 
@@ -201,6 +249,14 @@ class ImagePicker private constructor(builder: Builder) {
 
         fun compress(compress: Boolean) = apply {
             this.compress = compress
+        }
+
+        fun compressType(compressType: ImageCompress.ImageCompressType) = apply {
+            this.compressType = compressType
+        }
+
+        fun compressIgnoreSize(compressIgnoreSize: Int) = apply {
+            this.compressIgnoreSize = compressIgnoreSize
         }
 
         fun crop(crop: Boolean) = apply {

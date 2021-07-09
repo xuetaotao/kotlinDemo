@@ -41,6 +41,7 @@ class ImagePickerActivity : BaseActivity() {
                     showToast(msg)
                 }
             })
+            .compress(true)
             .choosePic()
     }
 
@@ -62,6 +63,8 @@ class ImagePickerActivity : BaseActivity() {
                     showToast(msg)
                 }
             })
+            .compress(true)
+//            .compressType(ImageCompress.ImageCompressType.OriginCompress)
             .takePhoto()
     }
 }

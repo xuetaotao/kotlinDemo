@@ -35,7 +35,7 @@ class MediaUtils : IAndroid11Upgrade {
     }
 
     override fun copyImgFromPicToAppPic(context: Context, uri: Uri): String? {
-        return Images.copyImgFromPicToAppPic(context, uri)
+        return Images.copyImgFromPicToAppPic(context, uri, imgDirName)
     }
 
     override fun copyImgFromAppPicToPic(context: Context, imgPath: String): Uri? {
@@ -208,7 +208,7 @@ class MediaUtils : IAndroid11Upgrade {
              * @return
              */
             fun createImageContentUri(
-                context: Context, isPubPicUri: Boolean, imgDirName: String?, authority: String?
+                context: Context, isPubPicUri: Boolean, imgDirName: String, authority: String?
             ): Uri? {
                 if (!checkPermission(context)) {
                     return null
@@ -220,12 +220,10 @@ class MediaUtils : IAndroid11Upgrade {
                     }//直接通过MediaStore API操作即可，也可以和FileProvider一起使用(在10.0版本下)
                 } else {
                     var uri: Uri? = null
-                    val IMG_APP_EXTERNAL: String =
-                        context.getExternalFilesDir(null)
-                            .toString() + File.separator + "Image" + File.separator
-                    if (createDirs(context, IMG_APP_EXTERNAL)) {
+                    val IMG_APP_EXTERNAL: String? = createAppPicDir(context, imgDirName)
+                    if (!TextUtils.isEmpty(IMG_APP_EXTERNAL)) {
                         val file =
-                            File(IMG_APP_EXTERNAL + "IMG" + System.currentTimeMillis() + ".jpg")
+                            File(IMG_APP_EXTERNAL, "IMG" + System.currentTimeMillis() + ".jpg")
                         uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             authority?.let {
                                 FileProvider.getUriForFile(context,
@@ -245,16 +243,13 @@ class MediaUtils : IAndroid11Upgrade {
              * 复制外部共享目录下图片到外部APP私有目录Image下
              * @return 外部APP私有目录Image下的保存路径
              */
-            fun copyImgFromPicToAppPic(context: Context, uri: Uri): String? {
+            fun copyImgFromPicToAppPic(context: Context, uri: Uri, imgDirName: String): String? {
                 if (!checkPermission(context)) {
                     return null
                 }
-                //外部存储APP私有目录
-                val IMG_APP_EXTERNAL: String =
-                    context.getExternalFilesDir(null)
-                        .toString() + File.separator + "Image" + File.separator
                 var imgPath: String? = null
-                if (createDirs(context, IMG_APP_EXTERNAL)) {
+                val IMG_APP_EXTERNAL = createAppPicDir(context, imgDirName)
+                if (!TextUtils.isEmpty(IMG_APP_EXTERNAL)) {
                     val imgFileName = "IMG" + System.currentTimeMillis() + ".jpg"
                     val file = File(IMG_APP_EXTERNAL, imgFileName)
                     val inputStream = getImageFromPic(context, uri)
@@ -288,6 +283,19 @@ class MediaUtils : IAndroid11Upgrade {
                 return insertImageToPic(context, inputStream, imgDirName)
             }
 
+
+            /**
+             * 创建APP私有目录下图片保存目录
+             */
+            fun createAppPicDir(context: Context, imgDirName: String): String? {
+                val IMG_APP_EXTERNAL: String = context.getExternalFilesDir(null)
+                    .toString() + File.separator + "Image" + File.separator + imgDirName + File.separator
+                if (createDirs(context, IMG_APP_EXTERNAL)) {
+                    return IMG_APP_EXTERNAL
+                }
+                return null
+            }
+
             private fun getImgMimeType(imgFileName: String): String {
                 val toLowerCase = imgFileName.toLowerCase(Locale.ROOT)
                 if (toLowerCase.endsWith("jpg") || toLowerCase.endsWith("jpeg")) {
@@ -318,7 +326,7 @@ class MediaUtils : IAndroid11Upgrade {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
         }
 
-        private fun createDirs(context: Context, dir: String): Boolean {
+        fun createDirs(context: Context, dir: String): Boolean {
             if (!checkPermission(context)) {
                 return false
             }

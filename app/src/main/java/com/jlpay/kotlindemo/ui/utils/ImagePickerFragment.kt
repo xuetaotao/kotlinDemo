@@ -41,6 +41,7 @@ class ImagePickerFragment : Fragment() {
 //        val intent: Intent = Intent(Intent.ACTION_PICK)//小米机型Android11版本返回resultCode!=RESULT_OK
         val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivityForResult(intent, CHOOSE_PIC)
     }
 

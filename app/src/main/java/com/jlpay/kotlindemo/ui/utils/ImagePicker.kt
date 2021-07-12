@@ -28,9 +28,22 @@ class ImagePicker private constructor(builder: Builder) {
     val fragmentActivity: FragmentActivity = builder.fragmentActivity
 
     var mImagePickerFragment: ImagePicker.Lazy<ImagePickerFragment>
+    var mediaUtils: MediaUtils
 
     init {
         mImagePickerFragment = getLazySingleton(fragmentActivity.supportFragmentManager)
+        mediaUtils = getLazyMediaUtils(imgDirName)
+    }
+
+    private fun getLazyMediaUtils(imgDirName: String): MediaUtils {
+        if (this.mediaUtils == null) {
+            synchronized(ImagePicker::class.java) {
+                if (this.mediaUtils == null) {
+                    this.mediaUtils = MediaUtils(imgDirName)
+                }
+            }
+        }
+        return mediaUtils
     }
 
     private fun getLazySingleton(fragmentManager: FragmentManager): ImagePicker.Lazy<ImagePickerFragment> {
@@ -136,10 +149,10 @@ class ImagePicker private constructor(builder: Builder) {
                 override fun apply(t: Boolean): ObservableSource<ImagePickerResult> {
                     if (t) {
                         createImgContentPicUri =
-                            MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+                            mediaUtils.createImgContentPicUri(fragmentActivity)
                         if (crop) {
                             cropOutputUri =
-                                MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+                                mediaUtils.createImgContentPicUri(fragmentActivity)
                         }
                         return if (createImgContentPicUri != null) {
                             requestImplementation(ImageOperationKind.TAKE_PHOTO,
@@ -189,7 +202,7 @@ class ImagePicker private constructor(builder: Builder) {
                             uri = cropOutputUri as Uri
                         }
                         val copyImgFromPicToAppPic: String? =
-                            MediaUtils(imgDirName).copyImgFromPicToAppPic(fragmentActivity,
+                            mediaUtils.copyImgFromPicToAppPic(fragmentActivity,
                                 uri)
                         if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(
                                 copyImgFromPicToAppPic)
@@ -224,7 +237,7 @@ class ImagePicker private constructor(builder: Builder) {
                     if (t) {
                         if (crop) {
                             cropOutputUri =
-                                MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+                                mediaUtils.createImgContentPicUri(fragmentActivity)
                         }
                         return requestImplementation(ImageOperationKind.CHOOSE_PIC,
                             null,
@@ -255,10 +268,10 @@ class ImagePicker private constructor(builder: Builder) {
                                                 return Observable.error(Exception("裁剪图片时传入的authority为空"))
                                             }
                                             val outPutUri: Uri =
-                                                MediaUtils(imgDirName).copyImgFromPicToAppPic(
+                                                mediaUtils.copyImgFromPicToAppPic(
                                                     fragmentActivity,
                                                     t.uri!!)?.let {
-                                                    MediaUtils(imgDirName).getImageContentUri(
+                                                    mediaUtils.getImageContentUri(
                                                         fragmentActivity,
                                                         it,
                                                         authority)
@@ -289,7 +302,7 @@ class ImagePicker private constructor(builder: Builder) {
                     } else {
                         if (uri != null) {
                             val copyImgFromPicToAppPic: String? =
-                                MediaUtils(imgDirName).copyImgFromPicToAppPic(fragmentActivity,
+                                mediaUtils.copyImgFromPicToAppPic(fragmentActivity,
                                     uri)
                             if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(
                                     copyImgFromPicToAppPic)

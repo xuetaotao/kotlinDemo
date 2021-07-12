@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
+import io.reactivex.ObservableTransformer
 import io.reactivex.functions.Function
 import io.reactivex.subjects.PublishSubject
 
@@ -67,7 +68,8 @@ class ImagePicker private constructor(builder: Builder) {
 
     private fun requestImplementation(
         imageOperationKind: String,
-        uri: Uri?
+        uri: Uri?,
+        cropOutputUri: Uri?
     ): Observable<ImagePickerResult> {
         val list: ArrayList<Observable<ImagePickerResult>> = ArrayList()
         var subject: PublishSubject<ImagePickerResult>? =
@@ -84,6 +86,9 @@ class ImagePicker private constructor(builder: Builder) {
             }
             ImageOperationKind.CHOOSE_PIC -> {
                 choosePicRequestFromFragment(imageOperationKind)
+            }
+            ImageOperationKind.IMAGE_CROP -> {
+                imageCropRequestFromFragment(imageOperationKind, uri!!, cropOutputUri!!)
             }
         }
 
@@ -109,24 +114,65 @@ class ImagePicker private constructor(builder: Builder) {
         this.mImagePickerFragment.get().choosePic(imageOperationKind)
     }
 
+    private fun imageCropRequestFromFragment(
+        imageOperationKind: String,
+        uri: Uri,
+        cropOutputUri: Uri
+    ) {
+        this.mImagePickerFragment.get()
+            .log("imageCropRequestFromFragment:\timageOperationKind:$imageOperationKind")
+        this.mImagePickerFragment.get().imageCrop(imageOperationKind, uri, cropOutputUri)
+    }
 
     fun takePhoto() {
         val createImgContentPicUri: Uri? =
             MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+        var cropOutputUri: Uri? = null
+        if (crop) {
+            cropOutputUri = MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+        }
         val subscribe = RxPermissions(fragmentActivity)
             .request(android.Manifest.permission.CAMERA,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            .flatMap(Function<Boolean, ObservableSource<ImagePickerResult>> { t ->
-                if (t) {
-                    if (createImgContentPicUri != null) {
-                        requestImplementation(ImageOperationKind.TAKE_PHOTO, createImgContentPicUri)
-                    } else {
-                        Observable.error(Exception("外部共享目录Uri创建失败"))
-                    }
+            .flatMap(object : Function<Boolean, ObservableSource<ImagePickerResult>> {
+                override fun apply(t: Boolean): ObservableSource<ImagePickerResult> {
+                    if (t) {
+                        return if (createImgContentPicUri != null) {
+                            requestImplementation(ImageOperationKind.TAKE_PHOTO,
+                                createImgContentPicUri,
+                                cropOutputUri)
+                        } else {
+                            Observable.error(Exception("外部共享目录Uri创建失败"))
+                        }
 
-                } else {
-                    Observable.error(Exception("权限获取失败"))
+                    } else {
+                        return Observable.error(Exception("权限获取失败"))
+                    }
+                }
+            })
+            .compose(object : ObservableTransformer<ImagePickerResult, ImagePickerResult> {
+                override fun apply(upstream: Observable<ImagePickerResult>): ObservableSource<ImagePickerResult> {
+                    if (crop) {
+                        return upstream.flatMap(object :
+                            Function<ImagePickerResult, ObservableSource<ImagePickerResult>> {
+                            override fun apply(t: ImagePickerResult): ObservableSource<ImagePickerResult> {
+                                if (t.resultCode != Activity.RESULT_OK) {
+                                    return Observable.error(Exception("resultCode!=RESULT_OK，拍照回调失败"))
+                                } else {
+                                    return if (cropOutputUri == null) {
+                                        Observable.error(Exception("裁剪图片的外部共享目录Uri创建失败"))
+                                    } else {
+                                        requestImplementation(ImageOperationKind.IMAGE_CROP,
+                                            createImgContentPicUri,
+                                            cropOutputUri)
+                                    }
+                                }
+                            }
+                        })
+                    } else {
+                        return upstream
+                    }
                 }
             })
             .subscribe({ t ->
@@ -135,9 +181,13 @@ class ImagePicker private constructor(builder: Builder) {
                         listener?.onFailed("resultCode!=RESULT_OK，回调失败",
                             t.resultCode.toString())
                     } else {
+                        var uri: Uri = createImgContentPicUri!!
+                        if (crop && cropOutputUri != null) {
+                            uri = cropOutputUri
+                        }
                         val copyImgFromPicToAppPic: String? =
                             MediaUtils(imgDirName).copyImgFromPicToAppPic(fragmentActivity,
-                                createImgContentPicUri!!)
+                                uri)
                         if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(
                                 copyImgFromPicToAppPic)
                         ) {
@@ -162,19 +212,60 @@ class ImagePicker private constructor(builder: Builder) {
     }
 
     fun choosePic() {
+        var cropOutputUri: Uri? = null
+        if (crop) {
+            cropOutputUri = MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+        }
         val subscribe = RxPermissions(fragmentActivity)
             .request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            .flatMap(Function<Boolean, ObservableSource<ImagePickerResult>> { t ->
-                if (t) {
-                    requestImplementation(ImageOperationKind.CHOOSE_PIC, null)
-                } else {
-                    Observable.error(Exception("权限获取失败"))
+            .flatMap(object : Function<Boolean, ObservableSource<ImagePickerResult>> {
+                override fun apply(t: Boolean): ObservableSource<ImagePickerResult> {
+                    return if (t) {
+                        requestImplementation(ImageOperationKind.CHOOSE_PIC,
+                            null,
+                            cropOutputUri)
+                    } else {
+                        Observable.error(Exception("权限获取失败"))
+                    }
+                }
+            })
+            .compose(object : ObservableTransformer<ImagePickerResult, ImagePickerResult> {
+                override fun apply(upstream: Observable<ImagePickerResult>): ObservableSource<ImagePickerResult> {
+                    if (crop) {
+                        return upstream.flatMap(object :
+                            Function<ImagePickerResult, ObservableSource<ImagePickerResult>> {
+                            override fun apply(t: ImagePickerResult): ObservableSource<ImagePickerResult> {
+                                if (t.resultCode != Activity.RESULT_OK) {
+                                    return Observable.error(Exception("resultCode!=RESULT_OK，相册选择照片回调失败"))
+                                } else {
+                                    return when {
+                                        cropOutputUri == null -> {
+                                            Observable.error(Exception("裁剪图片的外部共享目录Uri创建失败"))
+                                        }
+                                        t.uri == null -> {
+                                            Observable.error(Exception("选择照片返回的ImagePickerResult.Uri为空"))
+                                        }
+                                        else -> {
+                                            requestImplementation(ImageOperationKind.IMAGE_CROP,
+                                                t.uri,
+                                                cropOutputUri)
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    } else {
+                        return upstream
+                    }
                 }
             })
             .subscribe({ t ->
                 if (t != null) {
-                    val uri: Uri? = t.uri
+                    var uri: Uri? = t.uri
+                    if (crop && cropOutputUri != null) {
+                        uri = cropOutputUri
+                    }
                     if (t.resultCode != Activity.RESULT_OK) {
                         listener?.onFailed("resultCode!=RESULT_OK，回调失败",
                             t.resultCode.toString())

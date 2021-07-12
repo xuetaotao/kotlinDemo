@@ -42,6 +42,7 @@ class ImagePickerActivity : BaseActivity() {
                 }
             })
             .compress(true)
+            .crop(true)
             .choosePic()
     }
 
@@ -64,6 +65,7 @@ class ImagePickerActivity : BaseActivity() {
                 }
             })
             .compress(true)
+            .crop(true)
 //            .compressType(ImageCompress.ImageCompressType.OriginCompress)
             .takePhoto()
     }

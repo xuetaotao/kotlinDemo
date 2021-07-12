@@ -125,12 +125,8 @@ class ImagePicker private constructor(builder: Builder) {
     }
 
     fun takePhoto() {
-        val createImgContentPicUri: Uri? =
-            MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+        var createImgContentPicUri: Uri? = null
         var cropOutputUri: Uri? = null
-        if (crop) {
-            cropOutputUri = MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
-        }
         val subscribe = RxPermissions(fragmentActivity)
             .request(android.Manifest.permission.CAMERA,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -138,6 +134,12 @@ class ImagePicker private constructor(builder: Builder) {
             .flatMap(object : Function<Boolean, ObservableSource<ImagePickerResult>> {
                 override fun apply(t: Boolean): ObservableSource<ImagePickerResult> {
                     if (t) {
+                        createImgContentPicUri =
+                            MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+                        if (crop) {
+                            cropOutputUri =
+                                MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+                        }
                         return if (createImgContentPicUri != null) {
                             requestImplementation(ImageOperationKind.TAKE_PHOTO,
                                 createImgContentPicUri,
@@ -183,7 +185,7 @@ class ImagePicker private constructor(builder: Builder) {
                     } else {
                         var uri: Uri = createImgContentPicUri!!
                         if (crop && cropOutputUri != null) {
-                            uri = cropOutputUri
+                            uri = cropOutputUri as Uri
                         }
                         val copyImgFromPicToAppPic: String? =
                             MediaUtils(imgDirName).copyImgFromPicToAppPic(fragmentActivity,
@@ -213,20 +215,21 @@ class ImagePicker private constructor(builder: Builder) {
 
     fun choosePic() {
         var cropOutputUri: Uri? = null
-        if (crop) {
-            cropOutputUri = MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
-        }
         val subscribe = RxPermissions(fragmentActivity)
             .request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE)
             .flatMap(object : Function<Boolean, ObservableSource<ImagePickerResult>> {
                 override fun apply(t: Boolean): ObservableSource<ImagePickerResult> {
-                    return if (t) {
-                        requestImplementation(ImageOperationKind.CHOOSE_PIC,
+                    if (t) {
+                        if (crop) {
+                            cropOutputUri =
+                                MediaUtils(imgDirName).createImgContentPicUri(fragmentActivity)
+                        }
+                        return requestImplementation(ImageOperationKind.CHOOSE_PIC,
                             null,
                             cropOutputUri)
                     } else {
-                        Observable.error(Exception("权限获取失败"))
+                        return Observable.error(Exception("权限获取失败"))
                     }
                 }
             })

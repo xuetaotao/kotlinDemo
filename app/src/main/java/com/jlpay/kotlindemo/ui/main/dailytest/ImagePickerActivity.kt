@@ -42,7 +42,7 @@ class ImagePickerActivity : BaseActivity() {
                 }
             })
             .compress(true)
-            .crop(true)
+            .crop(true, "com.jlpay.kotlindemo.FileProvider")
             .choosePic()
     }
 
@@ -65,7 +65,7 @@ class ImagePickerActivity : BaseActivity() {
                 }
             })
             .compress(true)
-            .crop(true)
+            .crop(true, "com.jlpay.kotlindemo.FileProvider")
 //            .compressType(ImageCompress.ImageCompressType.OriginCompress)
             .takePhoto()
     }

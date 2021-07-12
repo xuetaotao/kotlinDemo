@@ -23,6 +23,7 @@ class ImagePicker private constructor(builder: Builder) {
     val compressType: ImageCompress.ImageCompressType = builder.compressType
     val compressIgnoreSize: Int = builder.compressIgnoreSize
     val crop: Boolean = builder.crop
+    val authority: String? = builder.authority
     val listener: ImagePicker.ImagePickerListener? = builder.listener
     val fragmentActivity: FragmentActivity = builder.fragmentActivity
 
@@ -242,16 +243,29 @@ class ImagePicker private constructor(builder: Builder) {
                                 if (t.resultCode != Activity.RESULT_OK) {
                                     return Observable.error(Exception("resultCode!=RESULT_OK，相册选择照片回调失败"))
                                 } else {
-                                    return when {
+                                    when {
                                         cropOutputUri == null -> {
-                                            Observable.error(Exception("裁剪图片的外部共享目录Uri创建失败"))
+                                            return Observable.error(Exception("裁剪图片的外部共享目录Uri创建失败"))
                                         }
                                         t.uri == null -> {
-                                            Observable.error(Exception("选择照片返回的ImagePickerResult.Uri为空"))
+                                            return Observable.error(Exception("选择照片返回的ImagePickerResult.Uri为空"))
                                         }
                                         else -> {
-                                            requestImplementation(ImageOperationKind.IMAGE_CROP,
-                                                t.uri,
+                                            if (authority == null || TextUtils.isEmpty(authority)) {
+                                                return Observable.error(Exception("裁剪图片时传入的authority为空"))
+                                            }
+                                            val outPutUri: Uri =
+                                                MediaUtils(imgDirName).copyImgFromPicToAppPic(
+                                                    fragmentActivity,
+                                                    t.uri!!)?.let {
+                                                    MediaUtils(imgDirName).getImageContentUri(
+                                                        fragmentActivity,
+                                                        it,
+                                                        authority)
+                                                }
+                                                    ?: return Observable.error(Exception("裁剪图片时复制原图到APP私有目录下并获取图片Uri出错"))
+                                            return requestImplementation(ImageOperationKind.IMAGE_CROP,
+                                                outPutUri,
                                                 cropOutputUri)
                                         }
                                     }
@@ -335,6 +349,7 @@ class ImagePicker private constructor(builder: Builder) {
             ImageCompress.ImageCompressType.LuBan//默认使用LuBan压缩
         internal var compressIgnoreSize: Int = 1024//默认压缩阈值:单位KB
         internal var crop: Boolean = false//裁剪
+        internal var authority: String? = null//Provider授权标志
         internal var listener: ImagePicker.ImagePickerListener? = null
 
         fun imgDirName(imgDirName: String) = apply {
@@ -353,8 +368,11 @@ class ImagePicker private constructor(builder: Builder) {
             this.compressIgnoreSize = compressIgnoreSize
         }
 
-        fun crop(crop: Boolean) = apply {
+        //解决Android11调用ACTION_GET_CONTENT选择最近照片时，返回uri再去裁剪的如下问题:(故而选择先复制到APP外部私有目录下，再根据其路径获取uri进行操作)
+        //UID 10363 does not have permission to content://com.android.providers.media.documents/document/image%3A7402 [user 0]; you could obtain access using ACTION_OPEN_DOCUMENT or related APIs
+        fun crop(crop: Boolean, authority: String) = apply {
             this.crop = crop
+            this.authority = authority
         }
 
         fun imagePickerListener(listener: ImagePicker.ImagePickerListener) = apply {

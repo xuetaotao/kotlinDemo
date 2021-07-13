@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -30,8 +31,12 @@ class MediaUtils : IAndroid11Upgrade {
         return Images.getImageFromPic(context, uri)
     }
 
-    override fun imgSaveToPubPic(context: Context, inputStream: InputStream): Uri? {
+    override fun saveImgToPubPic(context: Context, inputStream: InputStream): Uri? {
         return Images.insertImageToPic(context, inputStream, imgDirName)
+    }
+
+    override fun saveImgToPubPic(context: Context, bitmap: Bitmap): Uri? {
+        return Images.insertImageToPic(context, bitmap, imgDirName)
     }
 
     override fun copyImgFromPicToAppPic(context: Context, uri: Uri): String? {
@@ -126,6 +131,33 @@ class MediaUtils : IAndroid11Upgrade {
                             contentResolver.openOutputStream(pendingUri)
                         if (outputStream != null) {
                             copy(inputStream, outputStream)
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        contentResolver.delete(pendingUri, null, null)
+                        return null
+                    }
+                }
+                return pendingUri
+            }
+
+            /**
+             * 保存图片到外部共享目录Pic下
+             * @return 保存到的外部共享目录Pic下的Uri或者null
+             */
+            fun insertImageToPic(
+                context: Context,
+                bitmap: Bitmap,
+                imgDirName: String
+            ): Uri? {
+                val contentResolver = context.contentResolver
+                val pendingUri: Uri? = createImgPicUri(context, imgDirName)
+                if (pendingUri != null) {
+                    try {
+                        val outputStream: OutputStream? =
+                            contentResolver.openOutputStream(pendingUri)
+                        if (outputStream != null) {
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()

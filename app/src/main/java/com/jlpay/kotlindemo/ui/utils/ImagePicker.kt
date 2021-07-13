@@ -35,6 +35,13 @@ class ImagePicker private constructor(builder: Builder) {
         mediaUtils = getLazyMediaUtils(imgDirName)
     }
 
+    companion object {
+        @JvmStatic
+        fun with(fragmentActivity: FragmentActivity): Builder {
+            return Builder(fragmentActivity)
+        }
+    }
+
     private fun getLazyMediaUtils(imgDirName: String): MediaUtils {
         if (this.mediaUtils == null) {
             synchronized(ImagePicker::class.java) {
@@ -357,6 +364,7 @@ class ImagePicker private constructor(builder: Builder) {
     class Builder(internal var fragmentActivity: FragmentActivity) {
 
         internal var imgDirName: String = "MediaImage"
+        internal var isCamera: Boolean = true//默认为相机拍照
         internal var compress: Boolean = false//压缩
         internal var compressType: ImageCompress.ImageCompressType =
             ImageCompress.ImageCompressType.LuBan//默认使用LuBan压缩
@@ -367,6 +375,10 @@ class ImagePicker private constructor(builder: Builder) {
 
         fun imgDirName(imgDirName: String) = apply {
             this.imgDirName = imgDirName
+        }
+
+        fun isCamera(isCamera: Boolean) = apply {
+            this.isCamera = isCamera
         }
 
         fun compress(compress: Boolean) = apply {
@@ -394,13 +406,65 @@ class ImagePicker private constructor(builder: Builder) {
 
         fun build(): ImagePicker = ImagePicker(this)
 
-        //下面这些方法感觉写在Builder里面不太好
-        fun takePhoto() {
-            build().takePhoto()
+        private fun checkRxJavaSdk(): Boolean {
+            return try {
+                val clazz = Class.forName("io.reactivex.Observable")
+                true
+            } catch (e: Exception) {
+                false
+            } catch (e: Error) {
+                false
+            }
         }
 
-        fun choosePic() {
-            build().choosePic()
+        private fun checkRxPermissionsSdk(): Boolean {
+            return try {
+                val clazz = Class.forName("com.tbruyelle.rxpermissions2.RxPermissions")
+                true
+            } catch (e: Exception) {
+                false
+            } catch (e: Error) {
+                false
+            }
+        }
+
+        private fun checkLuBanSdk(): Boolean {
+            return try {
+                val clazz = Class.forName("top.zibin.luban.Luban")
+                true
+            } catch (e: Exception) {
+                false
+            } catch (e: Error) {
+                false
+            }
+        }
+
+//        fun takePhoto() {
+//            build().takePhoto()
+//        }
+
+//        fun choosePic() {
+//            build().choosePic()
+//        }
+
+        fun startPick() {
+            if (!checkRxJavaSdk()) {
+                listener?.onFailed("缺少RxJava依赖库", "04")
+                return
+            }
+            if (!checkRxPermissionsSdk()) {
+                listener?.onFailed("缺少RxPermissions依赖库", "04")
+                return
+            }
+            if (compress && compressType == ImageCompress.ImageCompressType.LuBan && !checkLuBanSdk()) {
+                listener?.onFailed("缺少Luban依赖库", "04")
+                return
+            }
+            if (isCamera) {
+                build().takePhoto()
+            } else {
+                build().choosePic()
+            }
         }
     }
 

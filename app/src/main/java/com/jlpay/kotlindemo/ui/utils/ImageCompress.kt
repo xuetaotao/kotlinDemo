@@ -33,6 +33,7 @@ class ImageCompress(private var imgDirName: String) {
             }
             ImageCompressType.OriginCompress -> {
                 originCompress(context, imagePath, ignoreSize, listener)
+//                originCompress(context, imagePath, 250, 250, ignoreSize, listener)
             }
         }
     }
@@ -100,6 +101,67 @@ class ImageCompress(private var imgDirName: String) {
                 (byteArrayOutputStream.toByteArray().size / 1024).toString() + "KB" + "\t" + "quality = " + quality)
             quality -= 10
         }
+        val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
+        if (TextUtils.isEmpty(createAppPicDir)) {
+            listener.onFailed("APP外部私有目录下压缩图片保存目录创建失败", "03")
+            return
+        }
+        val file = File(createAppPicDir, "IMG" + System.currentTimeMillis() + ".jpg")
+        try {
+            val fileOutputStream: FileOutputStream = FileOutputStream(file)
+            byteArrayOutputStream.writeTo(fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            byteArrayOutputStream.close()
+            listener.onSuccess(file.absolutePath)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            listener.onFailed("压缩图片流操作失败", "03")
+        } finally {
+            bitmapRecycle(bitmap)
+        }
+    }
+
+    /**
+     * Android原生质量和尺寸压缩
+     */
+    private fun originCompress(
+        context: Context,
+        imagePath: String,
+        reqWidth: Int,
+        reqHeight: Int,
+        ignoreSize: Int,
+        listener: ImageCompressListener
+    ) {
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        var bitmap: Bitmap = BitmapFactory.decodeFile(imagePath)
+        val width: Int = bitmap.width
+        val height: Int = bitmap.height
+        options.inJustDecodeBounds = false
+
+        var sampleSize: Int = 1
+        while ((width / sampleSize > reqWidth) || (height / sampleSize > reqHeight)) {
+            sampleSize *= 2
+        }
+        options.inSampleSize = sampleSize
+        try {
+            bitmap = BitmapFactory.decodeFile(imagePath, options)
+        } catch (e: OutOfMemoryError) {
+            listener.onFailed("The bitmap has out of memory：" + e.message, "03")
+            return
+        }
+        bitmap = rotatePicByDegree(bitmap, getPictureDegree(imagePath))
+        val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        var quality = 90
+        while (byteArrayOutputStream.toByteArray().size / 1024 > ignoreSize && quality >= 0) {
+            byteArrayOutputStream.reset()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+            quality -= 10
+        }
+
         val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
         if (TextUtils.isEmpty(createAppPicDir)) {
             listener.onFailed("APP外部私有目录下压缩图片保存目录创建失败", "03")

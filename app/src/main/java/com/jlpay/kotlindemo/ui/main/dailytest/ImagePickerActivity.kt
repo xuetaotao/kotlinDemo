@@ -6,6 +6,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseActivity
+import com.jlpay.kotlindemo.ui.utils.ImageCompress
 import com.jlpay.kotlindemo.ui.utils.ImagePicker
 
 class ImagePickerActivity : BaseActivity() {
@@ -29,7 +30,7 @@ class ImagePickerActivity : BaseActivity() {
      * 选择相册图片复制到APP外部私有目录
      */
     fun copy1(view: View) {
-        ImagePicker.Builder(this)
+        ImagePicker.with(this)
             .imagePickerListener(object : ImagePicker.ImagePickerListener {
                 override fun onSuccess(imagePath: String) {
                     Log.e("TAG", "复制到APP外部私有目录地址：$imagePath")
@@ -42,8 +43,9 @@ class ImagePickerActivity : BaseActivity() {
                 }
             })
             .compress(true)
-            .crop(true, "com.jlpay.kotlindemo.FileProvider")
-            .choosePic()
+//            .crop(true, "com.jlpay.kotlindemo.FileProvider")
+            .isCamera(false)
+            .startPick()
     }
 
 
@@ -66,7 +68,7 @@ class ImagePickerActivity : BaseActivity() {
             })
             .compress(true)
 //            .crop(true, "com.jlpay.kotlindemo.FileProvider")
-//            .compressType(ImageCompress.ImageCompressType.OriginCompress)
-            .takePhoto()
+            .compressType(ImageCompress.ImageCompressType.OriginCompress)
+            .startPick()
     }
 }

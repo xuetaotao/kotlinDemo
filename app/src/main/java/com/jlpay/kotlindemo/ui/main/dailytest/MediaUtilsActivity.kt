@@ -100,7 +100,7 @@ class MediaUtilsActivity : BaseActivity() {
                 val aa: IAndroid11Upgrade = MediaUtils("JLPay")
                 if (uri != null) {
                     val imgSaveToPubPic: Uri? = aa.getImgFromPubPic(this, uri)?.let {
-                        aa.imgSaveToPubPic(this, it)
+                        aa.saveImgToPubPic(this, it)
                     }
                     Log.e("TAG", "复制到外部共享目录Uri地址：$imgSaveToPubPic")
                     Glide.with(this).load(imgSaveToPubPic).into(imageView)

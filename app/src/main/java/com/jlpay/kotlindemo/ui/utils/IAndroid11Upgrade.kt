@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.ui.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import java.io.InputStream
 
@@ -27,7 +28,10 @@ interface IAndroid11Upgrade {
     fun getImgFromPubPic(context: Context, uri: Uri): InputStream?
 
     //将图片保存到外部共享目录Picture下
-    fun imgSaveToPubPic(context: Context, inputStream: InputStream): Uri?
+    fun saveImgToPubPic(context: Context, inputStream: InputStream): Uri?
+
+    //保存图片到外部共享目录Picture下
+    fun saveImgToPubPic(context: Context, bitmap: Bitmap): Uri?
 
     //将外部共享目录图片复制到APP外部私有目录
     fun copyImgFromPicToAppPic(context: Context, uri: Uri): String?

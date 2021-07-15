@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.jlpay.imagepick.ImagePicker;
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.BaseActivity;
 import com.jlpay.kotlindemo.ui.utils.PermissionUtils;
@@ -22,6 +26,8 @@ import com.jlpay.opensdk.location.bean.LocationData;
 import com.jlpay.opensdk.location.impl.ILocation;
 import com.jlpay.opensdk.location.listener.LocationListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +35,7 @@ import java.util.List;
 public class LibTestJavaActivity extends BaseActivity {
 
     private TextView tv_result;
+    private ImageView imageView;
 
     public static void newInstance(Context context) {
         Intent intent = new Intent(context, LibTestJavaActivity.class);
@@ -39,6 +46,28 @@ public class LibTestJavaActivity extends BaseActivity {
     @Override
     public void initView() {
         tv_result = findViewById(R.id.tv_result);
+        imageView = findViewById(R.id.imageView);
+    }
+
+    public void imagePicker(View view) {
+        ImagePicker.with(this)
+                .imagePickerListener(new ImagePicker.ImagePickerListener() {
+                    @Override
+                    public void onSuccess(@NotNull String imagePath) {
+                        Log.e("TAG", "复制到APP外部私有目录地址：$imagePath");
+                        Glide.with(LibTestJavaActivity.this).load(imagePath).into(imageView);
+                    }
+
+                    @Override
+                    public void onFailed(@NotNull String msg, @NotNull String code) {
+                        Log.e("TAG", msg);
+                        showToast(msg);
+                    }
+                })
+                .crop(true)
+                .compress(true)
+                .isCamera(false)
+                .startPick();
     }
 
     public void locationTest(View view) {

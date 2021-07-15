@@ -1,0 +1,22 @@
+# ImagePicker图片操作库
+
+## 调用方法：
+
+* ImagePicker.with(this)
+              .imagePickerListener(object : ImagePicker.ImagePickerListener {
+                  override fun onSuccess(imagePath: String) {
+                      Log.e("TAG", "复制到APP外部私有目录地址：$imagePath")
+                      Glide.with(this@MediaUtilsActivity).load(imagePath).into(imageView)
+                  }
+
+                  override fun onFailed(msg: String, code: String) {
+                      Log.e("TAG", msg)
+                      showToast(msg)
+                  }
+              })
+              .compress(false)
+              .crop(true)
+              .isCamera(false)
+              .startPick()
+
+

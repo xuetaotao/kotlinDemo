@@ -218,6 +218,9 @@ dependencies {
     //测试库 Kotlin版本
 //    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
 
+    //图片模块库
+    implementation project(":imagepick")
+
 
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     //腾讯Bugly https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20170912151050

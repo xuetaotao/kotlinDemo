@@ -118,6 +118,18 @@
                 android:textColor="@color/light_black"
                 android:textSize="14sp" />
 
+            <Button
+                android:id="@+id/btn_test_imagepick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:onClick="imagepick"
+                android:text="测试imagepick"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"

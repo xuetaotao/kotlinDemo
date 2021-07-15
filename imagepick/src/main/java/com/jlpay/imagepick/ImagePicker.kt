@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.utils
+package com.jlpay.imagepick
 
 import android.app.Activity
 import android.content.Context
@@ -363,6 +363,7 @@ class ImagePicker private constructor(builder: Builder) {
 
     class Builder(internal var fragmentActivity: FragmentActivity) {
 
+        internal val TAG: String = "ImagePicker"
         internal var imgDirName: String = "ImagePicker"
         internal var isCamera: Boolean = true//默认为相机拍照
         internal var compress: Boolean = false//压缩
@@ -370,7 +371,8 @@ class ImagePicker private constructor(builder: Builder) {
             ImageCompress.ImageCompressType.LuBan//默认使用LuBan压缩
         internal var compressIgnoreSize: Int = 1024//默认压缩阈值:单位KB
         internal var crop: Boolean = false//裁剪
-        internal var authority: String? = null//Provider授权标志
+        internal var authority: String =
+            "com.jlpay.imagepick.fileprovider." + fragmentActivity.application.packageName//Provider授权标志，裁剪图片Crop功能用到
         internal var listener: ImagePicker.ImagePickerListener? = null
 
         fun imgDirName(imgDirName: String) = apply {
@@ -395,9 +397,8 @@ class ImagePicker private constructor(builder: Builder) {
 
         //解决Android11调用ACTION_GET_CONTENT选择最近照片时，返回uri再去裁剪的如下问题:(故而选择先复制到APP外部私有目录下，再根据其路径获取uri进行操作)
         //UID 10363 does not have permission to content://com.android.providers.media.documents/document/image%3A7402 [user 0]; you could obtain access using ACTION_OPEN_DOCUMENT or related APIs
-        fun crop(crop: Boolean, authority: String) = apply {
+        fun crop(crop: Boolean) = apply {
             this.crop = crop
-            this.authority = authority
         }
 
         fun imagePickerListener(listener: ImagePicker.ImagePickerListener) = apply {

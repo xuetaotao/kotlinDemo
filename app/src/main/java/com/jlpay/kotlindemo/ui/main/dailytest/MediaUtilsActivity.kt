@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.jlpay.imagepick.ImagePicker
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseActivity
 import com.jlpay.kotlindemo.ui.utils.IAndroid11Upgrade
@@ -183,6 +184,25 @@ class MediaUtilsActivity : BaseActivity() {
                 startActivityForResult(intent, 0x1003)
             }
         }
+    }
+
+    fun imagepick(view: View) {
+        ImagePicker.with(this)
+            .imagePickerListener(object : ImagePicker.ImagePickerListener {
+                override fun onSuccess(imagePath: String) {
+                    Log.e("TAG", "复制到APP外部私有目录地址：$imagePath")
+                    Glide.with(this@MediaUtilsActivity).load(imagePath).into(imageView)
+                }
+
+                override fun onFailed(msg: String, code: String) {
+                    Log.e("TAG", msg)
+                    showToast(msg)
+                }
+            })
+            .compress(false)
+            .crop(true)
+            .isCamera(false)
+            .startPick()
     }
 
     fun action_pick(view: View) {

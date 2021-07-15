@@ -270,7 +270,8 @@
 
         <!--        </provider>-->
 
-        <!-- authorities：一个标识，在当前系统内必须是唯一值，用来标识provider的唯一标识，一般用包名-->
+        <!-- authorities：一个标识，在当前系统内必须是唯一值，用来标识provider的唯一标识，一般用包名。
+        authorities在这里并没有固定的要求，填写什么值都是可以的，但必须保证这个值在整个手机上是唯一的，所以通常会使用${applicationId}作为前缀，以防止和其他应用程序冲突-->
         <!-- android:exported 是Android中的四大组件 Activity，Service，Provider，Receiver 四大组件中都会有的一个属性       -->
         <!-- 它的主要作用是：是否支持其它应用调用当前组件；如果包含有intent-filter 默认值为true; 没有intent-filter默认值为false       -->
         <!-- 如果被设置为了false，那么这个组件将只会被当前应用或者拥有同样userID的应用组件调用       -->

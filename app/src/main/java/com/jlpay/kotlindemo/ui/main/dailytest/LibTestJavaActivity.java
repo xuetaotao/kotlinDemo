@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+//import com.jlpay.features.imageload.ImagePicker;
 import com.jlpay.imagepick.ImagePicker;
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.BaseActivity;

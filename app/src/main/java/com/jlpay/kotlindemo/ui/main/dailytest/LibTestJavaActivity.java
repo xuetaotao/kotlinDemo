@@ -1,6 +1,8 @@
 package com.jlpay.kotlindemo.ui.main.dailytest;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,14 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
-//import com.jlpay.features.imageload.ImagePicker;
 import com.jlpay.imagepick.ImagePicker;
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.BaseActivity;
+import com.jlpay.kotlindemo.ui.main.MainActivity;
 import com.jlpay.kotlindemo.ui.utils.PermissionUtils;
 import com.jlpay.opensdk.location.LocationManager;
 import com.jlpay.opensdk.location.bean.LocationData;
@@ -32,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+//import com.jlpay.features.imageload.ImagePicker;
 
 public class LibTestJavaActivity extends BaseActivity {
 
@@ -48,6 +53,18 @@ public class LibTestJavaActivity extends BaseActivity {
     public void initView() {
         tv_result = findViewById(R.id.tv_result);
         imageView = findViewById(R.id.imageView);
+
+        testClassLoader();
+    }
+
+    private void testClassLoader() {
+        ClassLoader classLoader2 = Application.class.getClassLoader();//BootClassLoader
+        ClassLoader classLoader1 = AppCompatActivity.class.getClassLoader();//PathClassLoader
+        ClassLoader classLoader = Activity.class.getClassLoader();//BootClassLoader
+        ClassLoader classLoader3 = MainActivity.class.getClassLoader();//PathClassLoader
+        ClassLoader classLoader4 = getClassLoader();//PathClassLoader
+        Log.e("LibTestJavaActivity", classLoader2.toString() + "\n\n" + classLoader1.toString() + "\n\n" +
+                classLoader.toString() + "\n\n" + classLoader3.toString() + "\n\n" + classLoader4.toString());
     }
 
     public void imagePicker(View view) {

@@ -1,0 +1,19 @@
+//扩展块
+ext {
+
+    //建立Map存储，key和value都是自定义的
+    androidId = [
+            compileSdkVersion: 30,
+            buildToolsVersion: "30.0.3",
+            applicationId    : "com.jlpay.kotlindemo",
+            minSdkVersion    : 21,
+            targetSdkVersion : 30,
+            versionCode      : 1,
+            versionName      : "1.0"
+    ]
+
+    dependenciesId = [
+            "appcompat"       : 'androidx.appcompat:appcompat:1.2.0',
+            "constraintlayout": 'androidx.constraintlayout:constraintlayout:2.0.4'
+    ]
+}

@@ -113,6 +113,9 @@ public class ThreadActivity extends AppCompatActivity {
     /**
      * Executor和线程池
      * 常用：newCachedThreadPool()
+     *
+     * 彻底搞懂Java线程池的工作原理
+     * https://mp.weixin.qq.com/s/tyh_kDZyLu7SDiDZppCx5Q
      */
     private static void executor() {
         Runnable runnable = new Runnable() {
@@ -122,10 +125,12 @@ public class ThreadActivity extends AppCompatActivity {
             }
         };
 
-        Executor executor = Executors.newCachedThreadPool();
+        ExecutorService executor = Executors.newCachedThreadPool();// 实例化一个线程池
+        executor.execute(runnable);// 使用线程池执行一个任务
         executor.execute(runnable);
         executor.execute(runnable);
-        executor.execute(runnable);
+//        executor.shutdown();// 关闭线程池,会阻止新任务提交，但不影响已提交的任务
+//        executor.shutdownNow();// 关闭线程池，阻止新任务提交，并且中断当前正在运行的线程
     }
 
     /**

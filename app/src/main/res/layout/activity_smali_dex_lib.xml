@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text=""
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="switchDemoApk"
+        android:text="切换Demo APK包"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="switchLiApk"
+        android:text="切换立刷 APK包"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="smaliDexLibTest"
+        android:text="smaliDexLibTest"
+        android:textAllCaps="false"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+</LinearLayout>

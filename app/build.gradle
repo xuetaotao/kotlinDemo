@@ -207,6 +207,10 @@ dependencies {
     //glide https://github.com/bumptech/glide
     implementation 'com.github.bumptech.glide:glide:3.7.0'
 
+    //修改dex文件库
+    implementation group: 'org.smali', name: 'dexlib2', version: '2.3.1'
+//    implementation 'org.smali:dexlib2:2.3.1'
+
     //高德定位
     implementation 'com.amap.api:location:5.1.0'
 

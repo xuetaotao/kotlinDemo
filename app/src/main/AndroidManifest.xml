@@ -236,6 +236,7 @@
         <activity android:name=".ui.main.dailytest.MediaUtilsActivity" />
         <activity android:name=".ui.main.chapter10.BroadcastReceiverActivity" />
         <activity android:name=".ui.main.dailytest.ImagePickerActivity" />
+        <activity android:name=".ui.main.dailytest.SmaliDexLibActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

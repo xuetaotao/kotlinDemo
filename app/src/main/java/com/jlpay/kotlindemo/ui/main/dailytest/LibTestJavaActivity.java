@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.jlpay.imagepick.ImageCompress;
 import com.jlpay.imagepick.ImagePicker;
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.ui.base.BaseActivity;
@@ -82,8 +83,9 @@ public class LibTestJavaActivity extends BaseActivity {
                         showToast(msg);
                     }
                 })
-                .crop(true)
+//                .crop(true)
                 .compress(true)
+                .compressType(ImageCompress.ImageCompressType.OriginCompress)
                 .isCamera(false)
                 .startPick();
     }

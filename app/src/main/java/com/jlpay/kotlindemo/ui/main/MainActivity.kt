@@ -186,6 +186,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
         addButton("BroadcastReceiverActivity", BroadcastReceiverActivity::class.java)
         addButton("ImagePickerActivity", ImagePickerActivity::class.java)
+        addButton("SmaliDexLibActivity", SmaliDexLibActivity::class.java)
     }
 
     override fun initData() {

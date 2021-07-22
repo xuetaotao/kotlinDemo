@@ -379,7 +379,7 @@ class ImagePicker private constructor(builder: Builder) {
         internal var isCamera: Boolean = true//默认为相机拍照
         internal var compress: Boolean = false//压缩
         internal var compressType: ImageCompress.ImageCompressType =
-            ImageCompress.ImageCompressType.LuBan//默认使用LuBan压缩
+            ImageCompress.ImageCompressType.OriginCompress//默认使用原生压缩
         internal var compressIgnoreSize: Int = 1024//默认压缩阈值:单位KB
         internal var crop: Boolean = false//裁剪
         internal var authority: String =

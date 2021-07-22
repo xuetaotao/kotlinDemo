@@ -166,11 +166,11 @@ class ImagePicker private constructor(builder: Builder) {
                                 createImgContentPicUri,
                                 cropOutputUri)
                         } else {
-                            Observable.error(Exception("外部共享目录Uri创建失败"))
+                            Observable.error(Exception(ErrorCodeBean.Message.PUBPIC_DIR_CREATE_FAIL_MSG))
                         }
 
                     } else {
-                        return Observable.error(Exception("权限获取失败"))
+                        return Observable.error(Exception(ErrorCodeBean.Message.PERMISSION_GRANT_FAIL_MSG))
                     }
                 }
             })
@@ -181,10 +181,10 @@ class ImagePicker private constructor(builder: Builder) {
                             Function<ImagePickerResult, ObservableSource<ImagePickerResult>> {
                             override fun apply(t: ImagePickerResult): ObservableSource<ImagePickerResult> {
                                 if (t.resultCode != Activity.RESULT_OK) {
-                                    return Observable.error(Exception("resultCode!=RESULT_OK，拍照回调失败"))
+                                    return Observable.error(Exception(ErrorCodeBean.Message.PHOTO_RESULT_FAIL_MSG + t.resultCode))
                                 } else {
                                     return if (cropOutputUri == null) {
-                                        Observable.error(Exception("裁剪图片的外部共享目录Uri创建失败"))
+                                        Observable.error(Exception(ErrorCodeBean.Message.CROP_PUBPIC_URI_FAIL_MSG))
                                     } else {
                                         requestImplementation(ImageOperationKind.IMAGE_CROP,
                                             createImgContentPicUri,
@@ -201,7 +201,7 @@ class ImagePicker private constructor(builder: Builder) {
             .subscribe({ t ->
                 if (t != null) {
                     if (t.resultCode != Activity.RESULT_OK) {
-                        listener?.onFailed("resultCode!=RESULT_OK，回调失败",
+                        listener?.onFailed(ErrorCodeBean.Message.RESULT_FAIL_MSG,
                             t.resultCode.toString())
                     } else {
                         var uri: Uri = createImgContentPicUri!!
@@ -214,7 +214,8 @@ class ImagePicker private constructor(builder: Builder) {
                         if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(
                                 copyImgFromPicToAppPic)
                         ) {
-                            listener?.onFailed("拍照照片复制到APP外部私有目录失败", "01")
+                            listener?.onFailed(ErrorCodeBean.Message.PHOTO_COPY_TOAPPPIC_FAIL_MSG,
+                                ErrorCodeBean.Code.TAKE_PHOTO_CODE)
                         } else {
                             if (compress) {
                                 imageCompress(fragmentActivity,
@@ -228,10 +229,14 @@ class ImagePicker private constructor(builder: Builder) {
                         }
                     }
                 } else {
-                    listener?.onFailed("ImagePickerResult返回为空", "01")
+                    listener?.onFailed(ErrorCodeBean.Message.RESULT_NULL_MSG,
+                        ErrorCodeBean.Code.TAKE_PHOTO_CODE)
                 }
             },
-                { t -> listener?.onFailed(t?.message ?: "未知错误", "01") })
+                { t ->
+                    listener?.onFailed(t?.message ?: ErrorCodeBean.Message.UNKNOWN_ERROR_MSG,
+                        ErrorCodeBean.Code.TAKE_PHOTO_CODE)
+                })
     }
 
     fun choosePic() {
@@ -250,7 +255,7 @@ class ImagePicker private constructor(builder: Builder) {
                             null,
                             cropOutputUri)
                     } else {
-                        return Observable.error(Exception("权限获取失败"))
+                        return Observable.error(Exception(ErrorCodeBean.Message.PERMISSION_GRANT_FAIL_MSG))
                     }
                 }
             })
@@ -261,18 +266,18 @@ class ImagePicker private constructor(builder: Builder) {
                             Function<ImagePickerResult, ObservableSource<ImagePickerResult>> {
                             override fun apply(t: ImagePickerResult): ObservableSource<ImagePickerResult> {
                                 if (t.resultCode != Activity.RESULT_OK) {
-                                    return Observable.error(Exception("resultCode!=RESULT_OK，相册选择照片回调失败"))
+                                    return Observable.error(Exception(ErrorCodeBean.Message.CHOOSE_PIC_RESULT_FAIL_MSG + t.resultCode))
                                 } else {
                                     when {
                                         cropOutputUri == null -> {
-                                            return Observable.error(Exception("裁剪图片的外部共享目录Uri创建失败"))
+                                            return Observable.error(Exception(ErrorCodeBean.Message.CROP_PUBPIC_URI_FAIL_MSG))
                                         }
                                         t.uri == null -> {
-                                            return Observable.error(Exception("选择照片返回的ImagePickerResult.Uri为空"))
+                                            return Observable.error(Exception(ErrorCodeBean.Message.CHOOSE_PIC_RESULT_URI_NULL_MSG))
                                         }
                                         else -> {
                                             if (authority == null || TextUtils.isEmpty(authority)) {
-                                                return Observable.error(Exception("裁剪图片时传入的authority为空"))
+                                                return Observable.error(Exception(ErrorCodeBean.Message.CROP_AUTHORITY_NULL_MSG))
                                             }
                                             val outPutUri: Uri =
                                                 mediaUtils.copyImgFromPicToAppPic(
@@ -283,7 +288,8 @@ class ImagePicker private constructor(builder: Builder) {
                                                         it,
                                                         authority)
                                                 }
-                                                    ?: return Observable.error(Exception("裁剪图片时复制原图到APP私有目录下并获取图片Uri出错"))
+                                                    ?: return Observable.error(Exception(
+                                                        ErrorCodeBean.Message.CROP_APPPIC_URI_NULL_MSG))
                                             return requestImplementation(ImageOperationKind.IMAGE_CROP,
                                                 outPutUri,
                                                 cropOutputUri)
@@ -304,7 +310,7 @@ class ImagePicker private constructor(builder: Builder) {
                         uri = cropOutputUri
                     }
                     if (t.resultCode != Activity.RESULT_OK) {
-                        listener?.onFailed("resultCode!=RESULT_OK，回调失败",
+                        listener?.onFailed(ErrorCodeBean.Message.RESULT_FAIL_MSG,
                             t.resultCode.toString())
                     } else {
                         if (uri != null) {
@@ -314,7 +320,8 @@ class ImagePicker private constructor(builder: Builder) {
                             if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(
                                     copyImgFromPicToAppPic)
                             ) {
-                                listener?.onFailed("选择的图片复制到APP外部私有目录失败", "02")
+                                listener?.onFailed(ErrorCodeBean.Message.COPY_TOAPPPIC_FAIL_MSG,
+                                    ErrorCodeBean.Code.CHOOSE_PIC_CODE)
                             } else {
                                 if (compress) {
                                     imageCompress(fragmentActivity,
@@ -327,15 +334,19 @@ class ImagePicker private constructor(builder: Builder) {
                                 }
                             }
                         } else {
-                            listener?.onFailed("ImagePickerResult返回Uri为空",
+                            listener?.onFailed(ErrorCodeBean.Message.RESULT_URI_NULL_MSG,
                                 t.resultCode.toString())
                         }
                     }
                 } else {
-                    listener?.onFailed("ImagePickerResult返回为空", "02")
+                    listener?.onFailed(ErrorCodeBean.Message.RESULT_NULL_MSG,
+                        ErrorCodeBean.Code.CHOOSE_PIC_CODE)
                 }
             },
-                { t -> listener?.onFailed(t?.message ?: "未知错误", "02") })
+                { t ->
+                    listener?.onFailed(t?.message ?: ErrorCodeBean.Message.UNKNOWN_ERROR_MSG,
+                        ErrorCodeBean.Code.CHOOSE_PIC_CODE)
+                })
     }
 
     fun imageCompress(
@@ -450,15 +461,18 @@ class ImagePicker private constructor(builder: Builder) {
 
         fun startPick() {
             if (!checkRxJavaSdk()) {
-                listener?.onFailed("缺少RxJava依赖库", "04")
+                listener?.onFailed(ErrorCodeBean.Message.LEAK_LIBRARY_RXJAVA_MSG,
+                    ErrorCodeBean.Code.LEAK_LIBRARY_CODE)
                 return
             }
             if (!checkRxPermissionsSdk()) {
-                listener?.onFailed("缺少RxPermissions依赖库", "04")
+                listener?.onFailed(ErrorCodeBean.Message.LEAK_LIBRARY_RXPERMISSIONS_MSG,
+                    ErrorCodeBean.Code.LEAK_LIBRARY_CODE)
                 return
             }
             if (compress && compressType == ImageCompress.ImageCompressType.LuBan && !checkLuBanSdk()) {
-                listener?.onFailed("缺少Luban依赖库", "04")
+                listener?.onFailed(ErrorCodeBean.Message.LEAK_LIBRARY_LUBAN_MSG,
+                    ErrorCodeBean.Code.LEAK_LIBRARY_CODE)
                 return
             }
             if (isCamera) {

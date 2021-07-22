@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.text.TextUtils
-import androidx.exifinterface.media.ExifInterface
 import android.util.Log
+import androidx.exifinterface.media.ExifInterface
 import top.zibin.luban.Luban
 import top.zibin.luban.OnCompressListener
 import java.io.ByteArrayOutputStream
@@ -46,7 +46,8 @@ class ImageCompress(private var imgDirName: String) {
     ) {
         val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
         if (TextUtils.isEmpty(createAppPicDir)) {
-            listener.onFailed("APP外部私有目录下压缩图片保存目录创建失败", "03")
+            listener.onFailed(ErrorCodeBean.Message.APPPIC_DIR_CREATE_FAIL_MSG,
+                ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
             return
         }
         Luban.with(context)
@@ -60,14 +61,16 @@ class ImageCompress(private var imgDirName: String) {
 
                 override fun onSuccess(file: File?) {
                     if (file == null) {
-                        listener.onFailed("LuBan压缩成功，但是返回file为空", "03")
+                        listener.onFailed(ErrorCodeBean.Message.LUBAN_FILE_NULL_MSG,
+                            ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
                     } else {
                         listener.onSuccess(file.absolutePath)
                     }
                 }
 
                 override fun onError(e: Throwable?) {
-                    listener.onFailed(e?.message ?: "LuBan压缩未知错误", "03")
+                    listener.onFailed(e?.message ?: ErrorCodeBean.Message.LUBAN_UNKNOWN_MSG,
+                        ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
                 }
             })
             .launch()
@@ -88,7 +91,8 @@ class ImageCompress(private var imgDirName: String) {
                 rotatePicByDegree(BitmapFactory.decodeFile(imagePath), getPictureDegree(imagePath))
         } catch (e: OutOfMemoryError) {
             e.printStackTrace()
-            listener.onFailed("The bitmap has out of memory：" + e.message, "03")
+            listener.onFailed(ErrorCodeBean.Message.BITMAP_OUTOFMEMORY_MSG + e.message,
+                ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
             return
         }
         val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
@@ -103,7 +107,8 @@ class ImageCompress(private var imgDirName: String) {
         }
         val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
         if (TextUtils.isEmpty(createAppPicDir)) {
-            listener.onFailed("APP外部私有目录下压缩图片保存目录创建失败", "03")
+            listener.onFailed(ErrorCodeBean.Message.APPPIC_DIR_CREATE_FAIL_MSG,
+                ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
             return
         }
         val file = File(createAppPicDir, "IMG" + System.currentTimeMillis() + ".jpg")
@@ -117,7 +122,8 @@ class ImageCompress(private var imgDirName: String) {
 
         } catch (e: Exception) {
             e.printStackTrace()
-            listener.onFailed("压缩图片流操作失败", "03")
+            listener.onFailed(ErrorCodeBean.Message.STREAM_FAIL_MSG,
+                ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
         } finally {
             bitmapRecycle(bitmap)
         }
@@ -149,7 +155,8 @@ class ImageCompress(private var imgDirName: String) {
         try {
             bitmap = BitmapFactory.decodeFile(imagePath, options)
         } catch (e: OutOfMemoryError) {
-            listener.onFailed("The bitmap has out of memory：" + e.message, "03")
+            listener.onFailed(ErrorCodeBean.Message.BITMAP_OUTOFMEMORY_MSG + e.message,
+                ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
             return
         }
         bitmap = rotatePicByDegree(bitmap, getPictureDegree(imagePath))
@@ -164,7 +171,8 @@ class ImageCompress(private var imgDirName: String) {
 
         val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
         if (TextUtils.isEmpty(createAppPicDir)) {
-            listener.onFailed("APP外部私有目录下压缩图片保存目录创建失败", "03")
+            listener.onFailed(ErrorCodeBean.Message.APPPIC_DIR_CREATE_FAIL_MSG,
+                ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
             return
         }
         val file = File(createAppPicDir, "IMG" + System.currentTimeMillis() + ".jpg")
@@ -178,7 +186,8 @@ class ImageCompress(private var imgDirName: String) {
 
         } catch (e: Exception) {
             e.printStackTrace()
-            listener.onFailed("压缩图片流操作失败", "03")
+            listener.onFailed(ErrorCodeBean.Message.STREAM_FAIL_MSG,
+                ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
         } finally {
             bitmapRecycle(bitmap)
         }

@@ -111,7 +111,7 @@ public class SmaliDexLibActivity extends AppCompatActivity {
      * TODO 需要初始化
      */
     public void switchLiApk(View view) {
-        apkName = "立刷_3.2.5_2_unkown_debug_lishua_dev.apk";
+        apkName = "立刷_3.2.9_329_unkown_debug_lishua_dev.apk";
         Log.e(TAG, "切换到Lishua Apk：" + apkName);
         Toast.makeText(this, "切换到Lishua Apk", Toast.LENGTH_SHORT).show();
     }
@@ -221,9 +221,12 @@ public class SmaliDexLibActivity extends AppCompatActivity {
                             if (insn instanceof ReferenceInstruction) {
                                 final ReferenceInstruction refInsn = (ReferenceInstruction) insn;
                                 switch (refInsn.getReferenceType()) {
-                                    case ReferenceType.TYPE: {//TODO 问题就出在这里了
+                                    case ReferenceType.TYPE: {
                                         final TypeReference typeRefInsn = (TypeReference) refInsn.getReference();
                                         final String refereeTypeDesc = typeRefInsn.getType();
+                                        //TODO 问题就出在这里了-->XmlPullParser包含在descOfClassesInApk中-->因为Tinker的引入有了前面这个问题，经测试不引入Tinker的话，
+                                        // descOfClassesInApk中不会包含XmlPullParser，那么打出的基准包中也不会有
+                                        // 所以，问题根源：为什么引入了Tinker后，会导致打出的普通基准包中，的dex文件的descOfClassesInApk中包含XmlPullParser？
                                         if (isReferenceFromLoaderClassValid(refereeTypeDesc)) {
                                             break;
                                         }

@@ -28,6 +28,11 @@ object ErrorCodeBean {
         const val PUBPIC_DIR_CREATE_FAIL_MSG = "外部共享目录Uri创建失败"
         const val PERMISSION_GRANT_FAIL_MSG = "权限获取失败"
         const val CROP_PUBPIC_URI_FAIL_MSG = "裁剪图片的外部共享目录Uri创建失败"
+        const val CROP_PIC_RESULT_FAIL_MSG = "resultCode!=RESULT_OK，裁剪图片回调失败"
+
+        const val PIC_COPY_TOAPPPIC_FAIL_MSG = "图片复制到APP外部私有目录失败"
+        const val APPPIC_URI_NULL_MSG = "APP私有目录下图片获取Uri出错"
+        const val APPPIC_TO_PATH_FAIL_MSG = "图片Uri转换图片路径Path失败"
 
         const val UNKNOWN_ERROR_MSG = "未知错误"
     }
@@ -40,6 +45,8 @@ object ErrorCodeBean {
         const val IMAGE_COMPRESS_CODE = "03"
 
         const val LEAK_LIBRARY_CODE = "04"
+
+        const val IMAGE_PICKER_CODE = "05"
     }
 
 }

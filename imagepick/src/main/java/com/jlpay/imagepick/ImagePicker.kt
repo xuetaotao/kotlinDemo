@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -11,7 +12,9 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 class ImagePicker private constructor(builder: Builder) {
@@ -19,11 +22,12 @@ class ImagePicker private constructor(builder: Builder) {
     val TAG: String = ImagePicker::class.java.simpleName
 
     val imgDirName: String = builder.imgDirName
+    val isCamera: Boolean = builder.isCamera
     val compress: Boolean = builder.compress
     val compressType: ImageCompress.ImageCompressType = builder.compressType
     val compressIgnoreSize: Int = builder.compressIgnoreSize
     val crop: Boolean = builder.crop
-    val authority: String? = builder.authority
+    val authority: String = builder.authority
     val listener: ImagePicker.ImagePickerListener? = builder.listener
     val fragmentActivity: FragmentActivity = builder.fragmentActivity
 
@@ -90,7 +94,7 @@ class ImagePicker private constructor(builder: Builder) {
     private fun requestImplementation(
         imageOperationKind: String,
         uri: Uri?,
-        cropOutputUri: Uri?
+        cropOutputUri: Uri?,
     ): Observable<ImagePickerResult> {
         val list: ArrayList<Observable<ImagePickerResult>> = ArrayList()
         var subject: PublishSubject<ImagePickerResult>? =
@@ -122,7 +126,7 @@ class ImagePicker private constructor(builder: Builder) {
 
     private fun takePhotoRequestFromFragment(
         imageOperationKind: String,
-        uri: Uri
+        uri: Uri,
     ) {
         this.mImagePickerFragment.get()
             .log("takePhotoRequestFromFragment:\t" + "imageOperationKind:$imageOperationKind, uri:${uri.toString()}")
@@ -138,11 +142,173 @@ class ImagePicker private constructor(builder: Builder) {
     private fun imageCropRequestFromFragment(
         imageOperationKind: String,
         uri: Uri,
-        cropOutputUri: Uri
+        cropOutputUri: Uri,
     ) {
         this.mImagePickerFragment.get()
             .log("imageCropRequestFromFragment:\timageOperationKind:$imageOperationKind")
         this.mImagePickerFragment.get().imageCrop(imageOperationKind, uri, cropOutputUri)
+    }
+
+    fun startPick() {
+        val subscribe = Observable.just(0)
+            //请求权限
+            .flatMap {
+                Log.e(TAG, "请求权限的线程：" + Thread.currentThread().name)//main
+                if (isCamera) {
+                    RxPermissions(fragmentActivity).request(android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                } else {
+                    RxPermissions(fragmentActivity)
+                        .request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
+            }
+            //调起拍照/选择相册
+            .flatMap(object : Function<Boolean, ObservableSource<Uri>> {
+                override fun apply(granted: Boolean): ObservableSource<Uri> {
+                    Log.e(TAG, "调起拍照/选择相册的线程：" + Thread.currentThread().name)//main
+                    if (!granted) {
+                        return Observable.error(Exception(ErrorCodeBean.Message.PERMISSION_GRANT_FAIL_MSG))
+                    }
+                    if (isCamera) {
+                        val createImgContentPicUri: Uri =
+                            mediaUtils.createImgContentPicUri(fragmentActivity)
+                                ?: return Observable.error(Exception(ErrorCodeBean.Message.PUBPIC_DIR_CREATE_FAIL_MSG))
+                        return requestImplementation(ImageOperationKind.TAKE_PHOTO,
+                            createImgContentPicUri,
+                            null)
+                            .flatMap(object : Function<ImagePickerResult, ObservableSource<Uri>> {
+                                override fun apply(t: ImagePickerResult): ObservableSource<Uri> {
+                                    if (t.resultCode != Activity.RESULT_OK) {
+                                        return Observable.error(Exception(ErrorCodeBean.Message.PHOTO_RESULT_FAIL_MSG + t.resultCode))
+                                    }
+                                    return Observable.just(createImgContentPicUri)
+                                }
+                            })
+
+                    } else {
+                        return requestImplementation(ImageOperationKind.CHOOSE_PIC, null, null)
+                            .flatMap(object : Function<ImagePickerResult, ObservableSource<Uri>> {
+                                override fun apply(t: ImagePickerResult): ObservableSource<Uri> {
+                                    if (t.resultCode != Activity.RESULT_OK) {
+                                        return Observable.error(Exception(ErrorCodeBean.Message.CHOOSE_PIC_RESULT_FAIL_MSG + t.resultCode))
+                                    }
+                                    if (t.uri == null) {
+                                        return Observable.error(Exception(ErrorCodeBean.Message.RESULT_URI_NULL_MSG + t.resultCode))
+                                    }
+                                    return Observable.just(t.uri)
+                                }
+                            })
+                    }
+                }
+            })
+            //复制图片到APP外部私有目录，不执行这一步的话，调用ACTION_GET_CONTENT选择最近照片时，返回uri再去裁剪会出问题
+            .observeOn(Schedulers.io())
+            .flatMap(object : Function<Uri, ObservableSource<Uri>> {
+                override fun apply(t: Uri): ObservableSource<Uri> {
+                    if (isCamera) {
+                        return Observable.just(t)
+                    }
+                    Log.e(TAG,
+                        "复制图片到APP外部私有目录的线程：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+                    val copyImgFromPicToAppPic: String? =
+                        mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
+                    if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {
+                        return Observable.error(Exception(ErrorCodeBean.Message.PIC_COPY_TOAPPPIC_FAIL_MSG))
+                    }
+                    val imageContentUri: Uri = mediaUtils.getImageContentUri(fragmentActivity,
+                        copyImgFromPicToAppPic,
+                        authority)
+                        ?: return Observable.error(Exception(ErrorCodeBean.Message.APPPIC_URI_NULL_MSG))
+                    return Observable.just(imageContentUri)
+                }
+            })
+            //图片裁剪
+            .compose(object : ObservableTransformer<Uri, Uri> {
+                override fun apply(upstream: Observable<Uri>): ObservableSource<Uri> {
+                    Log.e(TAG, "图片裁剪compose的线程：" + Thread.currentThread().name)//main 为什么???
+                    if (!crop) {
+                        return upstream
+                    }
+                    val cropOutputUri: Uri =
+                        mediaUtils.createImgContentPicUri(fragmentActivity)//TODO 这里只能是外部共享目录？
+                            ?: return Observable.error(Exception(ErrorCodeBean.Message.CROP_PUBPIC_URI_FAIL_MSG))
+                    return upstream.flatMap { t ->
+                        Log.e(TAG,
+                            "图片裁剪的线程：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+                        requestImplementation(ImageOperationKind.IMAGE_CROP, t, cropOutputUri)
+                            .flatMap(object :
+                                Function<ImagePickerResult, ObservableSource<Uri>> {
+                                override fun apply(t: ImagePickerResult): ObservableSource<Uri> {
+                                    if (t.resultCode != Activity.RESULT_OK) {
+                                        return Observable.error(Exception(ErrorCodeBean.Message.CROP_PIC_RESULT_FAIL_MSG + t.resultCode))
+                                    }
+                                    return Observable.just(cropOutputUri)
+                                }
+                            })
+                    }
+                }
+            })
+            .observeOn(Schedulers.io())
+            .flatMap(object : Function<Uri, ObservableSource<Uri>> {
+                override fun apply(t: Uri): ObservableSource<Uri> {
+                    Log.e(TAG,
+                        "复制图片到APP外部私有目录的线程2：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+                    val copyImgFromPicToAppPic: String? =
+                        mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
+                    if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {
+                        return Observable.error(Exception(ErrorCodeBean.Message.PIC_COPY_TOAPPPIC_FAIL_MSG))
+                    }
+                    val imageContentUri: Uri = mediaUtils.getImageContentUri(fragmentActivity,
+                        copyImgFromPicToAppPic,
+                        authority)
+                        ?: return Observable.error(Exception(ErrorCodeBean.Message.APPPIC_URI_NULL_MSG))
+                    return Observable.just(imageContentUri)
+                }
+            })
+            //图片压缩
+            .compose(object : ObservableTransformer<Uri, String> {
+                override fun apply(upstream: Observable<Uri>): ObservableSource<String> {
+                    Log.e(TAG, "图片压缩compose的线程：" + Thread.currentThread().name)//main
+                    return upstream.flatMap(object : Function<Uri, ObservableSource<String>> {
+                        override fun apply(t: Uri): ObservableSource<String> {
+                            Log.e(TAG,
+                                "图片压缩的线程22：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+                            val imagePath: String =
+                                mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
+                                    ?: return Observable.error(Exception(ErrorCodeBean.Message.APPPIC_TO_PATH_FAIL_MSG))
+                            if (!compress) {
+                                return Observable.just(imagePath)
+                            }
+
+                            return Observable.create { emitter ->
+                                Log.e(TAG,
+                                    "图片压缩的线程33：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+                                ImageCompress(imgDirName).compress(fragmentActivity,
+                                    imagePath,
+                                    compressType,
+                                    compressIgnoreSize,
+                                    object : ImageCompress.ImageCompressListener {
+                                        override fun onSuccess(imageCompressPath: String) {
+                                            emitter.onNext(imageCompressPath)
+                                        }
+
+                                        override fun onFailed(msg: String, code: String) {
+                                            emitter.onError(Exception(msg))
+                                        }
+                                    })
+                            }
+                        }
+                    })
+                }
+            })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ t -> listener?.onSuccess(t!!) }
+            ) { t ->
+                listener?.onFailed(t?.message ?: ErrorCodeBean.Message.UNKNOWN_ERROR_MSG,
+                    ErrorCodeBean.Code.IMAGE_PICKER_CODE)
+            }
     }
 
     fun takePhoto() {
@@ -354,7 +520,7 @@ class ImagePicker private constructor(builder: Builder) {
         imagePath: String,
         type: ImageCompress.ImageCompressType,
         ignoreSize: Int,
-        listener: ImagePicker.ImagePickerListener?
+        listener: ImagePicker.ImagePickerListener?,
     ) {
         ImageCompress(imgDirName).compress(context,
             imagePath,
@@ -475,11 +641,12 @@ class ImagePicker private constructor(builder: Builder) {
                     ErrorCodeBean.Code.LEAK_LIBRARY_CODE)
                 return
             }
-            if (isCamera) {
-                build().takePhoto()
-            } else {
-                build().choosePic()
-            }
+//            if (isCamera) {
+//                build().takePhoto()
+//            } else {
+//                build().choosePic()
+//            }
+            build().startPick()
         }
     }
 

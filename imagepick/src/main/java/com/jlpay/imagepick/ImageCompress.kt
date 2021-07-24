@@ -85,6 +85,11 @@ class ImageCompress(private var imgDirName: String) {
         ignoreSize: Int,
         listener: ImageCompressListener
     ) {
+        if (!needCompress(imagePath, ignoreSize)) {
+            Log.e("TAG", "不需要压缩：" + imagePath)
+            listener.onSuccess(imagePath)
+            return
+        }
         var bitmap: Bitmap? = null
         try {
             bitmap =
@@ -129,6 +134,16 @@ class ImageCompress(private var imgDirName: String) {
         }
     }
 
+    private fun needCompress(imagePath: String, ignoreSize: Int): Boolean {
+        if (ignoreSize > 0) {
+            val file: File = File(imagePath)
+            Log.e("TAG",
+                "File大小：" + file.length() + "\t" + "ignoreSize大小：" + ignoreSize + "\t" + "移位运算：" + (ignoreSize shl 10))
+            return file.exists() && (file.length() > (ignoreSize shl 10))//左移10(<<10)相当于乘以1024
+        }
+        return true
+    }
+
     /**
      * Android原生质量和尺寸压缩
      */
@@ -140,12 +155,19 @@ class ImageCompress(private var imgDirName: String) {
         ignoreSize: Int,
         listener: ImageCompressListener
     ) {
+        //如果inJustDecoedBounds设置为true的话，解码bitmap时可以只返回其高、宽和Mime类型，而不必为其申请内存，从而节省了内存空间；即只读取图片，不加载到内存中
         val options: BitmapFactory.Options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
         var bitmap: Bitmap = BitmapFactory.decodeFile(imagePath)
         val width: Int = bitmap.width
         val height: Int = bitmap.height
         options.inJustDecodeBounds = false
+
+        if (!needCompress(imagePath, ignoreSize) && width < reqWidth && height < reqHeight) {
+            Log.e("TAG", "不需要压缩：" + imagePath)
+            listener.onSuccess(imagePath)
+            return
+        }
 
         var sampleSize: Int = 1
         while ((width / sampleSize > reqWidth) || (height / sampleSize > reqHeight)) {

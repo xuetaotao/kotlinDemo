@@ -73,7 +73,7 @@ public class LibTestJavaActivity extends BaseActivity {
                 .imagePickerListener(new ImagePicker.ImagePickerListener() {
                     @Override
                     public void onSuccess(@NotNull String imagePath) {
-                        Log.e("TAG", "复制到APP外部私有目录地址:" + imagePath);
+                        Log.e("TAG", "复制到APP外部私有目录地址Lib:" + imagePath);
                         Glide.with(LibTestJavaActivity.this).load(imagePath).into(imageView);
                     }
 
@@ -83,7 +83,7 @@ public class LibTestJavaActivity extends BaseActivity {
                         showToast(msg);
                     }
                 })
-//                .crop(true)
+                .crop(true)
                 .compress(true)
                 .compressType(ImageCompress.ImageCompressType.OriginCompress)
                 .isCamera(false)

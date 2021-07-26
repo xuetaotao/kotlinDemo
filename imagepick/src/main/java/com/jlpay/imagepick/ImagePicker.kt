@@ -1,10 +1,8 @@
 package com.jlpay.imagepick
 
 import android.app.Activity
-import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -16,7 +14,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import java.io.File
 
 class ImagePicker private constructor(builder: Builder) {
 
@@ -307,232 +304,6 @@ class ImagePicker private constructor(builder: Builder) {
             }
     }
 
-    fun takePhoto() {
-        var createImgContentPicUri: Uri? = null
-        var cropOutputUri: Uri? = null
-        val subscribe = RxPermissions(fragmentActivity)
-            .request(android.Manifest.permission.CAMERA,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            .flatMap(object : Function<Boolean, ObservableSource<ImagePickerResult>> {
-                override fun apply(t: Boolean): ObservableSource<ImagePickerResult> {
-                    if (t) {
-                        createImgContentPicUri =
-                            mediaUtils.createImgContentPicUri(fragmentActivity)
-                        if (crop) {
-                            cropOutputUri =
-                                mediaUtils.createImgContentPicUri(fragmentActivity)
-                        }
-                        return if (createImgContentPicUri != null) {
-                            requestImplementation(ImageOperationKind.TAKE_PHOTO,
-                                createImgContentPicUri,
-                                cropOutputUri)
-                        } else {
-                            Observable.error(Exception(ErrorCodeBean.Message.PUBPIC_DIR_CREATE_FAIL_MSG))
-                        }
-
-                    } else {
-                        return Observable.error(Exception(ErrorCodeBean.Message.PERMISSION_GRANT_FAIL_MSG))
-                    }
-                }
-            })
-            .compose(object : ObservableTransformer<ImagePickerResult, ImagePickerResult> {
-                override fun apply(upstream: Observable<ImagePickerResult>): ObservableSource<ImagePickerResult> {
-                    if (crop) {
-                        return upstream.flatMap(object :
-                            Function<ImagePickerResult, ObservableSource<ImagePickerResult>> {
-                            override fun apply(t: ImagePickerResult): ObservableSource<ImagePickerResult> {
-                                if (t.resultCode != Activity.RESULT_OK) {
-                                    return Observable.error(Exception(ErrorCodeBean.Message.PHOTO_RESULT_FAIL_MSG + t.resultCode))
-                                } else {
-                                    return if (cropOutputUri == null) {
-                                        Observable.error(Exception(ErrorCodeBean.Message.CROP_PUBPIC_URI_FAIL_MSG))
-                                    } else {
-                                        requestImplementation(ImageOperationKind.IMAGE_CROP,
-                                            createImgContentPicUri,
-                                            cropOutputUri)
-                                    }
-                                }
-                            }
-                        })
-                    } else {
-                        return upstream
-                    }
-                }
-            })
-            .subscribe({ t ->
-                if (t != null) {
-                    if (t.resultCode != Activity.RESULT_OK) {
-                        listener?.onFailed(ErrorCodeBean.Message.RESULT_FAIL_MSG,
-                            t.resultCode.toString())
-                    } else {
-                        var uri: Uri = createImgContentPicUri!!
-                        if (crop && cropOutputUri != null) {
-                            uri = cropOutputUri as Uri
-                        }
-                        val copyImgFromPicToAppPic: String? =
-                            mediaUtils.copyImgFromPicToAppPic(fragmentActivity,
-                                uri)
-                        if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(
-                                copyImgFromPicToAppPic)
-                        ) {
-                            listener?.onFailed(ErrorCodeBean.Message.PHOTO_COPY_TOAPPPIC_FAIL_MSG,
-                                ErrorCodeBean.Code.TAKE_PHOTO_CODE)
-                        } else {
-                            if (compress) {
-                                imageCompress(fragmentActivity,
-                                    copyImgFromPicToAppPic,
-                                    compressType,
-                                    compressIgnoreSize,
-                                    listener)
-                            } else {
-                                listener?.onSuccess(copyImgFromPicToAppPic)
-                            }
-                        }
-                    }
-                } else {
-                    listener?.onFailed(ErrorCodeBean.Message.RESULT_NULL_MSG,
-                        ErrorCodeBean.Code.TAKE_PHOTO_CODE)
-                }
-            },
-                { t ->
-                    listener?.onFailed(t?.message ?: ErrorCodeBean.Message.UNKNOWN_ERROR_MSG,
-                        ErrorCodeBean.Code.TAKE_PHOTO_CODE)
-                })
-    }
-
-    fun choosePic() {
-        var cropOutputUri: Uri? = null
-        val subscribe = RxPermissions(fragmentActivity)
-            .request(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            .flatMap(object : Function<Boolean, ObservableSource<ImagePickerResult>> {
-                override fun apply(t: Boolean): ObservableSource<ImagePickerResult> {
-                    if (t) {
-                        if (crop) {
-                            cropOutputUri =
-                                mediaUtils.createImgContentPicUri(fragmentActivity)
-                        }
-                        return requestImplementation(ImageOperationKind.CHOOSE_PIC,
-                            null,
-                            cropOutputUri)
-                    } else {
-                        return Observable.error(Exception(ErrorCodeBean.Message.PERMISSION_GRANT_FAIL_MSG))
-                    }
-                }
-            })
-            .compose(object : ObservableTransformer<ImagePickerResult, ImagePickerResult> {
-                override fun apply(upstream: Observable<ImagePickerResult>): ObservableSource<ImagePickerResult> {
-                    if (crop) {
-                        return upstream.flatMap(object :
-                            Function<ImagePickerResult, ObservableSource<ImagePickerResult>> {
-                            override fun apply(t: ImagePickerResult): ObservableSource<ImagePickerResult> {
-                                if (t.resultCode != Activity.RESULT_OK) {
-                                    return Observable.error(Exception(ErrorCodeBean.Message.CHOOSE_PIC_RESULT_FAIL_MSG + t.resultCode))
-                                } else {
-                                    when {
-                                        cropOutputUri == null -> {
-                                            return Observable.error(Exception(ErrorCodeBean.Message.CROP_PUBPIC_URI_FAIL_MSG))
-                                        }
-                                        t.uri == null -> {
-                                            return Observable.error(Exception(ErrorCodeBean.Message.CHOOSE_PIC_RESULT_URI_NULL_MSG))
-                                        }
-                                        else -> {
-                                            if (authority == null || TextUtils.isEmpty(authority)) {
-                                                return Observable.error(Exception(ErrorCodeBean.Message.CROP_AUTHORITY_NULL_MSG))
-                                            }
-                                            val outPutUri: Uri =
-                                                mediaUtils.copyImgFromPicToAppPic(
-                                                    fragmentActivity,
-                                                    t.uri!!)?.let {
-                                                    mediaUtils.getImageContentUri(
-                                                        fragmentActivity,
-                                                        it,
-                                                        authority)
-                                                }
-                                                    ?: return Observable.error(Exception(
-                                                        ErrorCodeBean.Message.CROP_APPPIC_URI_NULL_MSG))
-                                            return requestImplementation(ImageOperationKind.IMAGE_CROP,
-                                                outPutUri,
-                                                cropOutputUri)
-                                        }
-                                    }
-                                }
-                            }
-                        })
-                    } else {
-                        return upstream
-                    }
-                }
-            })
-            .subscribe({ t ->
-                if (t != null) {
-                    var uri: Uri? = t.uri
-                    if (crop && cropOutputUri != null) {
-                        uri = cropOutputUri
-                    }
-                    if (t.resultCode != Activity.RESULT_OK) {
-                        listener?.onFailed(ErrorCodeBean.Message.RESULT_FAIL_MSG,
-                            t.resultCode.toString())
-                    } else {
-                        if (uri != null) {
-                            val copyImgFromPicToAppPic: String? =
-                                mediaUtils.copyImgFromPicToAppPic(fragmentActivity,
-                                    uri)
-                            if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(
-                                    copyImgFromPicToAppPic)
-                            ) {
-                                listener?.onFailed(ErrorCodeBean.Message.COPY_TOAPPPIC_FAIL_MSG,
-                                    ErrorCodeBean.Code.CHOOSE_PIC_CODE)
-                            } else {
-                                if (compress) {
-                                    imageCompress(fragmentActivity,
-                                        copyImgFromPicToAppPic,
-                                        compressType,
-                                        compressIgnoreSize,
-                                        listener)
-                                } else {
-                                    listener?.onSuccess(copyImgFromPicToAppPic)
-                                }
-                            }
-                        } else {
-                            listener?.onFailed(ErrorCodeBean.Message.RESULT_URI_NULL_MSG,
-                                t.resultCode.toString())
-                        }
-                    }
-                } else {
-                    listener?.onFailed(ErrorCodeBean.Message.RESULT_NULL_MSG,
-                        ErrorCodeBean.Code.CHOOSE_PIC_CODE)
-                }
-            },
-                { t ->
-                    listener?.onFailed(t?.message ?: ErrorCodeBean.Message.UNKNOWN_ERROR_MSG,
-                        ErrorCodeBean.Code.CHOOSE_PIC_CODE)
-                })
-    }
-
-    fun imageCompress(
-        context: Context,
-        imagePath: String,
-        type: ImageCompress.ImageCompressType,
-        ignoreSize: Int,
-        listener: ImagePicker.ImagePickerListener?,
-    ) {
-        ImageCompress(imgDirName).compress(context,
-            imagePath,
-            type,
-            ignoreSize,
-            object : ImageCompress.ImageCompressListener {
-                override fun onSuccess(imageCompressPath: String) {
-                    listener?.onSuccess(imageCompressPath)
-                }
-
-                override fun onFailed(msg: String, code: String) {
-                    listener?.onFailed(msg, code)
-                }
-            })
-    }
-
 
     class Builder(internal var fragmentActivity: FragmentActivity) {
 
@@ -613,14 +384,6 @@ class ImagePicker private constructor(builder: Builder) {
             }
         }
 
-//        fun takePhoto() {
-//            build().takePhoto()
-//        }
-
-//        fun choosePic() {
-//            build().choosePic()
-//        }
-
         fun startPick() {
             if (!checkRxJavaSdk()) {
                 listener?.onFailed(ErrorCodeBean.Message.LEAK_LIBRARY_RXJAVA_MSG,
@@ -637,11 +400,6 @@ class ImagePicker private constructor(builder: Builder) {
                     ErrorCodeBean.Code.LEAK_LIBRARY_CODE)
                 return
             }
-//            if (isCamera) {
-//                build().takePhoto()
-//            } else {
-//                build().choosePic()
-//            }
             build().startPick()
         }
     }

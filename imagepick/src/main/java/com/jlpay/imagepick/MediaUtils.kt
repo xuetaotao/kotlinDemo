@@ -22,10 +22,10 @@ class MediaUtils : IAndroid11Upgrade {
 
     private lateinit var imgDirName: String
 
-    constructor() : this(DEFAULT_EXTERN_DIR_NAME)
+    constructor() : this("ImagePicker")
 
-    constructor(imgDirName: String?) {
-        this.imgDirName = imgDirName ?: DEFAULT_EXTERN_DIR_NAME
+    constructor(imgDirName: String) {
+        this.imgDirName = imgDirName
     }
 
     override fun getImgFromPubPic(context: Context, uri: Uri): InputStream? {
@@ -121,7 +121,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun insertImageToPic(
                 context: Context,
                 inputStream: InputStream,
-                imgDirName: String
+                imgDirName: String,
             ): Uri? {
                 val contentResolver = context.contentResolver
                 val pendingUri: Uri? = createImgPicUri(context, imgDirName)
@@ -149,7 +149,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun insertImageToPic(
                 context: Context,
                 bitmap: Bitmap,
-                imgDirName: String
+                imgDirName: String,
             ): Uri? {
                 val contentResolver = context.contentResolver
                 val pendingUri: Uri? = createImgPicUri(context, imgDirName)
@@ -193,7 +193,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun getImageContentUri(
                 context: Context,
                 imagePath: String,
-                authority: String
+                authority: String,
             ): Uri? {
                 if (!checkPermission(context)) {
                     return null
@@ -272,7 +272,7 @@ class MediaUtils : IAndroid11Upgrade {
              * @return
              */
             fun createImageContentUri(
-                context: Context, isPubPicUri: Boolean, imgDirName: String, authority: String?
+                context: Context, isPubPicUri: Boolean, imgDirName: String, authority: String?,
             ): Uri? {
                 if (!checkPermission(context)) {
                     return null
@@ -338,7 +338,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun copyImgFromAppPicToPic(
                 context: Context,
                 imgPath: String,
-                imgDirName: String
+                imgDirName: String,
             ): Uri? {
                 if (!checkPermission(context)) {
                     return null
@@ -376,9 +376,6 @@ class MediaUtils : IAndroid11Upgrade {
 
 
     companion object {
-
-        private val DEFAULT_EXTERN_DIR_NAME = "MediaPic"
-
         //Android10以下版本使用
         private var EXTERN_STORAGE_PATH: String =
             Environment.getExternalStorageDirectory().absolutePath + File.separator

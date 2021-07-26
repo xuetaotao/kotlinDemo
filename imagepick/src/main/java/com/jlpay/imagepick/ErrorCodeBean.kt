@@ -34,6 +34,7 @@ object ErrorCodeBean {
         const val APPPIC_URI_NULL_MSG = "APP私有目录下图片获取Uri出错"
         const val APPPIC_TO_PATH_FAIL_MSG = "图片Uri转换图片路径Path失败"
 
+        const val USER_CANCELED = "用户取消"
         const val UNKNOWN_ERROR_MSG = "未知错误"
     }
 
@@ -47,6 +48,8 @@ object ErrorCodeBean {
         const val LEAK_LIBRARY_CODE = "04"
 
         const val IMAGE_PICKER_CODE = "05"
+
+        const val CANCEL_CODE = "06"
     }
 
 }

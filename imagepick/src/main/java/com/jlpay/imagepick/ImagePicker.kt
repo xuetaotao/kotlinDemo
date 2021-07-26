@@ -178,7 +178,9 @@ class ImagePicker private constructor(builder: Builder) {
                             null)
                             .flatMap(object : Function<ImagePickerResult, ObservableSource<Uri>> {
                                 override fun apply(t: ImagePickerResult): ObservableSource<Uri> {
-                                    if (t.resultCode != Activity.RESULT_OK) {
+                                    if (t.resultCode == Activity.RESULT_CANCELED) {
+                                        return Observable.error(Exception(ErrorCodeBean.Message.USER_CANCELED + ErrorCodeBean.Code.CANCEL_CODE))
+                                    } else if (t.resultCode != Activity.RESULT_OK) {
                                         return Observable.error(Exception(ErrorCodeBean.Message.PHOTO_RESULT_FAIL_MSG + t.resultCode))
                                     }
                                     return Observable.just(createImgContentPicUri)
@@ -189,7 +191,9 @@ class ImagePicker private constructor(builder: Builder) {
                         return requestImplementation(ImageOperationKind.CHOOSE_PIC, null, null)
                             .flatMap(object : Function<ImagePickerResult, ObservableSource<Uri>> {
                                 override fun apply(t: ImagePickerResult): ObservableSource<Uri> {
-                                    if (t.resultCode != Activity.RESULT_OK) {
+                                    if (t.resultCode == Activity.RESULT_CANCELED) {
+                                        return Observable.error(Exception(ErrorCodeBean.Message.USER_CANCELED + ErrorCodeBean.Code.CANCEL_CODE))
+                                    } else if (t.resultCode != Activity.RESULT_OK) {
                                         return Observable.error(Exception(ErrorCodeBean.Message.CHOOSE_PIC_RESULT_FAIL_MSG + t.resultCode))
                                     }
                                     if (t.uri == null) {
@@ -239,7 +243,9 @@ class ImagePicker private constructor(builder: Builder) {
                             .flatMap(object :
                                 Function<ImagePickerResult, ObservableSource<Uri>> {
                                 override fun apply(t: ImagePickerResult): ObservableSource<Uri> {
-                                    if (t.resultCode != Activity.RESULT_OK) {
+                                    if (t.resultCode == Activity.RESULT_CANCELED) {
+                                        return Observable.error(Exception(ErrorCodeBean.Message.USER_CANCELED + ErrorCodeBean.Code.CANCEL_CODE))
+                                    } else if (t.resultCode != Activity.RESULT_OK) {
                                         return Observable.error(Exception(ErrorCodeBean.Message.CROP_PIC_RESULT_FAIL_MSG + t.resultCode))
                                     }
                                     return Observable.just(cropOutputUri)

@@ -86,7 +86,7 @@ class ImageCompress(private var imgDirName: String) {
         listener: ImageCompressListener
     ) {
         if (!needCompress(imagePath, ignoreSize)) {
-            Log.e("TAG", "不需要压缩：" + imagePath)
+//            Log.e("TAG", "不需要压缩：" + imagePath)
             listener.onSuccess(imagePath)
             return
         }
@@ -137,8 +137,8 @@ class ImageCompress(private var imgDirName: String) {
     private fun needCompress(imagePath: String, ignoreSize: Int): Boolean {
         if (ignoreSize > 0) {
             val file: File = File(imagePath)
-            Log.e("TAG",
-                "File大小：" + file.length() + "\t" + "ignoreSize大小：" + ignoreSize + "\t" + "移位运算：" + (ignoreSize shl 10))
+//            Log.e("TAG",
+//                "File大小：" + file.length() + "\t" + "ignoreSize大小：" + ignoreSize + "\t" + "移位运算：" + (ignoreSize shl 10))
             return file.exists() && (file.length() > (ignoreSize shl 10))//左移10(<<10)相当于乘以1024
         }
         return true
@@ -164,7 +164,7 @@ class ImageCompress(private var imgDirName: String) {
         options.inJustDecodeBounds = false
 
         if (!needCompress(imagePath, ignoreSize) && width < reqWidth && height < reqHeight) {
-            Log.e("TAG", "不需要压缩：" + imagePath)
+//            Log.e("TAG", "不需要压缩：" + imagePath)
             listener.onSuccess(imagePath)
             return
         }

@@ -154,7 +154,7 @@ class ImagePicker private constructor(builder: Builder) {
         val subscribe = Observable.just(0)
             //请求权限
             .flatMap {
-                Log.e(TAG, "请求权限的线程：" + Thread.currentThread().name)//main
+//                Log.e(TAG, "请求权限的线程：" + Thread.currentThread().name)//main
                 if (isCamera) {
                     RxPermissions(fragmentActivity).request(android.Manifest.permission.CAMERA,
                         android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -168,7 +168,7 @@ class ImagePicker private constructor(builder: Builder) {
             //调起拍照/选择相册
             .flatMap(object : Function<Boolean, ObservableSource<Uri>> {
                 override fun apply(granted: Boolean): ObservableSource<Uri> {
-                    Log.e(TAG, "调起拍照/选择相册的线程：" + Thread.currentThread().name)//main
+//                    Log.e(TAG, "调起拍照/选择相册的线程：" + Thread.currentThread().name)//main
                     if (!granted) {
                         return Observable.error(Exception(ErrorCodeBean.Message.PERMISSION_GRANT_FAIL_MSG))
                     }
@@ -211,8 +211,8 @@ class ImagePicker private constructor(builder: Builder) {
                     if (isCamera) {
                         return Observable.just(t)
                     }
-                    Log.e(TAG,
-                        "复制图片到APP外部私有目录的线程：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+//                    Log.e(TAG,
+//                        "复制图片到APP外部私有目录的线程：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
                     val copyImgFromPicToAppPic: String? =
                         mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
                     if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {
@@ -228,7 +228,7 @@ class ImagePicker private constructor(builder: Builder) {
             //图片裁剪
             .compose(object : ObservableTransformer<Uri, Uri> {
                 override fun apply(upstream: Observable<Uri>): ObservableSource<Uri> {
-                    Log.e(TAG, "图片裁剪compose的线程：" + Thread.currentThread().name)//main 为什么???
+//                    Log.e(TAG, "图片裁剪compose的线程：" + Thread.currentThread().name)//main 为什么???
                     if (!crop) {
                         return upstream
                     }
@@ -236,8 +236,8 @@ class ImagePicker private constructor(builder: Builder) {
                         mediaUtils.createImgContentPicUri(fragmentActivity)//这里只能是外部共享目录，否则会报保存错误
                             ?: return Observable.error(Exception(ErrorCodeBean.Message.CROP_PUBPIC_URI_FAIL_MSG))
                     return upstream.flatMap { t ->
-                        Log.e(TAG,
-                            "图片裁剪的线程：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+//                        Log.e(TAG,
+//                            "图片裁剪的线程：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
                         requestImplementation(ImageOperationKind.IMAGE_CROP, t, cropOutputUri)
                             .flatMap(object :
                                 Function<ImagePickerResult, ObservableSource<Uri>> {
@@ -254,8 +254,8 @@ class ImagePicker private constructor(builder: Builder) {
             .observeOn(Schedulers.io())
             .flatMap(object : Function<Uri, ObservableSource<String>> {
                 override fun apply(t: Uri): ObservableSource<String> {
-                    Log.e(TAG,
-                        "复制图片到APP外部私有目录的线程2：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+//                    Log.e(TAG,
+//                        "复制图片到APP外部私有目录的线程2：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
                     val copyImgFromPicToAppPic: String? =
                         mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
                     if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {
@@ -267,18 +267,18 @@ class ImagePicker private constructor(builder: Builder) {
             //图片压缩
             .compose(object : ObservableTransformer<String, String> {
                 override fun apply(upstream: Observable<String>): ObservableSource<String> {
-                    Log.e(TAG, "图片压缩compose的线程：" + Thread.currentThread().name)//main
+//                    Log.e(TAG, "图片压缩compose的线程：" + Thread.currentThread().name)//main
                     return upstream.flatMap(object : Function<String, ObservableSource<String>> {
                         override fun apply(t: String): ObservableSource<String> {
-                            Log.e(TAG,
-                                "图片压缩的线程22：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+//                            Log.e(TAG,
+//                                "图片压缩的线程22：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
                             if (!compress) {
                                 return Observable.just(t)
                             }
 
                             return Observable.create { emitter ->
-                                Log.e(TAG,
-                                    "图片压缩的线程33：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+//                                Log.e(TAG,
+//                                    "图片压缩的线程33：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
                                 ImageCompress(imgDirName).compress(fragmentActivity,
                                     t,
                                     compressType,
@@ -286,8 +286,8 @@ class ImagePicker private constructor(builder: Builder) {
                                     object : ImageCompress.ImageCompressListener {
                                         override fun onSuccess(imageCompressPath: String) {
                                             emitter.onNext(imageCompressPath)
-                                            Log.e(TAG,
-                                                "压缩后图片大小：" + File(imageCompressPath).length())
+//                                            Log.e(TAG,
+//                                                "压缩后图片大小：" + File(imageCompressPath).length())
                                         }
 
                                         override fun onFailed(msg: String, code: String) {

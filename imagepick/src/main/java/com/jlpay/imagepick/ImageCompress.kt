@@ -163,7 +163,7 @@ class ImageCompress(private var imgDirName: String) {
         val height: Int = bitmap.height
         options.inJustDecodeBounds = false
 
-        if (!needCompress(imagePath, ignoreSize) && width < reqWidth && height < reqHeight) {
+        if (!needCompress(imagePath, ignoreSize) && width <= reqWidth && height <= reqHeight) {
 //            Log.e("TAG", "不需要压缩：" + imagePath)
             listener.onSuccess(imagePath)
             return

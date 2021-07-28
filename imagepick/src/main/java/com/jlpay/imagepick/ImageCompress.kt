@@ -147,7 +147,7 @@ class ImageCompress {
             val file: File = File(imagePath)
 //            Log.e("TAG",
 //                "File大小：" + file.length() + "\t" + "ignoreSize大小：" + ignoreSize + "\t" + "移位运算：" + (ignoreSize shl 10))
-            return file.exists() && (file.length() > (ignoreSize shl 10))//左移10(<<10)相当于乘以1024
+            return file.exists() && (file.length() > (ignoreSize shl 10))//左移10(<<10)相当于乘以1024，单位变为 字节(Byte)
         }
         return true
     }

@@ -409,6 +409,67 @@ task tinerRTxtCopyAdvanced3(dependsOn: "assembleRelease") {
     }
 }
 
+//三维度
+task tinerRTxtCopyAdvanced4(dependsOn: "assembleRelease") {
+    group("customerTask")
+    android.applicationVariants.all { variant ->
+        println("variant:${variant.name}")//lishuaPreRelease
+        println("variant2:${variant.dirName}")//lishuaPre/release
+        println("variant3:${variant.flavorName}")//lishuaPre
+        println("variant4:${project.name}")//app
+        println("variant5:${buildDir}")//Users/jlpay/op-app-android/app/build
+        println("variant6:${variant.buildType.name}")//release
+        println("variant7:${variant.baseName}")//lishua-pre-release
+        println("variant8:${variant.name.capitalize()}")//LishuaPreRelease
+        println("variant9:${it.name}")//tinerRTxtCopy
+        println("variant10:${variant.productFlavors}")//[com.android.build.gradle.internal.api.ReadOnlyProductFlavor@7ff4a89d, com.android.build.gradle.internal.api.ReadOnlyProductFlavor@1c928671]
+
+//        StringBuilder stringBuilder = new StringBuilder();
+//        List<String> flavors = new ArrayList<>();
+//        project.android.productFlavors.each { flavor ->
+//            println("variant11:${variant.productFlavors}")
+//            flavors.add(flavor.name)
+//        }
+
+        doLast {
+            def bakPath = "${buildDir}/bakApk/"
+            def dirName = variant.name
+            //TODO 这里可以考虑优化一下
+            def destDirFileName = "${variant.buildType.name}_${variant.productFlavors[0].name}_${variant.productFlavors[1].name}.apk"
+
+            def fileNamePrefix = "${project.name}-${variant.baseName}"
+            def destDir = ""
+
+            fileTree(bakPath) {
+                include("**/*${destDirFileName}")
+            }.each { file ->
+                destDir = file.parent
+                File newApk = new File(file.getParent(), fileNamePrefix + ".apk");
+                new File(file.path).renameTo(newApk)
+            }
+
+            if (destDir != null && destDir.length() != 0) {
+                copy {
+                    from "${buildDir}/intermediates/symbols/${dirName}/R.txt"
+                    from "${buildDir}/intermediates/symbol_list/${dirName}/R.txt"
+                    from "${buildDir}/intermediates/runtime_symbol_list/${dirName}/R.txt"
+                    into destDir
+                    rename { String fileName ->
+                        fileName.replace("R.txt", "${fileNamePrefix}-R.txt")
+                    }
+
+                    from("${buildDir}/outputs/mapping/${dirName}/mapping.txt")
+                    into destDir
+                    rename { String fileName ->
+                        fileName.replace("mapping.txt", "${fileNamePrefix}-mapping.txt")
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 task productFlavorsTest {
     group("customerTask")
     List<String> flavors = new ArrayList<>();

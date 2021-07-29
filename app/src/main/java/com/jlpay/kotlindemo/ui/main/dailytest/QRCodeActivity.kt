@@ -7,10 +7,10 @@ import android.widget.Button
 import android.widget.TextView
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseActivity
-import com.jlpay.kotlindemo.ui.utils.PermissionUtils
-import com.yxing.ScanCodeActivity
-import com.yxing.ScanCodeConfig
-import com.yxing.def.ScanStyle
+//import com.jlpay.kotlindemo.ui.utils.PermissionUtils
+//import com.yxing.ScanCodeActivity
+//import com.yxing.ScanCodeConfig
+//import com.yxing.def.ScanStyle
 
 
 class QRCodeActivity : BaseActivity() {
@@ -34,7 +34,7 @@ class QRCodeActivity : BaseActivity() {
         tvCode = findViewById(R.id.tvCode)
         btnScan = findViewById(R.id.btn_scan)
         btnScan.setOnClickListener {
-            yxingTest()
+//            yxingTest()
         }
     }
 
@@ -44,17 +44,17 @@ class QRCodeActivity : BaseActivity() {
      * Android 一行代码接入扫码功能 （CameraX + zxing）：
      * https://www.jianshu.com/p/c549f91cb9c5
      */
-    fun yxingTest() {
-        PermissionUtils.getCameraPermission(this, object : PermissionUtils.PermissionListener {
-            override fun allow() {
-                ScanCodeConfig.create(this@QRCodeActivity) //设置扫码页样式 ScanStyle.NONE：无  ScanStyle.QQ ：仿QQ样式   ScanStyle.WECHAT ：仿微信样式    ScanStyle.CUSTOMIZE ： 自定义样式
-                    .setStyle(ScanStyle.WECHAT) //扫码成功是否播放音效  true ： 播放   false ： 不播放
-                    .setPlayAudio(false)
-                    .buidler() //跳转扫码页   扫码页可自定义样式
-                    .start(ScanCodeActivity::class.java)
-            }
-        })
-    }
+//    fun yxingTest() {
+//        PermissionUtils.getCameraPermission(this, object : PermissionUtils.PermissionListener {
+//            override fun allow() {
+//                ScanCodeConfig.create(this@QRCodeActivity) //设置扫码页样式 ScanStyle.NONE：无  ScanStyle.QQ ：仿QQ样式   ScanStyle.WECHAT ：仿微信样式    ScanStyle.CUSTOMIZE ： 自定义样式
+//                    .setStyle(ScanStyle.WECHAT) //扫码成功是否播放音效  true ： 播放   false ： 不播放
+//                    .setPlayAudio(false)
+//                    .buidler() //跳转扫码页   扫码页可自定义样式
+//                    .start(ScanCodeActivity::class.java)
+//            }
+//        })
+//    }
 
     override fun initData() {
 
@@ -66,12 +66,12 @@ class QRCodeActivity : BaseActivity() {
             return
         }
         //接收扫码结果
-        if (requestCode == ScanCodeConfig.QUESTCODE && data != null) {
-            val extras = data.extras
-            if (extras != null) {
-                val code = extras.getString(ScanCodeConfig.CODE_KEY)
-                tvCode.text = String.format("%s%s", "结果： ", code)
-            }
-        }
+//        if (requestCode == ScanCodeConfig.QUESTCODE && data != null) {
+//            val extras = data.extras
+//            if (extras != null) {
+//                val code = extras.getString(ScanCodeConfig.CODE_KEY)
+//                tvCode.text = String.format("%s%s", "结果： ", code)
+//            }
+//        }
     }
 }

@@ -251,7 +251,7 @@ dependencies {
     annotationProcessor(project(':lib-processor'))//用来生成IOActivityBinding的类
 
     //扫码第三方库，个人维护，不建议使用，这里仅做测试
-    implementation('com.github.amggg:YXing:V1.0.6')
+//    implementation('com.github.amggg:YXing:V1.0.6')
 
     /***************************************这部分放暂时没用到但是可以用的第三方库*************************************************************************************/
 

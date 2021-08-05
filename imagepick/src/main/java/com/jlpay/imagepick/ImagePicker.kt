@@ -14,6 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import java.io.File
 
 class ImagePicker private constructor(builder: Builder) {
 
@@ -24,8 +25,10 @@ class ImagePicker private constructor(builder: Builder) {
     val compress: Boolean = builder.compress
     val compressType: ImageCompress.ImageCompressType = builder.compressType
     val compressIgnoreSize: Int = builder.compressIgnoreSize
+    val reqSize: Int = builder.reqSize
     val crop: Boolean = builder.crop
     val authority: String = builder.authority
+    var picToAppPicPath: String? = null//TODO 可以考虑进一步的优化
     val listener: ImagePicker.ImagePickerListener? = builder.listener
     val fragmentActivity: FragmentActivity = builder.fragmentActivity
 
@@ -219,6 +222,8 @@ class ImagePicker private constructor(builder: Builder) {
                     if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {
                         return Observable.error(Exception(ErrorCodeBean.Message.PIC_COPY_TOAPPPIC_FAIL_MSG))
                     }
+                    picToAppPicPath =
+                        copyImgFromPicToAppPic//全局变量保存当前复制到APP外部私有目录的路径，以便跳过压缩前复制那一步
                     val imageContentUri: Uri = mediaUtils.getImageContentUri(fragmentActivity,
                         copyImgFromPicToAppPic,
                         authority)
@@ -259,6 +264,10 @@ class ImagePicker private constructor(builder: Builder) {
                 override fun apply(t: Uri): ObservableSource<String> {
 //                    Log.e(TAG,
 //                        "复制图片到APP外部私有目录的线程2：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+                    //从相册选择图片，前一步已经做过复制操作，这里跳过
+                    if (!isCamera && !TextUtils.isEmpty(picToAppPicPath)) {
+                        return Observable.just(picToAppPicPath)
+                    }
                     val copyImgFromPicToAppPic: String? =
                         mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
                     if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {
@@ -286,8 +295,14 @@ class ImagePicker private constructor(builder: Builder) {
                                     t,
                                     compressType,
                                     compressIgnoreSize,
+                                    reqSize,
                                     object : ImageCompress.ImageCompressListener {
                                         override fun onSuccess(imageCompressPath: String) {
+//                                            Log.e(TAG, "压缩后图片路径：$imageCompressPath")
+                                            if (!TextUtils.equals(imageCompressPath, t)) {
+                                                val delete = File(t).delete()
+//                                                Log.e(TAG, "复制到APP私有目录下的原图删除结果：$delete")
+                                            }
                                             emitter.onNext(imageCompressPath)
 //                                            Log.e(TAG,
 //                                                "压缩后图片大小：" + File(imageCompressPath).length())
@@ -320,6 +335,7 @@ class ImagePicker private constructor(builder: Builder) {
         internal var compressType: ImageCompress.ImageCompressType =
             ImageCompress.ImageCompressType.OriginCompress//默认使用原生压缩
         internal var compressIgnoreSize: Int = 1024//默认压缩阈值:单位KB
+        internal var reqSize: Int = 1500//默认的压缩尺寸：1500*1500
         internal var crop: Boolean = false//裁剪
         internal var authority: String =
             "com.jlpay.imagepick.fileprovider." + fragmentActivity.application.packageName//Provider授权标志，裁剪图片Crop功能用到
@@ -343,6 +359,10 @@ class ImagePicker private constructor(builder: Builder) {
 
         fun compressIgnoreSize(compressIgnoreSize: Int) = apply {
             this.compressIgnoreSize = compressIgnoreSize
+        }
+
+        fun reqSize(reqSize: Int) = apply {
+            this.reqSize = reqSize
         }
 
         //解决Android11调用ACTION_GET_CONTENT选择最近照片时，返回uri再去裁剪的如下问题:(故而选择先复制到APP外部私有目录下，再根据其路径获取uri进行操作)

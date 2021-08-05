@@ -32,6 +32,7 @@ class ImageCompress {
         imagePath: String,
         type: ImageCompressType,
         ignoreSize: Int,
+        reqSize: Int,
         listener: ImageCompressListener,
     ) {
         when (type) {
@@ -39,8 +40,8 @@ class ImageCompress {
                 luBanCompress(context, imagePath, ignoreSize, listener)
             }
             ImageCompressType.OriginCompress -> {
-                originCompress(context, imagePath, ignoreSize, listener)
-//                originCompress(context, imagePath, 250, 250, ignoreSize, listener)
+//                originCompress(context, imagePath, ignoreSize, listener)
+                originCompress(context, imagePath, reqSize, reqSize, ignoreSize, listener)
             }
         }
     }
@@ -93,6 +94,16 @@ class ImageCompress {
         ignoreSize: Int,
         listener: ImageCompressListener,
     ) {
+        originCompress(context, imagePath, ignoreSize, listener, 60)
+    }
+
+    private fun originCompress(
+        context: Context,
+        imagePath: String,
+        ignoreSize: Int,
+        listener: ImageCompressListener,
+        quality: Int,
+    ) {
         if (!needCompress(imagePath, ignoreSize)) {
 //            Log.e("TAG", "不需要压缩：" + imagePath)
             listener.onSuccess(imagePath)
@@ -110,13 +121,21 @@ class ImageCompress {
         }
         val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        var quality: Int = 90
-        while (byteArrayOutputStream.toByteArray().size / 1024 > ignoreSize && quality >= 0) {
+        var qualityCurrent: Int = 100
+        var compressTime: Int = 0
+        while (byteArrayOutputStream.toByteArray().size / 1024 > ignoreSize && qualityCurrent >= quality) {
             byteArrayOutputStream.reset()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+
+            if (compressTime < 2) {
+                qualityCurrent -= 10
+            } else {
+                qualityCurrent -= 5
+            }
+            compressTime++
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, qualityCurrent, byteArrayOutputStream)
             Log.d(TAG,
                 (byteArrayOutputStream.toByteArray().size / 1024).toString() + "KB" + "\t" + "quality = " + quality)
-            quality -= 10
         }
         val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
         if (TextUtils.isEmpty(createAppPicDir)) {
@@ -142,6 +161,9 @@ class ImageCompress {
         }
     }
 
+    /**
+     * 判断是否需要压缩处理
+     */
     private fun needCompress(imagePath: String, ignoreSize: Int): Boolean {
         if (ignoreSize > 0) {
             val file: File = File(imagePath)
@@ -162,6 +184,18 @@ class ImageCompress {
         reqHeight: Int,
         ignoreSize: Int,
         listener: ImageCompressListener,
+    ) {
+        originCompress(context, imagePath, reqWidth, reqHeight, ignoreSize, listener, 60)
+    }
+
+    private fun originCompress(
+        context: Context,
+        imagePath: String,
+        reqWidth: Int,
+        reqHeight: Int,
+        ignoreSize: Int,
+        listener: ImageCompressListener,
+        quality: Int,
     ) {
         //如果inJustDecoedBounds设置为true的话，解码bitmap时可以只返回其高、宽和Mime类型，而不必为其申请内存，从而节省了内存空间；即只读取图片，不加载到内存中
         val options: BitmapFactory.Options = BitmapFactory.Options()
@@ -192,11 +226,28 @@ class ImageCompress {
         bitmap = rotatePicByDegree(bitmap, getPictureDegree(imagePath))
         val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        var quality = 90
-        while (byteArrayOutputStream.toByteArray().size / 1024 > ignoreSize && quality >= 0) {
+        var qualityCurrent = 100
+        var compressTime: Int = 0
+
+        Log.d(TAG,
+            (byteArrayOutputStream.toByteArray().size / 1024).toString() + "KB" + "\t" + "qualityCurrent = " + qualityCurrent
+                    + "\t" + "compressTime = " + compressTime)
+
+        while (byteArrayOutputStream.toByteArray().size / 1024 > ignoreSize && qualityCurrent >= quality) {
             byteArrayOutputStream.reset()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
-            quality -= 10
+
+            if (compressTime < 2) {
+                qualityCurrent -= 10
+            } else {
+                qualityCurrent -= 5
+            }
+            compressTime++
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, qualityCurrent, byteArrayOutputStream)
+
+            Log.d(TAG,
+                (byteArrayOutputStream.toByteArray().size / 1024).toString() + "KB" + "\t" + "qualityCurrent = " + qualityCurrent
+                        + "\t" + "compressTime = " + compressTime)
         }
 
         val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
@@ -221,6 +272,14 @@ class ImageCompress {
         } finally {
             bitmapRecycle(bitmap)
         }
+    }
+
+    /**
+     * 压缩值quality处理算法
+     * TODO 参考LuBan完善
+     */
+    private fun qualityProcessAlgorithm(quality: Int): Int {
+        return quality - 5
     }
 
     /**

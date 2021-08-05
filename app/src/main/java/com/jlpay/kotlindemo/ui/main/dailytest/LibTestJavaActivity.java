@@ -83,7 +83,7 @@ public class LibTestJavaActivity extends BaseActivity {
                         showToast(msg);
                     }
                 })
-                .crop(true)
+                .crop(false)
                 .compress(true)
                 .compressType(ImageCompress.ImageCompressType.OriginCompress)
                 .isCamera(false)

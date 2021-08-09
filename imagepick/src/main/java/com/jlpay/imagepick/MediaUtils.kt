@@ -1,7 +1,6 @@
 package com.jlpay.imagepick
 
 import android.Manifest
-import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
@@ -234,37 +233,6 @@ class MediaUtils : IAndroid11Upgrade {
                 return uri
             }
 
-            /**
-             * 根据图片Uri获取图片Path路径，仅建议APP外部私有目录下使用该方法
-             * Android10下外部存储不能直接通过文件路径访问文件
-             *
-             * TODO 有点问题，先别用
-             */
-            fun getImagePath(context: Context, uri: Uri): String? {
-                var imagePath: String? = null
-                // 以 file:// 开头的，比如 file://storage/emulated/0/Android/data/com.jlpay.kotlindemo/files/Image/IMG1625477375523.jpg
-                if (ContentResolver.SCHEME_FILE == uri.scheme) {
-                    imagePath = uri.path
-                }
-                // 以 content:// 开头的，比如 content://com.jlpay.kotlindemo.FileProvider/external_files_path/Image/IMG1625475923370.jpg
-                else if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
-                    var cursor: Cursor? = null
-                    val projection = arrayOf(MediaStore.Images.ImageColumns.DATA)
-                    try {
-                        cursor = context.contentResolver.query(uri, projection, null, null, null)
-                        if (cursor != null && cursor.moveToFirst()) {
-                            val columnIndex: Int = cursor.getColumnIndexOrThrow(projection[0])
-                            imagePath = cursor.getString(columnIndex)
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        return null
-                    } finally {
-                        cursor?.close()
-                    }
-                }
-                return imagePath
-            }
 
             /**
              * 创建图片Uri
@@ -371,6 +339,112 @@ class MediaUtils : IAndroid11Upgrade {
                 }
                 return "image/jpeg"
             }
+
+
+            /*
+            /**
+             * 根据图片Uri获取图片Path路径，仅建议APP外部私有目录下使用该方法
+             * Android10下外部存储不能直接通过文件路径访问文件
+             *
+             * TODO 还是有点问题，先别用
+             */
+            fun getFilePathByUri(context: Context, uri: Uri): String? {
+                var filePath: String? = null
+                // File
+                // 以 file:// 开头的，比如 file://storage/emulated/0/Android/data/com.jlpay.kotlindemo/files/Image/IMG1625477375523.jpg
+                if (ContentResolver.SCHEME_FILE == uri.scheme) {
+                    filePath = uri.path
+                }
+                // MediaStore (and general)
+                // 以 content:// 开头的，比如 content://com.jlpay.kotlindemo.FileProvider/external_files_path/Image/IMG1625475923370.jpg
+                else if (ContentResolver.SCHEME_CONTENT == uri.scheme) {
+                    filePath = getDataColumn(context, uri, null, null)
+                }
+                // DocumentProvider
+                else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(
+                        context,
+                        uri)
+                ) {
+                    // ExternalStorageProvider
+                    if (isExternalStorageDocument(uri)) {
+                        val docId: String = DocumentsContract.getDocumentId(uri)
+                        val split: List<String> = docId.split(":")
+                        val type: String = split[0]
+                        if ("primary".equals(type, ignoreCase = true)) {
+                            filePath =
+                                Environment.getExternalStorageDirectory().absolutePath + File.separator + split[1]
+                        }
+                        // TODO handle non-primary volumes
+                    }
+                    // DownloadsProvider
+                    else if (isDownloadsDocument(uri)) {
+                        val id: String = DocumentsContract.getDocumentId(uri)
+                        val contentUri: Uri =
+                            ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                                id.toLong())
+                        filePath = getDataColumn(context, uri, null, null)
+                    }
+                    // MediaProvider
+                    else if (isMediaDocument(uri)) {
+                        val docId: String = DocumentsContract.getDocumentId(uri)
+                        val split: List<String> = docId.split(":")
+                        val type: String = split[0]
+                        var contentUri: Uri = uri
+                        if ("image" == type) {
+                            contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                        } else if ("video" == type) {
+                            contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                        } else if ("audio" == type) {
+                            contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                        }
+                        val selection: String = "_id=?"
+                        val selectionArgs: Array<String> = arrayOf(split[1])
+                        filePath = getDataColumn(context, contentUri, selection, selectionArgs)
+                    }
+                }
+
+                return filePath
+            }
+
+            fun getDataColumn(
+                context: Context,
+                uri: Uri,
+                selection: String?,
+                selectionArgs: Array<String>?,
+            ): String? {
+                var filePath: String? = null
+                var cursor: Cursor? = null
+                val projection: Array<String> = arrayOf(MediaStore.Images.ImageColumns.DATA)
+                try {
+                    cursor = context.contentResolver.query(uri,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null)
+                    if (cursor != null && cursor.moveToFirst()) {
+                        val columnIndex: Int = cursor.getColumnIndexOrThrow(projection[0])
+                        filePath = cursor.getString(columnIndex)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return null
+                } finally {
+                    cursor?.close()
+                }
+                return filePath
+            }
+
+            fun isExternalStorageDocument(uri: Uri): Boolean {
+                return "com.android.externalstorage.documents" == uri.authority
+            }
+
+            fun isDownloadsDocument(uri: Uri): Boolean {
+                return "com.android.providers.downloads.documents" == uri.authority
+            }
+
+            fun isMediaDocument(uri: Uri): Boolean {
+                return "com.android.providers.media.documents" == uri.authority
+            }*/
         }
     }
 

@@ -42,6 +42,9 @@ class ImagePickerFragment : Fragment() {
         val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        // 用于表示 Intent 仅希望查询能使用 ContentResolver.openFileDescriptor(Uri, String) 打开的 Uri，
+        // 实测对于返回Uri，但是实际文件不存在，调用该方法返回文件不存在异常的情况(小米)，依旧不能解决
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
         startActivityForResult(intent, CHOOSE_PIC)
     }
 
@@ -76,7 +79,7 @@ class ImagePickerFragment : Fragment() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         //后续可以加上请求权限
@@ -122,7 +125,7 @@ class ImagePickerFragment : Fragment() {
 
     fun setSubjectForOperationKind(
         imageOperationKind: String,
-        subject: PublishSubject<ImagePickerResult>
+        subject: PublishSubject<ImagePickerResult>,
     ) {
         this.mSubjects[imageOperationKind] = subject
     }

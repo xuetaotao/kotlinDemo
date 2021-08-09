@@ -272,6 +272,9 @@ class ImagePicker private constructor(builder: Builder) {
                     if (!isCamera && !TextUtils.isEmpty(picToAppPicPath)) {
                         return Observable.just(picToAppPicPath)
                     }
+                    val inputStream: InputStream =
+                        MediaUtils.Images.getImageFromPic(fragmentActivity, t)
+                            ?: return Observable.error(Exception(ErrorCodeBean.Message.PIC_CHOOSE_NOT_EXIST))
                     val copyImgFromPicToAppPic: String? =
                         mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
                     if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {

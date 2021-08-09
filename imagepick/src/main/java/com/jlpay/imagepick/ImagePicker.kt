@@ -15,6 +15,7 @@ import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import java.io.File
+import java.io.InputStream
 
 class ImagePicker private constructor(builder: Builder) {
 
@@ -216,7 +217,10 @@ class ImagePicker private constructor(builder: Builder) {
                         return Observable.just(t)
                     }
 //                    Log.e(TAG,
-//                        "复制图片到APP外部私有目录的线程：" + Thread.currentThread().name)//RxCachedThreadScheduler-1
+//                        "复制图片到APP外部私有目录的线程：" + Threa  d.currentThread().name)//RxCachedThreadScheduler-1
+                    val inputStream: InputStream =
+                        MediaUtils.Images.getImageFromPic(fragmentActivity, t)
+                            ?: return Observable.error(Exception(ErrorCodeBean.Message.PIC_CHOOSE_NOT_EXIST))
                     val copyImgFromPicToAppPic: String? =
                         mediaUtils.copyImgFromPicToAppPic(fragmentActivity, t)
                     if (copyImgFromPicToAppPic == null || TextUtils.isEmpty(copyImgFromPicToAppPic)) {

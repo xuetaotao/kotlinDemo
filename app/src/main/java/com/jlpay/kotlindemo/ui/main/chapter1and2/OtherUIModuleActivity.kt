@@ -1,5 +1,6 @@
 package com.jlpay.kotlindemo.ui.main.chapter1and2
 
+import android.animation.Animator
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,8 @@ import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
@@ -46,6 +49,27 @@ class OtherUIModuleActivity : AppCompatActivity() {
         searchViewPractice()
         notificationPractice()
         numberPickerTest()
+    }
+
+    /**
+     * 加载补间动画资源
+     * Android动画分为：
+     * 视图动画(View动画)：作用对象是视图View,分为补间动画和逐帧动画
+     * 属性动画：作用对象是任意Java对象（不再局限视图View对象），可自定义各种动画效果（不再局限于4种基本变换）
+     */
+    public fun loadAnim(view: View) {
+        val btn_loadAnim: Button = findViewById(R.id.btn_loadAnim)
+        val iv_load_image: ImageView = findViewById(R.id.iv_load_image)
+        //加载动画资源
+        val anim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
+        //设置动画结束后保留结束状态
+        anim.fillAfter = true
+        //开始动画
+        btn_loadAnim.setOnClickListener {
+            iv_load_image.startAnimation(anim)//startAnimation方法来自View，归属于视图动画
+        }
+        //属性动画：
+        val animator: Animator? = null
     }
 
     fun numberPickerTest() {
@@ -190,7 +214,7 @@ class OtherUIModuleActivity : AppCompatActivity() {
                 view: DatePicker?,
                 year1: Int,
                 monthOfYear1: Int,
-                dayOfMonth1: Int
+                dayOfMonth1: Int,
             ) {
                 year = year1
                 month = monthOfYear1
@@ -229,7 +253,7 @@ class OtherUIModuleActivity : AppCompatActivity() {
                 view: CalendarView,
                 year: Int,
                 month: Int,
-                dayOfMonth: Int
+                dayOfMonth: Int,
             ) {
                 Toast.makeText(
                     this@OtherUIModuleActivity,

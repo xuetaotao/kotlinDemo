@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/linear_interpolator">
 
+    <!--android:interpolator属性指定动画的变化速度，可以实现匀速、正加速、负加速、无规则变加速等    -->
     <!--设置从左边拖出去的动画    -->
     <translate
         android:duration="@android:integer/config_mediumAnimTime"

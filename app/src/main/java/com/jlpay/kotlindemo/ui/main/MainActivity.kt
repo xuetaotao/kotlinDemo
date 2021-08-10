@@ -12,6 +12,7 @@ import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.EventListenerActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
+import com.jlpay.kotlindemo.ui.main.chapter6and7.AssetAndRawResActivity
 import com.jlpay.kotlindemo.ui.main.dailytest.*
 import com.jlpay.kotlindemo.ui.main.hencoder.IOActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.ThreadActivity
@@ -187,6 +188,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("BroadcastReceiverActivity", BroadcastReceiverActivity::class.java)
         addButton("ImagePickerActivity", ImagePickerActivity::class.java)
         addButton("SmaliDexLibActivity", SmaliDexLibActivity::class.java)
+        addButton("AssetAndRawResActivity", AssetAndRawResActivity::class.java)
     }
 
     override fun initData() {

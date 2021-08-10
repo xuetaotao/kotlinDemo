@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.res.AssetManager
+import android.content.res.XmlResourceParser
 import android.graphics.Color
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -18,6 +20,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.utils.NotificationUtils
+import java.io.InputStream
 import java.util.*
 
 class OtherUIModuleActivity : AppCompatActivity() {
@@ -49,7 +52,57 @@ class OtherUIModuleActivity : AppCompatActivity() {
         searchViewPractice()
         notificationPractice()
         numberPickerTest()
+
+        assetsRes()
     }
+
+    fun assetsRes() {
+        val assets: AssetManager = assets
+        val open: InputStream = assets.open("test.txt")
+    }
+
+    /**
+     * 解析XML资源
+     */
+    public fun xmlParse(view: View) {
+        val tv_xml: TextView = findViewById(R.id.tv_xml)
+
+        //根据xml的资源ID获取解析该资源的解析器，返回的XmlResourceParser是 XmlPullParser 的子类
+        val xml: XmlResourceParser = resources.getXml(R.xml.books)
+        try {
+            val stringBuilder: StringBuilder = StringBuilder()
+            //还没有到XML文档的结尾处
+            while (xml.eventType != XmlResourceParser.END_DOCUMENT) {
+                //如果遇到开始标签
+                if (xml.eventType == XmlResourceParser.START_TAG) {
+                    //获取该标签的标签名
+                    val name: String = xml.name
+                    //如果遇到book标签
+                    if (name == "book") {
+                        //根据属性名来获取属性值
+                        val bookPrice = xml.getAttributeValue(null, "price")
+                        stringBuilder.append("价格：")
+                        stringBuilder.append(bookPrice)
+                        //根据属性索引来获取属性值
+                        val bookDate = xml.getAttributeValue(1)
+                        stringBuilder.append("  出版日期：")
+                        stringBuilder.append(bookDate)
+                        stringBuilder.append("  书名：")
+                        //获取文本节点的值
+                        stringBuilder.append(xml.nextText())
+                    }
+                    stringBuilder.append("\n")
+                }
+                //获取解析器的下一个事件
+                xml.next()
+            }
+            tv_xml.text = stringBuilder.toString()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
 
     /**
      * 加载补间动画资源
@@ -58,16 +111,13 @@ class OtherUIModuleActivity : AppCompatActivity() {
      * 属性动画：作用对象是任意Java对象（不再局限视图View对象），可自定义各种动画效果（不再局限于4种基本变换）
      */
     public fun loadAnim(view: View) {
-        val btn_loadAnim: Button = findViewById(R.id.btn_loadAnim)
         val iv_load_image: ImageView = findViewById(R.id.iv_load_image)
         //加载动画资源
         val anim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
         //设置动画结束后保留结束状态
         anim.fillAfter = true
         //开始动画
-        btn_loadAnim.setOnClickListener {
-            iv_load_image.startAnimation(anim)//startAnimation方法来自View，归属于视图动画
-        }
+        iv_load_image.startAnimation(anim)//startAnimation方法来自View，归属于视图动画
         //属性动画：
         val animator: Animator? = null
     }

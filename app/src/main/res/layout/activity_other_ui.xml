@@ -58,6 +58,24 @@
             android:textSize="14sp" />
 
         <Button
+            android:id="@+id/btn_xml_parse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="xmlParse"
+            android:text="解析XML资源"
+            android:textAllCaps="false"
+            android:textColor="@color/light_black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_xml"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <Button
             android:id="@+id/btn_loadAnim"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

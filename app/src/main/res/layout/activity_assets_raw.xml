@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_assets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="assetsStart"
+        android:text="播放assets下的音乐"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+
+    <Button
+        android:id="@+id/btn_raw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="rawStart"
+        android:text="播放raw下的音乐"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+</LinearLayout>

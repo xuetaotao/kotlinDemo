@@ -4,25 +4,85 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_assets"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="assetsStart"
-        android:text="播放assets下的音乐"
-        android:textAllCaps="false"
-        android:textColor="@color/light_black"
-        android:textSize="14sp" />
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_assets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="assetsStart"
+                android:text="播放assets下的音乐"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
 
 
-    <Button
-        android:id="@+id/btn_raw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="rawStart"
-        android:text="播放raw下的音乐"
-        android:textAllCaps="false"
-        android:textColor="@color/light_black"
-        android:textSize="14sp" />
+            <Button
+                android:id="@+id/btn_raw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:onClick="rawStart"
+                android:text="播放raw下的音乐"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_assets_file"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:onClick="getAssetsFile"
+                android:text="获取assets目录下所有文件"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_assets_file"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_image_decoder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:onClick="imageDecoder"
+                android:text="使用ImageDecoder解码播放Gif图片"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_image_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/iv_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

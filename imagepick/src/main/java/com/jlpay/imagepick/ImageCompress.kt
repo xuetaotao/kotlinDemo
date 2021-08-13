@@ -12,6 +12,7 @@ import top.zibin.luban.OnCompressListener
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.math.max
 
 class ImageCompress {
 
@@ -211,11 +212,16 @@ class ImageCompress {
             return
         }
 
-        var sampleSize: Int = 1
-        while ((width / sampleSize > reqWidth) || (height / sampleSize > reqHeight)) {
-            sampleSize *= 2
-        }
+        //保证绝对压缩到 reqWidth*reqHeight
+//        var sampleSize: Int = 1
+//        while ((width / sampleSize > reqWidth) || (height / sampleSize > reqHeight)) {
+//            sampleSize *= 2
+//        }
+
+        //不保证绝对压缩到需求的尺寸，接近略大于
+        val sampleSize = max((width / reqWidth), (height / reqHeight))
         options.inSampleSize = sampleSize
+        Log.d(TAG, "options.inSampleSize：" + options.inSampleSize)
         try {
             bitmap = BitmapFactory.decodeFile(imagePath, options)
         } catch (e: OutOfMemoryError) {

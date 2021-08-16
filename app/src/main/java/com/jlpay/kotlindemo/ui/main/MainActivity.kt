@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.*
+import com.jlpay.kotlindemo.ui.main.chapter11.MediaPlayerActivity
 import com.jlpay.kotlindemo.ui.main.chapter1and2.*
 import com.jlpay.kotlindemo.ui.main.chapter3.AsyncTaskActivity
 import com.jlpay.kotlindemo.ui.main.chapter3.ConfigurationActivity
@@ -189,6 +190,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("ImagePickerActivity", ImagePickerActivity::class.java)
         addButton("SmaliDexLibActivity", SmaliDexLibActivity::class.java)
         addButton("AssetAndRawResActivity", AssetAndRawResActivity::class.java)
+        addButton("MediaPlayerActivity", MediaPlayerActivity::class.java)
     }
 
     override fun initData() {

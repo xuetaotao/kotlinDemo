@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_external_audio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="externalAudio"
+        android:text="选择外部存储器上的音频文件进行播放"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_pause"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="pause"
+        android:text="pause"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="start"
+        android:text="start"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="stop"
+        android:text="stop"
+        android:textAllCaps="false"
+        android:textColor="@color/light_black"
+        android:textSize="14sp" />
+
+
+</LinearLayout>

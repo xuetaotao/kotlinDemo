@@ -238,6 +238,7 @@
         <activity android:name=".ui.main.dailytest.ImagePickerActivity" />
         <activity android:name=".ui.main.dailytest.SmaliDexLibActivity" />
         <activity android:name=".ui.main.chapter6and7.AssetAndRawResActivity" />
+        <activity android:name=".ui.main.chapter11.MediaPlayerActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

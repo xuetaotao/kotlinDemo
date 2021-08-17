@@ -13,14 +13,32 @@ import com.jlpay.kotlindemo.R
 /**
  * Android MediaPlayer 基础简介
  * https://juejin.cn/post/6844903946113269767
+ *
  * Android 音频开发之 MediaPlayer
  * https://juejin.cn/post/6844903952618618887
  *
+ * Android多媒体之认识MP3与内置媒体播放（MediaPlayer）
+ * https://juejin.cn/post/6844903752445476878#heading-8
+ *
+ * android音视频指南-MediaPlayer概述
+ * https://juejin.cn/post/6844903702877192206
  *
  * MediaPlayer 播放音频文件
  * 1.播放应用的资源文件 {@link com.jlpay.kotlindemo.ui.main.chapter6and7.AssetAndRawResActivity#rawStart()}
  * 2.播放应用的原始资源文件 {@link com.jlpay.kotlindemo.ui.main.chapter6and7.AssetAndRawResActivity#assetsStart()}
  *
+ * int getDuration()：获取流媒体的总播放时长，单位是毫秒
+ * int getCurrentPosition()：获取当前流媒体的播放的位置，单位是毫秒
+ * void seekTo(int msec)：设置当前MediaPlayer的播放位置，单位是毫秒
+ * void setLooping(boolean looping)：设置是否循环播放
+ * boolean isLooping()：判断是否循环播放
+ * boolean isPlaying()：判断是否正在播放
+ * void prepare()：同步的方式装载流媒体文件
+ * void prepareAsync()：异步的方式装载流媒体文件
+ * void release ()：回收流媒体资源
+ * void setAudioStreamType(int streamtype)：设置播放流媒体类型
+ * void setWakeMode(Context context, int mode)：设置 CPU 唤醒的状态
+ * setNextMediaPlayer(MediaPlayer next)：设置当前流媒体播放完毕，下一个播放的 MediaPlayer
  */
 class MediaPlayerActivity : AppCompatActivity() {
 
@@ -55,6 +73,12 @@ class MediaPlayerActivity : AppCompatActivity() {
         mediaPlayer?.setOnSeekCompleteListener(object : MediaPlayer.OnSeekCompleteListener {
             override fun onSeekComplete(mp: MediaPlayer?) {
                 Log.e(TAG, "MediaPlayer  onPrepared")
+            }
+        })
+        //网络流媒体的缓冲变化时回调
+        mediaPlayer?.setOnBufferingUpdateListener(object : MediaPlayer.OnBufferingUpdateListener {
+            override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
+                Log.e(TAG, "MediaPlayer  onBufferingUpdate is $percent")
             }
         })
     }
@@ -104,6 +128,9 @@ class MediaPlayerActivity : AppCompatActivity() {
 
     //MediaPlayer暂停时，start()方法可以从暂停的位置继续播放。成功调用start方法后会进入Started状态
     fun start(view: View) {
+        if (mediaPlayer?.isPlaying == true) {
+            return
+        }
         mediaPlayer?.start()//这里不能调prepare()方法
     }
 
@@ -112,7 +139,9 @@ class MediaPlayerActivity : AppCompatActivity() {
     }
 
     fun pause(view: View) {
-        mediaPlayer?.pause()
+        if (mediaPlayer?.isPlaying == true) {
+            mediaPlayer?.pause()
+        }
     }
 
     override fun onDestroy() {

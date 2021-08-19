@@ -69,6 +69,30 @@ public class LibTestJavaActivity extends BaseActivity {
     }
 
     public void imagePicker(View view) {
+        ImagePicker.with(LibTestJavaActivity.this)
+                .imagePickerListener(new ImagePicker.ImagePickerListener() {
+                    @Override
+                    public void onSuccess(@NotNull String imagePath) {
+                        Log.e("TAG", "复制到APP外部私有目录地址Lib:" + imagePath);
+                        Glide.with(LibTestJavaActivity.this).load(imagePath).into(imageView);
+                    }
+
+                    @Override
+                    public void onFailed(@NotNull String msg, @NotNull String code) {
+                        Log.e("TAG", msg);
+                        showToast(msg);
+                    }
+                })
+                .crop(true)
+                .compress(true)
+                .compressType(ImageCompress.ImageCompressType.OriginCompress)
+                .isCamera(false)
+                .startPick();
+    }
+
+
+    public void testBlockCanary(View view) {
+//        SystemClock.sleep(2000);
         ImagePicker.with(this)
                 .imagePickerListener(new ImagePicker.ImagePickerListener() {
                     @Override
@@ -83,12 +107,13 @@ public class LibTestJavaActivity extends BaseActivity {
                         showToast(msg);
                     }
                 })
-                .crop(false)
+                .crop(true)
                 .compress(true)
                 .compressType(ImageCompress.ImageCompressType.OriginCompress)
-                .isCamera(false)
+                .isCamera(true)
                 .startPick();
     }
+
 
     public void locationTest(View view) {
         tv_result.setText("开始定位：");
@@ -114,9 +139,6 @@ public class LibTestJavaActivity extends BaseActivity {
         });
     }
 
-    public void testBlockCanary(View view) {
-        SystemClock.sleep(2000);
-    }
 
     @Override
     public int getResourceId() {
@@ -125,7 +147,7 @@ public class LibTestJavaActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        checkNeedPermission(initPermissionList());
+//        checkNeedPermission(initPermissionList());
     }
 
 

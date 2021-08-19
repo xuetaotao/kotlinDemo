@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:onClick="imagePicker"
-        android:text="测试ImagePicker库"
+        android:text="测试ImagePicker库：从相册选择"
         android:textAllCaps="false"
         android:textColor="@color/common_black"
         android:textSize="14sp" />
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:onClick="testBlockCanary"
-        android:text="测试卡顿"
+        android:text="测试ImagePicker库：拍照"
         android:textColor="@color/common_black"
         android:textSize="14sp" />
 

@@ -239,6 +239,7 @@
         <activity android:name=".ui.main.dailytest.SmaliDexLibActivity" />
         <activity android:name=".ui.main.chapter6and7.AssetAndRawResActivity" />
         <activity android:name=".ui.main.chapter11.MediaPlayerActivity" />
+        <activity android:name=".ui.main.java_advance.GenericTypeActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

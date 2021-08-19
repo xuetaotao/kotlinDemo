@@ -21,6 +21,7 @@ import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvp.MvpDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvvm.MvvmDemoActivity
+import com.jlpay.kotlindemo.ui.main.java_advance.GenericTypeActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn2.WanActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxAutoDisposeActivity
@@ -191,6 +192,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("SmaliDexLibActivity", SmaliDexLibActivity::class.java)
         addButton("AssetAndRawResActivity", AssetAndRawResActivity::class.java)
         addButton("MediaPlayerActivity", MediaPlayerActivity::class.java)
+        addButton("GenericTypeActivity", GenericTypeActivity::class.java)
     }
 
     override fun initData() {

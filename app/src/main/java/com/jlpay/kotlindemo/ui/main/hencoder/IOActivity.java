@@ -2,7 +2,6 @@ package com.jlpay.kotlindemo.ui.main.hencoder;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
@@ -69,8 +68,9 @@ public class IOActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         MyBinding.bind(this);
 //        MyInnerBinding.bind(this);
-        textView2.setText("Rengwuxian");
-        linearLayout.setBackgroundColor(Color.GRAY);
+        //TODO MyBinding有点问题，没有生成 IOActivityBinding 的文件
+//        textView2.setText("Rengwuxian");
+//        linearLayout.setBackgroundColor(Color.GRAY);
 
 //        io1();
 //        io2();

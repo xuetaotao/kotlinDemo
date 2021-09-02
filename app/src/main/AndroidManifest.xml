@@ -27,6 +27,10 @@
     <!--以下为Tinker热更新需要的权限    -->
     <!-- 读取系统底层日志 -->
     <uses-permission android:name="android.permission.READ_LOGS" />
+    <!-- 移除第三方SDK中的以下权限    -->
+    <uses-permission
+        android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
+        tools:node="remove" />
 
 
     <!-- 运行时权限申请，Android6.0以后 -->

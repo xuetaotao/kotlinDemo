@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="15dp"
-        android:text=""
+        android:text="我是onClickListener"
+        android:textAllCaps="false"
         android:textColor="@color/common_black"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"

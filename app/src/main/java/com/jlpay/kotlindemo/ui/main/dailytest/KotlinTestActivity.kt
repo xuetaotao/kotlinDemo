@@ -2,7 +2,9 @@ package com.jlpay.kotlindemo.ui.main.dailytest
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
+import android.view.View
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 
@@ -10,21 +12,32 @@ class KotlinTestActivity : AppCompatActivity() {
 
     private val TAG = KotlinTestActivity::class.java.simpleName
 
-    private lateinit var textView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kotlin_test)
 
-        textView = findViewById(R.id.textView)
         initData()
     }
 
     private fun initData() {
         arrayTest()
         exceptionTest()
+
+        var onClickListener: View.OnClickListener =
+            View.OnClickListener {
+                Toast.makeText(this,
+                    "我是onClickListener:${it.id}",
+                    Toast.LENGTH_SHORT).show()
+            }
+        findViewById<Button>(R.id.button).setOnClickListener(onClickListener)
+
+        LambdaTest().main()
     }
 
+    /**
+     * 测试异常
+     */
     private fun exceptionTest() {
         try {
             throw Exception("测试异常")
@@ -94,5 +107,60 @@ class KotlinTestActivity : AppCompatActivity() {
         }
     }
 
+    class LambdaTest {
 
+        fun main() {
+            // 前面为什么用var方法不应该是fun吗？
+            // 我们一直在写匿名函数，把匿名函数给 method01 变量
+            // KT函数是一等公民
+
+            // 函数中的函数，就是高阶函数
+
+            // KT中的 基本上都是表达式 包括 if  可以灵活返回
+            // Java中，基本上都是 语句 包括 if  执行体 不可以返回
+
+            //下面全部都是函数声明， 既然是函数声明，就不能调用
+
+            // 函数的声明 用lambda去描述函数的声明
+//            var method1: () -> Unit
+//            var method2: (Int, Int) -> Unit
+//            var method3: (String, Double) -> Any
+//            var method4: (Int, Double, Long, String) -> Boolean
+//            var method5: (Int, Int) -> Int
+
+
+            // 函数的声明 + 函数的实现
+            // : (参数)->返回  方式一 () 基本上属于声明 上面已经讲过了 就是函数的声明
+            // = {参数->方式}  方式二 () 基本上属于声明实现结合
+            var method01: () -> Unit = { println("我是method01函数") }
+            method01()//我是method01函数  // 调用函数  () == 操作符重载 invoke操作符
+            method01.invoke()
+
+            var method02/*: () -> String*/ = { "我是method02函数" }
+            println(method02())
+
+            var method03 = { str: String -> println("method03:你传入进来的值是$str") }
+            method03("白小纯")
+
+            var method04: (Int, Int) -> String =
+                { num1: Int, num2: Int -> num1.toString() + num2.toString() }
+            println("method04:" + method04(2, 3))
+
+            var method05 = { num1: Int, num2: Int -> num1 + num2 }
+            println("method05:" + method05(2, 3))
+
+            var method06: (Int) -> String // 先声明 后实现
+            method06 = fun(value: Int): String = value.toString()
+            println("method06:" + method06(99))
+
+            var method07: (Int) -> String
+            method07 = fun(value) = value.toString()
+            println("method07:" + method07(7))
+
+            var method08: (Int) -> String = { value -> "method08:$value" }
+            println(method08(8))
+
+            //剩下的暂时略过
+        }
+    }
 }

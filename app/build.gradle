@@ -212,10 +212,13 @@ dependencies {
 //    implementation 'org.smali:dexlib2:2.3.1'
 
     //高德定位
-    implementation 'com.amap.api:location:5.1.0'
+    implementation 'com.amap.api:location:5.4.0'
 
     //腾讯定位
     implementation 'com.tencent.map.geolocation:TencentLocationSdk-openplatform:7.2.6'
+
+    //pdf加载  https://github.com/barteksc/AndroidPdfViewer
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
     //定位模块库
     //对应 测试库 Java版本：'com.jlpay.opensdk:location:1.0.3'

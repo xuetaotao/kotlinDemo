@@ -160,7 +160,61 @@ class KotlinTestActivity : AppCompatActivity() {
             var method08: (Int) -> String = { value -> "method08:$value" }
             println(method08(8))
 
-            //剩下的暂时略过
+            //TODO 暂时理解不到位  (Int, Int) -> String = { n1, n2 -> "相加的结果是:${n1 + n2}  $n1aaa" } 放一起看
+            var fun4 = fun(n1aaa: Int, n2aaa: Int): (Int, Int) -> String =
+                { n1, n2 -> "相加的结果是:${n1 + n2}  $n1aaa" }
+            println(fun4(100, 100)(1000, 1000))//相加的结果是:2000  100
+            println(fun4(100,
+                100))//Function2<java.lang.Integer, java.lang.Integer, java.lang.String>
+
+            var k01: (String) -> (String) -> (Boolean) -> (Int) -> (String) -> Int =
+                {
+                    {
+                        {
+                            {
+                                {
+                                    99
+                                }
+                            }
+                        }
+                    }
+
+                }
+            println(k01("AAA")("BBB")(true)(800)("Derry"))//99
+
+            // 高阶函数 规则
+            fun loginServer(
+                userName: String,
+                userPwd: String,
+                responseResult: (String, String) -> Unit,
+            ) =
+                responseResult(userName, userPwd)
+
+            fun loginEngine(userName: String, userPwd: String, responseResult: (Boolean) -> Unit) {
+                if (userName == "Derry" && userPwd == "123456") {
+                    responseResult(true)
+                } else {
+                    responseResult(false)
+                }
+            }
+
+            // 我对T扩展，T本身就等于==this
+            fun <T> T.myRunOK(mm: T.(Double) -> Boolean) /*: Boolean*/ = mm(664.45) // 执行lambda
+
+            "AA".myRunOK {
+                println("这是一个:$this,它的$it")
+                true
+            }
+
+            fun <T> T.myRunOK2(mm: (Float) -> Boolean) /*: Boolean*/ = mm(656.4f) // 执行lambda
+
+            "derry".run {
+                println("derry的长度:$length") // 已经等到derry字符串长度了
+            }
+
+            "derry".let {
+                println("derry的长度:${it.length}") // 已经等到derry字符串长度了
+            }
         }
     }
 }

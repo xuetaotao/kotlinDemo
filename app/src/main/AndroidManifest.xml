@@ -44,6 +44,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 动态申请所有文件访问权限 -->
+    <!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />-->
     <!--以下为Tinker热更新需要的权限    -->
     <!-- 手机信息 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -244,6 +246,8 @@
         <activity android:name=".ui.main.chapter6and7.AssetAndRawResActivity" />
         <activity android:name=".ui.main.chapter11.MediaPlayerActivity" />
         <activity android:name=".ui.main.java_advance.GenericTypeActivity" />
+        <activity android:name=".ui.main.dailytest.PdfViewerActivity" />
+        <activity android:name=".ui.main.dailytest.FileManagerActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

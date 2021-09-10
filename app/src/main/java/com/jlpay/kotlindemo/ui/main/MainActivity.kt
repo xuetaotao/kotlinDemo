@@ -193,6 +193,8 @@ class MainActivity : BaseMediaActivity() {
         addButton("AssetAndRawResActivity", AssetAndRawResActivity::class.java)
         addButton("MediaPlayerActivity", MediaPlayerActivity::class.java)
         addButton("GenericTypeActivity", GenericTypeActivity::class.java)
+        addButton("PdfViewerActivity", PdfViewerActivity::class.java)
+        addButton("FileManagerActivity", FileManagerActivity::class.java)
     }
 
     override fun initData() {

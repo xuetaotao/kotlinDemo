@@ -246,7 +246,13 @@
         <activity android:name=".ui.main.chapter6and7.AssetAndRawResActivity" />
         <activity android:name=".ui.main.chapter11.MediaPlayerActivity" />
         <activity android:name=".ui.main.java_advance.GenericTypeActivity" />
-        <activity android:name=".ui.main.dailytest.PdfViewerActivity" />
+        <activity android:name=".ui.main.dailytest.PdfViewerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/pdf" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.main.dailytest.FileManagerActivity" />
 
         <service android:name=".service.SimpleService" />

@@ -3,13 +3,21 @@ package com.jlpay.kotlindemo.ui.main.dailytest
 import android.Manifest
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.github.barteksc.pdfviewer.PDFView
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.ui.base.Constants
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 class PdfViewerActivity : AppCompatActivity() {
 
@@ -77,6 +85,72 @@ class PdfViewerActivity : AppCompatActivity() {
 
         pdf_view = findViewById(R.id.pdf_view)
         imageView = findViewById(R.id.imageView)
+
+        receivePdfFile()
+    }
+
+    private fun receivePdfFile() {
+        val intent = intent
+        val action = intent.action
+        val mimeType = intent.type
+
+        if (action == Intent.ACTION_SEND && !TextUtils.isEmpty(mimeType)) {
+            when (mimeType) {
+                "text/plain" -> handlerSendText(intent)
+                "image/*" -> handlerSendImage(intent)
+                "application/pdf" -> handlerSendPdf(intent)
+            }
+        } else if (action == Intent.ACTION_SEND_MULTIPLE && !TextUtils.isEmpty(mimeType)) {
+            Toast.makeText(this, "暂未处理$mimeType", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handlerSendPdf(intent: Intent) {
+        //TODO 由于无法知道其他程序发送过来的数据内容是文本还是其他类型的数据，若数据量巨大，则需要大量处理时间，因此我们应避免在UI线程里面去处理那些获取到的数据
+        val uri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+        uri?.let {
+            pdf_view.fromUri(it).load()
+            val savePdf = savePdf(it)
+            Log.e("TAG", "这是保存的:$savePdf")
+        }
+    }
+
+    private fun savePdf(uri: Uri): String {
+        val file = File(Constants.FILE_SAVE_DIR + "my.pdf")
+        var openInputStream: InputStream? = null
+        var fileOutputStream: FileOutputStream? = null
+        try {
+            openInputStream = contentResolver.openInputStream(uri)
+            fileOutputStream = FileOutputStream(file)
+            openInputStream?.let {
+                val buffer: ByteArray = ByteArray(1024)
+                var readLength: Int = 0
+                while (openInputStream.read(buffer).also { readLength = it } != -1) {
+                    fileOutputStream.write(buffer, 0, readLength)
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                openInputStream?.close()
+                fileOutputStream?.flush()
+                fileOutputStream?.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        return file.absolutePath
+    }
+
+    private fun handlerSendImage(intent: Intent) {
+        TODO("Not yet implemented")
+    }
+
+    private fun handlerSendText(intent: Intent) {
+        TODO("Not yet implemented")
     }
 
     fun pdfViewer(view: View) {

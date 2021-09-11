@@ -26,9 +26,11 @@ class KotlinTestActivity : AppCompatActivity() {
 
         var onClickListener: View.OnClickListener =
             View.OnClickListener {
-                Toast.makeText(this,
+                Toast.makeText(
+                    this,
                     "我是onClickListener:${it.id}",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         findViewById<Button>(R.id.button).setOnClickListener(onClickListener)
 
@@ -164,8 +166,12 @@ class KotlinTestActivity : AppCompatActivity() {
             var fun4 = fun(n1aaa: Int, n2aaa: Int): (Int, Int) -> String =
                 { n1, n2 -> "相加的结果是:${n1 + n2}  $n1aaa" }
             println(fun4(100, 100)(1000, 1000))//相加的结果是:2000  100
-            println(fun4(100,
-                100))//Function2<java.lang.Integer, java.lang.Integer, java.lang.String>
+            println(
+                fun4(
+                    100,
+                    100
+                )
+            )//Function2<java.lang.Integer, java.lang.Integer, java.lang.String>
 
             var k01: (String) -> (String) -> (Boolean) -> (Int) -> (String) -> Int =
                 {
@@ -214,6 +220,18 @@ class KotlinTestActivity : AppCompatActivity() {
 
             "derry".let {
                 println("derry的长度:${it.length}") // 已经等到derry字符串长度了
+            }
+
+            val list: List<String> = listOf("aa", "bb", "vv", "cc", "dd")
+            println(list.getOrElse(8) { "ads" })
+//            list.add
+            val mutableList = list.toMutableList()
+            mutableList.add("HHH")
+            list.forEach { s ->
+                println("this is $s")
+            }
+            list.forEachIndexed { index: Int, s: String ->
+                println("this is the $index : $s")
             }
         }
     }

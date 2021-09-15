@@ -256,7 +256,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <!--                <data android:mimeType="*/*" />-->
+                <data android:mimeType="*/*" />
                 <data android:mimeType="application/ofd" />
                 <data android:mimeType="application/pdf" />
                 <!--                <data android:mimeType="text/plain" />-->

@@ -4,23 +4,28 @@ import android.Manifest
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.github.barteksc.pdfviewer.PDFView
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.bean.getMimeType
 import com.jlpay.kotlindemo.ui.base.Constants
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
 
+/**
+ * Android接收从其他App传送来的数据:
+ * https://www.w3cschool.cn/android_training_course/android_training_course-1nwj27ei.html
+ */
 class PdfViewerActivity : AppCompatActivity() {
 
+    final val TAG = PdfViewerActivity::class.java.simpleName
     lateinit var pdf_view: PDFView
     lateinit var imageView: ImageView
 
@@ -82,41 +87,143 @@ class PdfViewerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdfviewer)
+        Log.e(TAG, "onCreate: ")
 
         pdf_view = findViewById(R.id.pdf_view)
         imageView = findViewById(R.id.imageView)
 
-        receivePdfFile()
+        receivePdfFile(intent)
     }
 
-    private fun receivePdfFile() {
-        val intent = intent
-        val action = intent.action
-        val mimeType = intent.type
+    /**
+     * 在该Activity的实例已经存在于Task和Back stack中(或者通俗的说可以通过按返回键返回
+     * 到该Activity )时,当使用intent来再次启动该Activity的时候,如果此次启动不创建该
+     * Activity的新实例,则系统会调用原有实例的onNewIntent()方法来处理此intent
+     *
+     * 这里若不添加保存操作的话，若用户在操作前已经进入了该页面，也就是 onCreate操作已经执行了
+     * 那么就没办法再接收 Intent 携带过来的数据进行保存操作了
+     */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.e(TAG, "onNewIntent:${intent?.type}\t${intent?.action}")
+        intent?.let {
+            receivePdfFile(it)
+        } ?: Toast.makeText(this, "onNewIntent:intent为null", Toast.LENGTH_SHORT).show()
+    }
 
-        if (action == Intent.ACTION_SEND && !TextUtils.isEmpty(mimeType)) {
-            when (mimeType) {
-                "text/plain" -> handlerSendText(intent)
-                "image/*" -> handlerSendImage(intent)
-                "application/pdf" -> handlerSendPdf(intent)
+    private fun receivePdfFile(intent: Intent) {
+        //有个问题，每次切到后台再返回来就又会重新再保存一次，
+        //这是因为 onCreate 方法里的调用，每次切到后台都会执行 onDestroy，然后再切回来又会重新执行onCreate方法里的调用
+        //所以这里为了避免保存多次文件不一样，采取了覆盖写入的方案，但是只是占用存储减少了，每次仍然会有写入的操作过程
+        when (val action = intent.action) {
+            //用其他应用打开：
+            Intent.ACTION_VIEW -> {
+                openFileByOtherApp(intent)
             }
-        } else if (action == Intent.ACTION_SEND_MULTIPLE && !TextUtils.isEmpty(mimeType)) {
-            Toast.makeText(this, "暂未处理$mimeType", Toast.LENGTH_SHORT).show()
+            //关联到[handlerSendFile]方法：发送到其他
+            //对应的intent-filter： <action android:name="android.intent.action.SEND" />
+            Intent.ACTION_SEND -> {
+                handlerSendFile(intent)
+            }
+            Intent.ACTION_SEND_MULTIPLE -> {
+                Toast.makeText(this, "暂未处理的$action", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    private fun handlerSendPdf(intent: Intent) {
+    /**
+     * 其他APP选择(如微信)：用其他应用打开，选择了我们的APP打开文件，走到这里
+     * 据的获取方式与(发送到其他不同)：这里的数据是包裹在 Intent的 mData(Uri)里的
+     */
+    private fun openFileByOtherApp(intent: Intent) {
+        val data = intent.data
+        data?.let {
+            Log.e(TAG, "openFileByOtherApp#getMimeType: ${getMimeType(data.toString())}")
+            Log.e(TAG, "openFileByOtherApp:${intent.type} ")
+            if ("application/pdf" == intent.type) {
+                pdf_view.fromUri(it).load()
+                val savePdf = saveReceiveFile(it, "openByOtherApp.pdf")
+                Toast.makeText(this, "文件已保存到:$savePdf", Toast.LENGTH_SHORT).show()
+            } else {
+                val savePdf = saveReceiveFile(it, "openByOtherApp.ofd")
+                Toast.makeText(this, "文件已保存到:$savePdf", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    /**
+     * 注：该功能暂时被屏蔽，如果需要使用，需要打开AndroidManifest中的 SEND配置，并关闭 VIEW配置和scheme配置
+     * 使用下面注释中的配置
+     *
+     * 其他APP选择(如微信)：发送到其他，选择了发送到我们的APP，走到这里
+     * 数据的获取方式与(用其他应用打开不同)：这里的数据是包裹在 Intent的 mExtras(Bundle)里的
+     *
+     * 对应的 intent-filter 配置如下：
+     *  <action android:name="android.intent.action.SEND" /> //接收单个 //"android.intent.action.SEND_MULTIPLE"是连续接收多个
+     *  注意：如果与 <action android:name="android.intent.action.VIEW" />一起使用，经测试，SEND会被屏蔽调
+     *  <category android:name="android.intent.category.DEFAULT" />
+     *  <data android:mimeType="text/plain" />  //"image/这里是个*"/  "application/pdf"、
+     */
+    private fun handlerSendFile(intent: Intent) {
+        val mimeType = intent.type
+        Log.e(TAG, "handlerSendFile: $mimeType")
         //TODO 由于无法知道其他程序发送过来的数据内容是文本还是其他类型的数据，若数据量巨大，则需要大量处理时间，因此我们应避免在UI线程里面去处理那些获取到的数据
-        val uri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
-        uri?.let {
-            pdf_view.fromUri(it).load()
-            val savePdf = savePdf(it)
-            Log.e("TAG", "这是保存的:$savePdf")
+        when (mimeType) {
+            "text/plain" -> {//微信发送文本文件，测试OK
+//                val content = intent.getStringExtra(Intent.EXTRA_TEXT)//测试发现微信发送过来的是Intent.EXTRA_STREAM
+                val uri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+                uri?.let { uriSend ->
+                    val bufferedReader =
+                        BufferedReader(InputStreamReader(contentResolver.openInputStream(uriSend)))
+                    var content: String? = ""
+                    var lineContent: String? = null
+                    while (bufferedReader.readLine().also { lineContent = it } != null) {
+                        content += lineContent + "\n"
+                    }
+                    bufferedReader.close()
+                    Toast.makeText(this, "文件内容是:$content", Toast.LENGTH_SHORT).show()
+                }
+            }
+            "image/*" -> {//未找到测试方法，未测试
+                val uri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+                uri?.let {
+                    try {
+                        val openInputStream = contentResolver.openInputStream(it)
+                        val bitmap = BitmapFactory.decodeStream(openInputStream)
+                        imageView.setImageBitmap(bitmap)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+            "application/pdf" -> {//微信发送pdf文件，测试OK
+                val uri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+                uri?.let {
+                    pdf_view.fromUri(it).load()
+                    val savePdf = saveReceiveFile(it, "sendFile.pdf")
+                    Toast.makeText(this, "文件已保存到:$savePdf", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
-    private fun savePdf(uri: Uri): String {
-        val file = File(Constants.FILE_SAVE_DIR + "my.pdf")
+
+    /**
+     * @param uri 发送或者其他应用打开传递过来的文件uri
+     * @param mimeType 用来确定要保存文件的后缀名是 .pdf还是 .ofd
+     */
+    private fun saveReceiveFile(uri: Uri, fileName: String): String {
+        val file = File(Constants.FILE_SAVE_DIR + fileName)
+
+        /* 单纯为 chooseOtherApp 方法用到的 receiveUri 赋值  */
+        val uriPdfFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(this, "com.jlpay.kotlindemo.FileProvider", file)
+        } else {
+            Uri.fromFile(file)
+        }
+        receiveUri = uriPdfFile
+        /*  */
+
         var openInputStream: InputStream? = null
         var fileOutputStream: FileOutputStream? = null
         try {
@@ -145,13 +252,6 @@ class PdfViewerActivity : AppCompatActivity() {
         return file.absolutePath
     }
 
-    private fun handlerSendImage(intent: Intent) {
-        TODO("Not yet implemented")
-    }
-
-    private fun handlerSendText(intent: Intent) {
-        TODO("Not yet implemented")
-    }
 
     fun pdfViewer(view: View) {
         permissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -169,5 +269,29 @@ class PdfViewerActivity : AppCompatActivity() {
         getContent.launch("image/*")
     }
 
+    var receiveUri: Uri? = null
+    fun chooseOtherApp(view: View) {
+        receiveUri?.let {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            intent.setDataAndType(it, "application/pdf")
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivity(intent)
+        }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        Log.e(TAG, "onResume: ")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e(TAG, "onPause: ")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e(TAG, "onDestroy: ")
+    }
 }

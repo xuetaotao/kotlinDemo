@@ -30,7 +30,7 @@
             <com.github.barteksc.pdfviewer.PDFView
                 android:id="@+id/pdf_view"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="200dp"
                 android:layout_marginTop="15dp" />
 
             <Button
@@ -46,9 +46,20 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="10dp"
                 android:scaleType="centerInside" />
+
+            <Button
+                android:id="@+id/btn_choose_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="chooseOtherApp"
+                android:text="选择其他文件打开PDF"
+                android:textAllCaps="false"
+                android:textColor="@color/light_black"
+                android:textSize="14sp" />
+
 
         </LinearLayout>
 

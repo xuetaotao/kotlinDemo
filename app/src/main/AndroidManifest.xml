@@ -246,14 +246,40 @@
         <activity android:name=".ui.main.chapter6and7.AssetAndRawResActivity" />
         <activity android:name=".ui.main.chapter11.MediaPlayerActivity" />
         <activity android:name=".ui.main.java_advance.GenericTypeActivity" />
-        <activity android:name=".ui.main.dailytest.PdfViewerActivity">
+        <activity
+            android:name=".ui.main.dailytest.PdfViewerActivity"
+            android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="android.intent.action.SEND" />
+                <!--经测试，SEND与VIEW一起使用，SEND会被屏蔽调                -->
+                <!--                <action android:name="android.intent.action.SEND" />-->
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
+                <!--                <data android:mimeType="*/*" />-->
+                <data android:mimeType="application/ofd" />
                 <data android:mimeType="application/pdf" />
+                <!--                <data android:mimeType="text/plain" />-->
+                <!--                <data android:mimeType="image/*" />-->
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+
             </intent-filter>
         </activity>
         <activity android:name=".ui.main.dailytest.FileManagerActivity" />
+        <activity
+            android:name=".ui.main.dailytest.WebViewActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <!--指定Activity能被浏览器安全调用                -->
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+
+        </activity>
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

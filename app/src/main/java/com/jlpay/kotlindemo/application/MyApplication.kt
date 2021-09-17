@@ -16,6 +16,7 @@ import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.Beta
 import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.tinker.entry.DefaultApplicationLike
+import java.util.concurrent.TimeoutException
 
 /**
  * 自定义ApplicationLike
@@ -26,7 +27,7 @@ class MyApplication(
     tinkerLoadVerifyFlag: Boolean,
     applicationStartElapsedTime: Long,
     applicationStartMillisTime: Long,
-    tinkerResultIntent: Intent
+    tinkerResultIntent: Intent,
 ) : DefaultApplicationLike(
     application,
     tinkerFlags,
@@ -75,8 +76,32 @@ class MyApplication(
     private fun initLib() {
         AppUtils.initAppUtils(mContext)
 
-        ExceptionHandle.rxjavaExceptionCapture()
+        fixTimeoutException()//捕获Android异常
+        ExceptionHandle.rxjavaExceptionCapture()//捕获Rxjava的异常
+
         initLibNeedAgree()
+    }
+
+    /**
+     * 此外：还可以用来捕获异常，很好用
+     *
+     * 解决FinalizerWatchdogDaemon产生的TimeoutException问题
+     * 原因：FinalizerWatchdogDaemon析构监护守护线程，检测到超时后FinalizerDaemon析构守护线程中仍有正在执行的finalize()对象，视为finalize()执行超时，产生异常
+     * 解决方案：设置自定义UncaughtExceptionHandler处理该情况
+     * 参考：https://segmentfault.com/a/1190000019373275
+     */
+    private fun fixTimeoutException() {
+        val defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            //根据Bugly反应情况，暂时先只对OPPO机型处理
+            if (thread.name == "FinalizerWatchdogDaemon" && throwable is TimeoutException &&
+                Build.BRAND.equals("OPPO", ignoreCase = true)
+            ) {
+                //ignore it
+            } else {
+                defaultUncaughtExceptionHandler?.uncaughtException(thread, throwable)
+            }
+        }
     }
 
     /**

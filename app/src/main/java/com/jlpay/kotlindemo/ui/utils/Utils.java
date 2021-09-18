@@ -22,6 +22,24 @@ public class Utils {
         packageContext.startActivity(intent);
     }
 
+    // 两次点击按钮之间的点击间隔不能少于400毫秒
+    private static final int MIN_CLICK_DELAY_TIME = 400;
+    private static long lastClickTime;
+
+    /**
+     * 防止按钮快速重复点击
+     *
+     * @return true:是快速点击 flase:不是
+     */
+    public static boolean isFastClick() {
+        boolean flag = true;
+        long currentClickTime = System.currentTimeMillis();
+        if ((currentClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+            flag = false;
+        }
+        lastClickTime = currentClickTime;
+        return flag;
+    }
 
     /**
      * 自定义View绘制的时候参数都是px

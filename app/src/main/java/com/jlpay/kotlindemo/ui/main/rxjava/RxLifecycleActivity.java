@@ -14,12 +14,15 @@ import com.jlpay.kotlindemo.net.BaseObserver;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
@@ -313,6 +316,73 @@ public class RxLifecycleActivity extends RxAppCompatActivity {
                     }
                 });
     }
+
+    /**
+     * 使用 takeUntil 来做上传超时的监控
+     * 不可用，仅做用法的参考学习
+     *
+     * @param filePath
+     * @param listener
+     */
+//    private void uploadImg(String filePath, UploadImgListener listener) {
+//        String loadingMsg = getLoadingMsg(filePath);
+//        showLoading(loadingMsg);
+//
+//        Properties properties = new Properties();
+//        properties.setProperty("size", uploadImageSize(filePath) + "MB");
+//        long startTime = System.currentTimeMillis();
+//
+//        RetrofitClient.get()
+//                .upload(filePath)
+//                .takeUntil(Observable.interval(60, 1, TimeUnit.SECONDS)
+//                        .flatMap(new Function<Long, ObservableSource<Long>>() {
+//                            @Override
+//                            public ObservableSource<Long> apply(Long aLong) throws Exception {
+//                                return Observable.error(new Exception("上传超时，请重新上传"));
+//                            }
+//                        }))
+//                .map(new BaseFunction<UploadImgRpcBean>() {
+//                })
+//                .doOnSubscribe(new Consumer<Disposable>() {
+//                    @Override
+//                    public void accept(Disposable disposable) throws Exception {
+//                        addDisposable(disposable);
+//                    }
+//                })
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<UploadImgRpcBean>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(UploadImgRpcBean uploadImgRpcBean) {
+//                        hideLoading();
+//                        listener.onSuccess(uploadImgRpcBean, filePath);
+//                        long uploadImageTime = (System.currentTimeMillis() - startTime) / 1000;
+//                        properties.setProperty("time", uploadImageTime + "s");
+//                        properties.setProperty("result", "00");
+//                        PerformanceManager.reportEvent(BasePicturesActivity.this, "UpLoadLicenseImage", properties);
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        hideLoading();
+//                        listener.onFailed("上传失败：" + e.getMessage());
+//                        PerformanceManager.reportError(new Exception("图片上传失败：" + e.getMessage()));
+//                        long uploadImageTime = (System.currentTimeMillis() - startTime) / 1000;
+//                        properties.setProperty("time", String.valueOf(uploadImageTime));
+//                        properties.setProperty("result", "01");
+//                        PerformanceManager.reportEvent(BasePicturesActivity.this, "UpLoadLicenseImage", properties);
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
+//    }
 
     /**
      * 过滤操作符：filter()

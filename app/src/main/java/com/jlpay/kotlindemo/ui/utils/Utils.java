@@ -1,10 +1,12 @@
 package com.jlpay.kotlindemo.ui.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * 存放一些日常使用小方法的工具类
@@ -39,6 +41,19 @@ public class Utils {
         }
         lastClickTime = currentClickTime;
         return flag;
+    }
+
+    /**
+     * 隐藏软键盘
+     *
+     * @param activity activity
+     * @param view     触发隐藏的view
+     */
+    public static void hideKeyboard(Activity activity, View view) {
+        InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (manager != null && manager.isActive()) {
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     /**

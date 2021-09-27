@@ -49,7 +49,7 @@ class SmallFileManagerActivity : AppCompatActivity() {
         fileLists = initialDir?.listFiles()?.toList() ?: ArrayList<File>()
 
         tvCurrentDir = findViewById(R.id.tv_current_dir)
-        tvCurrentDir.text = currentDirPath
+        "当前目录：$currentDirPath".also { tvCurrentDir.text = it }
         recyclerview = findViewById(R.id.recyclerview)
         flFileListEmpty = findViewById(R.id.fl_file_list_empty)
         fileAdapter = FileAdapter(this, fileLists)
@@ -100,14 +100,17 @@ class SmallFileManagerActivity : AppCompatActivity() {
     }
 
     private fun loadDataFromCurrentDir(file: File) {
-        currentDirPath = file.absolutePath
-//        Log.e(Constants.TAG, "loadDataFromCurrentDir: $currentDir")
-        tvCurrentDir.text = currentDirPath
+        if (file.isDirectory) {
+            currentDirPath = file.absolutePath
+//            Log.e(Constants.TAG, "loadDataFromCurrentDir: $currentDirPath")
+            "当前目录：$currentDirPath".also { tvCurrentDir.text = it }
+        }
 
         if (file.isDirectory && !file.isFile) {
             val subFiles = file.listFiles()
             if (subFiles == null || subFiles.isEmpty()) {
                 flFileListEmpty.visibility = View.VISIBLE
+                fileAdapter.updateData(ArrayList<File>())
             } else {
                 flFileListEmpty.visibility = View.GONE
                 subFiles.toList().let { fileAdapter.updateData(it) }

@@ -16,6 +16,9 @@ import com.jlpay.kotlindemo.R
 
 /**
  * 自定义文件管理器
+ * 实现见 SmallFileManagerActivity
+ *
+ * 思路梳理：https://naotu.baidu.com/file/e444d527b42703b3ee650b4b1438b18b
  * 因为Android11上要申请的权限过于霸道，申请MANAGE_EXTERNAL_STORAGE权限并且适配Android11以上，会被禁止上Google商店，所以这里仅测试适配外部共享存储
  *
  * 1.在targetSdkVersion = 29应用中，设置android:requestLegacyExternalStorage="true"，就可以不启动分区存储，让以前的文件读取正常使用。

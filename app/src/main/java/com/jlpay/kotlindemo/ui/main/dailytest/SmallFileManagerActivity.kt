@@ -1,13 +1,20 @@
 package com.jlpay.kotlindemo.ui.main.dailytest
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +26,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 /**
- * APP私有目录下的文件管理器
- * 不需要获取任务相关权限
+ * APP 文件管理器
+ * 1.initFileManagerDir() 方法中，支持自己切换目录，变成某个特定目录的文件管理器
+ * 2.initView() 方法最后几行的代码中，支持在初始指定的目录下，筛选自己需要的某种文件
  */
 class SmallFileManagerActivity : AppCompatActivity() {
 
@@ -35,16 +43,54 @@ class SmallFileManagerActivity : AppCompatActivity() {
     var specialFileLists: MutableList<File> = ArrayList<File>()//通过遍历某个文件夹下所有文件，来获取某个特定文件类型
     private val TAG = Constants.TAG
 
+    val permissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            var allGranted: Boolean = true
+            it.forEach { entry ->
+                if (!entry.value) {
+                    allGranted = false
+                }
+            }
+            if (allGranted) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    allFilePermission.launch(intent)
+                } else {
+                    initView()
+                }
+            }
+        }
+
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    val allFilePermission =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (Environment.isExternalStorageManager()) {
+                Log.e(TAG, "所有文件访问权限申请成功 ")
+                initView()
+            }
+        }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_small_file_manager)
 
-        initView()
+        initFileManagerDir()
+    }
+
+    private fun initFileManagerDir() {
+        //1.只做APP私有目录 getExternalFilesDir 的文件管理器，不需要任何权限
+//        initialDir = getExternalFilesDir(null)
+
+        //2.做手机所有文件的文件管理器，要非常注意权限问题
+        initialDir = Environment.getExternalStorageDirectory()
+        permissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
 
     private fun initView() {
-        initialDir = getExternalFilesDir(null)
         currentDirPath = initialDir?.absolutePath
         fileLists = initialDir?.listFiles()?.toList() ?: ArrayList<File>()
 
@@ -65,14 +111,14 @@ class SmallFileManagerActivity : AppCompatActivity() {
         recyclerview.layoutManager = linearLayoutManager
 
 
-        //以下代码是用来 获取 getExternalFilesDir 目录下所有的 pdf文件
+        //以下代码是用来 获取 initialDir 目录下所有的 pdf文件
         specialFileLists.clear()
         initialDir?.let {
             iteratorSpecifiedDir(it, arrayOf(".pdf", ".ofd"))
 //            iteratorSpecifiedDir(it, null)
         }
         specialFileLists.forEach {
-            Log.e(TAG, "initView: ${it.name} \n ${it.absolutePath}")
+            Log.e(TAG, "initView: ${it.absolutePath}")
         }
     }
 
@@ -113,7 +159,9 @@ class SmallFileManagerActivity : AppCompatActivity() {
                 fileAdapter.updateData(ArrayList<File>())
             } else {
                 flFileListEmpty.visibility = View.GONE
-                subFiles.toList().let { fileAdapter.updateData(it) }
+                subFiles
+                    .toList()
+                    .let { fileAdapter.updateData(it) }
             }
 
         } else {

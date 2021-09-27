@@ -53,8 +53,13 @@ class SmallFileManagerActivity : AppCompatActivity() {
             }
             if (allGranted) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-                    allFilePermission.launch(intent)
+                    if (!Environment.isExternalStorageManager()) {//检查是否已经有权限
+                        val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                        allFilePermission.launch(intent)
+                    } else {
+                        initView()
+                    }
+
                 } else {
                     initView()
                 }
@@ -87,6 +92,8 @@ class SmallFileManagerActivity : AppCompatActivity() {
         initialDir = Environment.getExternalStorageDirectory()
         permissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE))
+
+        //TODO 文件遍历过程部分手机因性能原因耗时较长，考虑加个Loading动画
     }
 
 

@@ -23,6 +23,8 @@ public class Constants {
     public static final String APP_RELEASE_SHA1 = "F7:1C:71:88:47:4C:70:5B:CE:5A:85:61:CD:28:D8:A3:83:36:2A:4D";//发布版安全码SHA1，命令行：keytool -v -list -keystore C:\AndroidProgram\kotlinDemo\kotlinDemoKey.jks，密钥库口令：fit1
 //    public static final String APP_DEBUG_SHA1 = "12:52:5C:FA:1B:55:32:6C:29:6A:B1:AB:AF:A3:05:0E:A2:12:9D:D4";//发布版安全码SHA1，命令行：keytool -v -list -keystore C:\Users\xuetaotao\.android\debug.keystore，密钥库口令：android
 
+    public static final String TAG = "KotlinDemo";
+
     //外部存储根目录
     @Deprecated
     public static final String external_storage_dir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;

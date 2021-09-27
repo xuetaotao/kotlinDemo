@@ -150,6 +150,9 @@ public class LibTestJavaActivity extends BaseActivity {
 //        checkNeedPermission(initPermissionList());
     }
 
+    public void testPermission(View view) {
+        checkNeedPermission(initPermissionList());
+    }
 
     /**
      * 1.在AndroidManifest.xml中添加所需权限

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/common_white">
+
+    <LinearLayout
+        android:id="@+id/ll_file_folder"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center|start"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <ImageView
+            android:id="@+id/iv_file_list_folder"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_file_folder" />
+
+        <!--ellipsize:设置当文字过长时,该控件该如何显示；"end" ——省略号显示在结尾       -->
+        <TextView
+            android:id="@+id/tv_file_list_folderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:maxLength="100"
+            android:maxLines="1"
+            android:text="文件夹名称"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

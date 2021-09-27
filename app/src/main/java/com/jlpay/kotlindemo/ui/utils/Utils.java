@@ -3,7 +3,9 @@ package com.jlpay.kotlindemo.ui.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -23,6 +25,18 @@ public class Utils {
         Intent intent = new Intent(packageContext, clss);
         packageContext.startActivity(intent);
     }
+
+    /**
+     * 设置APP字体大小为标准字体，不随系统字体大小改变
+     */
+    public static void initFontScale(Context context) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.fontScale = 1.0f;//0.85:小号  1:标准  1.25:大号  1.4:巨无霸
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        Log.d("DisplayMetrics ", "======" + resources.getDisplayMetrics().toString() + "\t,fontScale:" + configuration.fontScale);
+    }
+
 
     // 两次点击按钮之间的点击间隔不能少于400毫秒
     private static final int MIN_CLICK_DELAY_TIME = 400;

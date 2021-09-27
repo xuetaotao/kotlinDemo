@@ -140,12 +140,19 @@ class PdfViewerActivity : AppCompatActivity() {
         data?.let {
             Log.e(TAG, "openFileByOtherApp#getMimeType: ${getMimeType(data.toString())}")
             Log.e(TAG, "openFileByOtherApp:${intent.type} ")
+            Log.e(TAG,
+                "openFileByOtherApp:data.path:${data.path} ")//  /external_files/storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv/标签支付(1).pdf
+
+            val splitPath = data.path?.split("/")
+
             if ("application/pdf" == intent.type) {
                 pdf_view.fromUri(it).load()
-                val savePdf = saveReceiveFile(it, "openByOtherApp.pdf")
+                val fileName = splitPath?.get(splitPath.size - 1) ?: "未知名文件.pdf"
+                val savePdf = saveReceiveFile(it, fileName)
                 Toast.makeText(this, "文件已保存到:$savePdf", Toast.LENGTH_SHORT).show()
             } else {
-                val savePdf = saveReceiveFile(it, "openByOtherApp.ofd")
+                val fileName = splitPath?.get(splitPath.size - 1) ?: "未知名文件.ofd"
+                val savePdf = saveReceiveFile(it, fileName)
                 Toast.makeText(this, "文件已保存到:$savePdf", Toast.LENGTH_SHORT).show()
             }
         }
@@ -215,14 +222,14 @@ class PdfViewerActivity : AppCompatActivity() {
     private fun saveReceiveFile(uri: Uri, fileName: String): String {
         val file = File(Constants.FILE_SAVE_DIR + fileName)
 
-        /* 单纯为 chooseOtherApp 方法用到的 receiveUri 赋值  */
+        //////////////////////////////////////单纯为 chooseOtherApp 方法用到的 receiveUri 赋值/////////////
         val uriPdfFile = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             FileProvider.getUriForFile(this, "com.jlpay.kotlindemo.FileProvider", file)
         } else {
             Uri.fromFile(file)
         }
         receiveUri = uriPdfFile
-        /*  */
+        //////////////////////////////////////////////////////////////////////////////////////////////
 
         var openInputStream: InputStream? = null
         var fileOutputStream: FileOutputStream? = null
@@ -253,6 +260,24 @@ class PdfViewerActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * 测试File类的 list() 和 listFiles() 方法
+     */
+    private fun testFileMethods() {
+        val testFile = getExternalFilesDir(null)
+        val list: Array<String>? = testFile?.list()
+        val listFiles: Array<File>? = testFile?.listFiles()
+        list?.forEach {
+            Log.e(TAG, "saveReceiveFile: list:${it}")//audio、file、image、video、apk、res
+        }
+        println()
+        listFiles?.forEach {
+            Log.e(TAG,
+                "saveReceiveFile: listFiles:${it}")// /storage/emulated/0/Android/data/com.jlpay.kotlindemo/files/audio 等等
+        }
+    }
+
+
     fun pdfViewer(view: View) {
         permissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE))
@@ -271,6 +296,8 @@ class PdfViewerActivity : AppCompatActivity() {
 
     var receiveUri: Uri? = null
     fun chooseOtherApp(view: View) {
+        testFileMethods()
+
         receiveUri?.let {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

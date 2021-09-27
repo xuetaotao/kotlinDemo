@@ -280,6 +280,7 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".ui.main.dailytest.SmallFileManagerActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

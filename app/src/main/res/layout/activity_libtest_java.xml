@@ -46,4 +46,14 @@
         android:textColor="@color/common_black"
         android:textSize="14sp" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:onClick="testPermission"
+        android:text="测试权限获取"
+        android:textColor="@color/common_black"
+        android:textSize="14sp" />
+
+
 </LinearLayout>

@@ -17,6 +17,7 @@ import com.github.barteksc.pdfviewer.PDFView
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.bean.getMimeType
 import com.jlpay.kotlindemo.ui.base.Constants
+import com.jlpay.kotlindemo.ui.utils.MediaUtils
 import java.io.*
 
 /**
@@ -29,12 +30,36 @@ class PdfViewerActivity : AppCompatActivity() {
     lateinit var pdf_view: PDFView
     lateinit var imageView: ImageView
 
+    //通过SAF访问其他目录文件
     val getPdf = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode != RESULT_OK) {
             return@registerForActivityResult
         } else {
             it.data?.data?.let { uri ->
                 pdf_view.fromUri(uri).load()
+
+                //测试一：默认开启分区存储的情况下，无法在外部存储根目录创建文件夹及文件（手动开启则可以）
+//                val fileDir =
+//                    File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "111hhh")
+//                if (!fileDir.exists()) {
+//                    fileDir.mkdirs()
+//                }
+//                val file1 =
+//                    File(fileDir, "ss.pdf")
+
+                //测试二：默认开启分区存储的情况下，无法在外部存储根目录直接创建文件（手动开启则可以）
+//                val file1 =
+//                    File(Environment.getExternalStorageDirectory().absolutePath + File.separator + "ss.pdf")
+
+                //测试三：默认开启分区存储的情况下，可以在外部存储 APP私有目录下直接创建文件夹和文件
+                val file1 =
+                    File(Constants.FILE_SAVE_DIR + "ss.pdf")
+
+                //复制通过SAF方式选中的文件，到目标目录下，验证通过SAF可以访问外部存储的其他目录（系统或其他应用创建的目录）
+                val fileOutputStream = FileOutputStream(file1)
+                contentResolver.openInputStream(uri)?.let { it1 ->
+                    MediaUtils.copy(it1, fileOutputStream)
+                }
             }
         }
     }

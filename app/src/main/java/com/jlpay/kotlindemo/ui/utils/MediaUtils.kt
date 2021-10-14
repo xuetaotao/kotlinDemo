@@ -387,7 +387,7 @@ class MediaUtils : IAndroid11Upgrade {
             return true
         }
 
-        private fun copy(inputStream: InputStream, outputStream: OutputStream) {
+        fun copy(inputStream: InputStream, outputStream: OutputStream) {
             val buffer: ByteArray = ByteArray(1024)
             var readLength: Int
             try {

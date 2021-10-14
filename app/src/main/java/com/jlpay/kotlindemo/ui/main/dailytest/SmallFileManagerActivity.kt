@@ -1,6 +1,5 @@
 package com.jlpay.kotlindemo.ui.main.dailytest
 
-import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -29,6 +28,27 @@ import kotlin.collections.ArrayList
  * APP 文件管理器
  * 1.initFileManagerDir() 方法中，支持自己切换目录，变成某个特定目录的文件管理器
  * 2.initView() 方法最后几行的代码中，支持在初始指定的目录下，筛选自己需要的某种文件
+ *
+ *
+ * 自定义文件管理器
+ * 实现见 SmallFileManagerActivity
+ *
+ * 思路梳理：https://naotu.baidu.com/file/e444d527b42703b3ee650b4b1438b18b
+ * 因为Android11上要申请的权限过于霸道，申请MANAGE_EXTERNAL_STORAGE权限并且适配Android11以上，会被禁止上Google商店，所以这里仅测试适配外部共享存储
+ *
+ * 1.在targetSdkVersion = 29应用中，设置android:requestLegacyExternalStorage="true"，就可以不启动分区存储，让以前的文件读取正常使用。
+ * 但是targetSdkVersion = 30中不行了，强制开启分区存储。
+ *
+ * 2.假若App开启了分区存储功能，当App运行在Android 10.0的设备上时，是没法遍历/sdcard/目录的。而在Android 11.0上运行时是可以遍历的，需要进行如下几个步骤。
+ *  1)声明管理权限:<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+ *  2)动态申请所有文件访问权限:startActivityForResult(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION), 101)
+ *  3)遍历目录、读写文件
+ *
+ * 3.综上，如果想要做文件管理器、病毒扫描管理器等功能。则判断运行设备版本是否大于等于Android 6.0，若是先需要申请普通的存储权。若运行设备版本为Android 10.0，
+ * 则可以直接通过路径访问/sdcard/目录下文件(因为禁用了分区存储)；若运行设备版本为Android 11.0，则需要申请MANAGE_EXTERNAL_STORAGE 权限。
+ *
+ * 实现方案可参考：https://blog.csdn.net/fitaotao/article/details/119700579
+ * https://github.com/zippo88888888/ZFileManager
  */
 class SmallFileManagerActivity : AppCompatActivity() {
 
@@ -85,13 +105,15 @@ class SmallFileManagerActivity : AppCompatActivity() {
     }
 
     private fun initFileManagerDir() {
-        //1.只做APP私有目录 getExternalFilesDir 的文件管理器，不需要任何权限
-//        initialDir = getExternalFilesDir(null)
+        //1.只做外部存储 APP私有目录 getExternalFilesDir 的文件管理器，不需要任何权限
+        initialDir = getExternalFilesDir(null)
+        initView()
 
-        //2.做手机所有文件的文件管理器，要非常注意权限问题
-        initialDir = Environment.getExternalStorageDirectory()
-        permissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE))
+        //2.做外部存储 所有文件的文件管理器，要非常注意权限问题
+        //要设置android:requestLegacyExternalStorage="true"，详细解释见 开头的注释
+//        initialDir = Environment.getExternalStorageDirectory()
+//        permissions.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE))
 
         //TODO 文件遍历过程部分手机因性能原因耗时较长，考虑加个Loading动画
     }

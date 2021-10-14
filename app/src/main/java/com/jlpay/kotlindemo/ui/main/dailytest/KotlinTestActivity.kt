@@ -235,4 +235,14 @@ class KotlinTestActivity : AppCompatActivity() {
             }
         }
     }
+
+    //mapAction: (I) -> O 中的形参 I 必须带括号
+    inline fun <I, O> map(input: I, isMap: Boolean = true, mapAction: (I) -> O) =
+//        if (isMap) mapAction(input) else null
+        mapAction(input).takeIf { isMap }
+
+    //调用自己写的Map变换符（模仿RxJava）
+    var aa/*: String?*/ = map(123) {
+        "自定义Map变换符的结果：$it"
+    }
 }

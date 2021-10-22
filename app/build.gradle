@@ -151,6 +151,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'//定义(src/androidTest)目录下的代码依赖
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
     //Kotlin 协程
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'

@@ -166,6 +166,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
 
     /**
      * interval 操作符
+     * interval 会切换线程，使用的时候更新UI要注意切换回主线程
      * 创建一个每隔给定的时间间隔发射一个递增整数的Observable
      * 每隔一段时间就会发送一个事件，这个事件是从0开始，不断增1的数字
      * 可以用来设置定时器

@@ -1,5 +1,8 @@
 package com.example.mvvm.constant
 
+/**
+ * TODO unfinished
+ */
 object Constant {
 
     const val BUGLY_ID = "445be59d72"

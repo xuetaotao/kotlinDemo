@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--    与正常的XML布局文件不同的是，根标签改成了layout标签，内部有data标签和具体的布局。-->
     <!--    data标签内存放Databinding的数据类。除了需要用到的Image类之外，-->

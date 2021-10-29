@@ -19,6 +19,10 @@
 
 * Kotlin的日常练习
 
+## 第三方API
+
+* 和风天气：https://dev.qweather.com/docs/api/weather/weather-now/
+
 ## 程序优化方向
 
 * 1.添加腾讯Bugly完善崩溃和卡顿监控

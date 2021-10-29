@@ -196,6 +196,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("PdfViewerActivity", PdfViewerActivity::class.java)
         addButton("FileManagerActivity", FileManagerActivity::class.java)
         addButton("SmallFileManagerActivity", SmallFileManagerActivity::class.java)
+        addButton("DataBindingActivity", DataBindingActivity::class.java)
     }
 
     override fun initData() {

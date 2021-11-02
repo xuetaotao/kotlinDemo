@@ -60,6 +60,7 @@
             android:name=".MainActivity"
             android:screenOrientation="behind" />
         <activity android:name=".ui.activity.login.LoginActivity" />
+        <activity android:name=".webView.WebViewActivity" />
 
     </application>
 

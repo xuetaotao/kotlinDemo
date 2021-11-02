@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-//    id 'kotlin-android-extensions'//Deprecated
+    id 'kotlin-android-extensions'//Deprecated,BaseActivity use
     id 'kotlin-kapt'//kapt是kotlin的注解处理器
 }
 
@@ -74,7 +74,8 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     //retrofit + okHttp3
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'//之前的版本android11打开会闪退，使用最新版(https://juejin.cn/post/6922649360962420743)
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+//之前的版本android11打开会闪退，使用最新版(https://juejin.cn/post/6922649360962420743)
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
     //腾讯bugly

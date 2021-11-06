@@ -1,0 +1,17 @@
+{
+    "data": [
+        {
+            "name": "上传给后台的字段，同时也可以代表这一栏",
+            "typeName": "栏目的左侧/底侧内容（如：费率设置/上传营业执照）",
+            "typeInput": "栏目的右侧/上侧输入内容形式(如：string,double,picker,datePicker,datePicker&Specific,double&Specific,double&picker,singleBox(单选框),urlJump(网络请求新接口),pageJump（页面跳转）)",
+            "decimalDigits": "小数位数(可选)",
+            "feeRangeMin": 0.383,
+            "feeRangeMax": 1,
+            "feeRange": {
+                "法人收款": "那些页面可见，哪些不可见",
+                "对公收款": "页面可见情况"
+            },
+            "haveHint": "是否有温馨提示框的标志"
+        }
+    ]
+}

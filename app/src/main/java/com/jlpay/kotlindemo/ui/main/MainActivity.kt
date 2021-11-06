@@ -197,6 +197,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("FileManagerActivity", FileManagerActivity::class.java)
         addButton("SmallFileManagerActivity", SmallFileManagerActivity::class.java)
         addButton("DataBindingActivity", DataBindingActivity::class.java)
+        addButton("DynamicLayoutActivity", DynamicLayoutActivity::class.java)
     }
 
     override fun initData() {

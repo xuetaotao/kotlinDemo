@@ -201,6 +201,9 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'org.greenrobot:greendao-generator:3.2.2'
 
+    //https://github.com/orhanobut/logger
+    implementation 'com.orhanobut:logger:2.2.0'
+
     //微信分享 https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419319167&token=&lang=
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 

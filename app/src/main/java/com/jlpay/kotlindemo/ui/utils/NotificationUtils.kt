@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -66,7 +67,7 @@ class NotificationUtils//首先会按顺序执行类中init代码块，然后再
                 NotificationCompat.Builder(context, CHANNEL_ID)
 
             } else {
-                NotificationCompat.Builder(context)
+                NotificationCompat.Builder(context, CHANNEL_ID)
             }
 
         //自定义通知栏样式
@@ -78,21 +79,24 @@ class NotificationUtils//首先会按顺序执行类中init代码块，然后再
         val intent: Intent = Intent(context, PracticeViewActivity::class.java)
         val pi: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
+        //设置了必须的1，2，3项后就可以显示通知了
         return builder
             .setTicker("APK升级")//状态栏显示的提示
-            .setContentTitle("准备下载")//通知栏标题
-            .setContentText("正在下载……")//通知正文
+            .setContentTitle("准备下载")//1。设置通知栏标题，必须
+            .setContentText("正在下载……")//2。设置通知正文内容，必须
             .setContent(remoteViews)//自定义布局
-            .setSmallIcon(R.mipmap.ic_launcher)//系统状态栏显示的小图标
+            .setSmallIcon(R.drawable.ic_baseline_account_circle_24)//3。设置小图标，必须，系统状态栏显示的小图标，Android5.0开始要求　应该使用alpha图层来进行绘制，而不应该包括RGB图层（也就是图片不能带颜色）
+//            .setColor(context.resources.getColor(R.color.blue))//设置小图标的颜色
+            .setColor(Color.parseColor("#1AA3FF"))//设置小图标的颜色
             .setLargeIcon(
                 BitmapFactory.decodeResource(
                     context.resources,
                     R.mipmap.ic_launcher
                 )
-            )//下拉显示的大图标
-            .setWhen(System.currentTimeMillis())//通知弹出时间
-            .setAutoCancel(true)//可以点击通知栏的删除按钮删除
-            .setContentIntent(pi)//设置意图
+            )//设置通知的大图标，下拉显示的大图标
+            .setWhen(System.currentTimeMillis())//设置通知被创建的时间，通知弹出时间，可以不设置，默认就是当前时间
+            .setAutoCancel(true)//设置点击通知后自动清除通知，可以点击通知栏的删除按钮删除
+            .setContentIntent(pi)//设置点击通知后的跳转意图
             .build()
     }
 

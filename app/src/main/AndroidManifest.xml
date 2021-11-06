@@ -283,6 +283,7 @@
         </activity>
         <activity android:name=".ui.main.dailytest.SmallFileManagerActivity" />
         <activity android:name=".ui.main.dailytest.DataBindingActivity" />
+        <activity android:name=".ui.main.dailytest.DynamicLayoutActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

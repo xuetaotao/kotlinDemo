@@ -6,6 +6,10 @@
 * 网络库(加密)，数据库，组件库(MMKM,定位库等)，第三方库(友盟,Bugly,LeakCanary)
 * 隐私安全政策(SafetyUtils),存储规范
 
+## 计划TODO
+
+* 添加本地日志记录功能，借助logger
+
 ## 程序信息
 
 * 程序ID：com.jlpay.kotlinDemo

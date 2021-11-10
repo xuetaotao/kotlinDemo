@@ -226,6 +226,9 @@ dependencies {
     //pdf加载  https://github.com/barteksc/AndroidPdfViewer
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
+    //选择器 https://github.com/Bigkoo/Android-PickerView/
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
+
     //定位模块库
     //对应 测试库 Java版本：'com.jlpay.opensdk:location:1.0.3'
     implementation project(":location")

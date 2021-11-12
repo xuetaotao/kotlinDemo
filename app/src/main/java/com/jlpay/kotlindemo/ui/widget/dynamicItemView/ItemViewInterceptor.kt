@@ -8,6 +8,9 @@ interface ItemViewInterceptor {
 
     fun getResult(): String
 
+    //回显
+    fun setResult(result: String)
+
 //    fun getResultAdvance(): T //TODO  结果返回
 
     fun getViewId(): String

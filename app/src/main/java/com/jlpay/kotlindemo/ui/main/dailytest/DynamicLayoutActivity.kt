@@ -18,7 +18,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.bean.DynamicLayout
 import com.jlpay.kotlindemo.ui.utils.DialogUtils
-import com.jlpay.kotlindemo.ui.widget.dynamicItemView.CustomItemView1
 import com.jlpay.kotlindemo.ui.widget.dynamicItemView.DispatchItemData
 import com.jlpay.kotlindemo.ui.widget.dynamicItemView.parseJsonFile
 
@@ -28,7 +27,6 @@ class DynamicLayoutActivity : AppCompatActivity() {
 
     private lateinit var ll_parent: LinearLayoutCompat
     private lateinit var parseLayoutFromGson2: ParseLayoutFromGson2
-    private lateinit var customItemView1: CustomItemView1
     private var dynamicLayoutList: List<DynamicLayout>? = mutableListOf()
     private lateinit var dispatchItemData: DispatchItemData
 
@@ -122,9 +120,12 @@ class DynamicLayoutActivity : AppCompatActivity() {
         //从JSON文件中加载
         dynamicLayoutList = parseJsonFile(this)?.dynamicLayoutList
 
-        dynamicLayoutList?.let {
-            dispatchItemData = DispatchItemData(ll_parent, this, it)
+        dynamicLayoutList?.let { dynamicLayoutList ->
+            dispatchItemData = DispatchItemData(ll_parent, this, dynamicLayoutList)
             dispatchItemData.dispatchView()
+            dynamicLayoutList.forEach {
+                dispatchItemData.setViewResult(it.name, "6666")
+            }
         }
     }
 

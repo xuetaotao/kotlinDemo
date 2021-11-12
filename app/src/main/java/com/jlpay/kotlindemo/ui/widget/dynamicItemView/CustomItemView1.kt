@@ -49,13 +49,18 @@ class CustomItemView1 : LinearLayout, ItemViewInterceptor {
         edittext = view.findViewById<EditText>(R.id.edittext)
         edittext.hint = dynamicLayout.layoutRightHint
         edittext.inputType = InputType.TYPE_CLASS_PHONE
+        edittext.setText("9999")//模拟回显
     }
 
     override fun getResult(): String {
         return edittext.text.toString()
     }
 
-//    override fun getResultAdvance(): String {
+    override fun setResult(result: String) {
+        edittext.setText(result)
+    }
+
+    //    override fun getResultAdvance(): String {
 //        return "111"
 //    }
 

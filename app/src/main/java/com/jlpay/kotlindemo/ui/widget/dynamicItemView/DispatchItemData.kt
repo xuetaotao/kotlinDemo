@@ -73,6 +73,22 @@ class DispatchItemData(
         return null
     }
 
+    fun setViewResult(viewId: String, result: String) {
+        val childCount = linearLayout.childCount
+        for (i in 0 until childCount) {
+            try {
+                val itemViewInterceptor: View = linearLayout.getChildAt(i)
+                if (itemViewInterceptor is ItemViewInterceptor) {
+                    if (itemViewInterceptor.getViewId() == viewId) {
+                        return itemViewInterceptor.setResult(result)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     //TODO
     private fun parseResultType(resultType: String) {
         when (resultType) {

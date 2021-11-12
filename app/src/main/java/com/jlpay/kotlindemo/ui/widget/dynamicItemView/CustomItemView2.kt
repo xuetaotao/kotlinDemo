@@ -56,7 +56,11 @@ class CustomItemView2 : LinearLayout, ItemViewInterceptor {
         return tvOption.text.toString()
     }
 
-//    override fun getResultAdvance(): String {
+    override fun setResult(result: String) {
+        tvOption.text = result
+    }
+
+    //    override fun getResultAdvance(): String {
 //        return "222"
 //    }
 

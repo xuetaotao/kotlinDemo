@@ -3,8 +3,29 @@ package com.jlpay.kotlindemo.ui.widget.dynamicItemView
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.jlpay.kotlindemo.bean.DynamicLayout
+import com.jlpay.kotlindemo.bean.DynamiclayoutBean
 import java.lang.reflect.Type
+
+fun parseJsonFile(context: Context): DynamiclayoutBean? {
+    var dynamiclayoutBean: DynamiclayoutBean? = null
+    try {
+        val openInputStream = context.assets.open("dynamic_layout.json")
+        openInputStream.use { inputStream ->
+            JsonReader(inputStream.reader()).use { jsonReader ->
+                //创建数据类型
+                dynamiclayoutBean =
+                    Gson().fromJson<DynamiclayoutBean>(jsonReader, DynamiclayoutBean::class.java)
+            }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return dynamiclayoutBean
+}
+
 
 class DispatchItemData(
     private var linearLayout: ViewGroup,
@@ -27,9 +48,12 @@ class DispatchItemData(
     fun getViewResult(viewId: String): String? {
         //获取返回结果的类型 TODO
         val resultType: Type
-        dynamicLayoutList.forEach {
+        dynamicLayoutList.forEach { it ->
             if (it.name == viewId) {
-                parseResultType(it.resultType)
+                //暂时没返回这个字段
+                it.resultType?.let { resultType ->
+                    parseResultType(resultType)
+                }
             }
         }
 

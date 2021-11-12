@@ -5,6 +5,18 @@
       "uiType": "0",
       "layoutLeft": "详细地址",
       "layoutRightHint": "请输入详细地址"
+    },
+    {
+      "name": "service_phone",
+      "uiType": "0",
+      "layoutLeft": "客服电话",
+      "layoutRightHint": "便于客户联系"
+    },
+    {
+      "name": "remark",
+      "uiType": "0",
+      "layoutLeft": "备注信息",
+      "layoutRightHint": "请输入备注信息"
     }
   ]
 }

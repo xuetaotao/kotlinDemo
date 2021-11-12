@@ -20,6 +20,7 @@ import com.jlpay.kotlindemo.bean.DynamicLayout
 import com.jlpay.kotlindemo.ui.utils.DialogUtils
 import com.jlpay.kotlindemo.ui.widget.dynamicItemView.CustomItemView1
 import com.jlpay.kotlindemo.ui.widget.dynamicItemView.DispatchItemData
+import com.jlpay.kotlindemo.ui.widget.dynamicItemView.parseJsonFile
 
 class DynamicLayoutActivity : AppCompatActivity() {
 
@@ -28,7 +29,7 @@ class DynamicLayoutActivity : AppCompatActivity() {
     private lateinit var ll_parent: LinearLayoutCompat
     private lateinit var parseLayoutFromGson2: ParseLayoutFromGson2
     private lateinit var customItemView1: CustomItemView1
-    private var dynamicLayoutList: MutableList<DynamicLayout> = mutableListOf()
+    private var dynamicLayoutList: List<DynamicLayout>? = mutableListOf()
     private lateinit var dispatchItemData: DispatchItemData
 
 
@@ -104,22 +105,27 @@ class DynamicLayoutActivity : AppCompatActivity() {
         )
 
         //fifth way
-        var char = 'a'
-        for (i in 0 until 10) {
-            val charToString = (char++).toString()
-            dynamicLayoutList.add(
-                DynamicLayout(
-                    charToString,
-                    charToString,
-                    charToString,
-                    "0",
-                    "string"
-                )
-            )
-        }
+//        var char = 'a'
+//        for (i in 0 until 10) {
+//            val charToString = (char++).toString()
+//            dynamicLayoutList.add(
+//                DynamicLayout(
+//                    charToString,
+//                    charToString,
+//                    charToString,
+//                    "0",
+//                    "string"
+//                )
+//            )
+//        }
 
-        dispatchItemData = DispatchItemData(ll_parent, this, dynamicLayoutList)
-        dispatchItemData.dispatchView()
+        //从JSON文件中加载
+        dynamicLayoutList = parseJsonFile(this)?.dynamicLayoutList
+
+        dynamicLayoutList?.let {
+            dispatchItemData = DispatchItemData(ll_parent, this, it)
+            dispatchItemData.dispatchView()
+        }
     }
 
     //second way 使用
@@ -131,13 +137,32 @@ class DynamicLayoutActivity : AppCompatActivity() {
         //fifth way
 //        val result = customItemView1.getResult()
 //        Toast.makeText(this, "这是：$result", Toast.LENGTH_SHORT).show()
-        val name = dynamicLayoutList[1].name
-        val viewResult =
-            if (!TextUtils.isEmpty(dispatchItemData.getViewResult(name))) dispatchItemData.getViewResult(
-                name
-            ) else "结果为空"
-        Toast.makeText(this, "${name}的结果是：${viewResult}", Toast.LENGTH_SHORT)
-            .show()
+
+        //获取单个内容
+//        dynamicLayoutList?.let {
+//            val name = it[0].name
+//            val viewResult =
+//                if (!TextUtils.isEmpty(dispatchItemData.getViewResult(name))) dispatchItemData.getViewResult(
+//                    name
+//                ) else "结果为空"
+//            Toast.makeText(this, "${name}的结果是：${viewResult}", Toast.LENGTH_SHORT)
+//                .show()
+//        }
+
+        //获取全部内容
+        dynamicLayoutList?.let { dynamicLayoutList ->
+            val stringBuilder = StringBuilder()
+            dynamicLayoutList.forEach {
+                stringBuilder.append(
+                    "${it.name}的结果是：${
+                        if (dispatchItemData.getViewResult(it.name)
+                                .isNullOrEmpty()
+                        ) "结果为空" else dispatchItemData.getViewResult(it.name)
+                    }\n"
+                )
+            }
+            Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initData() {

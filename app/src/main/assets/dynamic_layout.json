@@ -1,0 +1,10 @@
+{
+  "dynamicLayoutList": [
+    {
+      "name": "address",
+      "uiType": "0",
+      "layoutLeft": "详细地址",
+      "layoutRightHint": "请输入详细地址"
+    }
+  ]
+}

@@ -16,7 +16,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.bean.DynamicLayout
 import com.jlpay.kotlindemo.ui.utils.DialogUtils
+import com.jlpay.kotlindemo.ui.widget.dynamicItemView.CustomItemView1
+import com.jlpay.kotlindemo.ui.widget.dynamicItemView.DispatchItemData
 
 class DynamicLayoutActivity : AppCompatActivity() {
 
@@ -24,6 +27,9 @@ class DynamicLayoutActivity : AppCompatActivity() {
 
     private lateinit var ll_parent: LinearLayoutCompat
     private lateinit var parseLayoutFromGson2: ParseLayoutFromGson2
+    private lateinit var customItemView1: CustomItemView1
+    private var dynamicLayoutList: MutableList<DynamicLayout> = mutableListOf()
+    private lateinit var dispatchItemData: DispatchItemData
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,12 +102,42 @@ class DynamicLayoutActivity : AppCompatActivity() {
                 }
                 .build()
         )
+
+        //fifth way
+        var char = 'a'
+        for (i in 0 until 10) {
+            val charToString = (char++).toString()
+            dynamicLayoutList.add(
+                DynamicLayout(
+                    charToString,
+                    charToString,
+                    charToString,
+                    "0",
+                    "string"
+                )
+            )
+        }
+
+        dispatchItemData = DispatchItemData(ll_parent, this, dynamicLayoutList)
+        dispatchItemData.dispatchView()
     }
 
     //second way 使用
     fun btnGet(view: android.view.View) {
-        val editTextStr = parseLayoutFromGson2.getEditTextStr()
-        Toast.makeText(this, "这是：$editTextStr", Toast.LENGTH_SHORT).show()
+        //second way
+//        val editTextStr = parseLayoutFromGson2.getEditTextStr()
+//        Toast.makeText(this, "这是：$editTextStr", Toast.LENGTH_SHORT).show()
+
+        //fifth way
+//        val result = customItemView1.getResult()
+//        Toast.makeText(this, "这是：$result", Toast.LENGTH_SHORT).show()
+        val name = dynamicLayoutList[1].name
+        val viewResult =
+            if (!TextUtils.isEmpty(dispatchItemData.getViewResult(name))) dispatchItemData.getViewResult(
+                name
+            ) else "结果为空"
+        Toast.makeText(this, "${name}的结果是：${viewResult}", Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun initData() {

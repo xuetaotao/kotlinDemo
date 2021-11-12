@@ -1,22 +1,13 @@
 package com.jlpay.kotlindemo.bean
 
 data class DynamiclayoutBean(
-    val `data`: List<Data>
+    val dynamicLayoutList: List<DynamicLayout>
 )
 
-data class Data(
-//    val decimalDigits: String,
-//    val feeRange: FeeRange,
-//    val feeRangeMax: Int,
-//    val feeRangeMin: Double,
-//    val haveHint: String,
+data class DynamicLayout(
+    val layoutLeft: String,
+    val layoutRightHint: String,
     val name: String,
-    val type: String,
-    val typeInput: String,
-    val typeName: String
+    val uiType: String,
+    val resultType: String
 )
-
-//data class FeeRange(
-//    val 对公收款: String,
-//    val 法人收款: String
-//)

@@ -35,6 +35,29 @@ class KotlinTestActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button).setOnClickListener(onClickListener)
 
         LambdaTest().main()
+
+        testIt()
+    }
+
+
+    abstract class Base {
+        var code: Int = calculate()
+
+        //加上下面这两行也不行
+//        var code: Int = initCode()
+//        fun initCode() = calculate()
+        abstract fun calculate(): Int
+    }
+
+    class Derived(private val x: Int) : Base() {
+        override fun calculate(): Int {
+            return x
+        }
+    }
+
+    fun testIt() {
+        println(Derived(42).code) // Expected: 42, actual: 0
+        Log.e(TAG, "testIt: ${Derived(42).code}")
     }
 
     /**

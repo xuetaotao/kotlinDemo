@@ -36,6 +36,7 @@
             android:hint=""
             android:padding="14dp"
             android:textColorHint="@color/common_gray"
+            android:textCursorDrawable="@drawable/shape_custom_cursor"
             android:textSize="14sp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

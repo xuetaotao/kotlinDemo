@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -37,6 +38,24 @@ public class Utils {
         Log.d("DisplayMetrics ", "======" + resources.getDisplayMetrics().toString() + "\t,fontScale:" + configuration.fontScale);
     }
 
+    /**
+     * 解析url地址中的某个参数的值
+     *
+     * @param url 地址
+     */
+    public static String parseUrlParam(String url, String paramKey) {
+        String paramValue = null;
+        String urlParams = url.substring(url.indexOf("?") + 1);
+        String[] splitParams = urlParams.split("&");
+        for (String splitParam : splitParams) {
+            String[] splitParamKeyValue = splitParam.split("=");
+            if (splitParamKeyValue.length == 2 && TextUtils.equals(splitParamKeyValue[0], paramKey)) {
+                paramValue = splitParamKeyValue[1];
+                break;
+            }
+        }
+        return paramValue;
+    }
 
     // 两次点击按钮之间的点击间隔不能少于400毫秒
     private static final int MIN_CLICK_DELAY_TIME = 400;

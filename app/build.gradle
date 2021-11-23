@@ -213,6 +213,12 @@ dependencies {
     //glide https://github.com/bumptech/glide
     implementation 'com.github.bumptech.glide:glide:3.7.0'
 
+    //mmkv  https://github.com/Tencent/MMKV/wiki/android_setup_cn
+    implementation 'com.tencent:mmkv:1.2.11'
+
+    //BaseRecyclerViewAdapterHelper :  https://github.com/CymChad/BaseRecyclerViewAdapterHelper/
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
+
     //修改dex文件库
     implementation group: 'org.smali', name: 'dexlib2', version: '2.3.1'
 //    implementation 'org.smali:dexlib2:2.3.1'
@@ -278,7 +284,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     //内存泄露检测工具 LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     //性能(卡顿)监控工具 BlockCanary
 //    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'

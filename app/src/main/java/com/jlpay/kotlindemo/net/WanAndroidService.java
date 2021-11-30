@@ -10,6 +10,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -51,4 +52,9 @@ public interface WanAndroidService {
     @Streaming
     @GET
     Observable<ResponseBody> download(@Url String url);
+
+    //没有用，仅做用例说明
+    //@Body 即非表单请求体，被@Body注解的param将会被Gson转换成json发送到服务器
+    @POST("/common/authLoginValidate")
+    Observable<ResponseBody> login(@Body RequestBody param);
 }

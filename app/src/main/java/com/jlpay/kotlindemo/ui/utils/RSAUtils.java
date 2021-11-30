@@ -5,6 +5,7 @@ import android.util.Base64;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -288,6 +289,81 @@ public class RSAUtils {
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * javax.crypto.BadPaddingException: error:0407106B:rsa routines:RSA_padding_check_PKCS1_type_2:block t
+     * RSA超过长度时报这个错，解决方法是  加密使用117 解密使用128
+     * TODO 未验证
+     */
+    public static byte[] encryptByPublicKey(byte[] data, PublicKey publicKey) {
+        int MAX_ENCRYPT_BLOCK = 117;
+        try {
+            Cipher cipher = Cipher.getInstance(CIPHER_TRANSFORMATION);
+            // 编码前设定编码方式及密钥
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+
+            int inputLen = data.length;
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int offSet = 0;
+            byte[] cache;
+            int i = 0;
+            // 对数据分段加密
+            while (inputLen - offSet > 0) {
+                if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
+                    cache = cipher.doFinal(data, offSet, MAX_ENCRYPT_BLOCK);
+                } else {
+                    cache = cipher.doFinal(data, offSet, inputLen - offSet);
+                }
+                out.write(cache, 0, cache.length);
+                i++;
+                offSet = i * MAX_ENCRYPT_BLOCK;
+            }
+            byte[] encryptedData = out.toByteArray();
+            out.close();
+            return encryptedData;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * TODO 未验证
+     *
+     * @param encryptedData
+     * @param privateKey
+     * @return
+     */
+    public static byte[] decryptByPrivateKey(byte[] encryptedData, PrivateKey privateKey) {
+        int MAX_ENCRYPT_BLOCK = 128;
+        try {
+            Cipher cipher = Cipher.getInstance(CIPHER_TRANSFORMATION);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int inputLen = encryptedData.length;
+            int offSet = 0;
+            byte[] cache;
+            int i = 0;
+            // 对数据分段解密
+            while (inputLen - offSet > 0) {
+                if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
+                    cache = cipher.doFinal(encryptedData, offSet, MAX_ENCRYPT_BLOCK);
+                } else {
+                    cache = cipher.doFinal(encryptedData, offSet, inputLen - offSet);
+                }
+                out.write(cache, 0, cache.length);
+                i++;
+                offSet = i * MAX_ENCRYPT_BLOCK;
+            }
+            byte[] encryptData = out.toByteArray();
+            out.close();
+            return encryptData;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

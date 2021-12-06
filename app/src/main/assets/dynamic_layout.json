@@ -10,6 +10,7 @@
       "name": "service_phone",
       "uiType": "0",
       "layoutLeft": "客服电话",
+      "layoutRight": "来测测双向绑定",
       "layoutRightHint": "便于客户联系"
     },
     {

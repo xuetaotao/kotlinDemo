@@ -7,11 +7,13 @@ import android.graphics.Matrix
 import android.text.TextUtils
 import android.util.Log
 import androidx.exifinterface.media.ExifInterface
+import com.jlpay.imagepick.ErrorCodeBean
 import top.zibin.luban.Luban
 import top.zibin.luban.OnCompressListener
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.math.max
 
 class ImageCompress(private var imgDirName: String) {
 
@@ -184,6 +186,92 @@ class ImageCompress(private var imgDirName: String) {
         }
     }
 
+
+    private fun originCompress2(
+        context: Context,
+        imagePath: String,
+        reqWidth: Int,
+        reqHeight: Int,
+        ignoreSize: Int,
+        listener: ImageCompressListener,
+        quality: Int,
+    ) {
+        //如果inJustDecoedBounds设置为true的话，解码bitmap时可以只返回其高、宽和Mime类型，而不必为其申请内存，从而节省了内存空间；即只读取图片，不加载到内存中
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        var bitmap: Bitmap = BitmapFactory.decodeFile(imagePath)
+        val width: Int = bitmap.width
+        val height: Int = bitmap.height
+        options.inJustDecodeBounds = false
+
+        if (!needCompress(imagePath, ignoreSize) && width <= reqWidth && height <= reqHeight) {
+            listener.onSuccess(imagePath)
+            return
+        }
+
+        //保证绝对压缩到 reqWidth*reqHeight
+//        var sampleSize: Int = 1
+//        while ((width / sampleSize > reqWidth) || (height / sampleSize > reqHeight)) {
+//            sampleSize *= 2
+//        }
+
+        //不保证绝对压缩到需求的尺寸，接近略大于
+        val sampleSize = max((width / reqWidth), (height / reqHeight))
+
+        options.inSampleSize = sampleSize
+        try {
+            bitmap = BitmapFactory.decodeFile(imagePath, options)
+        } catch (e: OutOfMemoryError) {
+            listener.onFailed(ErrorCodeBean.Message.BITMAP_OUTOFMEMORY_MSG + e.message, ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
+            return
+        }
+        bitmap = rotatePicByDegree(bitmap, getPictureDegree(imagePath))
+        val byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        var qualityCurrent = 100
+        var compressTime: Int = 0
+
+        while (byteArrayOutputStream.toByteArray().size / 1024 > ignoreSize && qualityCurrent >= quality) {
+            byteArrayOutputStream.reset()
+
+            if (compressTime < 2) {
+                qualityCurrent -= 10
+            } else {
+                qualityCurrent -= 5
+            }
+            compressTime++
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, qualityCurrent, byteArrayOutputStream)
+
+            Log.d(TAG,
+                (byteArrayOutputStream.toByteArray().size / 1024).toString() + "KB" + "\t" + "qualityCurrent = " + qualityCurrent
+                        + "\t" + "compressTime = " + compressTime)
+        }
+
+        val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
+        if (TextUtils.isEmpty(createAppPicDir)) {
+            listener.onFailed(ErrorCodeBean.Message.APPPIC_DIR_CREATE_FAIL_MSG, ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
+            return
+        }
+        val file = File(createAppPicDir, "IMG" + System.currentTimeMillis() + ".jpg")
+        try {
+            val fileOutputStream: FileOutputStream = FileOutputStream(file)
+            byteArrayOutputStream.writeTo(fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            byteArrayOutputStream.close()
+            listener.onSuccess(file.absolutePath)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            listener.onFailed(ErrorCodeBean.Message.STREAM_FAIL_MSG, ErrorCodeBean.Code.IMAGE_COMPRESS_CODE)
+        } finally {
+            bitmapRecycle(bitmap)
+        }
+    }
+
+
+
     /**
      * 获取图片的旋转角度
      * 手机拍照的图片，本地查看正常的照片，传到服务器发现照片旋转了90°或者270°，这是因为有些手机摄像头的参数原因，拍出来的照片是自带旋转角度的
@@ -239,6 +327,18 @@ class ImageCompress(private var imgDirName: String) {
             }
         }
     }
+
+    /**
+     * 判断是否需要压缩处理
+     */
+    private fun needCompress(imagePath: String, ignoreSize: Int): Boolean {
+        if (ignoreSize > 0) {
+            val file: File = File(imagePath)
+            return file.exists() && (file.length() > (ignoreSize shl 10))//左移10(<<10)相当于乘以1024
+        }
+        return true
+    }
+
 
     enum class ImageCompressType {
         LuBan, OriginCompress

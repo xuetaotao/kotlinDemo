@@ -4,12 +4,12 @@ import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.bean.DynamicLayout
+import com.jlpay.kotlindemo.databinding.ItemLayoutFromGson1Binding
 
 class CustomItemView1 : LinearLayout, ItemViewInterceptor {
 
@@ -42,14 +42,28 @@ class CustomItemView1 : LinearLayout, ItemViewInterceptor {
 
 
     override fun inflateView(dynamicLayout: DynamicLayout) {
-        val view: View =
-            LayoutInflater.from(context).inflate(R.layout.item_layout_from_gson1, this, true)
-        val textview = view.findViewById<TextView>(R.id.textview)
-        textview.text = dynamicLayout.layoutLeft
-        edittext = view.findViewById<EditText>(R.id.edittext)
-        edittext.hint = dynamicLayout.layoutRightHint
-        edittext.inputType = InputType.TYPE_CLASS_PHONE
-        edittext.setText("9999")//模拟回显
+        //使用DataBinding实现双向绑定
+        val dataBinding = DataBindingUtil.inflate<ItemLayoutFromGson1Binding>(
+            LayoutInflater.from(context),
+            R.layout.item_layout_from_gson1,
+            this,
+            true
+        )
+//        dataBinding.lifecycleOwner = //TODO 要加上
+        dataBinding.textview.text = dynamicLayout.layoutLeft
+        dataBinding.edittext.inputType = InputType.TYPE_CLASS_PHONE
+        dataBinding.edittext.hint = dynamicLayout.layoutRightHint
+        dataBinding.edittext.setText(dynamicLayout.layoutRight)
+
+
+//        val view: View =
+//            LayoutInflater.from(context).inflate(R.layout.item_layout_from_gson1, this, true)
+//        val textview = view.findViewById<TextView>(R.id.textview)
+//        textview.text = dynamicLayout.layoutLeft
+//        edittext = view.findViewById<EditText>(R.id.edittext)
+//        edittext.hint = dynamicLayout.layoutRightHint
+//        edittext.inputType = InputType.TYPE_CLASS_PHONE
+//        edittext.setText("9999")//模拟回显
     }
 
     override fun getResult(): String {

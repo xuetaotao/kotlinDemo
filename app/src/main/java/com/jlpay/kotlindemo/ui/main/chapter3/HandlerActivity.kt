@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -20,6 +21,8 @@ import kotlin.collections.ArrayList
 import kotlin.math.sqrt
 
 class HandlerActivity : AppCompatActivity() {
+
+    private val TAG = "HandlerActivity"
 
     private lateinit var ivShow: ImageView
     private lateinit var etNum: EditText
@@ -41,6 +44,13 @@ class HandlerActivity : AppCompatActivity() {
 
         ivShow = findViewById(R.id.iv_show)
         etNum = findViewById(R.id.et_num)
+
+        //这个开启的runnable会在这个handler所依附线程中运行，而这个handler是在UI线程中创建的，所以
+        //自然地依附在主线程中了
+        Handler().postDelayed(Runnable {
+            Log.e(TAG, "fetchData current Thread:${Thread.currentThread().name}")
+            etNum.setText("过了五秒了")
+        }, 5000)
 
         //定义一个计时器，周期性执行指定任务，TimerTask的本质就是启动一条新线程，所以必须通过Handler通知主线程更新UI
         Timer().schedule(object : TimerTask() {

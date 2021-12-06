@@ -1,13 +1,16 @@
 package com.jlpay.kotlindemo.bean
 
+import androidx.databinding.ObservableField
+
 data class DynamiclayoutBean(
-    val dynamicLayoutList: List<DynamicLayout>
+    var dynamicLayoutList: List<DynamicLayout>
 )
 
 data class DynamicLayout(
-    val layoutLeft: String,
-    val layoutRightHint: String,
-    val name: String,
-    val uiType: String,
-    val resultType: String
+    var layoutLeft: String,
+    var layoutRightHint: String,
+    var layoutRight: String,
+    var name: String,
+    var uiType: String,
+    var resultType: String
 )

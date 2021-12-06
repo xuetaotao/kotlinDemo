@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'//Deprecated
+//apply plugin: 'kotlin-parcelize'//代替上面插件中的parcelize功能
 apply plugin: 'kotlin-kapt'//kapt是kotlin的注解处理器
 apply from: 'tinker-support.gradle'
 //apply plugin: 'com.jakewharton.hugo'

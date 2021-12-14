@@ -10,6 +10,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+
+import java.util.regex.Pattern;
 
 /**
  * 存放一些日常使用小方法的工具类
@@ -55,6 +58,34 @@ public class Utils {
             }
         }
         return paramValue;
+    }
+
+    /**
+     * 判断字符串是否为数字（包括小数和正整数）
+     *
+     * @param str 要判断的字符串
+     * @return true 是
+     */
+    private boolean isNumerEx(String str) {
+//        Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+"); //正负小数类型
+        Pattern pattern = Pattern.compile("[0-9]+.?[0-9]+");//正小数
+        Pattern pattern1 = Pattern.compile("[0-9]*");//正整数
+        if (pattern.matcher(str).matches() || pattern1.matcher(str).matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 设置EditText是否可编辑
+     *
+     * @param edtInvoiceCount
+     * @param editable
+     */
+    private void setEdieTextEditable(EditText edtInvoiceCount, boolean editable) {
+        edtInvoiceCount.setFocusable(editable);
+        edtInvoiceCount.setFocusableInTouchMode(editable);
     }
 
     // 两次点击按钮之间的点击间隔不能少于400毫秒

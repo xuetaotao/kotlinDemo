@@ -24,6 +24,7 @@ import com.jlpay.kotlindemo.ui.main.hencoder.mvvm.MvvmDemoActivity
 import com.jlpay.kotlindemo.ui.main.java_advance.GenericTypeActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn2.WanActivity
+import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn4.MyLoginActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxJavaActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxLifecycleActivity
@@ -198,10 +199,8 @@ class MainActivity : BaseMediaActivity() {
         addButton("SmallFileManagerActivity", SmallFileManagerActivity::class.java)
         addButton("DataBindingActivity", DataBindingActivity::class.java)
         addButton("DynamicLayoutActivity", DynamicLayoutActivity::class.java)
-        addButton(
-            "BaseRecyclerViewAdapterHelperActivity",
-            BaseRecyclerViewAdapterHelperActivity::class.java
-        )
+        addButton("BaseRecyclerViewAdapterHelperActivity", BaseRecyclerViewAdapterHelperActivity::class.java)
+        addButton("MyLoginActivity", MyLoginActivity::class.java)
     }
 
     override fun initData() {

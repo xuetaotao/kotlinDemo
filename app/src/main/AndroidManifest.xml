@@ -285,6 +285,7 @@
         <activity android:name=".ui.main.dailytest.DataBindingActivity" />
         <activity android:name=".ui.main.dailytest.DynamicLayoutActivity" />
         <activity android:name=".ui.main.dailytest.BaseRecyclerViewAdapterHelperActivity" />
+        <activity android:name=".ui.main.jetpack.mvvm.learn4.MyLoginActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

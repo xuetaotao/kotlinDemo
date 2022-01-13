@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn4.MyLoginViewModel" />
+
+        <variable
+            name="click"
+            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn4.MyLoginActivity.ClickProxy" />
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_dialog"
+            android:hint="请输入账号"
+            android:inputType="text"
+            android:padding="15dp"
+            android:text="@={vm.account}"
+            android:textColor="@color/common_black"
+            android:textColorHint="@color/common_gray"
+            android:textSize="14sp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_dialog"
+            android:hint="请输入密码"
+            android:inputType="textPassword"
+            android:padding="15dp"
+            android:text="@={vm.password}"
+            android:textColor="@color/common_black"
+            android:textColorHint="@color/common_gray"
+            android:textSize="14sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bg_blue_button"
+            android:onClick="@{v->click.login(v)}"
+            android:padding="15dp"
+            android:text="登陆"
+            android:textColor="@color/common_white"
+            android:textSize="14sp" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

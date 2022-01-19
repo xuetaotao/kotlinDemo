@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </androidx.viewpager.widget.ViewPager>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/common_gray" />
+
+        <!-- 注意这里是 material 库的TabLayout，而不是原始Android包中的TableLayout      -->
+        <!-- 设置tabRippleColor属性值为一个透明的背景色,去掉这个点击时的背景      -->
+        <!--tabIndicatorHeight: 设置指示器的高度，如果我们不需要显示指示器，则可以通过设置tabIndicatorHeight等于0来实现       -->
+        <!--tabIndicatorColor:这是属性设置指示器线条的颜色        -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorHeight="0dp"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabSelectedTextColor="@color/common_blue"
+            app:tabTextColor="@color/common_gray">
+
+            <!-- 这里在代码里通过newTab()方式添加，也可以在这里添加           -->
+            <!--            <com.google.android.material.tabs.TabItem-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="微信" />-->
+
+            <!--            <com.google.android.material.tabs.TabItem-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="通讯录" />-->
+
+
+            <!--            <com.google.android.material.tabs.TabItem-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="发现" />-->
+
+            <!--            <com.google.android.material.tabs.TabItem-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="我" />-->
+
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+        <!--Tablelayout 类以行和列的形式对控件进行管理，每一行为一个TableRow对象，或一个View控件        -->
+        <!--TableLayout 的行数由开发人员直接指定，即有多少个 TableRow 对象（或 View 控件），就有多少行        -->
+        <!--TableLayout 的列数等于含有最多子控件的 TableRow 的列数。如第一 TableRow 含2个子控件，第二个 TableRow 含3个，第三个 TableRow 含4个，那么该 TableLayout 的列数为4        -->
+        <!--        <TableLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content">-->
+
+        <!--            <TableRow>-->
+
+        <!--                <TextView-->
+        <!--                    android:layout_width="0dp"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:layout_weight="1"-->
+        <!--                    android:gravity="center"-->
+        <!--                    android:padding="15dp"-->
+        <!--                    android:text="微信"-->
+        <!--                    android:textColor="@color/common_black"-->
+        <!--                    android:textSize="14sp" />-->
+
+        <!--                <TextView-->
+        <!--                    android:layout_width="0dp"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:layout_weight="1"-->
+        <!--                    android:gravity="center"-->
+        <!--                    android:padding="15dp"-->
+        <!--                    android:text="通讯录"-->
+        <!--                    android:textColor="@color/common_black"-->
+        <!--                    android:textSize="14sp" />-->
+
+        <!--                <TextView-->
+        <!--                    android:layout_width="0dp"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:layout_weight="1"-->
+        <!--                    android:gravity="center"-->
+        <!--                    android:padding="15dp"-->
+        <!--                    android:text="发现"-->
+        <!--                    android:textColor="@color/common_black"-->
+        <!--                    android:textSize="14sp" />-->
+
+        <!--                <TextView-->
+        <!--                    android:layout_width="0dp"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    android:layout_weight="1"-->
+        <!--                    android:gravity="center"-->
+        <!--                    android:padding="15dp"-->
+        <!--                    android:text="我"-->
+        <!--                    android:textColor="@color/common_black"-->
+        <!--                    android:textSize="14sp" />-->
+
+        <!--            </TableRow>-->
+
+        <!--        </TableLayout>-->
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

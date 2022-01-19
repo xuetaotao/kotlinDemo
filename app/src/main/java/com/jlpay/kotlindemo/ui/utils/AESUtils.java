@@ -14,7 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class AESUtils {
 
     public static final String AES_KEY = "U6woFMMEYEjgb+Ws";//JDK目前只支持AES-128加密，也就是传入的密钥必须是长度为16的字符串，SP本地存储加密用
-    public static final int KEY_SIZE = 128;//对应16字节
+    public static final int KEY_SIZE = 128;//128位，对应16字节
     public static final String AES_ALGORITHM = "AES/CBC/PKCS5Padding";//Android默认密码工作模式为ECB，但不安全，这里用CBC
     public static final String CIPHER_ALGORITHM_ECB_NoPadding = "AES/ECB/NoPadding";//JL自定义AES加密使用
     public static final String AES = "AES";

@@ -153,6 +153,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'//定义(src/androidTest)目录下的代码依赖
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+//    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
     //Kotlin 协程
@@ -285,7 +287,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     //内存泄露检测工具 LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     //性能(卡顿)监控工具 BlockCanary
 //    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'

@@ -294,7 +294,7 @@ public class RSAUtils {
 
     /**
      * javax.crypto.BadPaddingException: error:0407106B:rsa routines:RSA_padding_check_PKCS1_type_2:block t
-     * RSA超过长度时报这个错，解决方法是  加密使用117 解密使用128
+     * RSA超过长度时报这个错，解决方法是 分段加解密  加密使用117 解密使用128
      * TODO 未验证
      */
     public static byte[] encryptByPublicKey(byte[] data, PublicKey publicKey) {

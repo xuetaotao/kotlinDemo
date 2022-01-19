@@ -201,6 +201,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("DynamicLayoutActivity", DynamicLayoutActivity::class.java)
         addButton("BaseRecyclerViewAdapterHelperActivity", BaseRecyclerViewAdapterHelperActivity::class.java)
         addButton("MyLoginActivity", MyLoginActivity::class.java)
+        addButton("LifeCycleActivity", LifeCycleActivity::class.java)
     }
 
     override fun initData() {

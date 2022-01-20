@@ -13,6 +13,13 @@ import com.jlpay.kotlindemo.ui.base.BaseLifeCycleActivity
 /**
  * Android控件-TabLayout使用介绍
  * https://juejin.cn/post/6999807478284173342
+ * Android仿微信底部菜单栏+今日头条顶部导航栏
+ * https://blog.csdn.net/ahuyangdong/article/details/82493158
+ *
+ * TabLayout是Android support中的一个控件android.support.design.widget.TabLayout，Google在升级了AndroidX之后，
+ * 将TabLayout迁移到material包下面去了com.google.android.material.tabs.TabLayout，原来的support下面的TabLayout
+ * 从API 29开始就不再维护了。所以如果项目已经升级了AndroidX，建议直接使用后者。
+ * TabLayout一般结合ViewPager+Fragment的使用实现滑动的标签选择器
  *
  * TODO 去掉滑动到最左边或者最右边后，继续向左或者向右滑动的动画
  * TODO 使用ViewPager2实现当前效果

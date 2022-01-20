@@ -202,6 +202,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("BaseRecyclerViewAdapterHelperActivity", BaseRecyclerViewAdapterHelperActivity::class.java)
         addButton("MyLoginActivity", MyLoginActivity::class.java)
         addButton("LifeCycleActivity", LifeCycleActivity::class.java)
+        addButton("ViewPager2TabActivity", ViewPager2TabActivity::class.java)
     }
 
     override fun initData() {

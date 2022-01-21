@@ -199,7 +199,10 @@ class MainActivity : BaseMediaActivity() {
         addButton("SmallFileManagerActivity", SmallFileManagerActivity::class.java)
         addButton("DataBindingActivity", DataBindingActivity::class.java)
         addButton("DynamicLayoutActivity", DynamicLayoutActivity::class.java)
-        addButton("BaseRecyclerViewAdapterHelperActivity", BaseRecyclerViewAdapterHelperActivity::class.java)
+        addButton(
+            "BaseRecyclerViewAdapterHelperActivity",
+            BaseRecyclerViewAdapterHelperActivity::class.java
+        )
         addButton("MyLoginActivity", MyLoginActivity::class.java)
         addButton("LifeCycleActivity", LifeCycleActivity::class.java)
         addButton("ViewPager2TabActivity", ViewPager2TabActivity::class.java)

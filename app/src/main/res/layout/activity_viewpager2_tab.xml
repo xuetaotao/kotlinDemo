@@ -20,6 +20,11 @@
             android:layout_weight="1"
             android:orientation="horizontal" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/blue" />
+
         <!--
         tabIndicatorColor  指示器颜色
         tabIndicatorHeight 指示器高度

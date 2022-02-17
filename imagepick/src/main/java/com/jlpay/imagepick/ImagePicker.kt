@@ -95,7 +95,7 @@ class ImagePicker private constructor(builder: Builder) {
     private fun requestImplementation(
         imageOperationKind: String,
         uri: Uri?,
-        cropOutputUri: Uri?,
+        cropOutputUri: Uri?
     ): Observable<ImagePickerResult> {
         val list: ArrayList<Observable<ImagePickerResult>> = ArrayList()
         var subject: PublishSubject<ImagePickerResult>? =
@@ -127,7 +127,7 @@ class ImagePicker private constructor(builder: Builder) {
 
     private fun takePhotoRequestFromFragment(
         imageOperationKind: String,
-        uri: Uri,
+        uri: Uri
     ) {
         this.mImagePickerFragment.get()
             .log("takePhotoRequestFromFragment:\t" + "imageOperationKind:$imageOperationKind, uri:${uri.toString()}")
@@ -143,7 +143,7 @@ class ImagePicker private constructor(builder: Builder) {
     private fun imageCropRequestFromFragment(
         imageOperationKind: String,
         uri: Uri,
-        cropOutputUri: Uri,
+        cropOutputUri: Uri
     ) {
         this.mImagePickerFragment.get()
             .log("imageCropRequestFromFragment:\timageOperationKind:$imageOperationKind")

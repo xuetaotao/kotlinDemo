@@ -79,7 +79,7 @@ class ImagePickerFragment : Fragment() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray,
+        grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         //后续可以加上请求权限
@@ -125,7 +125,7 @@ class ImagePickerFragment : Fragment() {
 
     fun setSubjectForOperationKind(
         imageOperationKind: String,
-        subject: PublishSubject<ImagePickerResult>,
+        subject: PublishSubject<ImagePickerResult>
     ) {
         this.mSubjects[imageOperationKind] = subject
     }

@@ -9,6 +9,7 @@ import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.mvvm.R
 import com.example.mvvm.constant.Constant
 import com.example.mvvm.utils.DensityUtil
@@ -54,9 +55,16 @@ abstract class BaseFragment : Fragment() {
      * 无网状态—>有网状态 的自动重连操作，子类可重写该方法
      */
     open fun doReConnected() {
-        LiveEventBus.get("isConnected", Boolean::class.java).observe(this) {
-            if (it) startHttp()
-        }
+        LiveEventBus.get("isConnected", Boolean::class.java)
+            .observe(this, object : Observer<Boolean> {
+                override fun onChanged(t: Boolean?) {
+                    if (t == true) startHttp()
+                }
+            })
+
+//        {
+//            if (it) startHttp()
+//        }
     }
 
     open fun showLoading() {

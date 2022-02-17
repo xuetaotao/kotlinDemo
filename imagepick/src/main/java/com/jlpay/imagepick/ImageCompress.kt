@@ -34,7 +34,7 @@ class ImageCompress {
         type: ImageCompressType,
         ignoreSize: Int,
         reqSize: Int,
-        listener: ImageCompressListener,
+        listener: ImageCompressListener
     ) {
         when (type) {
             ImageCompressType.LuBan -> {
@@ -51,7 +51,7 @@ class ImageCompress {
         context: Context,
         imagePath: String,
         ignoreSize: Int,
-        listener: ImageCompressListener,
+        listener: ImageCompressListener
     ) {
         val createAppPicDir = MediaUtils.Images.createAppPicDir(context, imgDirName)
         if (TextUtils.isEmpty(createAppPicDir)) {
@@ -93,7 +93,7 @@ class ImageCompress {
         context: Context,
         imagePath: String,
         ignoreSize: Int,
-        listener: ImageCompressListener,
+        listener: ImageCompressListener
     ) {
         originCompress(context, imagePath, ignoreSize, listener, 60)
     }
@@ -103,7 +103,7 @@ class ImageCompress {
         imagePath: String,
         ignoreSize: Int,
         listener: ImageCompressListener,
-        quality: Int,
+        quality: Int
     ) {
         if (!needCompress(imagePath, ignoreSize)) {
 //            Log.e("TAG", "不需要压缩：" + imagePath)
@@ -184,7 +184,7 @@ class ImageCompress {
         reqWidth: Int,
         reqHeight: Int,
         ignoreSize: Int,
-        listener: ImageCompressListener,
+        listener: ImageCompressListener
     ) {
         originCompress(context, imagePath, reqWidth, reqHeight, ignoreSize, listener, 60)
     }
@@ -196,7 +196,7 @@ class ImageCompress {
         reqHeight: Int,
         ignoreSize: Int,
         listener: ImageCompressListener,
-        quality: Int,
+        quality: Int
     ) {
         //如果inJustDecoedBounds设置为true的话，解码bitmap时可以只返回其高、宽和Mime类型，而不必为其申请内存，从而节省了内存空间；即只读取图片，不加载到内存中
         val options: BitmapFactory.Options = BitmapFactory.Options()

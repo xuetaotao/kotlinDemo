@@ -120,7 +120,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun insertImageToPic(
                 context: Context,
                 inputStream: InputStream,
-                imgDirName: String,
+                imgDirName: String
             ): Uri? {
                 val contentResolver = context.contentResolver
                 val pendingUri: Uri? = createImgPicUri(context, imgDirName)
@@ -148,7 +148,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun insertImageToPic(
                 context: Context,
                 bitmap: Bitmap,
-                imgDirName: String,
+                imgDirName: String
             ): Uri? {
                 val contentResolver = context.contentResolver
                 val pendingUri: Uri? = createImgPicUri(context, imgDirName)
@@ -192,7 +192,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun getImageContentUri(
                 context: Context,
                 imagePath: String,
-                authority: String,
+                authority: String
             ): Uri? {
                 if (!checkPermission(context)) {
                     return null
@@ -240,7 +240,7 @@ class MediaUtils : IAndroid11Upgrade {
              * @return
              */
             fun createImageContentUri(
-                context: Context, isPubPicUri: Boolean, imgDirName: String, authority: String?,
+                context: Context, isPubPicUri: Boolean, imgDirName: String, authority: String?
             ): Uri? {
                 if (!checkPermission(context)) {
                     return null
@@ -306,7 +306,7 @@ class MediaUtils : IAndroid11Upgrade {
             fun copyImgFromAppPicToPic(
                 context: Context,
                 imgPath: String,
-                imgDirName: String,
+                imgDirName: String
             ): Uri? {
                 if (!checkPermission(context)) {
                     return null

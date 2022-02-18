@@ -3,6 +3,7 @@ package com.jlpay.kotlindemo.service
 import android.app.IntentService
 import android.content.Intent
 import android.util.Log
+import androidx.core.app.JobIntentService
 
 /**
  * 建议学习使用：WorkManager 或者 JobIntentService
@@ -22,6 +23,9 @@ import android.util.Log
 class MyIntentService : IntentService {
 
     private var count: Int = 0
+    private val jobIntentService: JobIntentService by lazy {
+        MyJobIntentService()
+    }
 
     constructor() : super("MyIntentService")
 
@@ -47,5 +51,11 @@ class MyIntentService : IntentService {
     override fun onDestroy() {
         super.onDestroy()
         Log.e("IntentServiceActivity", "Service is Destroy")
+    }
+
+    inner class MyJobIntentService : JobIntentService() {
+        override fun onHandleWork(intent: Intent) {
+            Log.e("IntentServiceActivity", "MyJobIntentService onHandleWork")
+        }
     }
 }

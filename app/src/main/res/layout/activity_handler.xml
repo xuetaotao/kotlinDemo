@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="请输入一个数值"
+        android:inputType="number"
         android:textColor="@color/common_blue"
         android:textSize="14sp" />
 
@@ -36,6 +37,16 @@
         android:onClick="cal"
         android:text="计算"
         android:textColor="@color/common_blue"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        android:text=""
+        android:textColor="@color/common_black"
         android:textSize="14sp" />
 
 </LinearLayout>

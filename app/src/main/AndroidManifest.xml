@@ -233,7 +233,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.dailytest.KotlinTestActivity"
+            android:name=".kotlin_study.KotlinTestActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.main.chapter10.SimpleServiceActivity" />
@@ -288,6 +288,7 @@
         <activity android:name=".ui.main.jetpack.mvvm.learn4.MyLoginActivity" />
         <activity android:name=".ui.main.dailytest.LifeCycleActivity" />
         <activity android:name=".ui.main.dailytest.ViewPager2TabActivity" />
+        <activity android:name=".java_study.ListNodeActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.java_study.ListNodeActivity
+import com.jlpay.kotlindemo.java_study.ReflectActivity
 import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.*
@@ -209,6 +210,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("LifeCycleActivity", LifeCycleActivity::class.java)
         addButton("ViewPager2TabActivity", ViewPager2TabActivity::class.java)
         addButton("ListNodeActivity", ListNodeActivity::class.java)
+        addButton("ReflectActivity", ReflectActivity::class.java)
     }
 
     override fun initData() {

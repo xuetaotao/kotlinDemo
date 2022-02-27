@@ -9,6 +9,19 @@ public class JavaListNode {
 //
 //    }
 
+    public String name;
+    protected int age;
+    char sex;
+    private String phoneNum;
+
+    public JavaListNode(String name) {
+        this.name = name;
+    }
+
+    public JavaListNode() {
+
+    }
+
     /**
      * java ListNode 链表
      * https://www.cnblogs.com/easyidea/p/13371863.html

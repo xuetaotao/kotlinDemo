@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class ListNodeActivity extends AppCompatActivity {
 
@@ -19,7 +20,76 @@ public class ListNodeActivity extends AppCompatActivity {
 //        listNodeReplace();//替换节点
 //        listNodeDel();//删除节点
 //        printNodeList();//从尾到头打印链表 非递归
-        printNodeList2();//从尾到头打印链表  递归
+//        printNodeList2();//从尾到头打印链表  递归
+        reverseNodeList();//反转链表
+    }
+
+    /**
+     * 反转链表
+     * 给定一个单链表的头结点pHead(该头节点是有值的，比如在下图，它的val是1)，长度为n，反转该链表后，返回新链表的表头
+     * 如当输入链表{1,2,3}时，
+     * 经反转后，原链表变为{3,2,1}，所以对应的输出为{3,2,1}
+     * <p>
+     * 链表的反转是老生常谈的一个问题了，同时也是面试中常考的一道题。最简单的一种方式就是使用栈，因为栈是先进后出的。
+     * 实现原理就是把链表节点一个个入栈，当全部入栈完之后再一个个出栈，出栈的时候在把出栈的结点串成一个新的链表
+     */
+    private void reverseNodeList() {
+//        ListNode nodeSta = new ListNode(0);
+//        ListNode nextNode;
+//        nextNode = nodeSta;
+//
+//        for (int i = 1; i < 10; i++) {
+//            ListNode node = new ListNode(i);
+//            nextNode.next = node;
+//            nextNode = nextNode.next;
+//        }
+//        nextNode = nodeSta;
+//        print(nextNode);
+//        Log.e("TAG", "下面是反转后的打印输出：\n");
+
+        ListNode head = createListNode();
+        Stack<ListNode> stack = new Stack<>();
+        //把链表节点全部摘掉放到栈中
+        while (head != null) {
+            stack.push(head);
+            head = head.next;
+        }
+        if (stack.isEmpty()) {
+            return;
+        }
+        ListNode node = stack.pop();
+        ListNode dummy = node;
+        //栈中的结点全部出栈，然后重新连成一个新的链表
+        while (!stack.isEmpty()) {
+            ListNode tempNode = stack.pop();
+            node.next = tempNode;
+            node = node.next;
+        }
+        //最后一个结点就是反转前的头结点，一定要让他的next
+        //等于空，否则会构成环
+        node.next = null;
+
+        Log.e("TAG", "下面是反转的链表打印输出：\n");
+        print(dummy);
+    }
+
+    /**
+     * 创建一张链表
+     */
+    private ListNode createListNode() {
+        ListNode nodeSta = new ListNode(0);
+        ListNode nextNode;
+        nextNode = nodeSta;
+
+        for (int i = 1; i < 10; i++) {
+            ListNode node = new ListNode(i);
+            nextNode.next = node;
+            nextNode = nextNode.next;
+        }
+        nextNode = nodeSta;
+        Log.e("TAG", "下面是初始的链表打印输出：\n");
+        print(nextNode);
+        return nodeSta;
     }
 
     /**

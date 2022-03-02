@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.hencoder;
+package com.jlpay.kotlindemo.java_study;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jlpay.kotlindemo.R;
+import com.jlpay.kotlindemo.ui.main.hencoder.ThreadDemp;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -113,7 +113,7 @@ public class ThreadActivity extends AppCompatActivity {
     /**
      * Executor和线程池
      * 常用：newCachedThreadPool()
-     *
+     * <p>
      * 彻底搞懂Java线程池的工作原理
      * https://mp.weixin.qq.com/s/tyh_kDZyLu7SDiDZppCx5Q
      */
@@ -388,7 +388,7 @@ public class ThreadActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     for (int i = 0; i < 1_000_000; i++) {
-//                        if (Thread.interrupted()) {//会把中断标志重置为 false，故而只能判断一次
+//                        if (Thread.interrupted()) {//会把中断标志位重置为 false，故而只能判断一次
                         if (isInterrupted()) {//检查线程中断状态，一般在耗时操作前来结束线程，可以判断多次
                             Log.e(TAG, "线程终止");
                             return;
@@ -411,8 +411,8 @@ public class ThreadActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-//            thread.stop();//不可预测，会崩溃
-            thread.interrupt();//不是立即的，不是强制的，需要线程自己去支持
+//            thread.stop();//强制关闭线程，可能导致线程占用资源无法正常释放，不可预测，可能会崩溃
+            thread.interrupt();//中断线程（实际上只是改了下线程的中断标志位），不是立即的，也不是强制的，需要线程自己去支持
         }
     }
 

@@ -63,6 +63,12 @@
         android:name="android.hardware.nfc"
         android:required="false" />
 
+    <queries>
+        <!-- https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html-->
+        <!-- 指定微信包名,适配Android11系统特性，从而正常使用微信功能，如授权登录、分享、微信支付等功能-->
+        <package android:name="com.tencent.mm" />
+    </queries>
+
     <!--指定Android应用标签，图标-->
     <!--android:requestLegacyExternalStorage="true"，这里关闭分区存储，主要是因为SmallFileManagerActivity做文件管理器并适配Android11和10的需要 -->
     <application
@@ -104,7 +110,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.hencoder.ThreadActivity"
+            android:name=".java_study.ThreadActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity

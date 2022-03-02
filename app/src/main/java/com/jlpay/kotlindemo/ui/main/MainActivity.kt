@@ -19,7 +19,7 @@ import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
 import com.jlpay.kotlindemo.ui.main.chapter6and7.AssetAndRawResActivity
 import com.jlpay.kotlindemo.ui.main.dailytest.*
 import com.jlpay.kotlindemo.ui.main.hencoder.IOActivity
-import com.jlpay.kotlindemo.ui.main.hencoder.ThreadActivity
+import com.jlpay.kotlindemo.java_study.ThreadActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvp.MvpDemoActivity

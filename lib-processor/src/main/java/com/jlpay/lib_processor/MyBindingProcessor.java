@@ -30,6 +30,8 @@ public class MyBindingProcessor extends AbstractProcessor {
         filer = processingEnvironment.getFiler();
     }
 
+    //处理注解的过程, 在编译的时候干活
+    //如果没有在任何地方使用注解，这个函数是不会工作的
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
 //        System.out.println("MyBindingProcessor is Run");
@@ -51,6 +53,7 @@ public class MyBindingProcessor extends AbstractProcessor {
             ClassName className = ClassName.get(packageStr, classStr + "Binding");//拼接要生成的类名
             MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                     .addModifiers(Modifier.PUBLIC)
+//                    .addParameter(String[].class,"test")
                     .addParameter(ClassName.get(packageStr, classStr), "activity");
             boolean hasBinding = false;
 

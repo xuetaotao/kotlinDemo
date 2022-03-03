@@ -106,6 +106,9 @@ public class ThreadActivity extends AppCompatActivity {
 
         Thread thread = threadFactory.newThread(runnable);
         thread.start();
+//        设置为守护线程，守护线程中的finally里的程序不一定起作用，
+//        守护线程可以自动结束生命周期（当除守护线程之外的所有线程都结束的时候），常用的守护线程如GC
+//        thread.setDaemon(true);
         Thread thread1 = threadFactory.newThread(runnable);
         thread1.start();
     }
@@ -218,6 +221,7 @@ public class ThreadActivity extends AppCompatActivity {
 
         private int x = 0;
 
+        //如果这个地方使用 x 来作为锁的话就会出问题，因为 x++ 方法会 new 出新的对象 x，造成锁的对象发生变化，进而导致并发
         private synchronized void count() {
             x++;//非原子操作
         }
@@ -288,7 +292,9 @@ public class ThreadActivity extends AppCompatActivity {
 //            }
 //        }
 
-        //该方法与上面方法的锁一样，都是类锁
+        //如果下面的方法使用这个monitor3作为类锁，那么是可以和上面的方法并行的，因为这两个是不同的类，即不同的类锁
+        private static Object monitor3 = new Object();
+        //该方法与上面方法的锁一样，都是类锁，类锁本质上应该说是Class对象锁，因为每个类的Class对象只有一个，所以说是类锁
 //        private synchronized static void count(int newCount) {
 //            x = newCount;
 //            y = newCount;
@@ -398,7 +404,10 @@ public class ThreadActivity extends AppCompatActivity {
                         try {
                             Thread.sleep(10000);
                         } catch (InterruptedException e) {
-                            //当一个线程想要在线程睡眠的时候调用interrupt()结束当前线程，会触发这个异常，中断状态不会置为true，只能在这里完成需要完成的工作
+                            //当一个线程想要在线程睡眠的时候调用interrupt()结束当前线程，会触发这个异常，
+                            // 中断状态不会置为true(因为这里会被重置为false)，只能在这里完成需要完成的工作
+                            //如果线程没有中断，可以在catch里面做完资源释放以后,再调用interrupt()方法一次
+                            //处于死锁状态的线程，不会理会中断
                             Log.e(TAG, "线程Exception中终止了");
                             e.printStackTrace();
                         }
@@ -452,6 +461,7 @@ public class ThreadActivity extends AppCompatActivity {
                 }
             };
             thread1.start();
+//            thread1.setPriority(6);//设置线程优先级，默认5，范围1～10，10优先级最大，但是能否发挥作用由操作系统决定
 
             Thread thread2 = new Thread() {
                 @Override
@@ -466,7 +476,7 @@ public class ThreadActivity extends AppCompatActivity {
             };
             thread2.start();
             try {
-                thread1.join();//线程1插到主线程之前
+                thread1.join();//线程1插到主线程之前，通过join方法可以让线程之间的运行变为串行运行
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

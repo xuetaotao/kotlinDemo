@@ -21,7 +21,33 @@ public class ListNodeActivity extends AppCompatActivity {
 //        listNodeDel();//删除节点
 //        printNodeList();//从尾到头打印链表 非递归
 //        printNodeList2();//从尾到头打印链表  递归
-        reverseNodeList();//反转链表
+//        reverseNodeList();//反转链表 使用栈实现
+        reverseNodeList2();//反转链表 双链表求解
+    }
+
+    /**
+     * 双链表求解
+     * 双链表求解是把原链表的结点一个个摘掉，每次摘掉的链表都让他成为新的链表的头结点，然后更新新链表。下面以链表1→2→3→4为例画个图来看下
+     */
+    private void reverseNodeList2() {
+        ListNode head = createListNode();
+        //新链表
+        ListNode newHead = null;
+        while (head != null) {
+            //先保存访问的节点的下一个节点，保存起来
+            //留着下一步访问的
+            ListNode temp = head.next;
+            //每次访问的原链表节点都会成为新链表的头结点，
+            //其实就是把新链表挂到访问的原链表节点的
+            //后面就行了
+            head.next = newHead;
+            //更新新链表
+            newHead = head;
+            //重新赋值，继续访问
+            head = temp;
+        }
+        Log.e("TAG", "下面是反转的链表打印输出：\n");
+        print(newHead);
     }
 
     /**

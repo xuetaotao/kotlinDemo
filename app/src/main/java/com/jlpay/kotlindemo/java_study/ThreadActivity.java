@@ -178,6 +178,8 @@ public class ThreadActivity extends AppCompatActivity {
      * 保证加了 volatile 关键字的字段的操作具有同步性，以及对 long 和 double 的操作的原子性，因此 volatile 可以看做是简化版的
      * synchronized； volatile 只对基本类型（byte、char、short、int、long、float、double、boolean）的赋值操作和对象的
      * 引用赋值操作有效，你要修改 User.name 是不能保证同步的； volatile 依然解决不了 ++原子性的问题
+     *
+     * volatile 只保证可见性，适用场景是：一写多读的场景
      */
     static class Synchronized1Demo implements ThreadDemp {
 

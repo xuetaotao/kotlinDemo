@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.java_study.ListNodeActivity
+import com.jlpay.kotlindemo.java_study.ReferenceActivity
 import com.jlpay.kotlindemo.java_study.ReflectActivity
 import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
@@ -44,6 +45,10 @@ class MainActivity : BaseMediaActivity() {
         return R.layout.activity_main
     }
 
+    /**
+     * TODO 这里后面考虑做个注解处理器进行优化
+     * 每新建一个 Activity 自动添加到这里
+     */
     override fun initView() {
         llMain = findViewById(R.id.ll_main)
         val btnLinearlayout: Button = findViewById(R.id.btn_linearLayout)
@@ -211,6 +216,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("ViewPager2TabActivity", ViewPager2TabActivity::class.java)
         addButton("ListNodeActivity", ListNodeActivity::class.java)
         addButton("ReflectActivity", ReflectActivity::class.java)
+        addButton("ReferenceActivity", ReferenceActivity::class.java)
     }
 
     override fun initData() {

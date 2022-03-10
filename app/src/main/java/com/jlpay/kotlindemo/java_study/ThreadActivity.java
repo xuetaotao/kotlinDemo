@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jlpay.kotlindemo.R;
-import com.jlpay.kotlindemo.ui.main.hencoder.ThreadDemp;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -52,6 +51,25 @@ public class ThreadActivity extends AppCompatActivity {
         //线程间通信
 //        new ThreadInteractionDemo().runTest();
         new WaitDemo().runTest();
+
+        //threadLocal
+//        threadLocalDemo();
+    }
+
+    /**
+     * threadLocal 的 学习
+     */
+    private void threadLocalDemo() {
+        ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>() {
+            @Nullable
+            @Override
+            protected Integer initialValue() {
+                return 1;
+            }
+        };
+        Log.e(TAG, "threadLocalDemo: " + threadLocal.get());
+//        threadLocal.remove();//将当前 threadLocal 所指向的 value 一起从内存中清除，避免内存泄露
+        //另外，threadLocal 也存在线程不安全的问题，例子暂时略过
     }
 
 
@@ -178,10 +196,10 @@ public class ThreadActivity extends AppCompatActivity {
      * 保证加了 volatile 关键字的字段的操作具有同步性，以及对 long 和 double 的操作的原子性，因此 volatile 可以看做是简化版的
      * synchronized； volatile 只对基本类型（byte、char、short、int、long、float、double、boolean）的赋值操作和对象的
      * 引用赋值操作有效，你要修改 User.name 是不能保证同步的； volatile 依然解决不了 ++原子性的问题
-     *
+     * <p>
      * volatile 只保证可见性，适用场景是：一写多读的场景
      */
-    static class Synchronized1Demo implements ThreadDemp {
+    static class Synchronized1Demo implements ThreadDemo {
 
         private volatile boolean running = true;
 
@@ -219,7 +237,7 @@ public class ThreadActivity extends AppCompatActivity {
         new Synchronized2Demo().runTest();
     }
 
-    static class Synchronized2Demo implements ThreadDemp {
+    static class Synchronized2Demo implements ThreadDemo {
 
         private int x = 0;
 
@@ -256,7 +274,7 @@ public class ThreadActivity extends AppCompatActivity {
         new Synchronized3Demo().runTest();
     }
 
-    static class Synchronized3Demo implements ThreadDemp {
+    static class Synchronized3Demo implements ThreadDemo {
 
         private int x = 0;
         private int y = 0;
@@ -344,7 +362,7 @@ public class ThreadActivity extends AppCompatActivity {
     }
 
 
-    static class ReadWriteLockDemo implements ThreadDemp {
+    static class ReadWriteLockDemo implements ThreadDemo {
 
         private int x = 0;
         ReentrantLock lock1 = new ReentrantLock();
@@ -389,7 +407,7 @@ public class ThreadActivity extends AppCompatActivity {
 
     /************************线程间通信**********************************************/
 
-    static class ThreadInteractionDemo implements ThreadDemp {
+    static class ThreadInteractionDemo implements ThreadDemo {
         @Override
         public void runTest() {
             Thread thread = new Thread() {
@@ -428,19 +446,24 @@ public class ThreadActivity extends AppCompatActivity {
     }
 
 
-    static class WaitDemo implements ThreadDemp {
+    static class WaitDemo implements ThreadDemo {
 
         private String shareString;
 
         private synchronized void initString() {
             shareString = "rengwuxian";
             notifyAll();
+            Log.e(TAG, "initString: notifyAll");
         }
 
         private synchronized void printString() {
+            //收到notify()/notifyAll()后，会重新竞争锁，然后执行代码，判断条件
             while (shareString == null) {
                 try {
+                    Log.e(TAG, "printString: 开始wait");
+                    //调用wait方法后会释放它持有的锁
                     wait();//wait()和notify()/notifyAll() 都需要放在同步代码块里，且它们两必须是同一个 monitor
+                    Log.e(TAG, "printString: wait结束");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -455,10 +478,12 @@ public class ThreadActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         Thread.sleep(1000);
+                        Log.e(TAG, "thread1: 睡醒了");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 //                    yield();//暂时让出自己的时间片给同优先级的线程 TODO 没太懂
+                    Log.e(TAG, "thread1: printString");
                     printString();
                 }
             };
@@ -470,9 +495,11 @@ public class ThreadActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         Thread.sleep(2000);
+                        Log.e(TAG, "thread2: 睡醒了");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    Log.e(TAG, "thread2: initString");
                     initString();
                 }
             };

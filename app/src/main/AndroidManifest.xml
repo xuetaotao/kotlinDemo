@@ -296,6 +296,7 @@
         <activity android:name=".ui.main.dailytest.ViewPager2TabActivity" />
         <activity android:name=".java_study.ListNodeActivity" />
         <activity android:name=".java_study.ReflectActivity" />
+        <activity android:name=".java_study.ReferenceActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

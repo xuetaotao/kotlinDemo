@@ -5,9 +5,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.java_study.ListNodeActivity
-import com.jlpay.kotlindemo.java_study.ReferenceActivity
-import com.jlpay.kotlindemo.java_study.ReflectActivity
+import com.jlpay.kotlindemo.java_study.*
 import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.*
@@ -20,7 +18,6 @@ import com.jlpay.kotlindemo.ui.main.chapter3.HandlerActivity
 import com.jlpay.kotlindemo.ui.main.chapter6and7.AssetAndRawResActivity
 import com.jlpay.kotlindemo.ui.main.dailytest.*
 import com.jlpay.kotlindemo.ui.main.hencoder.IOActivity
-import com.jlpay.kotlindemo.java_study.ThreadActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvp.MvpDemoActivity
@@ -217,6 +214,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("ListNodeActivity", ListNodeActivity::class.java)
         addButton("ReflectActivity", ReflectActivity::class.java)
         addButton("ReferenceActivity", ReferenceActivity::class.java)
+        addButton("LruCacheActivity", LruCacheActivity::class.java)
     }
 
     override fun initData() {

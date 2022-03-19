@@ -297,6 +297,7 @@
         <activity android:name=".java_study.ListNodeActivity" />
         <activity android:name=".java_study.ReflectActivity" />
         <activity android:name=".java_study.ReferenceActivity" />
+        <activity android:name=".java_study.LruCacheActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

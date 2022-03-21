@@ -10,11 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.jlpay.kotlindemo.R;
 
+import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,10 +57,43 @@ public class ThreadActivity extends AppCompatActivity {
 
         //threadLocal
 //        threadLocalDemo();
+
+        //CountDownLatch
+//        countDownLatchDemo();
+
+        //Fork-Join
+        forkJoinDemo();
+    }
+
+    /**
+     * Fork-Join 学习
+     * 重要的类：
+     * ForkJoinTask  RecursiveAction  RecursiveTask ForkJoinPool
+     * TODO
+     */
+    private void forkJoinDemo() {
+        Random random = new Random();
+        int i = random.nextInt();
+
+        RecursiveTask<String> recursiveTask = new RecursiveTask<String>() {
+            @Override
+            protected String compute() {
+                return null;
+            }
+        };
+    }
+
+    /**
+     * CountDownLatch 的学习
+     * TODO
+     */
+    private void countDownLatchDemo() {
+        CountDownLatch countDownLatch = new CountDownLatch(3);
     }
 
     /**
      * threadLocal 的 学习
+     * TODO
      */
     private void threadLocalDemo() {
         ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>() {
@@ -422,7 +458,7 @@ public class ThreadActivity extends AppCompatActivity {
                         Log.e(TAG, "线程运行中：" + i + "");
 
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(10000);//也不会释放锁
                         } catch (InterruptedException e) {
                             //当一个线程想要在线程睡眠的时候调用interrupt()结束当前线程，会触发这个异常，
                             // 中断状态不会置为true(因为这里会被重置为false)，只能在这里完成需要完成的工作
@@ -457,12 +493,12 @@ public class ThreadActivity extends AppCompatActivity {
         }
 
         private synchronized void printString() {
-            //收到notify()/notifyAll()后，会重新竞争锁，然后执行代码，判断条件
+            //收到notify()/notifyAll()后，会重新竞争锁，然后继续执行后面的代码（从原来等待的地方），判断条件
             while (shareString == null) {
                 try {
                     Log.e(TAG, "printString: 开始wait");
                     //调用wait方法后会释放它持有的锁
-                    wait();//wait()和notify()/notifyAll() 都需要放在同步代码块里，且它们两必须是同一个 monitor
+                    wait();//wait()和notify()/notifyAll() 都需要放在同步代码块里，且它们两必须是同一个 monitor，会释放自己的锁
                     Log.e(TAG, "printString: wait结束");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -482,7 +518,7 @@ public class ThreadActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-//                    yield();//暂时让出自己的时间片给同优先级的线程 TODO 没太懂
+//                    yield();//暂时让出自己的时间片给同优先级的线程 ,让出CPU的执行期，但是不会释放已经拿到的锁
                     Log.e(TAG, "thread1: printString");
                     printString();
                 }

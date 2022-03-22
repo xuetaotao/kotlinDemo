@@ -13,6 +13,7 @@ import com.jlpay.kotlindemo.R;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,6 +21,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,6 +67,34 @@ public class ThreadActivity extends AppCompatActivity {
 
         //Fork-Join
 //        forkJoinDemo();
+
+        //CyclicBarrier
+//        CyclicBarrierDemo();
+
+        SemaphoreDemo();
+    }
+
+    /**
+     * Semaphore 信号灯
+     * 主要作用：流控
+     * TODO
+     */
+    private void SemaphoreDemo() {
+        Semaphore semaphore = new Semaphore(3);
+    }
+
+    /**
+     * CyclicBarrier
+     * 主要作用：有点像RxJava的 zip操作符，就是几个线程并发执行，然后等全部执行完拿到结果后，在执行后面的操作
+     * TODO
+     */
+    private void CyclicBarrierDemo() {
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(3, new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
     /**

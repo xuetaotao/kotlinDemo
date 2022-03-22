@@ -16,7 +16,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -53,16 +55,16 @@ public class ThreadActivity extends AppCompatActivity {
 
         //线程间通信
 //        new ThreadInteractionDemo().runTest();
-        new WaitDemo().runTest();
+//        new WaitDemo().runTest();
 
         //threadLocal
 //        threadLocalDemo();
 
         //CountDownLatch
-//        countDownLatchDemo();
+        countDownLatchDemo();
 
         //Fork-Join
-        forkJoinDemo();
+//        forkJoinDemo();
     }
 
     /**
@@ -72,23 +74,92 @@ public class ThreadActivity extends AppCompatActivity {
      * TODO
      */
     private void forkJoinDemo() {
+        //------------------一些测试代码-------------------------//
         Random random = new Random();
         int i = random.nextInt();
-
+        RecursiveAction recursiveAction = new RecursiveAction() {
+            @Override
+            protected void compute() {
+                //没有返回值
+            }
+        };
         RecursiveTask<String> recursiveTask = new RecursiveTask<String>() {
             @Override
             protected String compute() {
+                //有返回值
                 return null;
             }
         };
+
+        //-------------------下面才是使用-------------------------//
+        //new 出池的实例
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        //下面的代码暂时先不敲了，用到再学习
+
     }
 
     /**
      * CountDownLatch 的学习
-     * TODO
+     * 主要作用：当某个线程，需要等待其他线程执行完毕后再去执行，就可以使用 CountDownLatch
+     * 注：1、等待线程可以有多个；2、子线程数目不一定和CountDownLatch的扣减数一致；3、子线程countDown()执行后仍然可以继续运行；
+     * <p>
      */
+    private static CountDownLatch countDownLatch = new CountDownLatch(6);
+
     private void countDownLatchDemo() {
-        CountDownLatch countDownLatch = new CountDownLatch(3);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    Log.e(TAG, "Thread: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "start step1 work");
+                    countDownLatch.countDown();
+                    Log.e(TAG, "Thread: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "begin step2 work");
+                    Thread.sleep(1000);
+                    Log.e(TAG, "Thread: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "start step2 work");
+                    countDownLatch.countDown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        new Thread(new BusinessThread()).start();
+        for (int i = 0; i < 4; i++) {
+            new Thread(new InitThread()).start();
+        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.e(TAG, "countDownLatchDemo: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "do main work");
+    }
+
+    //初始化线程
+    private static class InitThread implements Runnable {
+        @Override
+        public void run() {
+            Log.e(TAG, "InitThread: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "ready init work");
+            countDownLatch.countDown();
+            for (int i = 0; i < 1; i++) {
+                Log.e(TAG, "InitThread: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "continue do its work");
+            }
+        }
+    }
+
+    //业务线程 等待latch的计数器为0时完成
+    private static class BusinessThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                countDownLatch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < 1; i++) {
+                Log.e(TAG, "BusinessThread: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "do business work");
+            }
+        }
     }
 
     /**

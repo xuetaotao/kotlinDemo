@@ -238,18 +238,6 @@ dependencies {
     //选择器 https://github.com/Bigkoo/Android-PickerView/
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
 
-    //定位模块库
-    //对应 测试库 Java版本：'com.jlpay.opensdk:location:1.0.3'
-    implementation project(":location")
-    //测试库 Java版本
-//    implementation 'com.jlpay.opensdk:location:1.0.3'
-    //测试库 Kotlin版本
-//    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
-
-    //图片模块库
-    implementation project(":imagepick")
-//    implementation 'com.jlpay.opensdk:imageload:2.0.1-SNAPSHOT'
-
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
     //腾讯Bugly https://bugly.qq.com/docs/user-guide/instruction-manual-android/?v=20170912151050
 //    implementation 'com.tencent.bugly:crashreport:3.3.6'//升级SDK已经集成crash上报功能
@@ -274,7 +262,29 @@ dependencies {
     //扫码第三方库，个人维护，不建议使用，这里仅做测试
 //    implementation('com.github.amggg:YXing:V1.0.6')
 
-    /***************************************这部分放暂时没用到但是可以用的第三方库*************************************************************************************/
+    //--------------------------------------------------JL自定义组件库测试--------------------------------------------------//
+
+    //定位模块库
+    //对应 测试库 Java版本：'com.jlpay.opensdk:location:1.0.3'
+    implementation project(":location")
+    //测试库 Java版本
+//    implementation 'com.jlpay.opensdk:location:1.0.3'
+    //测试库 Kotlin版本
+//    implementation 'com.jlpay.opensdk:location:2.0.0-SNAPSHOT'//测试版本
+
+    //图片模块库
+    implementation project(":imagepick")
+//    implementation 'com.jlpay.opensdk:imageload:2.0.1-SNAPSHOT'
+
+    //ocr识别
+    implementation('com.jlpay.opensdk:ocr:2.0.3-SNAPSHOT')
+
+    //第三方分享
+//    implementation 'com.jlpay.opensdk:share:1.0.2'
+
+    //--------------------------------------------------JL自定义组件库测试--------------------------------------------------//
+
+    //--------------------------------------------------暂时没用到但是可以用的第三方库--------------------------------------------------//
 
     //实用工具类的库：Android封装最全面的工具类(加密、文件、网络、bitmap、正则、屏幕、时间等等) https://github.com/Blankj/AndroidUtilCode
     implementation 'com.blankj:utilcode:1.26.0'
@@ -292,12 +302,15 @@ dependencies {
     //性能(卡顿)监控工具 BlockCanary
 //    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
 
-    /****************************************************************************************************************************/
+    //--------------------------------------------------暂时没用到但是可以用的第三方库--------------------------------------------------//
 
 
-    /**************************************这部分放只是想查看源码的第三方库**************************************************************************************/
+    //--------------------------------------------------想查看源码学习的第三方库--------------------------------------------------//
+
     //供查看源码使用
 //    compileOnly('com.android.tools.build:gradle:4.0.0')//compileOnly：只参与编译不会参与打包，编译有点问题，先注释掉
+
+    //--------------------------------------------------想查看源码学习的第三方库--------------------------------------------------//
 }
 
 

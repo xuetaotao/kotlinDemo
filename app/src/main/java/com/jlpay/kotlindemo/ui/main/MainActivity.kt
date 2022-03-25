@@ -26,6 +26,7 @@ import com.jlpay.kotlindemo.ui.main.java_advance.GenericTypeActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn2.WanActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn4.MyLoginActivity
+import com.jlpay.kotlindemo.ui.main.jlpay.OcrActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxJavaActivity
 import com.jlpay.kotlindemo.ui.main.rxjava.RxLifecycleActivity
@@ -215,6 +216,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("ReflectActivity", ReflectActivity::class.java)
         addButton("ReferenceActivity", ReferenceActivity::class.java)
         addButton("LruCacheActivity", LruCacheActivity::class.java)
+        addButton("OcrActivity", OcrActivity::class.java)
     }
 
     override fun initData() {

@@ -298,6 +298,7 @@
         <activity android:name=".java_study.ReflectActivity" />
         <activity android:name=".java_study.ReferenceActivity" />
         <activity android:name=".java_study.LruCacheActivity" />
+        <activity android:name=".ui.main.jlpay.OcrActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

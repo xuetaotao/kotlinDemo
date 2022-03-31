@@ -24,8 +24,10 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -329,7 +331,13 @@ public class ThreadActivity extends AppCompatActivity {
      * ThreadPoolExecutor
      */
     private void threadPoolExecutorDemo() {
-//        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor();
+        //获取CPU核心数
+        int processors = Runtime.getRuntime().availableProcessors();
+
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+                3, 10, 60, TimeUnit.SECONDS,
+                new SynchronousQueue<>()
+        );
     }
 
     /**

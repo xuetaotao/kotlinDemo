@@ -14,21 +14,38 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * 线程相关概念：
+ * 死锁：
+ * 通俗理解：
+ * 1、多个操作者（M>=2）争夺多个资源（N>=2），N<=M
+ * 2、争夺资源的顺序不对
+ * 3、拿到资源不放手
+ * 学术理解：1、互斥条件  2、请求保持  3、不剥夺  4、环路等待
+ * <p>
+ * CAS: Compare and Swap
+ * <p>
+ * 悲观锁：synchronized
+ * 乐观锁：CAS
+ */
 public class ThreadActivity extends AppCompatActivity {
 
     private static final String TAG = ThreadActivity.class.getSimpleName();
@@ -71,7 +88,17 @@ public class ThreadActivity extends AppCompatActivity {
         //CyclicBarrier
 //        CyclicBarrierDemo();
 
-        SemaphoreDemo();
+//        SemaphoreDemo();
+
+//        ExchangerDemo();
+    }
+
+    /**
+     * 用处不大，仅用于两个线程交换数据
+     * TODO
+     */
+    private void ExchangerDemo() {
+        Exchanger<String> exchanger = new Exchanger<>();
     }
 
     /**
@@ -98,6 +125,14 @@ public class ThreadActivity extends AppCompatActivity {
     }
 
     /**
+     * Random 学习
+     */
+    private void randomDemo() {
+        Random random = new Random();
+        int i = random.nextInt(100);//通过Random对象获取,[0, 100)之间的int整数
+    }
+
+    /**
      * Fork-Join 学习
      * 重要的类：
      * ForkJoinTask  RecursiveAction  RecursiveTask ForkJoinPool
@@ -105,8 +140,7 @@ public class ThreadActivity extends AppCompatActivity {
      */
     private void forkJoinDemo() {
         //------------------一些测试代码-------------------------//
-        Random random = new Random();
-        int i = random.nextInt();
+
         RecursiveAction recursiveAction = new RecursiveAction() {
             @Override
             protected void compute() {
@@ -284,15 +318,23 @@ public class ThreadActivity extends AppCompatActivity {
         };
 
         ExecutorService executor = Executors.newCachedThreadPool();// 实例化一个线程池
-        executor.execute(runnable);// 使用线程池执行一个任务
+        executor.execute(runnable);// 使用线程池执行一个任务,execute 提交的线程任务不关心返回值
         executor.execute(runnable);
         executor.execute(runnable);
 //        executor.shutdown();// 关闭线程池,会阻止新任务提交，但不影响已提交的任务
-//        executor.shutdownNow();// 关闭线程池，阻止新任务提交，并且中断当前正在运行的线程
+//        executor.shutdownNow();// 关闭线程池，阻止新任务提交，并且中断当前正在运行的线程(不一定能中断，除非自己处理了，因为Java的线程是协作式的)
+    }
+
+    /**
+     * ThreadPoolExecutor
+     */
+    private void threadPoolExecutorDemo() {
+//        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor();
     }
 
     /**
      * Callable和 Future
+     * Callable:相对于Runnable，可以有返回值
      */
     private static void callable() {
         Callable<String> callable = new Callable<String>() {
@@ -308,7 +350,7 @@ public class ThreadActivity extends AppCompatActivity {
         };
 
         ExecutorService executorService = Executors.newCachedThreadPool();
-        Future<String> future = executorService.submit(callable);
+        Future<String> future = executorService.submit(callable);//submit提交的线程任务关心返回值
         try {
             String result = future.get();//这里主线程会阻塞，等到子线程返回结果
             Log.e(TAG, "callable() started!");
@@ -316,6 +358,35 @@ public class ThreadActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+    /**
+     * FutureTask 本身就是一个 Runnable
+     */
+    private void futureTaskDemo() {
+        //1.FutureTask 作为Runnable，交给线程Thread来执行
+        Callable<String> callable = new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                return "hhh";
+            }
+        };
+        FutureTask<String> futureTask = new FutureTask<String>(callable);
+        new Thread(futureTask).start();
+
+        //2.FutureTask 作为 Future，拿到执行结果
+        FutureTask<String> futureTask2 = new FutureTask<String>(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }, "hhh");
+        try {
+            String result = futureTask2.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**********************************************************************/
 
 
@@ -498,7 +569,10 @@ public class ThreadActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Lock 学习
+     * Lock 可以尝试拿锁，而且拿到了锁可以释放锁，从而避免死锁问题
+     */
     static class ReadWriteLockDemo implements ThreadDemo {
 
         private int x = 0;

@@ -5,6 +5,10 @@ package com.jlpay.plugin
 //import com.android.utils.FileUtils
 //
 ////TODO 待解决：Transform等类引入不了
+//ASM 简介
+//https://www.jianshu.com/p/a85e8f83fa14
+//看完这一篇，你也可以自如地掌握字节码插桩
+//https://mp.weixin.qq.com/s/gEtsNEWPHsSt52D7J00pug
 //
 //class HenCoderTransform extends Transform {
 //    @Override

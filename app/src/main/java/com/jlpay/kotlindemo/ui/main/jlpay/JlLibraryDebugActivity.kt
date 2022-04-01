@@ -5,16 +5,19 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.databinding.ActivityOcrBinding
+import com.jlpay.kotlindemo.databinding.ActivityJlLibraryDebugBinding
 import com.jlpay.ocr.OcrManager
 
-class OcrActivity : AppCompatActivity() {
+class JlLibraryDebugActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val mBinding =
-            DataBindingUtil.setContentView<ActivityOcrBinding>(this, R.layout.activity_ocr)
+            DataBindingUtil.setContentView<ActivityJlLibraryDebugBinding>(
+                this,
+                R.layout.activity_jl_library_debug
+            )
         mBinding.lifecycleOwner = this
 
         mBinding.onClick = OnClickProxy()
@@ -26,7 +29,7 @@ class OcrActivity : AppCompatActivity() {
         fun onClick(view: View) {
             when (view.id) {
                 R.id.button -> {
-                    OcrManager.with(this@OcrActivity)
+                    OcrManager.with(this@JlLibraryDebugActivity)
                         .start()
                 }
             }

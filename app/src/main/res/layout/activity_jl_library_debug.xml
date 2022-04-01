@@ -6,7 +6,7 @@
 
         <variable
             name="onClick"
-            type="com.jlpay.kotlindemo.ui.main.jlpay.OcrActivity.OnClickProxy" />
+            type="com.jlpay.kotlindemo.ui.main.jlpay.JlLibraryDebugActivity.OnClickProxy" />
 
     </data>
 

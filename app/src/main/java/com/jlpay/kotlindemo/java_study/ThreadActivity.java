@@ -30,6 +30,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -93,6 +94,18 @@ public class ThreadActivity extends AppCompatActivity {
 //        SemaphoreDemo();
 
 //        ExchangerDemo();
+
+//        AbstractQueuedSynchronizerDemo();
+    }
+
+    /**
+     * AQS 学习
+     * 可以用来自定义锁
+     */
+    private void AbstractQueuedSynchronizerDemo() {
+        AbstractQueuedSynchronizer aqs = new AbstractQueuedSynchronizer() {
+            
+        };
     }
 
     /**

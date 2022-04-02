@@ -1,11 +1,13 @@
 package com.jlpay.kotlindemo.ui.main
 
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.java_study.*
+import com.jlpay.kotlindemo.kotlin_study.CoroutinesActivity
 import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.*
@@ -217,10 +219,11 @@ class MainActivity : BaseMediaActivity() {
         addButton("ReferenceActivity", ReferenceActivity::class.java)
         addButton("LruCacheActivity", LruCacheActivity::class.java)
         addButton("OcrActivity", JlLibraryDebugActivity::class.java)
+        addButton("Kotlin协程：CoroutinesActivity", CoroutinesActivity::class.java)
     }
 
     override fun initData() {
-
+//        okHttpTest()
     }
 
 
@@ -267,14 +270,19 @@ class MainActivity : BaseMediaActivity() {
         val client: OkHttpClient = OkHttpClient.Builder().build()
         val request: Request = Request.Builder()
             .url("http://www.baidu.com")
+            .get()
             .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-
+                Log.e("MainActivity", "onFailure: " + Thread.currentThread().name)
             }
 
             override fun onResponse(call: Call, response: Response) {
-
+                Log.e(
+                    "MainActivity",
+                    "onResponse: " + Thread.currentThread().name + "\n" + (response.body?.string()
+                        ?: "加载失败")
+                )
             }
         })
     }

@@ -78,7 +78,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <!--  指定该Activity是程序的入口   -->
@@ -299,6 +300,7 @@
         <activity android:name=".java_study.ReferenceActivity" />
         <activity android:name=".java_study.LruCacheActivity" />
         <activity android:name=".ui.main.jlpay.JlLibraryDebugActivity" />
+        <activity android:name=".kotlin_study.CoroutinesActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

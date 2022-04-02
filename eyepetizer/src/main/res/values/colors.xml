@@ -33,4 +33,6 @@
     <color name="grayDark">#adadad</color>
     <color name="loading">#cdcdcd</color>
 
+    <color name="light_black">#555555</color>
+
 </resources>

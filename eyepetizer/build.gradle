@@ -70,10 +70,18 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        //解决：AAPT: error: resource android:attr/lStar not found.
+        //原因时androidx.core:core-ktx导致。解决方案就是把androidx.core:core-ktx指定版本为1.6.0
+        force 'androidx.core:core-ktx:1.6.0'
+    }
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.12'
@@ -119,5 +127,12 @@ dependencies {
 
     //性能(卡顿)监控工具 BlockCanary
     debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
+
+    //--------------------------------------------------JL自定义组件库测试--------------------------------------------------//
+
+    //嘉联图片加载(glide)
+    implementation 'com.jlpay.opensdk:imageload:2.0.4'
+
+    //--------------------------------------------------JL自定义组件库测试--------------------------------------------------//
 
 }

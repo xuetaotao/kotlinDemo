@@ -67,6 +67,8 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
+        <activity android:name=".jlpay_library_debug.JlLibraryDebugActivity" />
+
         <!--TODO 待替换友盟APPKEY        -->
         <meta-data
             android:name="UMENG_APPKEY"

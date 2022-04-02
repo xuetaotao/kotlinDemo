@@ -199,8 +199,7 @@ public class ReflectActivity extends AppCompatActivity {
 
             Log.e(TAG, "*****************获取公有、无参的构造方法*******************************");
             try {
-                Constructor clazzConstructor = clazz.getConstructor(
-                        null);
+                Constructor clazzConstructor = clazz.getConstructor();
                 Log.e(TAG, String.valueOf(clazzConstructor));
                 //1>、因为是无参的构造方法所以类型是一个null,不写也可以：这里需要的是一个参数的类型，切记是类型
                 //2>、返回的是描述这个无参构造函数的类对象

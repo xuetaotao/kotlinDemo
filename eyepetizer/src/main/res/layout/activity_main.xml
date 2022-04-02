@@ -19,7 +19,8 @@
                 android:id="@+id/ll_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="15dp">
 
             </LinearLayout>
 
@@ -28,9 +29,10 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_margin="15dp"
             android:onClick="testBlockCanary"
             android:text="测试卡顿"
+            android:textColor="@color/blackAlpha60"
             android:textSize="14sp" />
 
     </LinearLayout>

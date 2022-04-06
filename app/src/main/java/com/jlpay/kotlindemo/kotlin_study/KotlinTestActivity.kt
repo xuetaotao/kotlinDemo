@@ -8,6 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 
+/**
+ * Kotlin关键字整理：
+ * out: Java的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取
+ * in:  Java的 ? super T  对应  Kotlin的 in T， 只可以被读取
+ * inline:  将内联函数的函数体复制到调用处实现内联
+ */
 class KotlinTestActivity : AppCompatActivity() {
 
     private val TAG = KotlinTestActivity::class.java.simpleName

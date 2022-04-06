@@ -45,9 +45,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 学术理解：1、互斥条件  2、请求保持  3、不剥夺  4、环路等待
  * <p>
  * CAS: Compare and Swap
+ * 问题：1、ABA问题  2、忘了  3、忘了
  * <p>
  * 悲观锁：synchronized
  * 乐观锁：CAS
+ * <p>
+ * AtomicInteger：
+ * 1、乐观锁，性能较强，利用CPU自身的特性保证原子性，即CPU的指令集封装compare and swap两个操作为一个指令来保证原子性  2、适合读多写少模式
  */
 public class ThreadActivity extends AppCompatActivity {
 
@@ -104,7 +108,7 @@ public class ThreadActivity extends AppCompatActivity {
      */
     private void AbstractQueuedSynchronizerDemo() {
         AbstractQueuedSynchronizer aqs = new AbstractQueuedSynchronizer() {
-            
+
         };
     }
 
@@ -347,10 +351,19 @@ public class ThreadActivity extends AppCompatActivity {
         //获取CPU核心数
         int processors = Runtime.getRuntime().availableProcessors();
 
+        ThreadFactory sThreadFactory = new ThreadFactory() {
+
+            private final AtomicInteger mCount = new AtomicInteger(1);
+
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r, "MySyncTask #" + mCount.getAndIncrement());
+            }
+        };
+
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 3, 10, 60, TimeUnit.SECONDS,
-                new SynchronousQueue<>()
-        );
+                new SynchronousQueue<Runnable>(), sThreadFactory);
     }
 
     /**
@@ -422,7 +435,7 @@ public class ThreadActivity extends AppCompatActivity {
      * 静态类不能访问外部类的非静态成员。他只能访问外部类的静态成员。一个非静态内部类不能脱离外部类实体被创建，
      * 一个非静态内部类可以访问外部类的数据和方法，因为他就在外部类里面
      * <p>
-     * 保证加了 volatile 关键字的字段的操作具有同步性，以及对 long 和 double 的操作的原子性，因此 volatile 可以看做是简化版的
+     * 保证加了 volatile 关键字的字段的操作具有可见性（同步性），以及对 long 和 double 的操作的原子性，因此 volatile 可以看做是简化版的
      * synchronized； volatile 只对基本类型（byte、char、short、int、long、float、double、boolean）的赋值操作和对象的
      * 引用赋值操作有效，你要修改 User.name 是不能保证同步的； volatile 依然解决不了 ++原子性的问题
      * <p>
@@ -570,6 +583,7 @@ public class ThreadActivity extends AppCompatActivity {
 
     /**
      * 单例模式
+     * volatile 用来防止CPU将指令重排序
      */
     static class SingleMan {
         private static volatile SingleMan INSTANCE;//避免构造方法还没调用完，就可以获取到对象了

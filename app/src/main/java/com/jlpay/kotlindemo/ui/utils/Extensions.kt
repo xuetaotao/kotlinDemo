@@ -23,3 +23,11 @@ val Float.px
         this,
         Resources.getSystem().displayMetrics
     )
+
+
+/**
+ * Kotlin 在类外部声明一个方法，可以随便哪里调用，有点像Java的 static方法
+ */
+fun worldHHH() {
+
+}

@@ -8,8 +8,12 @@ import androidx.databinding.DataBindingUtil
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityCoroutinesBinding
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.produce
 import okhttp3.*
 import java.io.IOException
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.CoroutineContext
 
 class CoroutinesActivity : AppCompatActivity() {
 
@@ -47,10 +51,45 @@ class CoroutinesActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * Continuation 接口
+     * 作用就是代替 Java 异步线程 中的那些回调
+     * 所有由suspend 关键字修饰的函数或者lambda表达式，都会被插入一个Continuation类型的参数
+     */
+    fun continuationCallBack() {
+        object : Continuation<String> {
+            override val context: CoroutineContext
+                get() = kotlin.coroutines.EmptyCoroutineContext//乱写的
+
+            override fun resumeWith(result: Result<String>) {
+                Log.e(TAG, "resumeWith: $result")
+            }
+        }
+    }
+
+    /**
+     * produce
+     */
+    fun produceDemo() {
+        GlobalScope.produce<String> {
+            var i = 0
+        }
+    }
+
+    /**
+     * Channel
+     */
+    suspend fun channelDemo(channel: Channel<Int>) {
+        var i = 0
+        Log.e(TAG, "channelDemo: " + channel.receive())
+        Log.e(TAG, "channelDemo: " + channel.send(i++))
+    }
+
+
     fun customTest(view: android.view.View) {
         okHttpTest()
     }
-
 
     fun okHttpTest() {
         Log.e(TAG, "okHttpTest: " + Thread.currentThread().name)

@@ -18,10 +18,6 @@ import java.io.FileOutputStream
  * inline:  将内联函数的函数体复制到调用处实现内联
  * reified: 用于Kotlin内联函数的,修饰内联函数的泛型,泛型被修饰后,在方法体里,能从泛型拿到泛型的Class对象,这与java是不同的,java需要泛型且需要泛型的Class类型时,是要把Class传过来的,但是kotlin不用了 (https://www.jianshu.com/p/e59fda556464)
  *
- * Kotlin高阶函数：
- * 1. ()->Unit与(T) -> Unit是相同的，只是一个带参，一个不带参
- * 2. (T) -> Unit通过形参T可将对象作为实参传给函数，所以函数体里能通过it或者指定名称的方式来访问该对象
- * 3. T.()->Unit 等同于为T定义了一个无参数的扩展函数，所以在函数体内可以直接通过this或省略来访问T代表的对象
  */
 class KotlinTestActivity : AppCompatActivity() {
 

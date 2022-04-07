@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.java_study.*
 import com.jlpay.kotlindemo.kotlin_study.CoroutinesActivity
+import com.jlpay.kotlindemo.kotlin_study.HigherAndExpandFuncActivity
 import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.ui.main.chapter10.*
@@ -220,6 +221,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("LruCacheActivity", LruCacheActivity::class.java)
         addButton("OcrActivity", JlLibraryDebugActivity::class.java)
         addButton("Kotlin协程：CoroutinesActivity", CoroutinesActivity::class.java)
+        addButton("Kotlin高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
     }
 
     override fun initData() {

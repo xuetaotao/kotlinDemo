@@ -7,12 +7,21 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 /**
  * Kotlin关键字整理：
  * out: Java的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取
  * in:  Java的 ? super T  对应  Kotlin的 in T， 只可以被读取
  * inline:  将内联函数的函数体复制到调用处实现内联
+ * reified: 用于Kotlin内联函数的,修饰内联函数的泛型,泛型被修饰后,在方法体里,能从泛型拿到泛型的Class对象,这与java是不同的,java需要泛型且需要泛型的Class类型时,是要把Class传过来的,但是kotlin不用了 (https://www.jianshu.com/p/e59fda556464)
+ *
+ * Kotlin高阶函数：
+ * 1. ()->Unit与(T) -> Unit是相同的，只是一个带参，一个不带参
+ * 2. (T) -> Unit通过形参T可将对象作为实参传给函数，所以函数体里能通过it或者指定名称的方式来访问该对象
+ * 3. T.()->Unit 等同于为T定义了一个无参数的扩展函数，所以在函数体内可以直接通过this或省略来访问T代表的对象
  */
 class KotlinTestActivity : AppCompatActivity() {
 
@@ -45,6 +54,26 @@ class KotlinTestActivity : AppCompatActivity() {
         testIt()
     }
 
+    /**
+     * use 的使用: 可以让我们不用自己写IO操作完成后，一系列关流的操作
+     * copy文件
+     */
+    private fun useDemo(source: File, dest: File) {
+        FileInputStream(source).use { input ->
+            FileOutputStream(dest).use { output ->
+                val buf = ByteArray(1024)
+                while (true) {
+                    val readLength: Int = input.read(buf)
+                    if (readLength <= 0) {
+                        break
+                    }
+                    output.write(buf, 0, readLength)
+                }
+            }
+        }
+
+//        val inputChannel = FileInputStream(source).channel
+    }
 
     abstract class Base {
         var code: Int = calculate()

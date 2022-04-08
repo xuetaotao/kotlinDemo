@@ -15,9 +15,9 @@ import java.io.FileOutputStream
  * Kotlin关键字整理：
  * out: Java的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取
  * in:  Java的 ? super T  对应  Kotlin的 in T， 只可以被读取
- * inline:  将内联函数的函数体复制到调用处实现内联
+ * inline:  将内联函数的函数体复制到调用处实现内联，即调用的函数在编译的时候会变成代码内嵌的形式
  * reified: 用于Kotlin内联函数的,修饰内联函数的泛型,泛型被修饰后,在方法体里,能从泛型拿到泛型的Class对象,这与java是不同的,java需要泛型且需要泛型的Class类型时,是要把Class传过来的,但是kotlin不用了 (https://www.jianshu.com/p/e59fda556464)
- *
+ * const val：编译时常量，编译的时候会进行内联式编译
  */
 class KotlinTestActivity : AppCompatActivity() {
 
@@ -35,7 +35,7 @@ class KotlinTestActivity : AppCompatActivity() {
         arrayTest()
         exceptionTest()
 
-        var onClickListener: View.OnClickListener =
+        val onClickListener: View.OnClickListener =
             View.OnClickListener {
                 Toast.makeText(
                     this,

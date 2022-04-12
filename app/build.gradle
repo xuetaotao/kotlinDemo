@@ -149,6 +149,8 @@ dependencies {
     dependenciesId.each { k, v -> implementation v }
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     testImplementation 'junit:junit:4.12'//项目测试代码(src/test/java)的依赖
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'//定义(src/androidTest)目录下的代码依赖
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

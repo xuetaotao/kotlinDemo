@@ -302,6 +302,7 @@
         <activity android:name=".ui.main.jlpay.JlLibraryDebugActivity" />
         <activity android:name=".kotlin_study.CoroutinesActivity" />
         <activity android:name=".kotlin_study.HigherAndExpandFuncActivity" />
+        <activity android:name=".java_study.CollectionActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

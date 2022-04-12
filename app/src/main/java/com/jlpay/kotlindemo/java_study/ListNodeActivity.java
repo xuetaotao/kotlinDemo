@@ -22,8 +22,33 @@ public class ListNodeActivity extends AppCompatActivity {
 //        printNodeList();//从尾到头打印链表 非递归
 //        printNodeList2();//从尾到头打印链表  递归
 //        reverseNodeList();//反转链表 使用栈实现
-        reverseNodeList2();//反转链表 双链表求解
+//        reverseNodeList2();//反转链表 双链表求解
+        mergeTwoSortedList(createListNode(), createListNode());//TODO 未测试 合并两个排序的链表
     }
+
+    /**
+     * 合并两个排序的链表
+     * 输入两个递增的链表，单个链表的长度为n，合并这两个链表并使新链表中的节点仍然是递增排序的。
+     * 数据范围： 0 \le n \le 10000≤n≤1000，-1000 \le 节点值 \le 1000−1000≤节点值≤1000
+     * 要求：空间复杂度 O(1)O(1)，时间复杂度 O(n)O(n)
+     * <p>
+     * 如输入{1,3,5},{2,4,6}时，合并后的链表为{1,2,3,4,5,6}，所以对应的输出为{1,2,3,4,5,6}
+     */
+    private ListNode mergeTwoSortedList(ListNode listNode1, ListNode listNode2) {
+        if (listNode1 == null) {
+            return listNode2;
+        } else if (listNode2 == null) {
+            return listNode1;
+        }
+        if (listNode2.val > listNode1.val) {
+            listNode1.next = mergeTwoSortedList(listNode1.next, listNode2);
+            return listNode1;
+        } else {
+            listNode2.next = mergeTwoSortedList(listNode1, listNode2.next);
+            return listNode2;
+        }
+    }
+
 
     /**
      * 双链表求解

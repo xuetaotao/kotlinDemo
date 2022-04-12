@@ -222,6 +222,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("OcrActivity", JlLibraryDebugActivity::class.java)
         addButton("Kotlin协程：CoroutinesActivity", CoroutinesActivity::class.java)
         addButton("Kotlin高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
+        addButton("Java基础：集合", CollectionActivity::class.java)
     }
 
     override fun initData() {

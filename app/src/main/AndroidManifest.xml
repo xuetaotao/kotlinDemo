@@ -303,6 +303,7 @@
         <activity android:name=".kotlin_study.CoroutinesActivity" />
         <activity android:name=".kotlin_study.HigherAndExpandFuncActivity" />
         <activity android:name=".java_study.CollectionActivity" />
+        <activity android:name=".android_study.ViewEventDispatchActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.android_study.ViewEventDispatchActivity
 import com.jlpay.kotlindemo.java_study.*
 import com.jlpay.kotlindemo.kotlin_study.CoroutinesActivity
 import com.jlpay.kotlindemo.kotlin_study.HigherAndExpandFuncActivity
@@ -223,6 +224,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Kotlin协程：CoroutinesActivity", CoroutinesActivity::class.java)
         addButton("Kotlin高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
         addButton("Java基础：集合", CollectionActivity::class.java)
+        addButton("Android基础：View的事件传递机制", ViewEventDispatchActivity::class.java)
     }
 
     override fun initData() {

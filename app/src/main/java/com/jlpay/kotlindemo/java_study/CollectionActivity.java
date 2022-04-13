@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Java 集合
@@ -50,10 +49,15 @@ public class CollectionActivity extends AppCompatActivity {
     /**
      * HashMap
      * 不是线程安全的，如果要保证线程安全，需要用 ConcurrentHashMap 这个类
-     * 底层数据结构是 ：数组+链表的组合；JDK1.8以后，达到一定条件后，链表会被转化为红黑树
+     * 底层数据结构是 ：数组+链表的组合；JDK1.8以后，达到一定条件后(链表长度超过8)，链表会被转化为红黑树
      * 1<<4 = 2的4次方 = 16
      * 1<<n = 2的n次方
      * 当HashMap中的元素超过预置的时候，HashMap中的数组是会动态扩容的
+     * 常见数据结构操作复杂度查询：https://www.bigocheatsheet.com
+     * <p>
+     * 二叉树与平衡二叉树：https://ke.qq.com/course/3323489?taid=10929446231127649
+     * 2-3树：https://ke.qq.com/course/3323489?taid=10929450526094945
+     * 红黑树：https://ke.qq.com/course/3323489?taid=10929454821062241
      */
     private void hashMapDemo() {
         HashMap<String, String> map = new HashMap<>();

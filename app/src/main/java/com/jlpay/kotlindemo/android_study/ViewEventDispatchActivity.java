@@ -24,7 +24,6 @@ public class ViewEventDispatchActivity extends AppCompatActivity {
     private String TAG = ViewEventDispatchActivity.class.getSimpleName();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +53,16 @@ public class ViewEventDispatchActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    //手指初次接触到屏幕时触发
                     Log.e(TAG, "onTouch: OnTouchListener:\tDOWN");
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    //手指离开屏幕时触发
                     Log.e(TAG, "onTouch: OnTouchListener:\tUP");
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    //手指在屏幕上滑动时触发，会多次触发
                     Log.e(TAG, "onTouch: OnTouchListener:\tMOVE");
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    //事件被上层拦截时触发
                     Log.e(TAG, "onTouch: OnTouchListener:\tCANCEL");
                 }
                 return false;
@@ -72,7 +75,6 @@ public class ViewEventDispatchActivity extends AppCompatActivity {
         Log.e(TAG, "dispatchTouchEvent: " + ev.getAction());
         return super.dispatchTouchEvent(ev);
     }
-
 
 
     @Override

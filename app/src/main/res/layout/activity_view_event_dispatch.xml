@@ -16,4 +16,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.jlpay.kotlindemo.android_study.ViewEventDispatchViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button8">
+
+        <com.jlpay.kotlindemo.android_study.ViewEventDispatchView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="15dp" />
+
+    </com.jlpay.kotlindemo.android_study.ViewEventDispatchViewGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

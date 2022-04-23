@@ -41,10 +41,17 @@ public class ViewEventDispatchViewGroup extends ViewGroup {
     }
 
     //第二步
+    //外部拦截法一般只需要在父容器处理,根据业务需求返回true或者false
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         //返回true表示当前ViewGroup拦截当前事件，不在向下传递，并调用onTouchEvent()方法
         //返回false时，交给子view的dispatchTouchEvent()
+        //内部拦截法步骤二
+        //ACTION_DOWN不能拦截，否则子View的requestDisallowInterceptTouchEvent()方法无效
+//        if (ev.getAction()==MotionEvent.ACTION_DOWN){
+//            super.onInterceptTouchEvent(ev);
+//            return false;
+//        }
         Log.e(TAG, "onInterceptTouchEvent: " + ev.getAction());
         return super.onInterceptTouchEvent(ev);
     }

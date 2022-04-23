@@ -37,6 +37,14 @@ public class ViewEventDispatchView extends View {
         //true, 当前的dispatchTouchEvent消费，停止传递
         //false, 父View的onTouchEvent消费
         Log.e(TAG, "onInterceptTouchEvent: " + event.getAction());
+        //内部拦截法（一定要想办法让子view拿到事件）步骤一
+        //如果是ACTION_DOWN事件，请求父容器不要拦截我，但是还需要父容器的onInterceptTouchEvent对该事件做不拦截处理
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        //该方法可以让父容器的onInterceptTouchEvent()方法直接不执行，从而不让父容器拦截
+//            getParent().requestDisallowInterceptTouchEvent(true);
+//        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//            getParent().requestDisallowInterceptTouchEvent(false);
+//        }
         return super.dispatchTouchEvent(event);
     }
 

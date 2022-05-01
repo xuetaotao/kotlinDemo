@@ -327,6 +327,8 @@ public class ThreadActivity extends AppCompatActivity {
      * <p>
      * 彻底搞懂Java线程池的工作原理
      * https://mp.weixin.qq.com/s/tyh_kDZyLu7SDiDZppCx5Q
+     * Java中的线程池有哪些
+     * https://baijiahao.baidu.com/s?id=1710203886182271419&wfr=spider&for=pc
      */
     private static void executor() {
         Runnable runnable = new Runnable() {
@@ -336,7 +338,21 @@ public class ThreadActivity extends AppCompatActivity {
             }
         };
 
-        ExecutorService executor = Executors.newCachedThreadPool();// 实例化一个线程池
+        //创建一个定长线程池,corePoolSize = maximumPoolSize = 传入值
+        //每当提交一个任务就创建一个工作线程，当线程 处于空闲状态时，它们并不会被回收，除非线程池被关闭了，
+        // 如果工作线程数量达到线程池初始的最大数，则将提交的任务存入到池队列(没有大小限制)中。
+        // 由于newFixedThreadPool只有核心线程并且这些核心线程不会被回收，这样它更加快速底相应外界的请求
+        ExecutorService executorService1 = Executors.newFixedThreadPool(3);
+
+        //创建一个定长线程池,corePoolSize = 传入值,主要用于执行定时任务和具有固定周期的重复任务
+        ExecutorService executorService2 = Executors.newScheduledThreadPool(3);
+
+        //创建一个单线程化的线程池
+        //内部只有一个核心线程，以无界队列方式来执行该线程，这使得这些任务之间不需要处理线程同步的问题
+        ExecutorService executorService3 = Executors.newSingleThreadExecutor();
+
+        //创建一个可缓存线程池程,适合执行大量的耗时较少的任务，当整个线程池都处于闲置状态时，线程池中的线程都会超时被停止
+        ExecutorService executor = Executors.newCachedThreadPool();
         executor.execute(runnable);// 使用线程池执行一个任务,execute 提交的线程任务不关心返回值
         executor.execute(runnable);
         executor.execute(runnable);
@@ -346,6 +362,16 @@ public class ThreadActivity extends AppCompatActivity {
 
     /**
      * ThreadPoolExecutor
+     * 构造方法中各个参数的意义：
+     * ThreadPoolExecutor(
+     * int corePoolSize,  核心线程数
+     * int maximumPoolSize, 最大线程数
+     * long keepAliveTime,空闲线程的存活时间
+     * TimeUnit unit,时间单位
+     * BlockingQueue<Runnable> workQueue,阻塞队列，用来存放暂时来不及处理的任务；当核心线程占用完后就开始往这里放，这里放满
+     * 了，会再开线程一直到最大线程数
+     * ThreadFactory threadFactory,在线程创建的时候做一点微调的工作，如命名等
+     * RejectedExecutionHandler handler),拒绝策略:丢弃最老的任务，直接抛出异常（默认），让调用者线程自己去执行任务，丢弃最新提交的任务
      */
     private void threadPoolExecutorDemo() {
         //获取CPU核心数
@@ -363,7 +389,7 @@ public class ThreadActivity extends AppCompatActivity {
 
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 3, 10, 60, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(), sThreadFactory);
+                new SynchronousQueue<Runnable>(), sThreadFactory, new ThreadPoolExecutor.AbortPolicy());
     }
 
     /**

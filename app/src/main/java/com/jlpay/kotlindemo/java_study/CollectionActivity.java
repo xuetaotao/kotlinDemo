@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,6 +62,8 @@ public class CollectionActivity extends AppCompatActivity {
     private void mapDemo() {
         Map<String, String> hashMap = new HashMap<>();
         Map<String, String> linkedHashMap = new LinkedHashMap<>();
+
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
 
         //线程安全,使用synchronized来修饰方法函数来保证线程安全,但是在多线程运行环境下效率表现非常低下
         Map<String, String> hashtable = new Hashtable<>();

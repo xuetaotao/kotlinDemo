@@ -8,7 +8,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +22,8 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HuaWeiTestActivity extends AppCompatActivity {
 
@@ -38,6 +43,272 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //
 //        }
 //    }
+
+
+    /**
+     * HJ21 简单密码
+     */
+    public static void hj21() {
+        Map<String, String> map = new HashMap<>();
+        map.put("1", "1");
+        map.put("abc", "2");
+        map.put("def", "3");
+        map.put("ghi", "4");
+        map.put("jkl", "5");
+        map.put("mno", "6");
+        map.put("pqrs", "7");
+        map.put("tuv", "8");
+        map.put("wxyz", "9");
+        map.put("0", "0");
+
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String str = sc.nextLine();
+            char[] chars = str.toCharArray();
+            StringBuilder sb = new StringBuilder();
+            for (char aChar : chars) {
+                if (aChar >= '0' && aChar <= '9') {
+                    //如果是正整数则不需要进行加密
+                    sb.append(aChar);
+                } else if (aChar >= 'A' && aChar <= 'Y') {
+                    //如果是A~Y的大写字母则需要将其+32位转换成小写再向后移1位
+                    char newChar = (char) (aChar + 32 + 1);
+                    sb.append(newChar);
+                } else if (aChar == 'Z') {
+                    //如果是Z则加密成a
+                    sb.append('a');
+                } else {
+                    //取出map容器中的key与字符进行校验并加密
+                    Set<String> keySet = map.keySet();
+                    for (String s : keySet) {
+                        if (s.contains(String.valueOf(aChar))) {
+                            sb.append(map.get(s));
+                        }
+                    }
+                }
+            }
+            System.out.println(sb.toString());
+        }
+    }
+
+
+    /**
+     * HJ20 密码验证合格程序
+     */
+    public static void hj20() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String str = sc.next();
+            if (str.length() <= 8) {
+                System.out.println("NG");
+                continue;
+            }
+            // 检查是否满足正则
+            if (!getMatch(str)) {
+                System.out.println("NG");
+                continue;
+            }
+            if (getString(str, 0, 3)) {
+                System.out.println("NG");
+                continue;
+            }
+            System.out.println("OK");
+        }
+    }
+
+    // 校验是否有重复子串
+    private static boolean getString(String str, int l, int r) {
+        if (r >= str.length()) {
+            return false;
+        }
+        if (str.substring(r).contains(str.substring(l, r))) {
+            return true;
+        } else {
+            return getString(str, l + 1, r + 1);
+        }
+    }
+
+
+    /**
+     * 检查是否满足正则
+     * Matcher  find()方法与matches()方法区别
+     * https://blog.csdn.net/weixin_30364147/article/details/95768264?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5.pc_relevant_paycolumn_v3&utm_relevant_index=9
+     * find()方法是部分匹配，是查找输入串中与模式匹配的子串，如果该匹配的串有组还可以使用group()函数
+     * matches()是全部匹配，是将整个输入串与模式匹配，如果要验证一个输入的数据是否为数字类型或其他类型，一般要用matches()
+     *
+     * @param str
+     * @return true 符合要求
+     */
+    private static boolean getMatch(String str) {
+        int count = 0;
+        Pattern pattern1 = Pattern.compile("[A-Z]");
+        Matcher matcher1 = pattern1.matcher(str);
+        if (matcher1.find()) {
+            count++;
+        }
+        Pattern pattern2 = Pattern.compile("[a-z]");
+        if (pattern2.matcher(str).find()) {
+            count++;
+        }
+        Pattern pattern3 = Pattern.compile("[0-9]");
+        if (pattern3.matcher(str).find()) {
+            count++;
+        }
+        Pattern pattern4 = Pattern.compile("[^A-Za-z0-9]");
+        if (pattern4.matcher(str).find()) {
+            count++;
+        }
+        if (count >= 3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * HJ19 简单错误记录
+     */
+    public static void hj19() {
+        //较难，可以先略过，有时间回来看
+    }
+
+    /**
+     * HJ18 识别有效的IP地址和掩码并进行分类统计
+     */
+    public static void hj18() {
+        //不会，过
+    }
+
+    /**
+     * HJ17 坐标移动
+     */
+    public static void hj17() {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String line = bufferedReader.readLine();
+            String[] lineStrArray = line.split(";");
+            int x = 0;
+            int y = 0;
+            for (String str : lineStrArray) {
+                if (str == null || str.length() == 0) {
+                    continue;
+                }
+                String direction = str.substring(0, 1);
+                int val = 0;
+                try {
+                    val = Integer.parseInt(str.substring(1));
+                } catch (NumberFormatException e) {
+                    continue;
+                }
+                if (!("W".equals(direction) || "A".equals(direction) || "S".equals(direction) || "D".equals(direction))) {
+                    continue;
+                }
+                switch (direction) {
+                    case "W":
+                        y += val;
+                        break;
+                    case "A":
+                        x -= val;
+                        break;
+                    case "S":
+                        y -= val;
+                        break;
+                    case "D":
+                        x += val;
+                        break;
+                }
+            }
+            System.out.println(x + "," + y);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * HJ16 购物单
+     */
+    public static void hj16() {
+        //不会，过
+    }
+
+    /**
+     * HJ15 求int型正整数在内存中存储时1的个数
+     */
+    public static void hj15() {
+        Scanner sc = new Scanner(System.in);
+        int num = sc.nextInt();
+        int result = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((num & 1) == 1) {
+                result++;//如果末位为1则计数
+            }
+            num = num >>> 1;//无符号右移
+        }
+        System.out.println(result);
+    }
+
+
+    /**
+     * HJ14 字符串排序
+     * TODO 还有其他解法
+     */
+    public static void hj14() {
+        Scanner sc = new Scanner(System.in);
+        int nextInt = Integer.valueOf(sc.nextLine());
+//        int nextInt = sc.nextInt();//TODO 这样有问题，原因暂时没搞清
+        String[] array = new String[nextInt];
+        for (int i = 0; i < nextInt; i++) {
+            array[i] = sc.nextLine();
+        }
+        Arrays.sort(array);
+        for (String s : array) {
+            System.out.println(s);
+        }
+    }
+
+
+    /**
+     * HJ13 句子逆序
+     */
+    public static void sentenceReverse() {
+        Scanner sc = new Scanner(System.in);
+        String nextLine = sc.nextLine();
+        String[] splitStr = nextLine.split(" ");
+        for (int i = splitStr.length - 1; i >= 0; i--) {
+            if (i != 0) {
+                System.out.print(splitStr[i] + " ");
+            } else {
+                System.out.print(splitStr[i]);
+            }
+        }
+    }
+
+
+    /**
+     * HJ12 字符串反转
+     */
+    public static void strReverse() {
+        Scanner sc = new Scanner(System.in);
+        String nextLine = sc.nextLine();
+        StringBuilder sb = new StringBuilder(nextLine);
+        sb.reverse();
+        System.out.println(sb.toString());
+    }
+
+
+    /**
+     * HJ11 数字颠倒
+     */
+    public static void reverseOrder() {
+        Scanner sc = new Scanner(System.in);
+        String nextLine = sc.nextLine();
+        StringBuilder sb = new StringBuilder(nextLine);
+        sb.reverse();
+        System.out.println(sb.toString());
+    }
+
 
     /**
      * HJ10 字符个数统计

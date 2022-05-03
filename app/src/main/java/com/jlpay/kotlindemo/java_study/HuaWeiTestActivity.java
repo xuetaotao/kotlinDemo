@@ -44,6 +44,96 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        }
 //    }
 
+    /**
+     * HJ26 字符串排序
+     */
+    public static void hj26() {
+
+    }
+
+
+    /**
+     * HJ25 数据分类处理
+     */
+    public static void hj25() {
+        //较难，先过
+    }
+
+    /**
+     * HJ24 合唱队
+     */
+    public static void hj24() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int n = sc.nextInt();
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++) {
+                arr[i] = sc.nextInt();
+            }
+            //存储每个数左边小于其的数的个数
+            int[] left = new int[n];
+            left[0] = 1;//最左边的数设为1
+            //存储每个数右边小于其的数的个数
+            int[] right = new int[n];
+            right[n - 1] = 1;//最右边的数设为1
+
+            //计算每个位置左侧的最长递增
+            //不理解  过
+        }
+    }
+
+
+    /**
+     * HJ23 删除字符串中出现次数最少的字符
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void hj23() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String str = sc.nextLine();
+            // Map记录每个字母的次数
+            Map<Character, Integer> map = new HashMap<>();
+            char[] chars = str.toCharArray();
+            for (char aChar : chars) {
+                map.put(aChar, map.getOrDefault(aChar, 0) + 1);
+            }
+            // 快速找出最少次数
+            int min = Integer.MAX_VALUE;
+            for (Integer value : map.values()) {
+                min = Math.min(min, value);
+            }
+            StringBuilder sb = new StringBuilder();
+            for (char aChar : chars) {
+                if (map.get(aChar) != min) {
+                    sb.append(aChar);
+                }
+            }
+            System.out.println(sb.toString());
+        }
+    }
+
+
+    /**
+     * HJ22 汽水瓶
+     */
+    public static void hj22() {
+        Scanner sc = new Scanner(System.in);
+        int[] input = new int[10];
+        int temp = 0;
+        for (int i = 0; i < 10; i++) {
+            temp = sc.nextInt();
+            if (temp == 0) {
+                break;
+            }
+            input[i] = temp;
+        }
+        for (int i = 0; i < 10; i++) {
+            if (input[i] != 0) {
+                System.out.println(input[i] / 2);
+            }
+        }
+    }
+
 
     /**
      * HJ21 简单密码

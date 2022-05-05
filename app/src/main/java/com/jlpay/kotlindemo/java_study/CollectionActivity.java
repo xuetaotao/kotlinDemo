@@ -11,15 +11,19 @@ import com.jlpay.kotlindemo.R;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
@@ -35,6 +39,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * https://ke.qq.com/course/3323489?taid=10786582733960801
  * 简述Java中满足线程安全的数据结构
  * https://blog.csdn.net/qq_29229567/article/details/87799838
+ * 常见数据结构：
+ * 栈：先入后出
+ * 队列：先入先出
+ * 数组：查询效率高，添加删除效率低
+ * 链表：添加删除效率高，查询效率低（对比数组）
+ * 哈希表：数组+链表，哈希值是JDK根据对象的地址或者字符串或者数字算出来的int类型的数值;Object.hashCode();
  */
 public class CollectionActivity extends AppCompatActivity {
 
@@ -137,9 +147,38 @@ public class CollectionActivity extends AppCompatActivity {
      * 可重复
      */
     private void listDemo() {
-        List<String> arrayList = new ArrayList<>();
+        List<String> arrayList = new ArrayList<>();//底层数据结构是数组
+        arrayList.add("aa");
+        //arrayList使用iterator的next方法进行遍历后，然后调用add方法会产生并发修改异常(ConcurrentModificationException)
+        //原因：迭代器遍历的过程中，通过集合对象修改了集合中元素的长度，造成了迭代器获取元素中判断预期修改值和实际修改值不一致
+        //解决：用for循环遍历，然后用集合对象做对应的操作即可
+        Iterator<String> iterator = arrayList.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().equals("aa")) {
+                arrayList.add("bb");//ConcurrentModificationException
+            }
+        }
+        //上面这种情况使用ListIterator的add方法可以解决
+        ListIterator<String> listIterator = arrayList.listIterator();
+        //增强for语句，内部原理是一个Iterator迭代器
+        for (String s : arrayList) {
+            System.out.println(s);
+            if (s.equals("aa")) {
+                arrayList.add("bb");//ConcurrentModificationException
+            }
+        }
 
-        List<String> linkedList = new LinkedList<>();
+        LinkedList<String> linkedList = new LinkedList<>();//底层数据结构是链表
+        linkedList.add("hello");
+        linkedList.add("world");
+        linkedList.add("java");
+        linkedList.addFirst("javase");//在该列表开头插入指定的元素
+        linkedList.addLast("javaee");//将指定的元素追加到此列表的末尾
+        String linkedListFirst = linkedList.getFirst();//返回此列表的第一个元素
+        String linkedListLast = linkedList.getLast();//返回此列表中的最后一个元素
+        String removeFirst = linkedList.removeFirst();//从此列表删除并返回第一个元素
+        String removeLast = linkedList.removeLast();//从此列表删除并返回最后一个元素
+
 
         //线程安全,通过数组保存数据,其本质上是一个队列
         //利用synchronized同步锁机制进行实现，其实现方式与HashTable类似
@@ -154,8 +193,28 @@ public class CollectionActivity extends AppCompatActivity {
      * Set
      */
     private void setDemo() {
-        Set<String> hashSet = new HashSet<>();
-        Set<String> treeSet = new TreeSet<>();
+        Set<String> stringSet = new HashSet<>();
+        //对集合的迭代顺序不做任何保证，底层数据结构是哈希表
+        HashSet<String> hashSet = new HashSet<>();
+        hashSet.add("hello");
+
+        //底层数据结构是哈希表(保证元素唯一)和链表(保证元素有序)，具有可预测的迭代顺序
+        LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>();
+
+        //根据其元素的自然排序进行排序(从小到大)
+        //自然排序就是让元素所属的类实现 Comparable 接口，重写 compareTo 方法
+        TreeSet<String> treeSet = new TreeSet<>();
+        //根据指定的比较器进行排序
+        TreeSet<Integer> treeSet2 = new TreeSet<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if (o1 > o2) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
 
         //线程安全,是对CopyOnWriteArrayList使用了装饰模式后的具体实现
         Set<String> copyOnWriteArraySet = new CopyOnWriteArraySet<>();
@@ -210,6 +269,7 @@ public class CollectionActivity extends AppCompatActivity {
         //排序方法三
         //使用比较器来进行排序，优点可以自己定义排序规则，可以对多属性进行排序
         //创建比较器类
+        //return 0; //认为是同一个元素; return 1; //升序  return -1; //降序
 //        Collections.sort(integerList, new Comparator<Integer>() {
 //            @Override
 //            public int compare(Integer o1, Integer o2) {
@@ -243,6 +303,18 @@ public class CollectionActivity extends AppCompatActivity {
         public int compareTo(HuaWeiTestActivity.User user) {
 //            return this.getName().compareTo(user.getName());//升序
             return user.getName().compareTo(this.getName());//降序
+
+            //return 0; //认为是同一个元素;
+            //return 1; //升序
+            //return -1; //降序
         }
+    }
+
+    /**
+     * Random 学习
+     */
+    private void randomDemo() {
+        Random random = new Random();
+        int i = random.nextInt(100);//通过Random对象获取,[0, 100)之间的int整数
     }
 }

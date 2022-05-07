@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,10 +46,152 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //    }
 
     /**
+     * HJ29 字符串加解密
+     */
+    public static void hj29() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            System.out.println(encode(sc.nextLine()));
+            System.out.println(decode(sc.nextLine()));
+        }
+    }
+
+    public static String encode(String str) {
+        char[] charArray = str.toCharArray();
+        for (int i = 0; i < charArray.length; i++) {
+            if (charArray[i] >= 'A' && charArray[i] < 'Z') {
+                charArray[i] = (char) (charArray[i] - 'A' + 'a' + 1);
+            } else if (charArray[i] == 'Z') {
+                charArray[i] = 'a';
+            } else if (charArray[i] >= 'a' && charArray[i] < 'z') {
+                charArray[i] = (char) (charArray[i] - 'a' + 'A' + 1);
+            } else if (charArray[i] == 'z') {
+                charArray[i] = 'A';
+            } else if (charArray[i] >= '0' && charArray[i] < '9') {
+                charArray[i] = (char) (charArray[i] + 1);
+            } else if (charArray[i] == '9') {
+                charArray[i] = '0';
+            }
+        }
+
+        return new String(charArray);
+    }
+
+    public static String decode(String str) {
+        char[] charArray = str.toCharArray();
+        for (int i = 0; i < charArray.length; i++) {
+            if (charArray[i] > 'A' && charArray[i] <= 'Z') {
+                charArray[i] = (char) (charArray[i] - 'A' + 'a' - 1);
+            } else if (charArray[i] == 'A') {
+                charArray[i] = 'z';
+            } else if (charArray[i] > 'a' && charArray[i] <= 'z') {
+                charArray[i] = (char) (charArray[i] - 'a' + 'A' - 1);
+            } else if (charArray[i] == 'a') {
+                charArray[i] = 'Z';
+            } else if (charArray[i] > '0' && charArray[i] <= '9') {
+                charArray[i] = (char) (charArray[i] - 1);
+            } else if (charArray[i] == '0') {
+                charArray[i] = '9';
+            }
+        }
+
+        return new String(charArray);
+    }
+
+
+    /**
+     * HJ28 素数伴侣
+     */
+    public static void hj28() {
+        //不会，过
+    }
+
+
+    /**
+     * HJ27 查找兄弟单词
+     */
+    public static void hj27() {
+        //1.解析输入数据
+        Scanner sc = new Scanner(System.in);
+        String str = sc.nextLine();
+        String[] splitStr = str.split(" ");
+        //字典中单词的个数
+        Integer worldNum = Integer.parseInt(splitStr[0]);
+        //获取输入的单词
+        String world = splitStr[splitStr.length - 2];
+        //获取K值，最后要打印输出第K个兄弟单词
+        Integer k = Integer.parseInt(splitStr[splitStr.length - 1]);
+
+        //2.找出输入字典中的单词中，符合兄弟单词的单词，并存储
+        List<String> brotherWorld = new ArrayList<>();
+        for (int i = 1; i <= worldNum; i++) {
+            String currentWorld = splitStr[i];
+            if (world.length() != currentWorld.length() ||
+                    world.equals(currentWorld)) {
+                continue;
+            }
+            char[] currentWorldArray = currentWorld.toCharArray();
+            char[] worldArray = world.toCharArray();
+            Arrays.sort(currentWorldArray);
+            Arrays.sort(worldArray);
+            if (new String(currentWorldArray).equals(new String(worldArray))) {
+                brotherWorld.add(currentWorld);
+            }
+        }
+
+        //3.打印兄弟单词的数目
+        System.out.println(brotherWorld.size());
+
+        //4.如果兄弟单词的数目大于要获取的第K个兄弟单词，则排序输出第K个兄弟单词
+        if (brotherWorld.size() >= k) {
+            Collections.sort(brotherWorld);
+            System.out.println(brotherWorld.get(k - 1));
+        }
+    }
+
+
+    /**
      * HJ26 字符串排序
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static void hj26() {
-
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String nextLine = sc.nextLine();
+            char[] chars = nextLine.toCharArray();
+            //开始排序
+            //1.把字母抽出来
+            List<Character> letters = new ArrayList<>();
+            for (char aChar : chars) {
+                if (Character.isLetter(aChar)) {
+                    letters.add(aChar);
+                }
+            }
+            //2.把抽离出来的字母列表不区分大小写排序
+//            Collections.sort(letters, new Comparator<Character>() {
+//                @Override
+//                public int compare(Character o1, Character o2) {
+//                    return Character.toLowerCase(o1) - Character.toLowerCase(o2);
+//                }
+//            });
+            letters.sort(new Comparator<Character>() {
+                @Override
+                public int compare(Character o1, Character o2) {
+                    return Character.toLowerCase(o1) - Character.toLowerCase(o2);
+                }
+            });
+            //把包括非字母的所有字符重新排序
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0, j = 0; i < chars.length; i++) {
+                if (Character.isLetter(chars[i])) {
+                    //把原来位置上是字母的字符全部重排序，原来位置非字母的保留
+                    sb.append(letters.get(j++));
+                } else {
+                    sb.append(chars[i]);
+                }
+            }
+            System.out.println(sb.toString());
+        }
     }
 
 

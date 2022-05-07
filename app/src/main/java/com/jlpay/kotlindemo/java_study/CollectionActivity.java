@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jlpay.kotlindemo.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -70,9 +71,21 @@ public class CollectionActivity extends AppCompatActivity {
      * 双列集合
      */
     private void mapDemo() {
+        Map<String, String> map = new HashMap<>();
+        Set<String> keySet = map.keySet();//获取所有键的集合
+        Collection<String> values = map.values();//获取所有值的集合
+        //方式二
+        Set<Map.Entry<String, String>> entrySet = map.entrySet();
+        for (Map.Entry<String, String> entry : entrySet) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+        }
+
         Map<String, String> hashMap = new HashMap<>();
+
         Map<String, String> linkedHashMap = new LinkedHashMap<>();
 
+        //根据其元素(这里是键，即Key)的自然排序进行排序(从小到大)
         TreeMap<Integer, Integer> treeMap = new TreeMap<>();
 
         //线程安全,使用synchronized来修饰方法函数来保证线程安全,但是在多线程运行环境下效率表现非常低下
@@ -130,6 +143,22 @@ public class CollectionActivity extends AppCompatActivity {
     private void collectionDemo() {
         Collection<String> collection = new ArrayList<>();
         collection.add("aa");
+
+        List<String> list = (List<String>) collection;
+        //将指定的列表按升序排序
+        Collections.sort(list);
+        //将指定的列表按降序排序
+        Collections.sort(list, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                //顺序不一定对
+                return o1.compareTo(o2);
+            }
+        });
+        //反转指定列表中元素的顺序
+        Collections.reverse(list);
+        //使用默认的随机源随机排序指定的列表
+        Collections.shuffle(list);
     }
 
 
@@ -148,6 +177,10 @@ public class CollectionActivity extends AppCompatActivity {
      */
     private void listDemo() {
         List<String> arrayList = new ArrayList<>();//底层数据结构是数组
+//        List.<String>of("hello","world");
+        List<String> list = Arrays.asList("hello", "world");
+        //返回的list不能做增删操作，可以做修改操作
+
         arrayList.add("aa");
         //arrayList使用iterator的next方法进行遍历后，然后调用add方法会产生并发修改异常(ConcurrentModificationException)
         //原因：迭代器遍历的过程中，通过集合对象修改了集合中元素的长度，造成了迭代器获取元素中判断预期修改值和实际修改值不一致
@@ -261,7 +294,7 @@ public class CollectionActivity extends AppCompatActivity {
             }
         }
 
-        //排序方法一(直接排序)
+        //排序方法一(直接排序)，将指定的列表按升序排序
         Collections.sort(integerList);
 
         //排序方法二  实现Comparable接口  该方法缺点就是只能对单一属性添加进行排序，而且写死在User类中

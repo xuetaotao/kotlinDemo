@@ -1,5 +1,7 @@
 package com.jlpay.kotlindemo.java_study;
 
+import java.util.Objects;
+
 public class Student extends JavaListNode {
     //---------------构造方法-------------------
     //（默认的构造方法）
@@ -61,4 +63,17 @@ public class Student extends JavaListNode {
         System.out.println("调用了，私有的，并且有返回值的，int参数的show4(): age = " + age);
         return "abcd";
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Student student = (Student) o;
+//        return age == student.age && sex == student.sex && Objects.equals(name, student.name) && Objects.equals(phoneNum, student.phoneNum);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(name, age, sex, phoneNum);
+//    }
 }

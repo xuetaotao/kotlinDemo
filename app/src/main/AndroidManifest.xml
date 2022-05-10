@@ -183,23 +183,23 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter3.EventListenerActivity"
+            android:name=".android_study.EventListenerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <!-- screenSize|orientation属性值指定该Activity可以监听屏幕方向改变的事件，这样当程序改变手机屏幕方向时，Activity的onConfigurationChanged()方法就会被回调       -->
         <activity
-            android:name=".ui.main.chapter3.ConfigurationActivity"
+            android:name=".android_study.ConfigurationActivity"
             android:configChanges="screenSize|orientation|keyboardHidden" />
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name=".ui.main.chapter3.HandlerActivity"
+            android:name=".android_study.HandlerActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter3.AsyncTaskActivity"
+            android:name=".android_study.AsyncTaskActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -243,17 +243,17 @@
             android:name=".kotlin_study.KotlinTestActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.main.chapter10.SimpleServiceActivity" />
-        <activity android:name=".ui.main.chapter10.IntentServiceActivity" />
-        <activity android:name=".ui.main.chapter10.AidlServiceActivity" />
-        <activity android:name=".ui.main.chapter10.CustomAidlServiceActivity" />
+        <activity android:name=".android_study.SimpleServiceActivity" />
+        <activity android:name=".android_study.IntentServiceActivity" />
+        <activity android:name=".android_study.AidlServiceActivity" />
+        <activity android:name=".android_study.CustomAidlServiceActivity" />
         <activity android:name=".ui.main.dailytest.MediaUtilsActivity" />
-        <activity android:name=".ui.main.chapter10.BroadcastReceiverActivity" />
+        <activity android:name=".android_study.BroadcastReceiverActivity" />
         <activity android:name=".ui.main.dailytest.ImagePickerActivity" />
         <activity android:name=".ui.main.dailytest.SmaliDexLibActivity" />
-        <activity android:name=".ui.main.chapter6and7.AssetAndRawResActivity" />
-        <activity android:name=".ui.main.chapter11.MediaPlayerActivity" />
-        <activity android:name=".ui.main.java_advance.GenericTypeActivity" />
+        <activity android:name=".android_study.AssetAndRawResActivity" />
+        <activity android:name=".android_study.MediaPlayerActivity" />
+        <activity android:name=".java_study.GenericTypeActivity" />
         <activity
             android:name=".ui.main.dailytest.PdfViewerActivity"
             android:launchMode="singleTask">
@@ -308,7 +308,7 @@
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />
-        <service android:name=".ui.main.chapter10.IntentServiceActivity$MyService" />
+        <service android:name=".android_study.IntentServiceActivity$MyService" />
 
         <!--广播注册：静态注册-->
         <!--android:exported指定该receiver能否接收其他APP发出的广播，如果配置了<intent-filter>，则默认为true        -->

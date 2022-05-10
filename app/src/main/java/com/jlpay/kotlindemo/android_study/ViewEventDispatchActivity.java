@@ -27,6 +27,9 @@ public class ViewEventDispatchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //隐藏ActionBar/TitleBar(相同效果见ActionBarActivity),此外也可以通过style里面设置
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);//继承自Activity使用,必须要在setContentView(因为它会用到设置的窗口属性)之前
+//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);//继承自AppCompatActivity使用,必须要在setContentView(因为它会用到设置的窗口属性)之前
         setContentView(R.layout.activity_view_event_dispatch);
 
         initView();

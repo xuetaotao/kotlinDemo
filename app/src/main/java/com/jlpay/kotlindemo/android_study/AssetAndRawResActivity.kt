@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.chapter6and7
+package com.jlpay.kotlindemo.android_study
 
 import android.content.res.AssetFileDescriptor
 import android.content.res.AssetManager

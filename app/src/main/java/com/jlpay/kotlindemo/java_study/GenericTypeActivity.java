@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.java_advance;
+package com.jlpay.kotlindemo.java_study;
 
 import android.os.Bundle;
 

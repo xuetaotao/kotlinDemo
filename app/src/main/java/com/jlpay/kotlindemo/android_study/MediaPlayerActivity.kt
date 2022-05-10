@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.chapter11
+package com.jlpay.kotlindemo.android_study
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -24,8 +24,8 @@ import com.jlpay.kotlindemo.R
  * https://juejin.cn/post/6844903702877192206
  *
  * MediaPlayer 播放音频文件
- * 1.播放应用的资源文件 {@link com.jlpay.kotlindemo.ui.main.chapter6and7.AssetAndRawResActivity#rawStart()}
- * 2.播放应用的原始资源文件 {@link com.jlpay.kotlindemo.ui.main.chapter6and7.AssetAndRawResActivity#assetsStart()}
+ * 1.播放应用的资源文件 {@link com.jlpay.kotlindemo.android_study.AssetAndRawResActivity#rawStart()}
+ * 2.播放应用的原始资源文件 {@link com.jlpay.kotlindemo.android_study.AssetAndRawResActivity#assetsStart()}
  *
  * int getDuration()：获取流媒体的总播放时长，单位是毫秒
  * int getCurrentPosition()：获取当前流媒体的播放的位置，单位是毫秒

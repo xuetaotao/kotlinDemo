@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.android_study;
+package com.jlpay.kotlindemo.android_study.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

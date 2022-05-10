@@ -13,10 +13,10 @@ import com.jlpay.kotlindemo.kotlin_study.HigherAndExpandFuncActivity
 import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
 import com.jlpay.kotlindemo.android_study.MediaPlayerActivity
-import com.jlpay.kotlindemo.ui.main.chapter1and2.*
 import com.jlpay.kotlindemo.android_study.ConfigurationActivity
 import com.jlpay.kotlindemo.android_study.EventListenerActivity
 import com.jlpay.kotlindemo.android_study.AssetAndRawResActivity
+import com.jlpay.kotlindemo.android_study.ui.*
 import com.jlpay.kotlindemo.ui.main.dailytest.*
 import com.jlpay.kotlindemo.ui.main.hencoder.IOActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity

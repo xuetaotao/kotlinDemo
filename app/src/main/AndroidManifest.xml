@@ -91,23 +91,23 @@
         <!--在Activity中添加了 android:configChanges属性，目的是当所指定属性(Configuration Changes)发生改变时，通知程序调用 onConfigurationChanged()函数
         就不会重启activity，同时能够监听系统设置的更改-->
         <activity
-            android:name=".ui.main.chapter1and2.PracticeViewActivity"
+            android:name=".android_study.ui.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.FirstUiActivity"
+            android:name=".android_study.ui.FirstUiActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.FrameLayoutActitivy"
+            android:name=".android_study.ui.FrameLayoutActitivy"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.ConstraintLayoutActivity"
+            android:name=".android_study.ui.ConstraintLayoutActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.LinearLayoutActivity"
+            android:name=".android_study.ui.LinearLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -115,11 +115,11 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.ImageViewActivity"
+            android:name=".android_study.ui.ImageViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.AdapterViewActivity"
+            android:name=".android_study.ui.AdapterViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -135,11 +135,11 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.RecyclerViewActivity"
+            android:name=".android_study.ui.RecyclerViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.ProgressBarActivity"
+            android:name=".android_study.ui.ProgressBarActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -147,39 +147,39 @@
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.ViewSwitcherActivity"
+            android:name=".android_study.ui.ViewSwitcherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.ImageSwitcherActivity"
+            android:name=".android_study.ui.ImageSwitcherActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.ViewFlipperActivity"
+            android:name=".android_study.ui.ViewFlipperActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.OtherUIModuleActivity"
+            android:name=".android_study.ui.OtherUIModuleActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.DialogActivity"
+            android:name=".android_study.ui.DialogActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.MenuActivity"
+            android:name=".android_study.ui.MenuActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.XmlMenuActivity"
+            android:name=".android_study.ui.XmlMenuActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.ActionBarActivity"
+            android:name=".android_study.ui.ActionBarActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.chapter1and2.PlaneViewActivity"
+            android:name=".android_study.ui.PlaneViewActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
@@ -303,7 +303,7 @@
         <activity android:name=".kotlin_study.CoroutinesActivity" />
         <activity android:name=".kotlin_study.HigherAndExpandFuncActivity" />
         <activity android:name=".java_study.CollectionActivity" />
-        <activity android:name=".android_study.ViewEventDispatchActivity" />
+        <activity android:name=".android_study.ui.ViewEventDispatchActivity" />
         <activity android:name=".java_study.HuaWeiTestActivity" />
 
         <service android:name=".service.SimpleService" />

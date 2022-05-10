@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.chapter1and2
+package com.jlpay.kotlindemo.android_study.ui
 
 import android.content.*
 import android.widget.Button

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".android_study.ViewEventDispatchActivity">
+    tools:context=".android_study.ui.ViewEventDispatchActivity">
 
     <Button
         android:id="@+id/button8"
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.jlpay.kotlindemo.android_study.ViewEventDispatchViewGroup
+    <com.jlpay.kotlindemo.android_study.ui.ViewEventDispatchViewGroup
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="15dp"
@@ -24,11 +24,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button8">
 
-        <com.jlpay.kotlindemo.android_study.ViewEventDispatchView
+        <com.jlpay.kotlindemo.android_study.ui.ViewEventDispatchView
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_margin="15dp" />
 
-    </com.jlpay.kotlindemo.android_study.ViewEventDispatchViewGroup>
+    </com.jlpay.kotlindemo.android_study.ui.ViewEventDispatchViewGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

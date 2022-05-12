@@ -14,12 +14,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import java.lang.ref.WeakReference
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.math.sqrt
 
 /**
  * Android多线程----异步消息处理机制之Handler详解
  * https://www.cnblogs.com/qianguyihao/p/4003922.html
+ * Android中Handler、Thread、HandlerThread三者的区别
+ * https://www.jb51.net/article/226211.htm
  */
 class HandlerActivity : AppCompatActivity() {
 
@@ -80,6 +81,14 @@ class HandlerActivity : AppCompatActivity() {
         calThread.handler?.sendMessage(msg)
     }
 
+    /**
+     * 线程间通信的时候，比如Android中常见的更新UI，涉及到的是子线程和主线程之间的通信，
+     * 实现方式就是Handler+Looper，但是要自己手动操作Looper，不推荐，所以谷歌封装了HandlerThread类（类似于AsyncTask类）
+     * <p>
+     * HandlerThread继承于Thread，所以它本质就是个Thread。与普通Thread的差别就在于，然后在内部直接实现了
+     * Looper的实现，这是Handler消息机制必不可少的。有了自己的looper,可以让我们在自己的线程中分发和处理消息。
+     * 如果不用HandlerThread的话，需要手动去调用Looper.prepare()和Looper.loop()这些方法
+     */
     fun handlerThreadStudy() {
         val handlerThread = HandlerThread("myHandlerThreadStudy")
         handlerThread.start()

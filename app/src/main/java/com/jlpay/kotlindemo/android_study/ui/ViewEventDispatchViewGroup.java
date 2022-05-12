@@ -7,6 +7,8 @@ import android.view.MotionEvent;
 import android.view.ViewGroup;
 
 /**
+ * ViewGroup.java类中只分发事件：   ViewGroup.dispatchTouchEvent()--->实现了分发流程的逻辑
+ * <p>
  * 与事件分发相关联的三个方法分别为dispatchTouchEvent，onInterceptTouchEvent， onTouchEvent
  */
 public class ViewEventDispatchViewGroup extends ViewGroup {

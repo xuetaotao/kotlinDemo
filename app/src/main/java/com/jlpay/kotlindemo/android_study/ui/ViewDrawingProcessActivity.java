@@ -1,13 +1,15 @@
 package com.jlpay.kotlindemo.android_study.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,24 +47,29 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
 
 
     /**
-     * 自定义View
+     * 自定义View的步骤：
+     * 1.attrs文件中自定义属性，以及xml中使用
+     * 2.测量onMeasure---只需要测量自定义View自己（如果继承自类似TextView，测量工作就不需要自己做了）
+     * 3.自定义View不需要 onLayout
+     * 4.onDraw：绘制自己
+     * 5.交互
      */
     static class MyView extends View {
 
         public MyView(Context context) {
-            super(context);
+            this(context, null);
         }
 
         public MyView(Context context, @Nullable AttributeSet attrs) {
-            super(context, attrs);
+            this(context, attrs, 0);
         }
 
         public MyView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
-        }
 
-        public MyView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-            super(context, attrs, defStyleAttr, defStyleRes);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MyView);
+            int color = typedArray.getColor(R.styleable.MyView_background_color, Color.WHITE);
+            typedArray.recycle();
         }
 
         @Override
@@ -78,41 +85,54 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            invalidate();
+            canvas.save();//保存画布绘制前的样子
+            invalidate();//刷新显示
+            canvas.restore();//恢复画布初始保存的样子
         }
     }
 
     /**
-     * 自定义 ViewGroup
+     * 自定义ViewGroup的步骤：
+     * 1.attrs文件中自定义属性，以及xml中使用
+     * 2.测量onMeasure---先测量子View，再根据子View尺寸，计算自己的，保存尺寸给后面用
+     * 3.布局onLayout---根据自己的规则确定 child 的位置
+     * 4.绘制onDraw--正常不会调用，可以通过重写 dispatchDraw 替代（一般不会用）
+     * 5.交互
      */
-    static class MyLinearLayout extends LinearLayout {
+    static class MyViewGroup extends ViewGroup {
 
-        private final String TAG = MyLinearLayout.class.getSimpleName();
+        private final String TAG = MyViewGroup.class.getSimpleName();
 
-        public MyLinearLayout(Context context) {
-            super(context);
+        public MyViewGroup(Context context) {
+            this(context, null);
         }
 
-        public MyLinearLayout(Context context, @Nullable AttributeSet attrs) {
-            super(context, attrs);
+        public MyViewGroup(Context context, @Nullable AttributeSet attrs) {
+            this(context, attrs, 0);
         }
 
-        public MyLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        public MyViewGroup(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
         }
 
-        public MyLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-            super(context, attrs, defStyleAttr, defStyleRes);
-        }
-
+        //先测量子View，再根据子View尺寸，计算自己的，保存尺寸给后面用
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            //获取限制的值，父容器对子View限制的大小和模式
+            int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+            int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+            int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+            //保存尺寸给后面用
+//            setMeasuredDimension(1,2);
         }
 
         @Override
         protected void onLayout(boolean changed, int l, int t, int r, int b) {
-            super.onLayout(changed, l, t, r, b);
+            //放置子View
+//            layout();
         }
 
         @Override

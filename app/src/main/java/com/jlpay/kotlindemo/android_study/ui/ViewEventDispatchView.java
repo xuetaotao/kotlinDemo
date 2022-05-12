@@ -10,6 +10,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+/**
+ * View.java类中只处理事件：View.dispatchTouchEvent()--->只有事件的处理逻辑
+ */
 public class ViewEventDispatchView extends View {
 
     private String TAG = ViewEventDispatchView.class.getSimpleName();

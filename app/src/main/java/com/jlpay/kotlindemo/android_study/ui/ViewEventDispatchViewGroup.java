@@ -4,31 +4,27 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 /**
  * ViewGroup.java类中只分发事件：   ViewGroup.dispatchTouchEvent()--->实现了分发流程的逻辑
  * <p>
  * 与事件分发相关联的三个方法分别为dispatchTouchEvent，onInterceptTouchEvent， onTouchEvent
  */
-public class ViewEventDispatchViewGroup extends ViewGroup {
+public class ViewEventDispatchViewGroup extends LinearLayout {
 
     private String TAG = ViewEventDispatchViewGroup.class.getSimpleName();
 
     public ViewEventDispatchViewGroup(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public ViewEventDispatchViewGroup(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public ViewEventDispatchViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public ViewEventDispatchViewGroup(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     //ViewGroup中的事件传递流程
@@ -38,7 +34,7 @@ public class ViewEventDispatchViewGroup extends ViewGroup {
         //在ViewGroup的dispatchTouchEvent()方法中首先会调用onInterceptTouchEvent()判断是否需要拦截当前事件
         //true, 当前的dispatchTouchEvent消费，停止传递
         //false, 父View的onTouchEvent消费
-        Log.e(TAG, "onInterceptTouchEvent: " + ev.getAction());
+        Log.e(TAG, "父容器--->dispatchTouchEvent: " + ev.getAction());
         return super.dispatchTouchEvent(ev);
     }
 
@@ -54,7 +50,7 @@ public class ViewEventDispatchViewGroup extends ViewGroup {
 //            super.onInterceptTouchEvent(ev);
 //            return false;
 //        }
-        Log.e(TAG, "onInterceptTouchEvent: " + ev.getAction());
+        Log.e(TAG, "父容器--->onInterceptTouchEvent: " + ev.getAction());
         return super.onInterceptTouchEvent(ev);
     }
 
@@ -65,12 +61,12 @@ public class ViewEventDispatchViewGroup extends ViewGroup {
         //如果onTouchEvent()返回false时，则调用当前ViewGroup的parent View的onTouchEvent()方法
         //同理如果当前ViewGroup的parent View的onTouchEvent()方法放回true，则表示该view消费当前事件，并且终止事件传递，
         //反之如果当前ViewGroup的parent View的onTouchEvent()方法放回false，则继续向上传递事件
-        Log.e(TAG, "onInterceptTouchEvent: " + event.getAction());
+        Log.e(TAG, "父容器--->onTouchEvent: " + event.getAction());
         return super.onTouchEvent(event);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
-    }
+//    @Override
+//    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+//
+//    }
 }

@@ -306,6 +306,7 @@
         <activity android:name=".android_study.ui.ViewEventDispatchActivity" />
         <activity android:name=".java_study.HuaWeiTestActivity" />
         <activity android:name=".android_study.ui.ViewDrawingProcessActivity" />
+        <activity android:name=".android_study.ui.AnimatorActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

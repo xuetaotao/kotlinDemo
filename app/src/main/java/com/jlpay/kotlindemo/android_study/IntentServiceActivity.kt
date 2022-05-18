@@ -10,6 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.service.MyIntentService
 
+/**
+ * IntentService的使用
+ * {@link com.jlpay.kotlindemo.service.MyIntentService#onHandleIntent(intent: Intent?)}
+ */
 class IntentServiceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -13,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.service.SimpleService
 
+/**
+ * Service 的基本使用
+ * {@link SimpleService}
+ */
 class SimpleServiceActivity : AppCompatActivity() {
 
     //保持所启动的Service的IBinder对象

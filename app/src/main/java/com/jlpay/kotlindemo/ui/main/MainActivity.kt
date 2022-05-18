@@ -224,6 +224,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Android基础：View的绘制流程", ViewDrawingProcessActivity::class.java)
         addButton("Android基础：View的事件传递机制", ViewEventDispatchActivity::class.java)
         addButton("华为笔试刷题", HuaWeiTestActivity::class.java)
+        addButton("Android动画", AnimatorActivity::class.java)
     }
 
     override fun initData() {

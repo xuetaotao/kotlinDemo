@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -56,6 +58,8 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
      */
     static class MyView extends View {
 
+        private GestureDetector gestureDetector;
+
         public MyView(Context context) {
             this(context, null);
         }
@@ -70,11 +74,22 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MyView);
             int color = typedArray.getColor(R.styleable.MyView_background_color, Color.WHITE);
             typedArray.recycle();
+
+            gestureDetector = new GestureDetector(context, new MyGesture());
         }
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
+
+        /**
+         * 在onMeasure调用之后  调用
+         * 每次改变尺寸时也会调用
+         */
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            super.onSizeChanged(w, h, oldw, oldh);
         }
 
         @Override
@@ -88,6 +103,12 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
             canvas.save();//保存画布绘制前的样子
             invalidate();//刷新显示
             canvas.restore();//恢复画布初始保存的样子
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            //将gestureDetector与onTouchEvent关联起来，进而处理自己实现的相关效果
+            return gestureDetector.onTouchEvent(event);
         }
     }
 
@@ -145,6 +166,84 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
         protected void dispatchDraw(Canvas canvas) {
             super.dispatchDraw(canvas);
             Log.e(TAG, "dispatchDraw: ");//会执行
+        }
+    }
+
+    /**
+     * 实现手势操作（如双击-->可以直接用这种方式，也可以通过onTouchEvent来处理）
+     * 一般用哪个方法重写哪个就行，不需要全部重写，这里是为了注释
+     */
+    static class MyGesture extends GestureDetector.SimpleOnGestureListener {
+
+        public MyGesture() {
+            super();
+        }
+
+        //Up时触发，双击的时候只第二次抬起时触发
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return super.onSingleTapUp(e);
+        }
+
+        //用的多一些
+        //长按    300ms
+        @Override
+        public void onLongPress(MotionEvent e) {
+            super.onLongPress(e);
+        }
+
+        //用的多一些
+        //类似 move事件
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+
+        //用的多一些
+        //抛掷，当手指抬起的时候触发
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        //用的多一些
+        //按下延时触发  100ms --用来实现点击效果，如水波纹
+        @Override
+        public void onShowPress(MotionEvent e) {
+            super.onShowPress(e);
+        }
+
+        //用的多一些
+        //按下   注意：直接返回true，否则onScroll中拦截不到事件
+        @Override
+        public boolean onDown(MotionEvent e) {
+//            return super.onDown(e);
+            return true;
+        }
+
+        //用的多一些
+        //双击    第二次点击按下的时候触发
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            return super.onDoubleTap(e);
+        }
+
+        //双击第二次 down、move、up都会触发
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            return super.onDoubleTapEvent(e);
+        }
+
+        //略复杂，单击按下时触发，双击时不触发
+        //延时300ms触发TAP事件
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return super.onSingleTapConfirmed(e);
+        }
+
+        @Override
+        public boolean onContextClick(MotionEvent e) {
+            return super.onContextClick(e);
         }
     }
 }

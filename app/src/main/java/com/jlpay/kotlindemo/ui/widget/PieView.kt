@@ -23,7 +23,7 @@ private val OFFSET_LENGTH = 20f.px
 private val OFFSET_WHICH = 1
 
 /**
- * 饼图
+ * 自定义View--->饼图
  */
 class PieView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     View(context, attrs, defStyleAttr) {
@@ -44,7 +44,6 @@ class PieView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -58,8 +57,7 @@ class PieView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
                 if (index == OFFSET_WHICH) {
                     canvas.save()
                     canvas.translate(
-                        OFFSET_LENGTH * cos(Math.toRadians(startAngle + angle / 2f.toDouble())).toFloat()
-                        ,
+                        OFFSET_LENGTH * cos(Math.toRadians(startAngle + angle / 2f.toDouble())).toFloat(),
                         OFFSET_LENGTH * sin(Math.toRadians(startAngle + angle / 2f.toDouble())).toFloat()
                     )
                 }

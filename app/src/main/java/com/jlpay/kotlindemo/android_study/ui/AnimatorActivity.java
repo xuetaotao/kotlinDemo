@@ -78,6 +78,7 @@ public class AnimatorActivity extends AppCompatActivity {
 
     public void setCurrentScale(float currentScale) {
         this.currentScale = currentScale;
+//        invalidate();//自定义View的话，值更改就要刷新UI
     }
 
     public void propertyAnim() {

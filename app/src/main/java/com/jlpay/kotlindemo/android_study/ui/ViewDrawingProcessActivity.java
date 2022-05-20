@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -59,6 +60,7 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
     static class MyView extends View {
 
         private GestureDetector gestureDetector;
+        private ScaleGestureDetector scaleGestureDetector;
 
         public MyView(Context context) {
             this(context, null);
@@ -76,6 +78,7 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
             typedArray.recycle();
 
             gestureDetector = new GestureDetector(context, new MyGesture());
+            scaleGestureDetector = new ScaleGestureDetector(context, new MyScaleGestureDetector());
         }
 
         @Override
@@ -107,8 +110,14 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            //将gestureDetector与onTouchEvent关联起来，进而处理自己实现的相关效果
-            return gestureDetector.onTouchEvent(event);
+            //双指操作优先
+            boolean result = scaleGestureDetector.onTouchEvent(event);
+            //如果不是双指操作的话，就执行双击操作关联
+            if (!scaleGestureDetector.isInProgress()) {
+                //将gestureDetector与onTouchEvent关联起来，进而处理自己实现的相关效果
+                result = gestureDetector.onTouchEvent(event);
+            }
+            return result;
         }
     }
 
@@ -194,15 +203,17 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
 
         //用的多一些
         //类似 move事件
+        //distanceX: 在X轴上滑过的距离（单位时间） 旧位置-新位置
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             return super.onScroll(e1, e2, distanceX, distanceY);
         }
 
         //用的多一些
-        //抛掷，当手指抬起的时候触发
+        //抛掷，当手指抬起的时候，惯性滑动触发
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+//            OverScroller
             return super.onFling(e1, e2, velocityX, velocityY);
         }
 
@@ -222,7 +233,7 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
         }
 
         //用的多一些
-        //双击    第二次点击按下的时候触发
+        //双击    第二次点击按下的时候触发  返回值无所谓
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             return super.onDoubleTap(e);
@@ -244,6 +255,30 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
         @Override
         public boolean onContextClick(MotionEvent e) {
             return super.onContextClick(e);
+        }
+    }
+
+    /**
+     * 实现双指缩放 ScaleGestureDetector
+     */
+    static class MyScaleGestureDetector implements ScaleGestureDetector.OnScaleGestureListener {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float scaleFactor = detector.getScaleFactor();
+//            invalidate();
+            return false;
+        }
+
+        //注意：返回true，消费事件
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            return true;
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+
         }
     }
 }

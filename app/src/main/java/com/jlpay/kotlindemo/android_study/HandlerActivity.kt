@@ -19,8 +19,11 @@ import kotlin.math.sqrt
 /**
  * Android多线程----异步消息处理机制之Handler详解
  * https://www.cnblogs.com/qianguyihao/p/4003922.html
+ *
  * Android中Handler、Thread、HandlerThread三者的区别
  * https://www.jb51.net/article/226211.htm
+ *
+ * Handler sendMessage与post/postDelayed区别(TODO)
  */
 class HandlerActivity : AppCompatActivity() {
 
@@ -53,6 +56,12 @@ class HandlerActivity : AppCompatActivity() {
         //自然地依附在主线程中了
         //对于Handler的Post方式来说，它会传递一个Runnable对象到消息队列中
         // 在这个Runnable对象中，重写run()方法。一般在这个run()方法中写入需要在UI线程上的操作
+        Handler().post(object : Runnable {
+            override fun run() {
+                Log.e(TAG, "fetchData current Thread:${Thread.currentThread().name}")//Main线程
+                tvResult.text = "fetchData current Thread:${Thread.currentThread().name}\n立刻更新"
+            }
+        })
         Handler().postDelayed(Runnable {
             Log.e(TAG, "fetchData current Thread:${Thread.currentThread().name}")//Main线程
             tvResult.text = "fetchData current Thread:${Thread.currentThread().name}\n过了五秒了"

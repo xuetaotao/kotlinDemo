@@ -294,7 +294,7 @@
         <activity android:name=".ui.main.dailytest.BaseRecyclerViewAdapterHelperActivity" />
         <activity android:name=".ui.main.jetpack.mvvm.learn4.MyLoginActivity" />
         <activity android:name=".android_study.ui.ViewPagerTabLayoutActivity" />
-        <activity android:name=".ui.main.dailytest.ViewPager2TabActivity" />
+        <activity android:name=".android_study.ui.ViewPager2TabActivity" />
         <activity android:name=".java_study.ListNodeActivity" />
         <activity android:name=".java_study.ReflectActivity" />
         <activity android:name=".java_study.ReferenceActivity" />
@@ -307,6 +307,7 @@
         <activity android:name=".java_study.HuaWeiTestActivity" />
         <activity android:name=".android_study.ui.ViewDrawingProcessActivity" />
         <activity android:name=".android_study.ui.AnimatorActivity" />
+        <activity android:name=".android_study.ui.NestedScrollActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

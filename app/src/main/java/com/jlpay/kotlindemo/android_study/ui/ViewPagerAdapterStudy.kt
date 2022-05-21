@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.dailytest
+package com.jlpay.kotlindemo.android_study.ui
 
 import android.view.View
 import android.view.ViewGroup

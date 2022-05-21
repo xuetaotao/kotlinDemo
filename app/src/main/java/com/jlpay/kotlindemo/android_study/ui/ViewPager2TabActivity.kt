@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.dailytest
+package com.jlpay.kotlindemo.android_study.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +9,11 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityViewpager2TabBinding
+import com.jlpay.kotlindemo.ui.main.dailytest.LifeCycleFragment
 
+/**
+ * ViewPager2的使用
+ */
 class ViewPager2TabActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityViewpager2TabBinding

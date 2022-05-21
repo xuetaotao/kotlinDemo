@@ -22,8 +22,10 @@ import com.jlpay.kotlindemo.ui.main.dailytest.LifeCycleFragment
  * 从API 29开始就不再维护了。所以如果项目已经升级了AndroidX，建议直接使用后者。
  * TabLayout一般结合ViewPager+Fragment的使用实现滑动的标签选择器
  *
+ * FragmentPagerAdapter与FragmentStatePagerAdapter
+ * {@link com.jlpay.kotlindemo.android_study.ui.MyPagerAdapter}
+ *
  * TODO 去掉滑动到最左边或者最右边后，继续向左或者向右滑动的动画
- * TODO 使用ViewPager2实现当前效果
  */
 class ViewPagerTabLayoutActivity : BaseLifeCycleActivity() {
 

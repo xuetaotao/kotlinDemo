@@ -293,7 +293,7 @@
         <activity android:name=".ui.main.dailytest.DynamicLayoutActivity" />
         <activity android:name=".ui.main.dailytest.BaseRecyclerViewAdapterHelperActivity" />
         <activity android:name=".ui.main.jetpack.mvvm.learn4.MyLoginActivity" />
-        <activity android:name=".ui.main.dailytest.LifeCycleActivity" />
+        <activity android:name=".android_study.ui.ViewPagerTabLayoutActivity" />
         <activity android:name=".ui.main.dailytest.ViewPager2TabActivity" />
         <activity android:name=".java_study.ListNodeActivity" />
         <activity android:name=".java_study.ReflectActivity" />

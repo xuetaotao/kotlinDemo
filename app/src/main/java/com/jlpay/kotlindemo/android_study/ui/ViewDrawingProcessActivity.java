@@ -2,8 +2,11 @@ package com.jlpay.kotlindemo.android_study.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -59,6 +62,9 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
      */
     static class MyView extends View {
 
+        private Bitmap bitmap;
+        private Context context;
+        private Paint paint;
         private GestureDetector gestureDetector;
         private ScaleGestureDetector scaleGestureDetector;
 
@@ -77,6 +83,14 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
             int color = typedArray.getColor(R.styleable.MyView_background_color, Color.WHITE);
             typedArray.recycle();
 
+            this.context = context;
+            init();
+        }
+
+        private void init() {
+            bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.baotu);
+            paint = new Paint();
+            paint.setColor(Color.BLUE);
             gestureDetector = new GestureDetector(context, new MyGesture());
             scaleGestureDetector = new ScaleGestureDetector(context, new MyScaleGestureDetector());
         }
@@ -104,12 +118,17 @@ public class ViewDrawingProcessActivity extends AppCompatActivity {
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             canvas.save();//保存画布绘制前的样子
+            canvas.drawBitmap(bitmap, 0, 0, paint);
             invalidate();//刷新显示
             canvas.restore();//恢复画布初始保存的样子
         }
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
+            //多指操作的时候调用方法
+            int actionMasked = event.getActionMasked();
+            //单指操作的时候调用方法
+            int eventAction = event.getAction();
             //双指操作优先
             boolean result = scaleGestureDetector.onTouchEvent(event);
             //如果不是双指操作的话，就执行双击操作关联

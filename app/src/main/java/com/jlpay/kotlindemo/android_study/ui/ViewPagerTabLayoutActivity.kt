@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.ui.main.dailytest
+package com.jlpay.kotlindemo.android_study.ui
 
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayout
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityLifecycleBinding
 import com.jlpay.kotlindemo.ui.base.BaseLifeCycleActivity
+import com.jlpay.kotlindemo.ui.main.dailytest.LifeCycleFragment
 
 /**
  * Android控件-TabLayout使用介绍
@@ -24,7 +25,7 @@ import com.jlpay.kotlindemo.ui.base.BaseLifeCycleActivity
  * TODO 去掉滑动到最左边或者最右边后，继续向左或者向右滑动的动画
  * TODO 使用ViewPager2实现当前效果
  */
-class LifeCycleActivity : BaseLifeCycleActivity() {
+class ViewPagerTabLayoutActivity : BaseLifeCycleActivity() {
 
     private val TAG = this::class.java.simpleName
     private lateinit var mBinding: ActivityLifecycleBinding

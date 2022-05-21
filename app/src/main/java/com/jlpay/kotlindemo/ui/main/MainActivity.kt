@@ -7,23 +7,18 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.android_study.*
+import com.jlpay.kotlindemo.android_study.ui.*
 import com.jlpay.kotlindemo.java_study.*
 import com.jlpay.kotlindemo.kotlin_study.CoroutinesActivity
 import com.jlpay.kotlindemo.kotlin_study.HigherAndExpandFuncActivity
 import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.ui.base.BaseMediaActivity
-import com.jlpay.kotlindemo.android_study.MediaPlayerActivity
-import com.jlpay.kotlindemo.android_study.ConfigurationActivity
-import com.jlpay.kotlindemo.android_study.EventListenerActivity
-import com.jlpay.kotlindemo.android_study.AssetAndRawResActivity
-import com.jlpay.kotlindemo.android_study.ui.*
 import com.jlpay.kotlindemo.ui.main.dailytest.*
 import com.jlpay.kotlindemo.ui.main.hencoder.IOActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvp.MvpDemoActivity
 import com.jlpay.kotlindemo.ui.main.hencoder.mvvm.MvvmDemoActivity
-import com.jlpay.kotlindemo.java_study.GenericTypeActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn2.WanActivity
 import com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn4.MyLoginActivity
@@ -211,7 +206,6 @@ class MainActivity : BaseMediaActivity() {
             BaseRecyclerViewAdapterHelperActivity::class.java
         )
         addButton("MyLoginActivity", MyLoginActivity::class.java)
-        addButton("LifeCycleActivity", LifeCycleActivity::class.java)
         addButton("ViewPager2TabActivity", ViewPager2TabActivity::class.java)
         addButton("ListNodeActivity", ListNodeActivity::class.java)
         addButton("ReflectActivity", ReflectActivity::class.java)
@@ -223,8 +217,9 @@ class MainActivity : BaseMediaActivity() {
         addButton("Java基础：集合", CollectionActivity::class.java)
         addButton("Android基础：View的绘制流程", ViewDrawingProcessActivity::class.java)
         addButton("Android基础：View的事件传递机制", ViewEventDispatchActivity::class.java)
+        addButton("Android基础：ViewPager与TabLayout联动", ViewPagerTabLayoutActivity::class.java)
+        addButton("Android基础：动画", AnimatorActivity::class.java)
         addButton("华为笔试刷题", HuaWeiTestActivity::class.java)
-        addButton("Android动画", AnimatorActivity::class.java)
     }
 
     override fun initData() {

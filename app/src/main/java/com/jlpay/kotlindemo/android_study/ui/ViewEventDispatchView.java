@@ -57,18 +57,34 @@ public class ViewEventDispatchView extends androidx.appcompat.widget.AppCompatBu
         //获取手指按下的位置
         float eventX = event.getX();
         float eventY = event.getY();
+        //多指操作的时候调用方法，根据 pointIndex 来区分手指
+        int actionMasked = event.getActionMasked();
+        //单指操作的时候调用方法
+        int eventAction = event.getAction();
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN://只会触发一次，第一根手指按下时触发
                 Log.e(TAG, "子View--->onTouchEvent: MotionEvent.ACTION_DOWN=" + MotionEvent.ACTION_DOWN);
                 break;
-            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_UP://只会触发一次，最后一根手指抬起时触发
                 Log.e(TAG, "子View--->onTouchEvent: MotionEvent.ACTION_UP=" + MotionEvent.ACTION_UP);
                 break;
             case MotionEvent.ACTION_CANCEL:
                 Log.e(TAG, "子View--->onTouchEvent: MotionEvent.ACTION_CANCEL=" + MotionEvent.ACTION_CANCEL);
                 break;
-            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_MOVE://多指的move和单指的move都是这个事件
                 Log.e(TAG, "子View--->onTouchEvent: MotionEvent.ACTION_MOVE=" + MotionEvent.ACTION_MOVE);
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN://第二根...第n根手指按下
+                Log.e(TAG, "子View--->onTouchEvent: MotionEvent.ACTION_POINTER_DOWN=" + MotionEvent.ACTION_POINTER_DOWN);
+                break;
+            case MotionEvent.ACTION_POINTER_UP://第二根...第n根手指抬起
+                //id是固定不变的(手指离开了再回来，会按顺序填充一个新的id)，
+                //index可以理解为是int 数组，int[]，会随着手指的离开而变化
+                int pointerIndex = event.findPointerIndex(0);//通过id获取index值
+                int pointerId = event.getPointerId(pointerIndex);//通过index获取id值
+                int pointerCount = event.getPointerCount();//获取总的point
+                int actionIndex = event.getActionIndex();//获取pointerIndex值
+                Log.e(TAG, "子View--->onTouchEvent: MotionEvent.ACTION_POINTER_UP=" + MotionEvent.ACTION_POINTER_UP);
                 break;
         }
         return super.onTouchEvent(event);

@@ -299,7 +299,7 @@
         <activity android:name=".java_study.ReflectActivity" />
         <activity android:name=".java_study.ReferenceActivity" />
         <activity android:name=".java_study.LruCacheActivity" />
-        <activity android:name=".daily.jlpaylibrary.JlLibraryDebugActivity" />
+        <activity android:name=".daily.practice.JlLibraryDebugActivity" />
         <activity android:name=".kotlin_study.CoroutinesActivity" />
         <activity android:name=".kotlin_study.HigherAndExpandFuncActivity" />
         <activity android:name=".java_study.CollectionActivity" />

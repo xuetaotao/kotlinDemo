@@ -9,7 +9,7 @@ import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.android_study.*
 import com.jlpay.kotlindemo.android_study.ui.*
 import com.jlpay.kotlindemo.base.BaseMediaActivity
-import com.jlpay.kotlindemo.daily.jlpaylibrary.JlLibraryDebugActivity
+import com.jlpay.kotlindemo.daily.practice.JlLibraryDebugActivity
 import com.jlpay.kotlindemo.daily.practice.*
 import com.jlpay.kotlindemo.java_study.*
 import com.jlpay.kotlindemo.jetpack_study.DataBindingActivity

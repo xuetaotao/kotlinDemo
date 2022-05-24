@@ -1,7 +1,5 @@
 package com.jlpay.kotlindemo.bean;
 
-import com.jlpay.kotlindemo.base.ResultCode;
-
 public class BResponse {
 
     private String msg;

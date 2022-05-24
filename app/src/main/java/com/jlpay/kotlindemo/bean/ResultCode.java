@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.base;
+package com.jlpay.kotlindemo.bean;
 
 public class ResultCode {
 

@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.base
+package com.jlpay.kotlindemo.daily.practice
 
 import android.os.Bundle
 import android.util.Log

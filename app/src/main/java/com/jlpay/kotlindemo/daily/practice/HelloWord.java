@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.daily;
+package com.jlpay.kotlindemo.daily.practice;
 
 public class HelloWord {
     public static void main(String[] args) {

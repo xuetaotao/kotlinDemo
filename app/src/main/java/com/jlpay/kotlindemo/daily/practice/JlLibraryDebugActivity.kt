@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.daily.jlpaylibrary
+package com.jlpay.kotlindemo.daily.practice
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,9 @@ import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityJlLibraryDebugBinding
 import com.jlpay.ocr.OcrManager
 
+/**
+ * 嘉联 OCR 组件库功能测试
+ */
 class JlLibraryDebugActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

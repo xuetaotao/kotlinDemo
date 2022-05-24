@@ -91,39 +91,39 @@
         <!--在Activity中添加了 android:configChanges属性，目的是当所指定属性(Configuration Changes)发生改变时，通知程序调用 onConfigurationChanged()函数
         就不会重启activity，同时能够监听系统设置的更改-->
         <activity
-            android:name=".android_study.ui.PracticeViewActivity"
+            android:name=".study_android.ui.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.FirstUiActivity"
+            android:name=".study_android.ui.FirstUiActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.FrameLayoutActitivy"
+            android:name=".study_android.ui.FrameLayoutActitivy"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.ConstraintLayoutActivity"
+            android:name=".study_android.ui.ConstraintLayoutActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.LinearLayoutActivity"
+            android:name=".study_android.ui.LinearLayoutActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".java_study.ThreadActivity"
+            android:name=".study_java.ThreadActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.ImageViewActivity"
+            android:name=".study_android.ui.ImageViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.AdapterViewActivity"
+            android:name=".study_android.ui.AdapterViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.library_study.rxjava.RxJavaActivity"
+            android:name="com.jlpay.kotlindemo.study_library.rxjava.RxJavaActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -135,79 +135,79 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.RecyclerViewActivity"
+            android:name=".study_android.ui.RecyclerViewActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.ProgressBarActivity"
+            android:name=".study_android.ui.ProgressBarActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".java_study.IOActivity"
+            android:name=".study_java.IOActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.ViewSwitcherActivity"
+            android:name=".study_android.ui.ViewSwitcherActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.ImageSwitcherActivity"
+            android:name=".study_android.ui.ImageSwitcherActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.ViewFlipperActivity"
+            android:name=".study_android.ui.ViewFlipperActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.OtherUIModuleActivity"
+            android:name=".study_android.ui.OtherUIModuleActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.DialogActivity"
+            android:name=".study_android.ui.DialogActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.MenuActivity"
+            android:name=".study_android.ui.MenuActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.XmlMenuActivity"
+            android:name=".study_android.ui.XmlMenuActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.ActionBarActivity"
+            android:name=".study_android.ui.ActionBarActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.ui.PlaneViewActivity"
+            android:name=".study_android.ui.PlaneViewActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.EventListenerActivity"
+            android:name=".study_android.EventListenerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <!-- screenSize|orientation属性值指定该Activity可以监听屏幕方向改变的事件，这样当程序改变手机屏幕方向时，Activity的onConfigurationChanged()方法就会被回调       -->
         <activity
-            android:name=".android_study.ConfigurationActivity"
+            android:name=".study_android.ConfigurationActivity"
             android:configChanges="screenSize|orientation|keyboardHidden" />
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name=".android_study.HandlerActivity"
+            android:name=".study_android.HandlerActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".android_study.AsyncTaskActivity"
+            android:name=".study_android.AsyncTaskActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.library_study.rxjava.RxLifecycleActivity"
+            android:name="com.jlpay.kotlindemo.study_library.rxjava.RxLifecycleActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.library_study.rxjava.RxAutoDisposeActivity"
+            android:name="com.jlpay.kotlindemo.study_library.rxjava.RxAutoDisposeActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -215,45 +215,45 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.jetpack_study.mvc.MvcDemoActivity"
+            android:name="com.jlpay.kotlindemo.study_jetpack.mvc.MvcDemoActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <!--TODO 想办法搞一个组件自动注册的方法-->
         <activity
-            android:name="com.jlpay.kotlindemo.jetpack_study.mvp.MvpDemoActivity"
+            android:name="com.jlpay.kotlindemo.study_jetpack.mvp.MvpDemoActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.jetpack_study.mvcadvance.MvcAdvanceDemoActivity"
+            android:name="com.jlpay.kotlindemo.study_jetpack.mvcadvance.MvcAdvanceDemoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.jetpack_study.mvvm1.MvvmDemoActivity"
+            android:name="com.jlpay.kotlindemo.study_jetpack.mvvm1.MvvmDemoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.jetpack_study.mvvm2.ImageMvvmActivity"
+            android:name="com.jlpay.kotlindemo.study_jetpack.mvvm2.ImageMvvmActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jlpay.kotlindemo.jetpack_study.mvvm3.WanActivity"
+            android:name="com.jlpay.kotlindemo.study_jetpack.mvvm3.WanActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".kotlin_study.KotlinTestActivity"
+            android:name=".study_kotlin.KotlinTestActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".android_study.SimpleServiceActivity" />
-        <activity android:name=".android_study.IntentServiceActivity" />
-        <activity android:name=".android_study.AidlServiceActivity" />
-        <activity android:name=".android_study.CustomAidlServiceActivity" />
+        <activity android:name=".study_android.SimpleServiceActivity" />
+        <activity android:name=".study_android.IntentServiceActivity" />
+        <activity android:name=".study_android.AidlServiceActivity" />
+        <activity android:name=".study_android.CustomAidlServiceActivity" />
         <activity android:name=".daily.practice.MediaUtilsActivity" />
-        <activity android:name=".android_study.BroadcastReceiverActivity" />
+        <activity android:name=".study_android.BroadcastReceiverActivity" />
         <activity android:name=".daily.practice.ImagePickerActivity" />
-        <activity android:name=".library_study.tinker.SmaliDexLibActivity" />
-        <activity android:name=".android_study.AssetAndRawResActivity" />
-        <activity android:name=".android_study.MediaPlayerActivity" />
-        <activity android:name=".java_study.GenericTypeActivity" />
+        <activity android:name=".study_library.tinker.SmaliDexLibActivity" />
+        <activity android:name=".study_android.AssetAndRawResActivity" />
+        <activity android:name=".study_android.MediaPlayerActivity" />
+        <activity android:name=".study_java.GenericTypeActivity" />
         <activity
             android:name=".daily.practice.PdfViewerActivity"
             android:launchMode="singleTask">
@@ -276,7 +276,7 @@
         </activity>
         <activity android:name=".daily.practice.FileManagerActivity" />
         <activity
-            android:name=".android_study.WebViewActivity"
+            android:name=".study_android.WebViewActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -289,31 +289,31 @@
 
         </activity>
         <activity android:name=".daily.practice.SmallFileManagerActivity" />
-        <activity android:name=".jetpack_study.DataBindingActivity" />
+        <activity android:name=".study_jetpack.DataBindingActivity" />
         <activity android:name=".daily.practice.DynamicLayoutActivity" />
-        <activity android:name=".library_study.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity" />
-        <activity android:name=".jetpack_study.mvvm5.MyLoginActivity" />
-        <activity android:name=".android_study.ui.ViewPagerTabLayoutActivity" />
-        <activity android:name=".android_study.ui.ViewPager2TabActivity" />
-        <activity android:name=".java_study.ListNodeActivity" />
-        <activity android:name=".java_study.ReflectActivity" />
-        <activity android:name=".java_study.ReferenceActivity" />
-        <activity android:name=".java_study.LruCacheActivity" />
+        <activity android:name=".study_library.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity" />
+        <activity android:name=".study_jetpack.mvvm5.MyLoginActivity" />
+        <activity android:name=".study_android.ui.ViewPagerTabLayoutActivity" />
+        <activity android:name=".study_android.ui.ViewPager2TabActivity" />
+        <activity android:name=".study_java.ListNodeActivity" />
+        <activity android:name=".study_java.ReflectActivity" />
+        <activity android:name=".study_java.ReferenceActivity" />
+        <activity android:name=".study_java.LruCacheActivity" />
         <activity android:name=".daily.practice.JlLibraryDebugActivity" />
-        <activity android:name=".kotlin_study.CoroutinesActivity" />
-        <activity android:name=".kotlin_study.HigherAndExpandFuncActivity" />
-        <activity android:name=".java_study.CollectionActivity" />
-        <activity android:name=".android_study.ui.ViewEventDispatchActivity" />
-        <activity android:name=".java_study.HuaWeiTestActivity" />
-        <activity android:name=".android_study.ui.ViewDrawingProcessActivity" />
-        <activity android:name=".android_study.ui.AnimatorActivity" />
-        <activity android:name=".android_study.ui.NestedScrollActivity" />
-        <activity android:name=".library_study.leakcanary.LeakCanaryActivity" />
-        <activity android:name=".android_study.ui.NotificationActivity" />
+        <activity android:name=".study_kotlin.CoroutinesActivity" />
+        <activity android:name=".study_kotlin.HigherAndExpandFuncActivity" />
+        <activity android:name=".study_java.CollectionActivity" />
+        <activity android:name=".study_android.ui.ViewEventDispatchActivity" />
+        <activity android:name=".study_java.HuaWeiTestActivity" />
+        <activity android:name=".study_android.ui.ViewDrawingProcessActivity" />
+        <activity android:name=".study_android.ui.AnimatorActivity" />
+        <activity android:name=".study_android.ui.NestedScrollActivity" />
+        <activity android:name=".study_library.leakcanary.LeakCanaryActivity" />
+        <activity android:name=".study_android.ui.NotificationActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />
-        <service android:name=".android_study.IntentServiceActivity$MyService" />
+        <service android:name=".study_android.IntentServiceActivity$MyService" />
 
         <!--广播注册：静态注册-->
         <!--android:exported指定该receiver能否接收其他APP发出的广播，如果配置了<intent-filter>，则默认为true        -->

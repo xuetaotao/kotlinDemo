@@ -5,11 +5,11 @@
 
         <variable
             name="vm"
-            type="com.jlpay.kotlindemo.jetpack_study.mvvm5.MyLoginViewModel" />
+            type="com.jlpay.kotlindemo.study_jetpack.mvvm5.MyLoginViewModel" />
 
         <variable
             name="click"
-            type="com.jlpay.kotlindemo.jetpack_study.mvvm5.MyLoginActivity.ClickProxy" />
+            type="com.jlpay.kotlindemo.study_jetpack.mvvm5.MyLoginActivity.ClickProxy" />
 
     </data>
 

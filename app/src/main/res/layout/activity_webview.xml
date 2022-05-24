@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".android_study.WebViewActivity">
+    tools:context=".study_android.WebViewActivity">
 
     <WebView
         android:id="@+id/webview"

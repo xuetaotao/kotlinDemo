@@ -5,7 +5,7 @@
 
         <variable
             name="presenter"
-            type="com.jlpay.kotlindemo.jetpack_study.mvvm4.RoomActivity.Presenter" />
+            type="com.jlpay.kotlindemo.study_jetpack.mvvm4.RoomActivity.Presenter" />
 
     </data>
 

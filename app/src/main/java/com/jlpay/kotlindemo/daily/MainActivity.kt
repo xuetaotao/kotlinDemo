@@ -9,15 +9,10 @@ import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.android_study.*
 import com.jlpay.kotlindemo.android_study.ui.*
 import com.jlpay.kotlindemo.base.BaseMediaActivity
+import com.jlpay.kotlindemo.daily.jlpaylibrary.JlLibraryDebugActivity
+import com.jlpay.kotlindemo.daily.practice.*
 import com.jlpay.kotlindemo.java_study.*
-import com.jlpay.kotlindemo.kotlin_study.CoroutinesActivity
-import com.jlpay.kotlindemo.kotlin_study.HigherAndExpandFuncActivity
-import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
-import com.jlpay.kotlindemo.library_study.leakcanary.LeakCanaryActivity
-import com.jlpay.kotlindemo.library_study.rxjava.RxAutoDisposeActivity
-import com.jlpay.kotlindemo.library_study.rxjava.RxJavaActivity
-import com.jlpay.kotlindemo.library_study.rxjava.RxLifecycleActivity
-import com.jlpay.kotlindemo.java_study.IOActivity
+import com.jlpay.kotlindemo.jetpack_study.DataBindingActivity
 import com.jlpay.kotlindemo.jetpack_study.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.jetpack_study.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.jetpack_study.mvp.MvpDemoActivity
@@ -25,10 +20,14 @@ import com.jlpay.kotlindemo.jetpack_study.mvvm1.MvvmDemoActivity
 import com.jlpay.kotlindemo.jetpack_study.mvvm2.ImageMvvmActivity
 import com.jlpay.kotlindemo.jetpack_study.mvvm3.WanActivity
 import com.jlpay.kotlindemo.jetpack_study.mvvm5.MyLoginActivity
-import com.jlpay.kotlindemo.daily.jlpaylibrary.JlLibraryDebugActivity
-import com.jlpay.kotlindemo.daily.practice.*
-import com.jlpay.kotlindemo.jetpack_study.DataBindingActivity
+import com.jlpay.kotlindemo.kotlin_study.CoroutinesActivity
+import com.jlpay.kotlindemo.kotlin_study.HigherAndExpandFuncActivity
+import com.jlpay.kotlindemo.kotlin_study.KotlinTestActivity
 import com.jlpay.kotlindemo.library_study.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity
+import com.jlpay.kotlindemo.library_study.leakcanary.LeakCanaryActivity
+import com.jlpay.kotlindemo.library_study.rxjava.RxAutoDisposeActivity
+import com.jlpay.kotlindemo.library_study.rxjava.RxJavaActivity
+import com.jlpay.kotlindemo.library_study.rxjava.RxLifecycleActivity
 import com.jlpay.kotlindemo.library_study.tinker.SmaliDexLibActivity
 import com.jlpay.kotlindemo.utils.Utils
 import com.jlpay.kotlindemo.widget.CustomDialog
@@ -218,6 +217,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Java基础：集合", CollectionActivity::class.java)
         addButton("Kotlin基础：高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
         addButton("Kotlin协程", CoroutinesActivity::class.java)
+        addButton("Android基础：通知：Notification的使用", NotificationActivity::class.java)
         addButton("Android基础：View的绘制流程", ViewDrawingProcessActivity::class.java)
         addButton("Android基础：View的事件传递机制", ViewEventDispatchActivity::class.java)
         addButton("Android基础：ViewPager与TabLayout联动", ViewPagerTabLayoutActivity::class.java)

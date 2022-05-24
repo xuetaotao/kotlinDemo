@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.utils
+package com.jlpay.kotlindemo.daily.practice
 
 import android.content.Context
 import android.graphics.Bitmap

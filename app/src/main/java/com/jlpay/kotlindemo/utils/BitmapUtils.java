@@ -13,6 +13,7 @@ import androidx.exifinterface.media.ExifInterface;
 
 import com.jlpay.kotlindemo.R;
 import com.jlpay.kotlindemo.base.Constants;
+import com.jlpay.kotlindemo.daily.practice.MediaStoreUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

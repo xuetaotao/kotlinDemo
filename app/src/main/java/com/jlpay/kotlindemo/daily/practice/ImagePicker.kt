@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.utils
+package com.jlpay.kotlindemo.daily.practice
 
 import android.app.Activity
 import android.content.Context
@@ -24,10 +24,10 @@ class ImagePicker private constructor(builder: Builder) {
     val compressIgnoreSize: Int = builder.compressIgnoreSize
     val crop: Boolean = builder.crop
     val authority: String? = builder.authority
-    val listener: ImagePicker.ImagePickerListener? = builder.listener
+    val listener: ImagePickerListener? = builder.listener
     val fragmentActivity: FragmentActivity = builder.fragmentActivity
 
-    var mImagePickerFragment: ImagePicker.Lazy<ImagePickerFragment>
+    var mImagePickerFragment: Lazy<ImagePickerFragment>
     var mediaUtils: MediaUtils
 
     init {
@@ -53,7 +53,7 @@ class ImagePicker private constructor(builder: Builder) {
         return mediaUtils
     }
 
-    private fun getLazySingleton(fragmentManager: FragmentManager): ImagePicker.Lazy<ImagePickerFragment> {
+    private fun getLazySingleton(fragmentManager: FragmentManager): Lazy<ImagePickerFragment> {
         return object : Lazy<ImagePickerFragment> {
 
             private var imagePickerFragment: ImagePickerFragment? = null
@@ -162,7 +162,8 @@ class ImagePicker private constructor(builder: Builder) {
                                 mediaUtils.createImgContentPicUri(fragmentActivity)
                         }
                         return if (createImgContentPicUri != null) {
-                            requestImplementation(ImageOperationKind.TAKE_PHOTO,
+                            requestImplementation(
+                                ImageOperationKind.TAKE_PHOTO,
                                 createImgContentPicUri,
                                 cropOutputUri)
                         } else {
@@ -186,7 +187,8 @@ class ImagePicker private constructor(builder: Builder) {
                                     return if (cropOutputUri == null) {
                                         Observable.error(Exception("裁剪图片的外部共享目录Uri创建失败"))
                                     } else {
-                                        requestImplementation(ImageOperationKind.IMAGE_CROP,
+                                        requestImplementation(
+                                            ImageOperationKind.IMAGE_CROP,
                                             createImgContentPicUri,
                                             cropOutputUri)
                                     }
@@ -246,7 +248,8 @@ class ImagePicker private constructor(builder: Builder) {
                             cropOutputUri =
                                 mediaUtils.createImgContentPicUri(fragmentActivity)
                         }
-                        return requestImplementation(ImageOperationKind.CHOOSE_PIC,
+                        return requestImplementation(
+                            ImageOperationKind.CHOOSE_PIC,
                             null,
                             cropOutputUri)
                     } else {
@@ -284,7 +287,8 @@ class ImagePicker private constructor(builder: Builder) {
                                                         authority)
                                                 }
                                                     ?: return Observable.error(Exception("裁剪图片时复制原图到APP私有目录下并获取图片Uri出错"))
-                                            return requestImplementation(ImageOperationKind.IMAGE_CROP,
+                                            return requestImplementation(
+                                                ImageOperationKind.IMAGE_CROP,
                                                 outPutUri,
                                                 cropOutputUri)
                                         }
@@ -343,7 +347,7 @@ class ImagePicker private constructor(builder: Builder) {
         imagePath: String,
         type: ImageCompress.ImageCompressType,
         ignoreSize: Int,
-        listener: ImagePicker.ImagePickerListener?
+        listener: ImagePickerListener?
     ) {
         ImageCompress(imgDirName).compress(context,
             imagePath,
@@ -371,7 +375,7 @@ class ImagePicker private constructor(builder: Builder) {
         internal var compressIgnoreSize: Int = 1024//默认压缩阈值:单位KB
         internal var crop: Boolean = false//裁剪
         internal var authority: String? = null//Provider授权标志
-        internal var listener: ImagePicker.ImagePickerListener? = null
+        internal var listener: ImagePickerListener? = null
 
         fun imgDirName(imgDirName: String) = apply {
             this.imgDirName = imgDirName
@@ -400,7 +404,7 @@ class ImagePicker private constructor(builder: Builder) {
             this.authority = authority
         }
 
-        fun imagePickerListener(listener: ImagePicker.ImagePickerListener) = apply {
+        fun imagePickerListener(listener: ImagePickerListener) = apply {
             this.listener = listener
         }
 

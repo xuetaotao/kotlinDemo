@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.utils
+package com.jlpay.kotlindemo.daily.practice
 
 /**
  * 用来定义执行图片操作的类型

@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.utils;
+package com.jlpay.kotlindemo.daily.practice;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 
 import com.jlpay.kotlindemo.base.BaseActivity;
 import com.jlpay.kotlindemo.base.Constants;
+import com.jlpay.kotlindemo.utils.AppUtils;
+import com.jlpay.kotlindemo.utils.PermissionUtils;
 
 import java.io.File;
 import java.io.FileDescriptor;

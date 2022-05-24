@@ -309,6 +309,7 @@
         <activity android:name=".android_study.ui.AnimatorActivity" />
         <activity android:name=".android_study.ui.NestedScrollActivity" />
         <activity android:name=".library_study.leakcanary.LeakCanaryActivity" />
+        <activity android:name=".android_study.ui.NotificationActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

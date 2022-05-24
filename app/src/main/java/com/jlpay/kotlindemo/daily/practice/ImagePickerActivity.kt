@@ -6,8 +6,6 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.base.BaseActivity
-import com.jlpay.kotlindemo.utils.ImageCompress
-import com.jlpay.kotlindemo.utils.ImagePicker
 
 class ImagePickerActivity : BaseActivity() {
 

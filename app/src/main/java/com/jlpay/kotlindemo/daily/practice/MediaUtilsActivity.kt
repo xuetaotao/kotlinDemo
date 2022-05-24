@@ -13,8 +13,6 @@ import com.bumptech.glide.Glide
 import com.jlpay.imagepick.ImagePicker
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.base.BaseActivity
-import com.jlpay.kotlindemo.utils.IAndroid11Upgrade
-import com.jlpay.kotlindemo.utils.MediaUtils
 import com.jlpay.kotlindemo.utils.PermissionUtils
 import java.io.File
 

@@ -1,4 +1,4 @@
-package com.jlpay.kotlindemo.utils
+package com.jlpay.kotlindemo.daily.practice
 
 import android.Manifest
 import android.content.ContentUris
@@ -86,13 +86,15 @@ class MediaUtils : IAndroid11Upgrade {
                 contentValues.put(MediaStore.Images.ImageColumns.DISPLAY_NAME,
                     imgFileName)//设置带扩展名的文件名，如：IMG1024.JPG
                 contentValues.put(MediaStore.Images.ImageColumns.MIME_TYPE,
-                    getImgMimeType(imgFileName))//设置文件类型，类似于image/jpeg
+                    getImgMimeType(imgFileName)
+                )//设置文件类型，类似于image/jpeg
                 contentValues.put(MediaStore.Images.ImageColumns.DATE_ADDED,
                     System.currentTimeMillis())//第一次被添加的时间
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     //AndroidQ 中不再使用DATA字段，而用RELATIVE_PATH代替，RELATIVE_PATH是相对路径不是绝对路径，DCIM是系统文件夹
                     contentValues.put(MediaStore.Images.ImageColumns.RELATIVE_PATH,
-                        getPicPath(imgDirName))//文件存储的相对路径
+                        getPicPath(imgDirName)
+                    )//文件存储的相对路径
                 } else {
                     //AndroidQ以下版本，直接使用外部公共存储目录下的图片绝对路径，不能去掉，因为上面的要求API>=29，在10.0以下设备中下一步insert产生的Uri会为空
                     val imgFileDir = EXTERN_STORAGE_PATH + getPicPath(imgDirName)

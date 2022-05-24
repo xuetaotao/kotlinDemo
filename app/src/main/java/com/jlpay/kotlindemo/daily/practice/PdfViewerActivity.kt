@@ -17,7 +17,6 @@ import com.github.barteksc.pdfviewer.PDFView
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.bean.getMimeType
 import com.jlpay.kotlindemo.base.Constants
-import com.jlpay.kotlindemo.utils.MediaUtils
 import java.io.*
 
 /**

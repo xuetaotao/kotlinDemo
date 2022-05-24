@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".ui.main.dailytest.LibTestJavaActivity">
+    tools:context=".daily.practice.LibTestJavaActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

@@ -1,6 +1,6 @@
 package com.jlpay.kotlindemo.net
 
-import com.jlpay.kotlindemo.ui.base.BaseActivity
+import com.jlpay.kotlindemo.base.BaseActivity
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers

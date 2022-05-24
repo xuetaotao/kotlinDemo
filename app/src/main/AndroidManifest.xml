@@ -80,7 +80,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".daily.MainActivity">
             <intent-filter>
                 <!--  指定该Activity是程序的入口   -->
                 <action android:name="android.intent.action.MAIN" />
@@ -123,15 +123,15 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.rxjava.RxJavaActivity"
+            android:name="com.jlpay.kotlindemo.library_study.rxjava.RxJavaActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.dailytest.LibTestJavaActivity"
+            android:name=".daily.practice.LibTestJavaActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.dailytest.LibTestKotlinActivity"
+            android:name=".daily.practice.LibTestKotlinActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
@@ -143,7 +143,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.hencoder.IOActivity"
+            android:name=".java_study.IOActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -203,40 +203,40 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.rxjava.RxLifecycleActivity"
+            android:name="com.jlpay.kotlindemo.library_study.rxjava.RxLifecycleActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.rxjava.RxAutoDisposeActivity"
+            android:name="com.jlpay.kotlindemo.library_study.rxjava.RxAutoDisposeActivity"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.dailytest.QRCodeActivity"
+            android:name=".daily.practice.QRCodeActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.hencoder.mvc.MvcDemoActivity"
+            android:name="com.jlpay.kotlindemo.jetpack_study.mvc.MvcDemoActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <!--TODO 想办法搞一个组件自动注册的方法-->
         <activity
-            android:name=".ui.main.hencoder.mvp.MvpDemoActivity"
+            android:name="com.jlpay.kotlindemo.jetpack_study.mvp.MvpDemoActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.hencoder.mvcadvance.MvcAdvanceDemoActivity"
+            android:name="com.jlpay.kotlindemo.jetpack_study.mvcadvance.MvcAdvanceDemoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.hencoder.mvvm.MvvmDemoActivity"
+            android:name="com.jlpay.kotlindemo.jetpack_study.mvvm1.MvvmDemoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.jetpack.mvvm.learn1.ImageMvvmActivity"
+            android:name="com.jlpay.kotlindemo.jetpack_study.mvvm2.ImageMvvmActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.jetpack.mvvm.learn2.WanActivity"
+            android:name="com.jlpay.kotlindemo.jetpack_study.mvvm3.WanActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -247,15 +247,15 @@
         <activity android:name=".android_study.IntentServiceActivity" />
         <activity android:name=".android_study.AidlServiceActivity" />
         <activity android:name=".android_study.CustomAidlServiceActivity" />
-        <activity android:name=".ui.main.dailytest.MediaUtilsActivity" />
+        <activity android:name=".daily.practice.MediaUtilsActivity" />
         <activity android:name=".android_study.BroadcastReceiverActivity" />
-        <activity android:name=".ui.main.dailytest.ImagePickerActivity" />
-        <activity android:name=".ui.main.dailytest.SmaliDexLibActivity" />
+        <activity android:name=".daily.practice.ImagePickerActivity" />
+        <activity android:name=".library_study.tinker.SmaliDexLibActivity" />
         <activity android:name=".android_study.AssetAndRawResActivity" />
         <activity android:name=".android_study.MediaPlayerActivity" />
         <activity android:name=".java_study.GenericTypeActivity" />
         <activity
-            android:name=".ui.main.dailytest.PdfViewerActivity"
+            android:name=".daily.practice.PdfViewerActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <!--经测试，SEND与VIEW一起使用，SEND会被屏蔽调                -->
@@ -274,9 +274,9 @@
 
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.dailytest.FileManagerActivity" />
+        <activity android:name=".daily.practice.FileManagerActivity" />
         <activity
-            android:name=".ui.main.dailytest.WebViewActivity"
+            android:name=".android_study.WebViewActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -288,18 +288,18 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ui.main.dailytest.SmallFileManagerActivity" />
-        <activity android:name=".ui.main.dailytest.DataBindingActivity" />
-        <activity android:name=".ui.main.dailytest.DynamicLayoutActivity" />
-        <activity android:name=".ui.main.dailytest.BaseRecyclerViewAdapterHelperActivity" />
-        <activity android:name=".ui.main.jetpack.mvvm.learn4.MyLoginActivity" />
+        <activity android:name=".daily.practice.SmallFileManagerActivity" />
+        <activity android:name=".jetpack_study.DataBindingActivity" />
+        <activity android:name=".daily.practice.DynamicLayoutActivity" />
+        <activity android:name=".library_study.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity" />
+        <activity android:name=".jetpack_study.mvvm5.MyLoginActivity" />
         <activity android:name=".android_study.ui.ViewPagerTabLayoutActivity" />
         <activity android:name=".android_study.ui.ViewPager2TabActivity" />
         <activity android:name=".java_study.ListNodeActivity" />
         <activity android:name=".java_study.ReflectActivity" />
         <activity android:name=".java_study.ReferenceActivity" />
         <activity android:name=".java_study.LruCacheActivity" />
-        <activity android:name=".ui.main.jlpay.JlLibraryDebugActivity" />
+        <activity android:name=".daily.jlpaylibrary.JlLibraryDebugActivity" />
         <activity android:name=".kotlin_study.CoroutinesActivity" />
         <activity android:name=".kotlin_study.HigherAndExpandFuncActivity" />
         <activity android:name=".java_study.CollectionActivity" />
@@ -308,6 +308,7 @@
         <activity android:name=".android_study.ui.ViewDrawingProcessActivity" />
         <activity android:name=".android_study.ui.AnimatorActivity" />
         <activity android:name=".android_study.ui.NestedScrollActivity" />
+        <activity android:name=".library_study.leakcanary.LeakCanaryActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />
@@ -316,7 +317,7 @@
         <!--广播注册：静态注册-->
         <!--android:exported指定该receiver能否接收其他APP发出的广播，如果配置了<intent-filter>，则默认为true        -->
         <receiver
-            android:name=".broadcast_receiver.MyReceiver"
+            android:name=".broadcast.MyReceiver"
             android:exported="false">
 
             <intent-filter android:priority="20">
@@ -326,7 +327,7 @@
         </receiver>
 
         <receiver
-            android:name=".broadcast_receiver.MyReceiver2"
+            android:name=".broadcast.MyReceiver2"
             android:exported="false">
 
             <intent-filter android:priority="0">

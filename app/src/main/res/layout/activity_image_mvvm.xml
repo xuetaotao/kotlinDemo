@@ -12,15 +12,15 @@
 
         <variable
             name="imageBean"
-            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.Image" />
+            type="com.jlpay.kotlindemo.jetpack_study.mvvm2.Image" />
 
         <variable
             name="presenter"
-            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageMvvmActivity.Presenter" />
+            type="com.jlpay.kotlindemo.jetpack_study.mvvm2.ImageMvvmActivity.Presenter" />
 
         <variable
             name="viewModel"
-            type="com.jlpay.kotlindemo.ui.main.jetpack.mvvm.learn1.ImageViewModel" />
+            type="com.jlpay.kotlindemo.jetpack_study.mvvm2.ImageViewModel" />
 
         <import type="com.jlpay.kotlindemo.net.UrlConfig" />
 

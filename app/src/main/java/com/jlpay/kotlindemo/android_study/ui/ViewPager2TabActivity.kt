@@ -9,7 +9,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityViewpager2TabBinding
-import com.jlpay.kotlindemo.ui.main.dailytest.LifeCycleFragment
 
 /**
  * ViewPager2的使用
@@ -83,14 +82,14 @@ class ViewPager2TabActivity : AppCompatActivity() {
         init {
             fragments.clear()
             for (tabTitle in tabTitles) {
-                fragments.add(LifeCycleFragment.newInstance(tabTitle))
+                fragments.add(ChildFragment.newInstance(tabTitle))
             }
         }
 
         override fun getItemCount(): Int = fragments.size
 
         override fun createFragment(position: Int): Fragment {
-            return LifeCycleFragment.newInstance(tabTitles[position])
+            return ChildFragment.newInstance(tabTitles[position])
         }
     }
 }

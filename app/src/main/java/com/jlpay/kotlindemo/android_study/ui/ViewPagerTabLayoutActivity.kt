@@ -8,8 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityLifecycleBinding
-import com.jlpay.kotlindemo.ui.base.BaseLifeCycleActivity
-import com.jlpay.kotlindemo.ui.main.dailytest.LifeCycleFragment
+import com.jlpay.kotlindemo.base.BaseLifeCycleActivity
 
 /**
  * Android控件-TabLayout使用介绍
@@ -52,10 +51,10 @@ class ViewPagerTabLayoutActivity : BaseLifeCycleActivity() {
     private fun initViewPager() {
         fragments = ArrayList()
         fragments.run {
-            add(LifeCycleFragment.newInstance("微信"))
-            add(LifeCycleFragment.newInstance("通讯录"))
-            add(LifeCycleFragment.newInstance("发现"))
-            add(LifeCycleFragment.newInstance("我"))
+            add(ChildFragment.newInstance("微信"))
+            add(ChildFragment.newInstance("通讯录"))
+            add(ChildFragment.newInstance("发现"))
+            add(ChildFragment.newInstance("我"))
         }
         //给ViewPager设置adapter
         mBinding.viewpager.adapter = LifePageAdapter(

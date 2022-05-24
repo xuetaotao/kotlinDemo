@@ -10,8 +10,8 @@ import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
 import com.jlpay.kotlindemo.BuildConfig
 import com.jlpay.kotlindemo.net.ExceptionHandle
-import com.jlpay.kotlindemo.ui.base.Constants
-import com.jlpay.kotlindemo.ui.utils.AppUtils
+import com.jlpay.kotlindemo.base.Constants
+import com.jlpay.kotlindemo.utils.AppUtils
 import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.Beta
 import com.tencent.bugly.crashreport.CrashReport

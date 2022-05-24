@@ -39,7 +39,7 @@
         android:textColor="@color/common_black"
         android:textSize="14sp" />
 
-    <com.jlpay.kotlindemo.ui.widget.DrawView
+    <com.jlpay.kotlindemo.widget.DrawView
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

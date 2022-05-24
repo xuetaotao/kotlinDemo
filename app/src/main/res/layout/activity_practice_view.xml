@@ -26,7 +26,7 @@
 
             <include layout="@layout/table_layout" />
 
-            <com.jlpay.kotlindemo.ui.widget.DrawView
+            <com.jlpay.kotlindemo.widget.DrawView
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
 
@@ -35,7 +35,7 @@
                 android:layout_height="5dp"
                 android:background="@color/common_divider_gray" />
 
-            <com.jlpay.kotlindemo.ui.widget.DashBoardView
+            <com.jlpay.kotlindemo.widget.DashBoardView
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:visibility="visible" />
@@ -45,7 +45,7 @@
                 android:layout_height="5dp"
                 android:background="@color/common_divider_gray" />
 
-            <com.jlpay.kotlindemo.ui.widget.PieView
+            <com.jlpay.kotlindemo.widget.PieView
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:visibility="visible" />

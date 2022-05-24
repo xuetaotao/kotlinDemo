@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
-    tools:context=".ui.main.dailytest.SmallFileManagerActivity">
+    tools:context=".daily.practice.SmallFileManagerActivity">
 
     <TextView
         android:id="@+id/tv_current_dir"

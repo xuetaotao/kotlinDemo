@@ -19,7 +19,7 @@ import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.ui.utils.NotificationUtils
+import com.jlpay.kotlindemo.utils.NotificationUtils
 import java.io.InputStream
 import java.util.*
 

@@ -7,7 +7,7 @@ import android.util.DisplayMetrics
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.ui.widget.PlaneView
+import com.jlpay.kotlindemo.widget.PlaneView
 
 class PlaneViewActivity : AppCompatActivity() {
 

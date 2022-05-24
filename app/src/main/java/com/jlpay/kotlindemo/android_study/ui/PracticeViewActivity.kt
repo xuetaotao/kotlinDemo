@@ -3,8 +3,8 @@ package com.jlpay.kotlindemo.android_study.ui
 import android.content.*
 import android.widget.Button
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.broadcast_receiver.MyReceiver
-import com.jlpay.kotlindemo.ui.base.BaseActivity
+import com.jlpay.kotlindemo.broadcast.MyReceiver
+import com.jlpay.kotlindemo.base.BaseActivity
 import java.util.concurrent.Executor
 
 class PracticeViewActivity : BaseActivity() {

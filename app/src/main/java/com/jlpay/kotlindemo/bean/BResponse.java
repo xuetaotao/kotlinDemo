@@ -1,6 +1,6 @@
 package com.jlpay.kotlindemo.bean;
 
-import com.jlpay.kotlindemo.ui.base.ResultCode;
+import com.jlpay.kotlindemo.base.ResultCode;
 
 public class BResponse {
 

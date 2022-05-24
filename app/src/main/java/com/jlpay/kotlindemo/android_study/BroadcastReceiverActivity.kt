@@ -13,7 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
-import com.jlpay.kotlindemo.broadcast_receiver.MyReceiver
+import com.jlpay.kotlindemo.broadcast.MyReceiver
 
 class BroadcastReceiverActivity : AppCompatActivity() {
 

@@ -18,6 +18,7 @@ def customBaseApk = ""
 
 /**
  * 对于插件各参数的详细解析请参考
+ * https://bugly.qq.com/docs/utility-tools/plugin-gradle-hotfix/
  */
 tinkerSupport {
 
@@ -32,6 +33,7 @@ tinkerSupport {
 
     // 是否启用覆盖tinkerPatch配置功能，默认值false
     // 开启后tinkerPatch配置不生效，即无需添加tinkerPatch
+    //但是对于tinkerPatch中独有的配置项，如allowLoaderInAnyDex貌似覆盖不了，可以在tinkerPatch中配置
     overrideTinkerPatchConfiguration = true
 
     // 编译补丁包时，必需指定基线版本的apk，默认值为空
@@ -44,6 +46,8 @@ tinkerSupport {
     baseApkProguardMapping = "${bakPath}/${baseApkDir}/app-release-mapping.txt"
 
     // 对应tinker插件applyResourceMapping
+    // 可选参数；在编译新的apk时候，我们希望通过旧apk的R.txt文件保持ResId的分配，这样不仅可以减少补丁包的大小，
+    // 同时也避免由于ResId改变导致remote view异常
     baseApkResourceMapping = "${bakPath}/${baseApkDir}/app-release-R.txt"
 
     // 构建基准包和补丁包都要指定不同的tinkerId，并且必须保证唯一性
@@ -62,17 +66,27 @@ tinkerSupport {
     // 是否支持新增非export的Activity（注意：设置为true才能修改AndroidManifest文件）
     supportHotplugComponent = true
 
+    //usingResourceMapping默认为false，可以点开看下代码，
+    // 对应tinkerPatch.buildConfig.usingResourceMapping(这个是猜的，点开看代码是和TinkerBuildConfigExtension.usingResourceMapping命名相同)
+//    usingResourceMapping = true
+
+    //对应tinkerPatch中dex闭包下面的loader配置
+//    dexLoader = ["org.xmlpull.v1.XmlPullParser", "org.xmlpull.v1.XmlPullParserException"]
 }
 
 /**
  * 一般来说,我们无需对下面的参数做任何的修改
  * 对于各参数的详细介绍请参考:
  * https://github.com/Tencent/tinker/wiki/Tinker-%E6%8E%A5%E5%85%A5%E6%8C%87%E5%8D%97
+ *
+ * 因为tinkerSupport中开启了 overrideTinkerPatchConfiguration = true，会覆盖tinkerPatch配置功能,
+ * 开启后tinkerPatch配置不生效，即无需添加tinkerPatch
  */
 tinkerPatch {
     //oldApk ="${bakPath}/${appName}/app-release.apk"
     ignoreWarning = false
     useSign = true
+    //对于tinkerPatch中独有的配置项，如allowLoaderInAnyDex貌似tinkerSupport覆盖不了，可以在tinkerPatch中配置
     allowLoaderInAnyDex = true
     removeLoaderForAllDex = true
     dex {

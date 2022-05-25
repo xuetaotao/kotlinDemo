@@ -28,7 +28,7 @@ buildscript {
     }
 }
 
-//allprojects里的repositories是项目本身需要的依赖
+//allprojects里的repositories是项目本身需要的依赖(第三方库)
 allprojects {
     repositories {
         //JL自定义组件库

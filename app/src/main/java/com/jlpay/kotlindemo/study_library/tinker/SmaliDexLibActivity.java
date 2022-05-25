@@ -49,8 +49,8 @@ import java.util.regex.Pattern;
  * 问题：FATAL: method 'onInit:VLIL' in loader class 'Lcom/tencent/tinker/loader/hotplug/IncrementComponentManager$AttrTranslator;'
  * refers to class 'Lorg/xmlpull/v1/XmlPullParser;' which is not loader class, this may cause crash when patch is loaded.
  * 问题描述：抛出自 {@link com.tencent.tinker.build.decoder.DexDiffDecoder#checkIfLoaderClassesReferToNonLoaderClasses()}
- * {@link com.tencent.tinker.loader.hotplug.IncrementComponentManager.AttrTranslator#onInit(Context, int, XmlPullParser)}
- * 引用了{@link org.xmlpull.v1.XmlPullParser}类，但是后者不在
+ * 原因：是{@link com.tencent.tinker.loader.hotplug.IncrementComponentManager.AttrTranslator#onInit(Context, int, XmlPullParser)}
+ * 引用了{@link org.xmlpull.v1.XmlPullParser}类，但是后者不是已加载的类，可能会在加载补丁时导致崩溃。
  * <p>
  * 该类的使用说明：
  * 1.添加依赖库：implementation group: 'org.smali', name: 'dexlib2', version: '2.3.1'

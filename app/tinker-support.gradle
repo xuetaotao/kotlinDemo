@@ -112,9 +112,18 @@ tinkerPatch {
     }
     buildConfig {
         keepDexApply = false
+
         //tinkerId = "1.0.1-base"
-        //applyMapping = "${bakPath}/${appName}/app-release-mapping.txt" //  可选，设置mapping文件，建议保持旧apk的proguard混淆方式
-        //applyResourceMapping = "${bakPath}/${appName}/app-release-R.txt" // 可选，设置R.txt文件，通过旧apk文件保持ResId的分配
+
+        //可选，设置mapping文件，建议保持旧apk的proguard混淆方式
+        //applyMapping = "${bakPath}/${appName}/app-release-mapping.txt"
+
+        //指定旧资源 id 映射 (R.txt) 文件以应用ResourceMapping
+        //可选，设置R.txt文件，通过旧apk文件保持ResId的分配
+        //applyResourceMapping = "${bakPath}/${appName}/app-release-R.txt"
+
+        //usingResourceMapping默认为false，可以点开看下代码，对应tinkerPatch.buildConfig.usingResourceMapping
+//        usingResourceMapping = true
     }
 
 

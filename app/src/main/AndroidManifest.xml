@@ -310,6 +310,7 @@
         <activity android:name=".study_android.ui.NestedScrollActivity" />
         <activity android:name=".study_library.leakcanary.LeakCanaryActivity" />
         <activity android:name=".study_android.ui.NotificationActivity" />
+        <activity android:name=".study_java.ClassLoaderActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

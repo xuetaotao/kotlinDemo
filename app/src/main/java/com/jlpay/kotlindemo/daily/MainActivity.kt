@@ -6,11 +6,10 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.jlpay.kotlindemo.R
+import com.jlpay.kotlindemo.base.BaseMediaActivity
+import com.jlpay.kotlindemo.daily.practice.*
 import com.jlpay.kotlindemo.study_android.*
 import com.jlpay.kotlindemo.study_android.ui.*
-import com.jlpay.kotlindemo.base.BaseMediaActivity
-import com.jlpay.kotlindemo.daily.practice.JlLibraryDebugActivity
-import com.jlpay.kotlindemo.daily.practice.*
 import com.jlpay.kotlindemo.study_java.*
 import com.jlpay.kotlindemo.study_jetpack.DataBindingActivity
 import com.jlpay.kotlindemo.study_jetpack.mvc.MvcDemoActivity
@@ -215,6 +214,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("LruCacheActivity", LruCacheActivity::class.java)
         addButton("OcrActivity", JlLibraryDebugActivity::class.java)
         addButton("Java基础：集合", CollectionActivity::class.java)
+        addButton("Java基础：类加载机制", ClassLoaderActivity::class.java)
         addButton("Kotlin基础：高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
         addButton("Kotlin协程", CoroutinesActivity::class.java)
         addButton("Android基础：通知：Notification的使用", NotificationActivity::class.java)

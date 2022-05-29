@@ -20,6 +20,8 @@ import java.util.concurrent.TimeoutException
 
 /**
  * 自定义ApplicationLike
+ * 在Application，Activity和ContentProvider三个类的onCreate函数中打印了log，发现它们的启动顺序为：
+ * Application->attachBaseContext =====>ContentProvider->onCreate =====>Application->onCreate =====>Activity->onCreate
  */
 class MyApplication(
     application: Application,

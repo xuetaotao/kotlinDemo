@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -73,7 +74,11 @@ public class ReflectActivity extends AppCompatActivity {
                 Log.e(TAG, show1Method.toString());
                 //实例化一个Student对象
                 Object instance = clazz.getConstructor().newInstance();
+                if (!show1Method.isAccessible()) {
+                    show1Method.setAccessible(true);
+                }
                 show1Method.invoke(instance, "刘德华");
+                //如果是静态方法，第一个参数传null就行，也可以传实例对象
 
             } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
@@ -119,14 +124,14 @@ public class ReflectActivity extends AppCompatActivity {
         try {
             Class clazz = Class.forName("com.jlpay.kotlindemo.study_java.Student");
             //2.获取字段
-            Log.e(TAG, "************获取所有公有的字段********************");
+            Log.e(TAG, "************获取所有公有的字段属性********************");
             //该方法能获取到父类的公有字段
             Field[] clazzFields = clazz.getFields();
             for (Field field : clazzFields) {
                 Log.e(TAG, field.toString());
             }
 
-            Log.e(TAG, "************获取所有的字段(包括私有、受保护、默认的)********************");
+            Log.e(TAG, "************获取当前类(不包括父类)所有的字段属性(包括私有、受保护、默认的)********************");
             Field[] clazzDeclaredFields = clazz.getDeclaredFields();
             for (Field field : clazzDeclaredFields) {
                 Log.e(TAG, field.toString());
@@ -153,6 +158,8 @@ public class ReflectActivity extends AppCompatActivity {
                 Object newInstance = clazz.getConstructor().newInstance();
                 phoneNum.setAccessible(true);
                 phoneNum.set(newInstance, "18888889999");
+                Object o = phoneNum.get(newInstance);
+                Log.e(TAG, "getFields: " + o);
                 Student newStudent = (Student) newInstance;
                 Log.e(TAG, "电话: " + newStudent);
 
@@ -256,5 +263,25 @@ public class ReflectActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+        //4 获取父类的class
+        // getSuperClass():获取父类，返回值为：BaseDao
+        // getGenericSuperClass:获取带泛型参数的父类，返回值为：BaseDao<Employee, String>
+        // Type的子接口：ParameterizedType 的 getActualTypeArguments()获取泛型参数的数组
+        Class superclass = bClass.getSuperclass();
+    }
+
+    /**
+     * 获取注解
+     */
+    private void getAnnotation() {
+        //TODO
+    }
+
+    /**
+     * 反射创建数组
+     */
+    private void createArray() {
+        String[] instance = (String[]) Array.newInstance(String.class, 10);
     }
 }

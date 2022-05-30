@@ -15,6 +15,7 @@ buildscript {
         google()
         jcenter()
     }
+    //这里的依赖是gradle脚本文件用到的
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.0"//Android Gradle 插件版本，与Gradle版本对应关系：https://developer.android.google.cn/studio/releases/gradle-plugin.html#updating-plugin
 //        classpath "com.android.tools.build:gradle:3.5.1"//tinker热更新使用，不要乱升暂时

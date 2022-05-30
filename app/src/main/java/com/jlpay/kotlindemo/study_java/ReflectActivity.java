@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jlpay.kotlindemo.study_android.AidlServiceActivity;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -283,5 +285,12 @@ public class ReflectActivity extends AppCompatActivity {
      */
     private void createArray() {
         String[] instance = (String[]) Array.newInstance(String.class, 10);
+        Class cls = AidlServiceActivity.class;//不在同一个包下正常引用就必须要import引入
+        try {
+            //反射引用不需要 import
+            Class cls2 = Class.forName("com.jlpay.kotlindemo.study_android.AsyncTaskActivity");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -36,9 +36,10 @@ dependencies {
 
 //使用插件
 //apply plugin: HenCoderPlugin
-apply plugin: 'com.jlpay.henCoder'
 
-//配置扩展
+//配置扩展，使用的是 buildSrc 目录下的 HenCoder 插件
+//com.jlpay.henCoder.properties文件名是这个，那么这里的引用名就是com.jlpay.henCoder(去掉最后的properties)
+apply plugin: 'com.jlpay.henCoder'
 hencoder {
     name 'zhukai2333~~'
 }

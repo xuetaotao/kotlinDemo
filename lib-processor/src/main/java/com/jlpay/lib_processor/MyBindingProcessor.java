@@ -46,7 +46,7 @@ public class MyBindingProcessor extends AbstractProcessor {
 //            e.printStackTrace();
 //        }
 
-        //正式代码
+        //正式代码，使用 javapoet 生成
         for (Element element : roundEnvironment.getRootElements()) {
             String packageStr = element.getEnclosingElement().toString();//获取包名
             String classStr = element.getSimpleName().toString();//获取类名

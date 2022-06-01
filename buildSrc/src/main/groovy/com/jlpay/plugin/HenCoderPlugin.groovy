@@ -1,5 +1,6 @@
 package com.jlpay.plugin
 
+
 import com.android.build.gradle.internal.plugins.AppPlugin
 import org.gradle.api.Action
 import org.gradle.api.Plugin
@@ -7,7 +8,13 @@ import org.gradle.api.Project
 
 //import com.android.build.gradle.AppPlugin
 
-class HenCoder implements Plugin<Project> {
+/**
+ * 自定义插件应用场景：
+ * 多用于字节码插桩的场景（在这里获取class文件）
+ *
+ * groovy中支持写java代码
+ */
+class HenCoderPlugin implements Plugin<Project> {
 
     private Project mProject = null
 
@@ -27,9 +34,19 @@ class HenCoder implements Plugin<Project> {
         target.afterEvaluate(new Action<Project>() {
             @Override
             void execute(Project project) {
-                //与下面等效
-                HenCoderExtension ext = target.getExtensions().findByType(HenCoderExtension.class)
-                println(ext.getName())
+                //这两行与下面等效
+                HenCoderExtension ext = target.getExtensions().findByType(HenCoderExtension.class);
+                println(ext.getName());
+                //下面有问题，待解决。Caused by: org.gradle.api.UnknownDomainObjectException: Extension of type 'AppExtension' does not exist. Currently registered extension types: [ExtraPropertiesExtension, DefaultArtifactPublicationSet, ReportingExtension, SourceSetContainer, JavaPluginExtension, HenCoderExtension]
+                //获取到android的所有变体，findByType与getByType都可以，代码里最终都是调同一方法
+//                AppExtension android = project.getExtensions().getByType(AppExtension.class);
+//                DomainObjectSet<ApplicationVariant> applicationVariants = android.getApplicationVariants();
+//                for (ApplicationVariant applicationVariant : applicationVariants) {
+//                    String name = applicationVariant.getName();
+//                    if (name.contains("debug") && !ext.getDebugOn()) {
+//                        return;
+//                    }
+//                }
             }
         })
         target.afterEvaluate {

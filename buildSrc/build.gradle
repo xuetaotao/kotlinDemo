@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation("com.android.tools.build:gradle:4.0.0")
+    implementation("com.android.tools.build:gradle:4.0.0")//这个插件还可以传递ASM的库
 }
 
 sourceCompatibility = "1.7"

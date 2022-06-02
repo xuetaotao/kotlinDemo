@@ -1,6 +1,6 @@
 package com.jlpay.plugin
 
-
+import com.android.build.gradle.AppExtension
 import com.android.build.gradle.internal.plugins.AppPlugin
 import org.gradle.api.Action
 import org.gradle.api.Plugin
@@ -38,6 +38,7 @@ class HenCoderPlugin implements Plugin<Project> {
                 HenCoderExtension ext = target.getExtensions().findByType(HenCoderExtension.class);
                 println(ext.getName());
                 //下面有问题，待解决。Caused by: org.gradle.api.UnknownDomainObjectException: Extension of type 'AppExtension' does not exist. Currently registered extension types: [ExtraPropertiesExtension, DefaultArtifactPublicationSet, ReportingExtension, SourceSetContainer, JavaPluginExtension, HenCoderExtension]
+                //问题原因可能是因为这是java模块？？不确定
                 //获取到android的所有变体，findByType与getByType都可以，代码里最终都是调同一方法
 //                AppExtension android = project.getExtensions().getByType(AppExtension.class);
 //                DomainObjectSet<ApplicationVariant> applicationVariants = android.getApplicationVariants();
@@ -57,5 +58,9 @@ class HenCoderPlugin implements Plugin<Project> {
 //        def transform = new HenCoderTransform()
 //        def baseExtension = target.extensions.getByType(BaseExtension)
 //        baseExtension.registerTransform(transform)
+
+        //注册MyTransform，有问题，和上面一样，AppExtension找不到
+//        def appExtension = mProject.getExtensions().getByType(AppExtension.class);
+//        appExtension.registerTransform(new MyTransform())
     }
 }

@@ -109,6 +109,10 @@ android {
         targetCompatibility(JavaVersion.VERSION_1_8)
     }
 
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     //配置被依赖的代码路径
     sourceSets {
         main {
@@ -166,6 +170,10 @@ dependencies {
     //Android Jetpack 组件
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
 //    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    //为了使用DefaultLifecycleObserver
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.4.1'
+    //只有lifecycle(不带viewmodel或livedata)
+//    implementation 'androidx.lifecycle:lifecycle-runtime:2.2.0'
 //    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 //    implementation 'androidx.work:work-runtime:2.3.4'
 

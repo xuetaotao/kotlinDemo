@@ -12,6 +12,7 @@ import com.jlpay.kotlindemo.study_android.*
 import com.jlpay.kotlindemo.study_android.ui.*
 import com.jlpay.kotlindemo.study_java.*
 import com.jlpay.kotlindemo.study_jetpack.DataBindingActivity
+import com.jlpay.kotlindemo.study_jetpack.JetpackLifeCycleActivity
 import com.jlpay.kotlindemo.study_jetpack.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.study_jetpack.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.study_jetpack.mvp.MvpDemoActivity
@@ -209,12 +210,12 @@ class MainActivity : BaseMediaActivity() {
         )
         addButton("MyLoginActivity", MyLoginActivity::class.java)
         addButton("ListNodeActivity", ListNodeActivity::class.java)
-        addButton("ReflectActivity", ReflectActivity::class.java)
         addButton("ReferenceActivity", ReferenceActivity::class.java)
         addButton("LruCacheActivity", LruCacheActivity::class.java)
         addButton("OcrActivity", JlLibraryDebugActivity::class.java)
         addButton("Java基础：集合", CollectionActivity::class.java)
         addButton("Java基础：类加载机制", ClassLoaderActivity::class.java)
+        addButton("Java基础：反射", ReflectActivity::class.java)
         addButton("Java基础：代码中执行命令行命令", CommandLineActivity::class.java)
         addButton("Kotlin基础：高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
         addButton("Kotlin协程", CoroutinesActivity::class.java)
@@ -225,6 +226,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Android基础：ViewPager2与TabLayout联动", ViewPager2TabActivity::class.java)
         addButton("Android基础：嵌套滑动NestedScrollView学习", NestedScrollActivity::class.java)
         addButton("Android基础：动画", AnimatorActivity::class.java)
+        addButton("Jetpack：LifeCycle", JetpackLifeCycleActivity::class.java)
         addButton("开源框架：LeakCanary", LeakCanaryActivity::class.java)
         addButton("华为笔试刷题", HuaWeiTestActivity::class.java)
     }

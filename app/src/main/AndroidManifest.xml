@@ -312,6 +312,7 @@
         <activity android:name=".study_android.ui.NotificationActivity" />
         <activity android:name=".study_java.ClassLoaderActivity" />
         <activity android:name=".study_java.CommandLineActivity" />
+        <activity android:name=".study_jetpack.JetpackLifeCycleActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

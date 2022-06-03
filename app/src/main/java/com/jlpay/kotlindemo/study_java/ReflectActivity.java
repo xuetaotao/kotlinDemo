@@ -271,6 +271,21 @@ public class ReflectActivity extends AppCompatActivity {
         // getGenericSuperClass:获取带泛型参数的父类，返回值为：BaseDao<Employee, String>
         // Type的子接口：ParameterizedType 的 getActualTypeArguments()获取泛型参数的数组
         Class superclass = bClass.getSuperclass();
+
+        //5.获取接口对象的class，能获取到它的实现类
+        Test aTest = new Test() {
+            @Override
+            public void myTest() {
+                Log.e(TAG, "myTest: ");
+            }
+        };
+        Class<? extends Test> aTestClass = aTest.getClass();
+        //结果：class com.jlpay.kotlindemo.study_java.ReflectActivity$1
+        Log.e(TAG, "getATestCLass: " + aTestClass);
+        Test bTest = new TestImpl();
+        Class<? extends Test> bTestClass = bTest.getClass();
+        //结果：class com.jlpay.kotlindemo.study_java.ReflectActivity$TestImpl
+        Log.e(TAG, "getBTestCLass: " + bTestClass);
     }
 
     /**
@@ -292,5 +307,16 @@ public class ReflectActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    class TestImpl implements Test {
+        @Override
+        public void myTest() {
+            Log.e(TAG, "TestImpl--->myTest: ");
+        }
+    }
+
+    interface Test {
+        void myTest();
     }
 }

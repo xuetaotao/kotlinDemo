@@ -22,11 +22,12 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 闪光灯   -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <!-- 安装应用程序 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!--以下为Tinker热更新需要的权限    -->
     <!-- 读取系统底层日志 -->
-    <uses-permission android:name="android.permission.READ_LOGS" />
+<!--    <uses-permission android:name="android.permission.READ_LOGS" />-->
     <!-- 移除第三方SDK中的以下权限    -->
     <uses-permission
         android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
@@ -314,11 +315,13 @@
         <activity android:name=".study_java.CommandLineActivity" />
         <activity android:name=".study_jetpack.JetpackLifeCycleActivity" />
         <activity android:name=".study_jetpack.JetpackLiveDataActivity" />
+        <activity android:name=".study_android.MusicServiceActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />
         <service android:name=".study_android.IntentServiceActivity$MyService" />
         <service android:name=".service.LiveDataService" />
+        <service android:name=".service.MusicPlayerService" />
 
         <!--广播注册：静态注册-->
         <!--android:exported指定该receiver能否接收其他APP发出的广播，如果配置了<intent-filter>，则默认为true        -->
@@ -340,6 +343,16 @@
                 <action android:name="com.jlpay.kotlindemo.MyReceiver" />
             </intent-filter>
 
+        </receiver>
+        <receiver
+            android:name=".broadcast.MusicPlayerReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="player" />
+                <action android:name="pause" />
+                <action android:name="last" />
+                <action android:name="next" />
+            </intent-filter>
         </receiver>
 
         <!--        <provider-->

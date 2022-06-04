@@ -39,9 +39,10 @@ class NotificationUtils//首先会按顺序执行类中init代码块，然后再
     //2.创建NotificationChannel对象，并在NotificationManager上创建该Channel对象
     //3.创建Notification对象，并用NotificationManager发送或者取消该通知
 
-    val CHANNEL_ID: String = "download"//渠道ID，可以随便定义，只要保证全局唯一性就可以
+    val CHANNEL_ID: String =
+        "download"//渠道ID，可以随便定义，只要保证全局(整个apk包)唯一性就可以(The id of the channel. Must be unique per package.)
     val CHANNEL_NAME: String = "下载场景使用的通知类别"//渠道名称，给用户看的，需要能够表达清楚这个渠道的用途
-    val NOTIFICATION_ID: Int = 0x1001;//通知ID，只要保证全局唯一性就可以
+    val NOTIFICATION_ID: Int = 0x1001;//通知ID，只要保证全局(整个apk包)唯一性就可以
 
     private var context: Context = context.applicationContext
 
@@ -78,6 +79,10 @@ class NotificationUtils//首先会按顺序执行类中init代码块，然后再
         //通知调转
         val intent: Intent = Intent(context, PracticeViewActivity::class.java)
         val pi: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
+        //这个可以代替下面的setContentIntent()方法，但是点击了不会自动取消通知，未研究解决办法
+//        remoteViews.setOnClickPendingIntent(R.id.rl_download, pi);
+
 
         //设置了必须的1，2，3项后就可以显示通知了
         return builder

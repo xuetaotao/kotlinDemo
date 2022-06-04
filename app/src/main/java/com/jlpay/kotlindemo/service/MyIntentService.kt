@@ -32,7 +32,7 @@ class MyIntentService : IntentService {
     constructor(name: String) : super(name)
 
     override fun onHandleIntent(intent: Intent?) {
-        //该方法内执行耗时任务可能导致ANR(Application Not Responding)
+        //该方法内可以执行耗时任务，因为新开了子线程处理
         val endTime: Long = System.currentTimeMillis() + 20 * 1000
         Log.e("IntentServiceActivity", "onStartCommand")
         while (System.currentTimeMillis() < endTime) {

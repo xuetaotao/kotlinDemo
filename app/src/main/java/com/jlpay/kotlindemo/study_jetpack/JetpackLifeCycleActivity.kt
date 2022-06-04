@@ -54,6 +54,7 @@ class JetpackLifeCycleActivity : AppCompatActivity() {
         if (isShowLifecycleLog) {
             Log.e(TAG, "onResume: ")
         }
+//        lifecycle.addObserver(MyLifeCycleObserver2())//在这里注册会有问题
     }
 
     override fun onPause() {
@@ -100,7 +101,8 @@ class JetpackLifeCycleActivity : AppCompatActivity() {
         fun onClick(view: View) {
             when (view.id) {
                 R.id.btn_lifecycle -> {
-                    Toast.makeText(this@JetpackLifeCycleActivity, "HHH", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@JetpackLifeCycleActivity, "LifeCycle", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }

@@ -19,6 +19,8 @@ import com.jlpay.kotlindemo.service.SimpleService
  */
 class SimpleServiceActivity : AppCompatActivity() {
 
+    private val TAG: String = this::class.java.simpleName
+
     //保持所启动的Service的IBinder对象
     private lateinit var binder: SimpleService.MyBinder
 
@@ -39,6 +41,7 @@ class SimpleServiceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simple_service)
+        Log.e(TAG, "onCreate")
 
         val intent: Intent = Intent(this@SimpleServiceActivity, SimpleService::class.java)
 
@@ -67,5 +70,10 @@ class SimpleServiceActivity : AppCompatActivity() {
         btn_status.setOnClickListener {
             Toast.makeText(this, "Service的count值为：" + binder.getCount(), Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e(TAG, "onDestroy")
     }
 }

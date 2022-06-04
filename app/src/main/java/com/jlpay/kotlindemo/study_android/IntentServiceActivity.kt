@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.service.MyIntentService
+import kotlin.concurrent.thread
 
 /**
  * IntentService的使用
@@ -44,19 +45,30 @@ class IntentServiceActivity : AppCompatActivity() {
             return null
         }
 
+        override fun onCreate() {
+            super.onCreate()
+            Log.e("IntentServiceActivity", "Service is onCreate")
+        }
+
         override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-            //该方法内执行耗时任务可能导致ANR(Application Not Responding)
+            Log.e("IntentServiceActivity", "Service is onStartCommand")
             val endTime: Long = System.currentTimeMillis() + 20 * 1000
-            Log.e("IntentServiceActivity", "onStartCommand")
-            while (System.currentTimeMillis() < endTime) {
-                try {
-                    Thread.sleep(1000)
-                    Log.e("IntentServiceActivity", count++.toString())
-                } catch (e: Exception) {
-                    e.printStackTrace()
+            Thread(object : Runnable {
+                override fun run() {
+                    //该方法内执行耗时任务可能导致ANR(Application Not Responding)(没有放在子线程的话)
+                    // 即弹窗提示APP没有响应
+                    while (System.currentTimeMillis() < endTime) {
+                        try {
+                            Thread.sleep(1000)
+                            Log.e("IntentServiceActivity", count++.toString())
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    Log.e("IntentServiceActivity", "耗时任务执行完成")
+                    stopSelf()
                 }
-            }
-            Log.e("IntentServiceActivity", "耗时任务执行完成")
+            }).start()
             return START_STICKY
         }
 

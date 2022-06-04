@@ -63,6 +63,7 @@ class SimpleService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         this.quit = true
+//        stopSelf()//自己结束服务
         Log.e(TAG, "Service is Destroy")
     }
 

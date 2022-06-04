@@ -13,6 +13,7 @@ import com.jlpay.kotlindemo.study_android.ui.*
 import com.jlpay.kotlindemo.study_java.*
 import com.jlpay.kotlindemo.study_jetpack.DataBindingActivity
 import com.jlpay.kotlindemo.study_jetpack.JetpackLifeCycleActivity
+import com.jlpay.kotlindemo.study_jetpack.JetpackLiveDataActivity
 import com.jlpay.kotlindemo.study_jetpack.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.study_jetpack.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.study_jetpack.mvp.MvpDemoActivity
@@ -188,8 +189,6 @@ class MainActivity : BaseMediaActivity() {
         addButton("ImageMvvmActivity", ImageMvvmActivity::class.java)
         addButton("WanActivity", WanActivity::class.java)
         addButton("KotlinTestActivity", KotlinTestActivity::class.java)
-        addButton("SimpleServiceActivity", SimpleServiceActivity::class.java)
-        addButton("IntentServiceActivity", IntentServiceActivity::class.java)
         addButton("AidlServiceActivity", AidlServiceActivity::class.java)
         addButton("CustomAidlServiceActivity", CustomAidlServiceActivity::class.java)
         addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
@@ -219,6 +218,8 @@ class MainActivity : BaseMediaActivity() {
         addButton("Java基础：代码中执行命令行命令", CommandLineActivity::class.java)
         addButton("Kotlin基础：高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
         addButton("Kotlin协程", CoroutinesActivity::class.java)
+        addButton("Android基础：Service的基本使用", SimpleServiceActivity::class.java)
+        addButton("Android基础：IntentService的使用", IntentServiceActivity::class.java)
         addButton("Android基础：通知：Notification的使用", NotificationActivity::class.java)
         addButton("Android基础：View的绘制流程", ViewDrawingProcessActivity::class.java)
         addButton("Android基础：View的事件传递机制", ViewEventDispatchActivity::class.java)
@@ -227,6 +228,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Android基础：嵌套滑动NestedScrollView学习", NestedScrollActivity::class.java)
         addButton("Android基础：动画", AnimatorActivity::class.java)
         addButton("Jetpack：LifeCycle", JetpackLifeCycleActivity::class.java)
+        addButton("Jetpack：LiveData", JetpackLiveDataActivity::class.java)
         addButton("开源框架：LeakCanary", LeakCanaryActivity::class.java)
         addButton("华为笔试刷题", HuaWeiTestActivity::class.java)
     }

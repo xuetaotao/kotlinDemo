@@ -313,10 +313,12 @@
         <activity android:name=".study_java.ClassLoaderActivity" />
         <activity android:name=".study_java.CommandLineActivity" />
         <activity android:name=".study_jetpack.JetpackLifeCycleActivity" />
+        <activity android:name=".study_jetpack.JetpackLiveDataActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />
         <service android:name=".study_android.IntentServiceActivity$MyService" />
+        <service android:name=".service.LiveDataService" />
 
         <!--广播注册：静态注册-->
         <!--android:exported指定该receiver能否接收其他APP发出的广播，如果配置了<intent-filter>，则默认为true        -->

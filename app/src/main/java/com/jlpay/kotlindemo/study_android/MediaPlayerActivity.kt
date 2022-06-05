@@ -39,6 +39,8 @@ import com.jlpay.kotlindemo.R
  * void setAudioStreamType(int streamtype)：设置播放流媒体类型
  * void setWakeMode(Context context, int mode)：设置 CPU 唤醒的状态
  * setNextMediaPlayer(MediaPlayer next)：设置当前流媒体播放完毕，下一个播放的 MediaPlayer
+ *
+ * TODO 可与 MusicServiceActivity 连接搞一个完整的音乐播放器
  */
 class MediaPlayerActivity : AppCompatActivity() {
 

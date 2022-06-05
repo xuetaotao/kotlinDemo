@@ -135,10 +135,6 @@ class MainActivity : BaseMediaActivity() {
         btnConfiguration.setOnClickListener {
             ConfigurationActivity.newInstance(this)
         }
-        val btnHandler: Button = findViewById(R.id.btn_handler)
-        btnHandler.setOnClickListener {
-            HandlerActivity.newInstance(this)
-        }
         val btnAsynctask: Button = findViewById(R.id.btn_asyncTask)
         btnAsynctask.setOnClickListener {
             Utils.launchActivity(this, AsyncTaskActivity::class.java)
@@ -147,28 +143,6 @@ class MainActivity : BaseMediaActivity() {
         btnPermission.setOnClickListener {
             openPhotoAlbum()
 //            takePhoto()
-        }
-        val btnThread: Button = findViewById(R.id.btn_thread)
-        btnThread.setOnClickListener {
-            ThreadActivity.newInstance(this)
-        }
-        val btnIo: Button = findViewById(R.id.btn_io)
-        btnIo.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                IOActivity.newInstance(this@MainActivity)
-            }
-        })
-        val btnRxjava2: Button = findViewById(R.id.btn_rxjava2)
-        btnRxjava2.setOnClickListener {
-            RxJavaActivity.newInstance(this)
-        }
-        val btnRxlifecycle: Button = findViewById(R.id.btn_rxlifecycle)
-        btnRxlifecycle.setOnClickListener {
-            RxLifecycleActivity.newInstance(this)
-        }
-        val btnRxautodispose: Button = findViewById(R.id.btn_rxautodispose)
-        btnRxautodispose.setOnClickListener {
-            RxAutoDisposeActivity.newInstance(this)
         }
         val btnQrcode: Button = findViewById(R.id.btn_qrCode)
         btnQrcode.setOnClickListener {
@@ -187,35 +161,41 @@ class MainActivity : BaseMediaActivity() {
         addButton("MvcAdvanceDemo", MvcAdvanceDemoActivity::class.java)
         addButton("MvvmDemo", MvvmDemoActivity::class.java)
         addButton("WanActivity", WanActivity::class.java)
-        addButton("KotlinTestActivity", KotlinTestActivity::class.java)
         addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
         addButton("BroadcastReceiverActivity", BroadcastReceiverActivity::class.java)
         addButton("ImagePickerActivity", ImagePickerActivity::class.java)
         addButton("SmaliDexLibActivity", SmaliDexLibActivity::class.java)
         addButton("AssetAndRawResActivity", AssetAndRawResActivity::class.java)
-        addButton("MediaPlayerActivity", MediaPlayerActivity::class.java)
-        addButton("GenericTypeActivity", GenericTypeActivity::class.java)
-        addButton("PdfViewerActivity", PdfViewerActivity::class.java)
-        addButton("FileManagerActivity", FileManagerActivity::class.java)
-        addButton("SmallFileManagerActivity", SmallFileManagerActivity::class.java)
         addButton("DynamicLayoutActivity", DynamicLayoutActivity::class.java)
         addButton(
             "BaseRecyclerViewAdapterHelperActivity",
             BaseRecyclerViewAdapterHelperActivity::class.java
         )
         addButton("ListNodeActivity", ListNodeActivity::class.java)
-        addButton("ReferenceActivity", ReferenceActivity::class.java)
         addButton("LruCacheActivity", LruCacheActivity::class.java)
         addButton("OcrActivity", JlLibraryDebugActivity::class.java)
+
+        //Java基础
+        addButton("Java基础：并发编程", ThreadActivity::class.java)
         addButton("Java基础：集合", CollectionActivity::class.java)
-        addButton("Java基础：类加载机制", ClassLoaderActivity::class.java)
+        addButton("Java基础：泛型--占坑", GenericTypeActivity::class.java)
         addButton("Java基础：反射", ReflectActivity::class.java)
+        addButton("Java基础：类加载机制", ClassLoaderActivity::class.java)
+        addButton("Java基础：IO流", IOActivity::class.java)
+        addButton("Java基础：Java虚拟机原理--强/软/弱/虚四大引用", ReferenceActivity::class.java)
         addButton("Java基础：代码中执行命令行命令", CommandLineActivity::class.java)
+
+        //Kotlin基础；TODO(扩展函数)
+        addButton("Kotlin基础：Kotlin基本使用", KotlinTestActivity::class.java)
         addButton("Kotlin基础：高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
         addButton("Kotlin协程", CoroutinesActivity::class.java)
+
+        //Android基础
+        addButton("Android基础：文件管理器(未完成)", FileManagerActivity::class.java)
+        addButton("Android基础：当前APK-外部私有目录的-文件管理器", SmallFileManagerActivity::class.java)
         addButton("Android基础：Service的基本使用", SimpleServiceActivity::class.java)
         addButton("Android基础：IntentService的使用", IntentServiceActivity::class.java)
-        addButton("Android基础：前台Service的使用", MusicServiceActivity::class.java)
+        addButton("Android基础：前台Service的使用--音乐播放器通知服务", MusicServiceActivity::class.java)
         addButton("Android基础：远程Service与Aidl的使用", AidlServiceActivity::class.java)
         addButton("Android基础：远程Service与Aidl的使用2", CustomAidlServiceActivity::class.java)
         addButton("Android基础：通知：Notification的使用", NotificationActivity::class.java)
@@ -225,13 +205,27 @@ class MainActivity : BaseMediaActivity() {
         addButton("Android基础：ViewPager2与TabLayout联动", ViewPager2TabActivity::class.java)
         addButton("Android基础：嵌套滑动NestedScrollView学习", NestedScrollActivity::class.java)
         addButton("Android基础：动画", AnimatorActivity::class.java)
+        addButton("Android基础：音频播放器(考虑与MusicServiceActivity联姻一下)", MediaPlayerActivity::class.java)
+
+        //Jetpack与MVVM
         addButton("Jetpack：LifeCycle", JetpackLifeCycleActivity::class.java)
         addButton("Jetpack：LiveData", JetpackLiveDataActivity::class.java)
         addButton("Jetpack：DataBinding", JetpackDataBindingActivity::class.java)
         addButton("MVVM：每日一图", ImageMvvmActivity::class.java)
         addButton("MVVM：简易登录页面", MyLoginActivity::class.java)
+
+        //FrameWork
+        addButton("FrameWork：Handler", HandlerActivity::class.java)
+
+        //开源框架
+        addButton("开源框架：Pdf阅读器", PdfViewerActivity::class.java)
         addButton("开源框架：LeakCanary", LeakCanaryActivity::class.java)
-        addButton("华为笔试刷题", HuaWeiTestActivity::class.java)
+        addButton("开源框架：RxJava2", RxJavaActivity::class.java)
+        addButton("开源框架：RxJava2--RxLifecycle", RxLifecycleActivity::class.java)
+        addButton("开源框架：RxJava2--RxAutoDispose", RxAutoDisposeActivity::class.java)
+
+        //算法与数据结构
+        addButton("算法与数据结构：华为笔试刷题", HuaWeiTestActivity::class.java)
     }
 
     override fun initData() {

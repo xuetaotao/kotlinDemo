@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.study_android
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,11 @@ class MusicServiceActivity : AppCompatActivity() {
 
     public fun musicPlayerStart(view: View) {
         val intent = Intent(this@MusicServiceActivity, MusicPlayerService::class.java)
-        startService(intent)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            startForegroundService(intent)
+//        } else {
+            startService(intent)
+//        }
     }
 
     public fun musicPlayerPause(view: View) {

@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 
 /**
- * 解决LiveData粘性事件
+ * 解决LiveData粘性事件(经过测试，SingleLiveData 无法解决粘性问题，原因待定；UnPeekLiveData可以解决粘性问题)
  * Created on 2020-12-28.
  *
  * 泛型：  Java的 ? extends T  对应  Kotlin的 out T， 只可以被写入而不可以被读取
@@ -18,16 +18,16 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 如何理解Kotlin泛型中的in和out？
  * https://blog.csdn.net/weixin_38261570/article/details/112637337
  */
-class SingleLiveDataEvent<T> : MutableLiveData<T>() {
+class SingleLiveData<T> : MutableLiveData<T>() {
 
     private val mPending: AtomicBoolean = AtomicBoolean(false)
 
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
-        super.observe(owner, {
+        super.observe(owner) {
             if (mPending.compareAndSet(true, false)) {
                 observer.onChanged(it)
             }
-        })
+        }
     }
 
     @MainThread

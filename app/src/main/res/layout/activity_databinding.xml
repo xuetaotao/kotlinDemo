@@ -1,29 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--    <data class="MyDataBinding">  可以自定义生成类名-->
     <data>
 
         <variable
-            name="textStr"
-            type="String" />
+            name="jetpackDataBindingActivity"
+            type="com.jlpay.kotlindemo.study_jetpack.JetpackDataBindingActivity" />
 
         <variable
-            name="onClickListener"
-            type="android.view.View.OnClickListener" />
+            name="click"
+            type="com.jlpay.kotlindemo.study_jetpack.JetpackDataBindingActivity.OnClickProxy" />
 
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txt"
+        <EditText
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{onClickListener}"
-            android:text="@{textStr}" />
+            android:layout_marginTop="25dp"
+            android:background="@drawable/bg_border"
+            android:hint="请输入姓名"
+            android:padding="15dp"
+            android:text="@={jetpackDataBindingActivity.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:padding="15dp"
+            android:text="@{jetpackDataBindingActivity.password}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+        <Button
+            android:id="@+id/button20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_blue_button"
+            android:onClick="@{(v)->click.onClick(v)}"
+            android:padding="15dp"
+            android:text="提交"
+            android:textAllCaps="false"
+            android:textColor="@color/common_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_password" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

@@ -20,6 +20,9 @@ import kotlin.concurrent.thread
  * 它既是观察者，也是被观察者.
  *
  * 一般情况下，LiveData要配合ViewModel一起使用，这里作为学习只使用LiveData
+ *
+ * 经过测试，SingleLiveData 无法解决粘性问题，原因待定；UnPeekLiveData可以解决粘性问题
+ *
  */
 class JetpackLiveDataActivity : AppCompatActivity() {
 
@@ -36,10 +39,13 @@ class JetpackLiveDataActivity : AppCompatActivity() {
         mBinding.onClick = OnClickProxy()
 
 //        initLiveDataObserver()
-        initLiveDataObserver2()
+//        initLiveDataObserver2()
+//        liveDataScene3()
+//        liveDataScene4()
+//        liveDataScene5()
     }
 
-    //LiveData使用场景1
+    //LiveData使用场景1，数据监听
     private fun initLiveDataObserver() {
         //1.观察者，观察数据变化，Kotlin写法一
         MyLiveData.info1.observe(this) {
@@ -53,7 +59,7 @@ class JetpackLiveDataActivity : AppCompatActivity() {
 //        })
     }
 
-    //LiveData使用场景1
+    //LiveData使用场景1，数据监听
     private fun modifyLiveData() {
         //2。触发数据改变 环境
         //如果把这部分放在其他的Activity处，就可以实现类似EventBus的效果
@@ -84,6 +90,77 @@ class JetpackLiveDataActivity : AppCompatActivity() {
         Toast.makeText(this, "推送服务器启动成功", Toast.LENGTH_SHORT).show()
     }
 
+    //LiveData使用场景3，暴露liveData的数据粘性问题
+    private fun liveDataScene3() {
+        //先订阅再改变，会监听到发生的改变，这是我们的常识
+        //先改变再订阅，也会监听到之前发生的改变，这就是粘性
+        modifyLiveData3()
+        initLiveDataObserver3()
+    }
+
+    //LiveData使用场景3，暴露liveData的数据粘性问题
+    private fun initLiveDataObserver3() {
+        MyLiveData.info1.observe(this) {
+            Log.e(TAG, "数据发生改变啦:$it ")
+            Toast.makeText(this, "数据发生改变啦:$it", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    //LiveData使用场景3，暴露liveData的数据粘性问题
+    private fun modifyLiveData3() {
+        MyLiveData.info1.value = "我就是不一样的烟火3"
+    }
+
+    //LiveData使用场景4，解决liveData的数据粘性问题，不行，还是有问题
+    private fun liveDataScene4() {
+        //先改变
+        val mySingleLiveData = SingleLiveData<String>()
+        mySingleLiveData.value = "我是没有粘性的烟火4"
+        //后订阅
+        mySingleLiveData.observe(this) {
+            Log.e(TAG, "数据发生改变啦:$it ")
+            Toast.makeText(this, "数据发生改变啦:$it", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    //LiveData使用场景5，解决liveData的数据粘性问题，测试OK
+    val unPeekLiveData = UnPeekLiveData<String>()
+    private fun liveDataScene5() {
+        //先改变
+        unPeekLiveData.value = "我是没有粘性的烟火5"
+        //后订阅
+        unPeekLiveData.observe(this) {
+            Log.e(TAG, "数据发生改变啦:$it ")
+            Toast.makeText(this, "数据发生改变啦:$it", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    //LiveData使用场景5，解决liveData的数据粘性问题，测试OK
+    private fun modifyLiveData5() {
+        unPeekLiveData.value = "我是改变后的没有粘性的烟火5"
+    }
+
+    //LiveData使用场景6，暴露liveData的数据粘性问题，跨Activity观察数据
+    private fun liveDataScene6() {
+        //先改变数据
+        MyLiveData.info1.value = "我就是不一样的烟火6"
+        startActivity(Intent(this, JetpackLiveData2Activity::class.java))
+    }
+
+    //LiveData使用场景7，解决liveData(跨Activity观察数据)的数据粘性问题，不行，还是有问题
+    private fun liveDataScene7() {
+        //先改变数据
+        MySingleLiveData.info1.value = "我就是不一样的烟火7"
+        startActivity(Intent(this, JetpackLiveData2Activity::class.java))
+    }
+
+    //LiveData使用场景8，解决liveData(跨Activity观察数据)的数据粘性问题，测试OK
+    private fun liveDataScene8() {
+        //先改变数据
+        MyUnPeekLiveData.info1.value = "我就是不一样的烟火8"
+        startActivity(Intent(this, JetpackLiveData2Activity::class.java))
+    }
+
     inner class OnClickProxy {
         fun onClick(view: View) {
             when (view.id) {
@@ -91,7 +168,11 @@ class JetpackLiveDataActivity : AppCompatActivity() {
 //                    Toast.makeText(this@JetpackLiveDataActivity, "LiveData", Toast.LENGTH_SHORT)
 //                        .show()
 //                    modifyLiveData()
-                    modifyLiveData2()
+//                    modifyLiveData2()
+//                    modifyLiveData5()
+//                    liveDataScene6()
+//                    liveDataScene7()
+                    liveDataScene8()
                 }
             }
         }

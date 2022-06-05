@@ -11,7 +11,7 @@ import com.jlpay.kotlindemo.daily.practice.*
 import com.jlpay.kotlindemo.study_android.*
 import com.jlpay.kotlindemo.study_android.ui.*
 import com.jlpay.kotlindemo.study_java.*
-import com.jlpay.kotlindemo.study_jetpack.DataBindingActivity
+import com.jlpay.kotlindemo.study_jetpack.JetpackDataBindingActivity
 import com.jlpay.kotlindemo.study_jetpack.JetpackLifeCycleActivity
 import com.jlpay.kotlindemo.study_jetpack.JetpackLiveDataActivity
 import com.jlpay.kotlindemo.study_jetpack.mvc.MvcDemoActivity
@@ -186,7 +186,6 @@ class MainActivity : BaseMediaActivity() {
         addButton("MvpDemo", MvpDemoActivity::class.java)
         addButton("MvcAdvanceDemo", MvcAdvanceDemoActivity::class.java)
         addButton("MvvmDemo", MvvmDemoActivity::class.java)
-        addButton("ImageMvvmActivity", ImageMvvmActivity::class.java)
         addButton("WanActivity", WanActivity::class.java)
         addButton("KotlinTestActivity", KotlinTestActivity::class.java)
         addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
@@ -199,13 +198,11 @@ class MainActivity : BaseMediaActivity() {
         addButton("PdfViewerActivity", PdfViewerActivity::class.java)
         addButton("FileManagerActivity", FileManagerActivity::class.java)
         addButton("SmallFileManagerActivity", SmallFileManagerActivity::class.java)
-        addButton("DataBindingActivity", DataBindingActivity::class.java)
         addButton("DynamicLayoutActivity", DynamicLayoutActivity::class.java)
         addButton(
             "BaseRecyclerViewAdapterHelperActivity",
             BaseRecyclerViewAdapterHelperActivity::class.java
         )
-        addButton("MyLoginActivity", MyLoginActivity::class.java)
         addButton("ListNodeActivity", ListNodeActivity::class.java)
         addButton("ReferenceActivity", ReferenceActivity::class.java)
         addButton("LruCacheActivity", LruCacheActivity::class.java)
@@ -230,6 +227,9 @@ class MainActivity : BaseMediaActivity() {
         addButton("Android基础：动画", AnimatorActivity::class.java)
         addButton("Jetpack：LifeCycle", JetpackLifeCycleActivity::class.java)
         addButton("Jetpack：LiveData", JetpackLiveDataActivity::class.java)
+        addButton("Jetpack：DataBinding", JetpackDataBindingActivity::class.java)
+        addButton("MVVM：每日一图", ImageMvvmActivity::class.java)
+        addButton("MVVM：简易登录页面", MyLoginActivity::class.java)
         addButton("开源框架：LeakCanary", LeakCanaryActivity::class.java)
         addButton("华为笔试刷题", HuaWeiTestActivity::class.java)
     }

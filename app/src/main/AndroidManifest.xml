@@ -22,12 +22,13 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 闪光灯   -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!-- 前台服务权限-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <!-- 安装应用程序 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!--以下为Tinker热更新需要的权限    -->
     <!-- 读取系统底层日志 -->
-<!--    <uses-permission android:name="android.permission.READ_LOGS" />-->
+    <!--    <uses-permission android:name="android.permission.READ_LOGS" />-->
     <!-- 移除第三方SDK中的以下权限    -->
     <uses-permission
         android:name="android.permission.ACCESS_BACKGROUND_LOCATION"
@@ -290,7 +291,7 @@
 
         </activity>
         <activity android:name=".daily.practice.SmallFileManagerActivity" />
-        <activity android:name=".study_jetpack.DataBindingActivity" />
+        <activity android:name=".study_jetpack.JetpackDataBindingActivity" />
         <activity android:name=".daily.practice.DynamicLayoutActivity" />
         <activity android:name=".study_library.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity" />
         <activity android:name=".study_jetpack.mvvm5.MyLoginActivity" />
@@ -316,6 +317,7 @@
         <activity android:name=".study_jetpack.JetpackLifeCycleActivity" />
         <activity android:name=".study_jetpack.JetpackLiveDataActivity" />
         <activity android:name=".study_android.MusicServiceActivity" />
+        <activity android:name=".study_jetpack.JetpackLiveData2Activity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

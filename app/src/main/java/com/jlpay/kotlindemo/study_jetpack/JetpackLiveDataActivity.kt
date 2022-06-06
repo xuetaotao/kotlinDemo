@@ -144,6 +144,8 @@ class JetpackLiveDataActivity : AppCompatActivity() {
     private fun liveDataScene6() {
         //先改变数据
         MyLiveData.info1.value = "我就是不一样的烟火6"
+        //只会以最后一次数据作为粘性数据
+        MyLiveData.info1.value = "我就是不一样的烟火66"
         startActivity(Intent(this, JetpackLiveData2Activity::class.java))
     }
 

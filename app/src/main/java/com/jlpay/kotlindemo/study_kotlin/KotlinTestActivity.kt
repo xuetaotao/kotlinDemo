@@ -18,6 +18,9 @@ import java.io.FileOutputStream
  * inline:  将内联函数的函数体复制到调用处实现内联，即调用的函数在编译的时候会变成代码内嵌的形式
  * reified: 用于Kotlin内联函数的,修饰内联函数的泛型,泛型被修饰后,在方法体里,能从泛型拿到泛型的Class对象,这与java是不同的,java需要泛型且需要泛型的Class类型时,是要把Class传过来的,但是kotlin不用了 (https://www.jianshu.com/p/e59fda556464)
  * const val：编译时常量，编译的时候会进行内联式编译
+ * object：TODO 相当于static？
+ * as：强制类型转换
+ * is：a is b，判断a是不是b的子类型，就是java的 instanceof
  */
 class KotlinTestActivity : AppCompatActivity() {
 

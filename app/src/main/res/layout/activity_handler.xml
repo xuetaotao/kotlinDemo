@@ -30,23 +30,58 @@
         android:textColor="@color/common_blue"
         android:textSize="14sp" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_button"
-        android:onClick="cal"
-        android:text="计算"
-        android:textColor="@color/common_blue"
-        android:textSize="14sp" />
-
     <TextView
         android:id="@+id/tv_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="15dp"
-        android:text=""
+        android:text="计算结果展示"
         android:textColor="@color/common_black"
         android:textSize="14sp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="calPrimeNum"
+        android:text="子线程Handler计算质数"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="handlerThreadStudy"
+        android:text="HandlerThread"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="takeTurnsImage"
+        android:text="轮流播放图片"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="handlerPostMethod"
+        android:text="handler的Post方法"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
 
 </LinearLayout>

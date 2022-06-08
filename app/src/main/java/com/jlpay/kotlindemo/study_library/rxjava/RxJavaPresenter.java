@@ -48,6 +48,12 @@ public class RxJavaPresenter implements RxJavaContract.Presenter {
         mView = view;
     }
 
+    /**
+     * RxJava 内置的线程调度器的确可以让我们的线程切换得心应手，但其中也有些需要注意的地方。
+     * 简单地说，subscribeOn() 指定的就是发射事件的线程，observerOn 指定的就是订阅者接收事件的线程
+     * 多次指定发射事件的线程只有第一次指定的有效，也就是说多次调用 subscribeOn() 只有第一次的有效，其余的会被忽略
+     * 但多次指定订阅者接收线程是可以的，也就是说每调用一次 observerOn()，下游的线程就会切换一次
+     */
     @Override
     public void netRequest() {
         Observable.interval(1, TimeUnit.SECONDS)

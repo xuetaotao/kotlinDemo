@@ -25,6 +25,10 @@ class BaseApplication : Application() {
         lateinit var mContext: Context
     }
 
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+    }
+
     override fun onCreate() {
         super.onCreate()
         instance = this

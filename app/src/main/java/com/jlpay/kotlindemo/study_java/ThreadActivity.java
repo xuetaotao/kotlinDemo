@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,11 +85,8 @@ public class ThreadActivity extends AppCompatActivity {
 //        new ThreadInteractionDemo().runTest();
 //        new WaitDemo().runTest();
 
-        //threadLocal
-//        threadLocalDemo();
-
         //CountDownLatch
-        countDownLatchDemo();
+//        countDownLatchDemo();
 
         //Fork-Join
 //        forkJoinDemo();
@@ -246,18 +245,52 @@ public class ThreadActivity extends AppCompatActivity {
     }
 
     /**
-     * threadLocal 的 学习
-     * TODO
+     * 1.ThreadLocal是一个线程内部的存储类，可以在指定线程内存储数据，数据存储以后，只有指定线程可以得到存储数据。
+     * 2.ThreadLocal提供了线程内存储变量的能力，这些变量不同之处在于每一个线程读取的变量是对应的互相独立的。
+     * 通过get和set方法就可以得到当前线程对应的值。
+     * 3.ThreadLocal的静态内部类ThreadLocalMap为每个Thread都维护了一个数组table，ThreadLocal确定了一个数组下标，
+     * 而这个下标就是value存储的对应位置。
+     * 4.每个线程持有一个ThreadLocalMap对象,每一个新的线程Thread都会实例化一个ThreadLocalMap并赋值给成员
+     * 变量threadLocals，使用时若已经存在threadLocals则直接使用已经存在的对象。
+     * 5.对于某一ThreadLocal来讲，他的索引值i是确定的，在不同线程之间访问时访问的是不同的table数组的同一位置
+     * 即都为table[i]，只不过这个不同线程之间的table是独立的
+     * 6.对于同一线程的不同ThreadLocal来讲，这些ThreadLocal实例共享一个table数组，然后每个ThreadLocal实例
+     * 在table中的索引i是不同的。
+     * 7.ThreadLocal是通过每个线程单独一份存储空间，牺牲空间来解决冲突，并且相比于Synchronized，ThreadLocal
+     * 具有线程隔离的效果，只有在线程内才能获取到对应的值，线程外则不能访问到想要的值。
+     * 8.应用场景：当某些数据是以线程为作用域并且不同线程具有不同的数据副本的时候，就可以考虑采用ThreadLocal
      */
-    private void threadLocalDemo() {
+    private int countNum = 0;
+
+    public void threadLocalDemo(View view) {
         ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>() {
             @Nullable
             @Override
             protected Integer initialValue() {
-                return 1;
+                return -1;
             }
         };
-        Log.e(TAG, "threadLocalDemo: " + threadLocal.get());
+        if (countNum != 0) {
+            threadLocal.set(countNum++);
+        } else {
+            countNum++;
+        }
+        Log.e(TAG, "threadLocalDemo的值是:\t" + threadLocal.get() + "\n" +
+                "当前线程是：\t" + Thread.currentThread().getName());
+        Toast.makeText(this, "threadLocalDemo的值是:\t" + threadLocal.get() + "\n" +
+                "当前线程是：\t" + Thread.currentThread().getName(), Toast.LENGTH_SHORT).show();
+
+        //新开一个子线程
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "threadLocalDemo的值是1-->:\t" + threadLocal.get() + "\n" +
+                        "当前线程是1-->：\t" + Thread.currentThread().getName());
+            }
+        });
+        thread.start();
+
+
 //        threadLocal.remove();//将当前 threadLocal 所指向的 value 一起从内存中清除，避免内存泄露
         //另外，threadLocal 也存在线程不安全的问题，例子暂时略过
     }

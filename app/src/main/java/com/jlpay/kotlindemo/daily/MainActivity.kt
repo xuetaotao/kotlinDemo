@@ -14,6 +14,7 @@ import com.jlpay.kotlindemo.study_java.*
 import com.jlpay.kotlindemo.study_jetpack.JetpackDataBindingActivity
 import com.jlpay.kotlindemo.study_jetpack.JetpackLifeCycleActivity
 import com.jlpay.kotlindemo.study_jetpack.JetpackLiveDataActivity
+import com.jlpay.kotlindemo.study_jetpack.JetpackViewModelActivity
 import com.jlpay.kotlindemo.study_jetpack.mvc.MvcDemoActivity
 import com.jlpay.kotlindemo.study_jetpack.mvcadvance.MvcAdvanceDemoActivity
 import com.jlpay.kotlindemo.study_jetpack.mvp.MvpDemoActivity
@@ -211,6 +212,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Jetpack：LifeCycle", JetpackLifeCycleActivity::class.java)
         addButton("Jetpack：LiveData", JetpackLiveDataActivity::class.java)
         addButton("Jetpack：DataBinding", JetpackDataBindingActivity::class.java)
+        addButton("Jetpack：ViewModel", JetpackViewModelActivity::class.java)
         addButton("MVVM：每日一图", ImageMvvmActivity::class.java)
         addButton("MVVM：简易登录页面", MyLoginActivity::class.java)
 

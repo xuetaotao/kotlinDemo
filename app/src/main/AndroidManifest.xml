@@ -318,6 +318,7 @@
         <activity android:name=".study_jetpack.JetpackLiveDataActivity" />
         <activity android:name=".study_android.MusicServiceActivity" />
         <activity android:name=".study_jetpack.JetpackLiveData2Activity" />
+        <activity android:name=".study_jetpack.JetpackViewModelActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

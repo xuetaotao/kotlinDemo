@@ -32,6 +32,12 @@ class JetpackViewModelActivity : AppCompatActivity() {
             this,
             ViewModelProvider.NewInstanceFactory()
         ).get(MyViewModel::class.java)
+
+        //myViewModel继承自AndroidViewModel的话，使用这种方式初始化
+//        myViewModel = ViewModelProvider(
+//            viewModelStore,
+//            ViewModelProvider.AndroidViewModelFactory(application)
+//        ).get(MyViewModel::class.java)
     }
 
     //做横竖屏翻转测试，翻转后ViewModel中的num不会销毁重建，但是numCommon就会重新变为0
@@ -43,5 +49,15 @@ class JetpackViewModelActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.e(TAG, "JetpackViewModelActivity：\tonDestroy")
+    }
+
+    /**
+     * 每次横竖屏切换会执行这个函数
+     * onRetainCustomNonConfigurationInstance-->onDestroy-->onCreate
+     */
+    override fun onRetainCustomNonConfigurationInstance(): Any? {
+        Log.e(TAG, "onRetainCustomNonConfigurationInstance: 横竖屏切换了")
+        //如果没有ViewModel，我们可以自己在这里面做数据的保存工作
+        return super.onRetainCustomNonConfigurationInstance()
     }
 }

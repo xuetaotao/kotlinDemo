@@ -16,5 +16,16 @@
         android:textColor="@color/common_white"
         android:textSize="@dimen/sp_14" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="waitNotifyAllJoinDemo"
+        android:text="wait  NotifyAll   Join"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
 
 </LinearLayout>

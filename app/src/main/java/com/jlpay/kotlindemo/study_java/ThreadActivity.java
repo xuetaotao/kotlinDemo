@@ -83,7 +83,6 @@ public class ThreadActivity extends AppCompatActivity {
 
         //线程间通信
 //        new ThreadInteractionDemo().runTest();
-//        new WaitDemo().runTest();
 
         //CountDownLatch
 //        countDownLatchDemo();
@@ -750,6 +749,18 @@ public class ThreadActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 线程间通信
+     * wait、NotifyAll、Join的使用
+     * 1)wait()和notify()/notifyAll() 都需要放在同步代码块里,且它们两必须是同一个 monitor
+     * wait:调用后会释放自己的锁，开始等待
+     * notify()/notifyAll():调用后会唤醒其他等待的锁，但是不会释放锁
+     * join()://线程1插到主线程之前，通过join方法可以让线程之间的运行变为串行运行
+     */
+    public void waitNotifyAllJoinDemo(View view) {
+        new WaitDemo().runTest();
+    }
+
 
     static class WaitDemo implements ThreadDemo {
 
@@ -757,7 +768,7 @@ public class ThreadActivity extends AppCompatActivity {
 
         private synchronized void initString() {
             shareString = "rengwuxian";
-            notifyAll();
+            notifyAll();//会唤醒其他等待的锁，但是不会释放锁
             Log.e(TAG, "initString: notifyAll");
         }
 
@@ -767,7 +778,7 @@ public class ThreadActivity extends AppCompatActivity {
                 try {
                     Log.e(TAG, "printString: 开始wait");
                     //调用wait方法后会释放它持有的锁
-                    wait();//wait()和notify()/notifyAll() 都需要放在同步代码块里，且它们两必须是同一个 monitor，会释放自己的锁
+                    wait();//wait()和notify()/notifyAll() 都需要放在同步代码块里，且它们两必须是同一个 monitor，wait会释放自己的锁
                     Log.e(TAG, "printString: wait结束");
                 } catch (InterruptedException e) {
                     e.printStackTrace();

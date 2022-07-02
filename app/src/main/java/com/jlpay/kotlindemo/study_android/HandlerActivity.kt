@@ -98,6 +98,8 @@ class HandlerActivity : AppCompatActivity() {
 //        Thread.sleep(1000);
         timer.schedule(object : TimerTask() {
             override fun run() {
+                //这里是子线程了已经
+                Log.e(TAG, "run: ${Thread.currentThread().name}")
                 calThread.handler?.sendMessage(msg)
             }
         }, 2000)
@@ -209,7 +211,7 @@ class HandlerActivity : AppCompatActivity() {
     private val timer: Timer by lazy { Timer() }
     fun takeTurnsImage(view: View) {
         //定义一个计时器，周期性执行指定任务，
-        // TimerTask的本质就是启动一条新线程，所以必须通过Handler通知主线程更新UI
+        // Timer的本质就是启动一条新线程(Timer()构造函数中就会开启)，所以必须通过Handler通知主线程更新UI
         timer.schedule(object : TimerTask() {
             override fun run() {
                 //这里是子线程
@@ -239,6 +241,22 @@ class HandlerActivity : AppCompatActivity() {
         override fun handleMessage(msg: Message) {
             if (msg.what == 0x1233) {
                 activity.get()?.ivShow?.setImageResource(imageIds[currentImageId++ % imageIds.size])
+            }
+        }
+    }
+
+    /**
+     * Handler造成内存泄漏的原因:
+     * 匿名内部类会持有外部类引用，可以调用外部类的方法
+     * This Handler class should be static or leaks might occur (anonymous android.os.Handler)
+     */
+    fun handlerWeak() {
+        val handler = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg)
+                //匿名内部类会持有外部类引用，可以调用外部类的方法
+                handlerPostMethod(View(this@HandlerActivity))
+                Log.e(TAG, "handleMessage: ")
             }
         }
     }

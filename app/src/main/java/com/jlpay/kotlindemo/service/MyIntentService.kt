@@ -32,6 +32,8 @@ class MyIntentService : IntentService {
     constructor(name: String) : super(name)
 
     override fun onHandleIntent(intent: Intent?) {
+        //这里可以通过intent传递一个参数过来，然后根据参数执行不同的任务，类似Rxjava处理的链式任务顺序执行
+        //参考：Android多线程：IntentService使用教程(含实例讲解)：https://blog.csdn.net/carson_ho/article/details/90437126/
         //该方法内可以执行耗时任务，因为新开了子线程处理
         val endTime: Long = System.currentTimeMillis() + 20 * 1000
         Log.e("IntentServiceActivity", "onStartCommand")

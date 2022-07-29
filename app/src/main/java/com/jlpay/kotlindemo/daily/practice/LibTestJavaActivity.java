@@ -3,6 +3,7 @@ package com.jlpay.kotlindemo.daily.practice;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -45,7 +46,12 @@ public class LibTestJavaActivity extends BaseActivity {
     private ImageView imageView;
 
     public static void newInstance(Context context) {
+        //方式一
         Intent intent = new Intent(context, LibTestJavaActivity.class);
+        //方式二
+//        Intent intent = new Intent();
+//        intent.setComponent(new ComponentName("com.jlpay.kotlindemo.daily.practice",
+//                "com.jlpay.kotlindemo.daily.practice.LibTestJavaActivity"));
         context.startActivity(intent);
     }
 

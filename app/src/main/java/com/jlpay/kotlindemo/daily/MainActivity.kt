@@ -182,6 +182,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Java基础：泛型--占坑", GenericTypeActivity::class.java)
         addButton("Java基础：反射", ReflectActivity::class.java)
         addButton("Java基础：类加载机制", ClassLoaderActivity::class.java)
+        addButton("Java基础：动态代理", DynamicProxyActivity::class.java)
         addButton("Java基础：IO流", IOActivity::class.java)
         addButton("Java基础：Java虚拟机原理--强/软/弱/虚四大引用", ReferenceActivity::class.java)
         addButton("Java基础：代码中执行命令行命令", CommandLineActivity::class.java)

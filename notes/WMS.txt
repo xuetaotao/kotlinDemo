@@ -1,0 +1,196 @@
+//*************************View的绘制显示逻辑，源码分析*********************************************
+# ActivityThread.java
+    -->void handleResumeActivity(...){
+        final ActivityClientRecord r = performResumeActivity(token, finalStateRequest, reason);
+        final Activity a = r.activity;
+        r.window = r.activity.getWindow();
+        View decor = r.window.getDecorView();
+        decor.setVisibility(View.INVISIBLE);
+        ViewManager wm = a.getWindowManager();
+        WindowManager.LayoutParams l = r.window.getAttributes();
+        //会跳转WindowManagerImpl的addView方法
+        wm.addView(decor, l);
+    }
+    -->ActivityClientRecord performResumeActivity(){
+        final ActivityClientRecord r = mActivities.get(token);
+        //这里会跳转到Activity.performResume(...)
+        r.activity.performResume(r.startsNotResumed, reason);
+    }
+
+# Activity.java
+    -->private Instrumentation mInstrumentation;
+    -->void performResume(boolean followedByPause, String reason){
+        mInstrumentation.callActivityOnResume(this);
+    }
+# Instrumentation.java
+    -->void callActivityOnResume(Activity activity){
+        activity.onResume();
+    }
+//WindowManagerImpl是WindowManager的唯一实现
+# WindowManagerImpl.java
+    -->private final WindowManagerGlobal mGlobal = WindowManagerGlobal.getInstance();
+    -->void addView(View view, ViewGroup.LayoutParams params){
+        mGlobal.addView(...);
+    }
+# WindowManagerGlobal.java
+    -->void addView(...){
+        ViewRootImpl root;
+        root = new ViewRootImpl(view.getContext(), display);
+        root.setView(view, wparams, panelParentView, userId);
+    }
+# ViewRootImpl.java
+    -->final IWindowSession mWindowSession;
+    -->void setView(...){
+        requestLayout();
+        //跳转到Session.java
+        res = mWindowSession.addToDisplayAsUser(...);
+    }
+    -->void requestLayout(){
+            checkThread();
+            //这里后续的绘制逻辑和下面的invalidate()重绘逻辑一致，不赘述了
+            scheduleTraversals();
+        }
+# Session.java
+    -->final WindowManagerService mService;
+    -->int addToDisplayAsUser(...){
+        return mService.addWindow(...);
+    }
+# WindowManagerService.java
+    -->int addWindow(...){
+        //这里就会把数据发到底层给GPU进行渲染
+        WindowState parentWindow = null;
+        WindowToken token = displayContent.getWindowToken(...);
+        final WindowState win = new WindowState();
+    }
+
+
+//******************View的invalidate()重绘逻辑，源码分析*********************************************
+# View.java
+    -->void invalidate(...){
+        invalidateInternal(...)
+    }
+    -->void invalidateInternal(...){
+        //设置了跳过绘制标记，如App在后台运行
+        if (skipInvalidate()) {return;}
+        //设置需要绘制的Flag，就是根据这个Flag判断是否需要重绘(并非所有的都重绘)
+        mPrivateFlags |= PFLAG_DIRTY;
+        final AttachInfo ai = mAttachInfo;
+        final ViewParent p = mParent;
+        //记录需要重新绘制的区域 damage，该区域为该View尺寸
+        final Rect damage = ai.mTmpInvalRect;
+        damage.set(l, t, r, b);
+        //p为该View的父布局，调用父布局的invalidateChild
+        //自下而上的传递 invalidate() 事件
+        p.invalidateChild(this, damage);
+    }
+# ViewGroup.java
+    -->final void invalidateChild(View child, final Rect dirty){
+        do{
+            view.mPrivateFlags |= PFLAG_DRAW_ANIMATION;
+            //parent为null执行到这个函数，这样就会执行到根布局(就是ViewRootImpl)
+            parent = parent.invalidateChildInParent(location, dirty);
+            dirty.set(...);
+        }while (parent != null);
+    }
+# ViewRootImpl.java
+    -->ViewParent invalidateChildInParent(int[] location, Rect dirty){
+        invalidateRectOnScreen(dirty);
+    }
+    -->void invalidateRectOnScreen(Rect dirty){
+        //计算真正需要重绘的区域
+        localDirty.union(dirty.left, dirty.top, dirty.right, dirty.bottom);
+        scheduleTraversals();
+    }
+    //////////////////////////////////////////////////////////////////
+    //注：添加一个重要方法requestLayout，与invalidate()重绘逻辑无关，是初始的绘制逻辑
+    //这之前的逻辑从ActivityThread.handleResumeActivity()过来
+    -->void setView(...){
+        requestLayout();
+    }
+    -->void requestLayout(){
+        checkThread();
+        scheduleTraversals();
+    }
+    //////////////////////////////////////////////////////////////////
+    -->void scheduleTraversals(){
+        mTraversalBarrier = mHandler.getLooper().getQueue().postSyncBarrier();
+        mChoreographer.postCallback(Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);
+    }
+    -->final TraversalRunnable mTraversalRunnable = new TraversalRunnable();
+    -->final class TraversalRunnable implements Runnable {
+               @Override
+               public void run() {
+                   doTraversal();
+               }
+           }
+    -->void doTraversal(){
+        performTraversals();
+    }
+    -->void performTraversals(){
+        int relayoutResult = relayoutWindow(params, viewVisibility, insetsPending);
+        //自上而下地进行View的onMeasure, onLayout, onDraw
+        performMeasure(childWidthMeasureSpec, childHeightMeasureSpec);
+        performLayout(lp, mWidth, mHeight);
+        performDraw();
+    }
+    -->final IWindowSession mWindowSession;
+    -->public final Surface mSurface = new Surface();
+    -->int relayoutWindow(...){
+        //跳转到Session.java
+        int relayoutResult = mWindowSession.relayout(...);
+        //这个mSurface就是我们UI绘制使用的
+        mSurface.copyFrom(mSurfaceControl);
+    }
+    -->View mView;
+    -->void performMeasure(int childWidthMeasureSpec, int childHeightMeasureSpec){
+        mView.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+    }
+    -->void performLayout(...){
+        final View host = mView;
+        host.layout(0, 0, host.getMeasuredWidth(), host.getMeasuredHeight());
+    }
+    -->void performDraw(){
+        boolean canUseAsync = draw(fullRedrawNeeded);
+    }
+    -->boolean draw(boolean fullRedrawNeeded){
+        if (!drawSoftware(surface, mAttachInfo...)) {
+             return false;
+        }
+    }
+    -->boolean drawSoftware(...){
+        final Canvas canvas;
+        //通过mSurface拿到Canvas
+        canvas = mSurface.lockCanvas(dirty);
+        mView.draw(canvas);
+    }
+# View.java
+    -->final void measure(int widthMeasureSpec, int heightMeasureSpec){
+        onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+    -->void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+        setMeasuredDimension(...);
+    }
+    -->void layout(int l, int t, int r, int b){
+        onLayout(changed, l, t, r, b);
+    }
+    -->void onLayout(...) {}
+    -->void draw(Canvas canvas){
+        onDraw(canvas);
+    }
+    -->void onDraw(Canvas canvas){}
+# Session.java
+    -->final WindowManagerService mService;
+    -->int relayout(...){
+        int res = mService.relayoutWindow(...);
+    }
+# WindowManagerService.java
+    -->int relayoutWindow(...){
+        final WindowState win = windowForClientLocked(session, client, false);
+        WindowStateAnimator winAnimator = win.mWinAnimator;
+        result = createSurfaceControl(outSurfaceControl, outBLASTSurfaceControl, result, win, winAnimator);
+    }
+    -->int createSurfaceControl(SurfaceControl outSurfaceControl...){
+        surfaceController = winAnimator.createSurfaceLocked(win.mAttrs.type, win.mOwnerUid);
+        //这个outSurfaceControl就是上层输出要使用的surface
+        surfaceController.getSurfaceControl(outSurfaceControl);
+    }

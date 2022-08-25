@@ -1,5 +1,6 @@
 package com.jlpay.kotlindemo.study_android.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -41,6 +42,7 @@ import com.jlpay.kotlindemo.R;
  * --> performLayout(lp, mWidth, mHeight);//布局
  * --> performDraw();//绘制
  */
+//public class ViewDrawingProcessActivity extends Activity {
 public class ViewDrawingProcessActivity extends AppCompatActivity {
 
     @Override

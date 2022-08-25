@@ -18,6 +18,8 @@ import kotlin.concurrent.thread
  * Android从零开始搭建MVVM架构（1）————DataBinding：https://juejin.cn/post/6844903955693043725
  *
  * dataBinding 双向绑定就不存在数据粘性的问题了
+ * 注：单向绑定是由数据驱动 UI 变化，当 UI 发生变化时并不会引起数据的改变。
+ * 双向绑定才是UI和数据改变互相影响。
  */
 class JetpackDataBindingActivity : AppCompatActivity() {
 

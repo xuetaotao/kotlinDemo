@@ -9,6 +9,7 @@ import android.util.Log
 /**
  * Service组件的基本框架
  * 如果希望Service组件做什么事情，只要在onCreate或者onStartCommand方法中定义相关业务代码即可
+ * 不能做耗时操作
  * <p>
  * 使用方法：
  * 1.通过 Context的 context.startService(intent) 方法启动 Service，stopService(intent)关闭 Service；访问者与Service之间没有关联，即使访问者退出了，
@@ -48,6 +49,7 @@ class SimpleService : Service() {
 
     //每次客户端调用 startService(Intent) 方法启动该Service时都会回调该方法
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.e(TAG, "onStartCommand: ${Thread.currentThread().name}")//main，主线程，不能做耗时操作
         Log.e(TAG, "Service is Started")
 //        return super.onStartCommand(intent, flags, startId)
         return START_STICKY

@@ -163,7 +163,6 @@ class MainActivity : BaseMediaActivity() {
         addButton("MvvmDemo", MvvmDemoActivity::class.java)
         addButton("WanActivity", WanActivity::class.java)
         addButton("MediaUtilsActivity", MediaUtilsActivity::class.java)
-        addButton("BroadcastReceiverActivity", BroadcastReceiverActivity::class.java)
         addButton("ImagePickerActivity", ImagePickerActivity::class.java)
         addButton("SmaliDexLibActivity", SmaliDexLibActivity::class.java)
         addButton("AssetAndRawResActivity", AssetAndRawResActivity::class.java)
@@ -195,6 +194,7 @@ class MainActivity : BaseMediaActivity() {
         //Android基础
         addButton("Android基础：文件管理器(未完成)", FileManagerActivity::class.java)
         addButton("Android基础：当前APK-外部私有目录的-文件管理器", SmallFileManagerActivity::class.java)
+        addButton("Android基础：BroadcastReceiver的基本使用", BroadcastReceiverActivity::class.java)
         addButton("Android基础：Service的基本使用", SimpleServiceActivity::class.java)
         addButton("Android基础：IntentService的使用", IntentServiceActivity::class.java)
         addButton("Android基础：前台Service的使用--音乐播放器通知服务", MusicServiceActivity::class.java)

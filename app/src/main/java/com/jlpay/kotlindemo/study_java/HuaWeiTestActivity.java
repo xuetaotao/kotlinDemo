@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.jlpay.kotlindemo.R;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -26,12 +28,27 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * HJ5 进制转换
+ * 0xAA: 10*16+10
+ * Scanner类的next() 和nextLine()的区别:
+ * https://blog.csdn.net/weixin_44718865/article/details/121572499?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.pc_relevant_default&spm=1001.2101.3001.4242.1&utm_relevant_index=3
+ * Scanner是一个扫描器，我们录取到键盘的数据，先存到缓存区等待读取，它判断读取结束的标示是 空白符；比如空格，回车，tab 等等
+ * next():
+ * 1、一定要读取到有效字符后才可以结束输入。
+ * 2、对输入有效字符之前遇到的空白，next() 方法会自动将其去掉。
+ * 3、只有输入有效字符后才将其后面输入的空白作为分隔符或者结束符。
+ * 4、next() 不能得到带有空格的字符串。
+ * nextLine()：
+ * 1、以Enter为结束符,也就是说 nextLine()方法返回的是输入回车之前的所有字符。
+ * 2、可以获得空白。
+ */
 public class HuaWeiTestActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_huawei_test);
     }
 
     public void onClickTest(View view) {
@@ -44,6 +61,102 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //
 //        }
 //    }
+
+    /**
+     * HJ31 单词倒排
+     */
+    public static void hj31() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            String nextLine = scanner.nextLine();
+            String result = convertTo(nextLine);
+            System.out.println(result);
+        }
+    }
+
+    public static String convertTo(String nextLine) {
+        // 匹配非字母的字符进行分割
+        String[] strings = nextLine.split("[^A-Za-z]");
+        StringBuilder stringBuilder = new StringBuilder();
+        // 逆序添加分割完的单词
+        for (int i = strings.length - 1; i >= 0; i--) {
+            stringBuilder.append(strings[i]).append(" ");
+        }
+        return stringBuilder.toString().trim();
+    }
+
+
+    /**
+     * HJ30 字符串合并处理
+     * 1.将输入的两个字符串str1和str2进行前后合并
+     * 2.对合并后的字符串进行排序，要求为：下标为奇数的字符和下标为偶数的字符分别从小到大排序(注意要按ascii码进行排序)。
+     * 3.对排序后的字符串进行转换操作，需要进行转换的字符所代表的十六进制用二进制表示并倒序，然后再转换成对应的十六进制大写字符
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void hj30() {
+        //hash 保存十六进制反转的对应表（第三步要求）， 空间换时间
+        Map<Character, Character> map = new HashMap<Character, Character>() {
+            {
+                put('0', '0');
+                put('1', '8');
+                put('2', '4');
+                put('3', 'C');
+                put('4', '2');
+                put('5', 'A');
+                put('6', '6');
+                put('7', 'E');
+                put('8', '1');
+                put('9', '9');
+                put('a', '5');
+                put('b', 'D');
+                put('c', '3');
+                put('d', 'B');
+                put('e', '7');
+                put('f', 'F');
+                put('A', '5');
+                put('B', 'D');
+                put('C', '3');
+                put('D', 'B');
+                put('E', '7');
+                put('F', 'F');
+            }
+        };
+        Scanner scanner = new Scanner(System.in);
+        String s = "";
+        while (scanner.hasNext()) {
+            String s1 = scanner.next();
+            String s2 = scanner.next();
+            char[] ch = (s1 + s2).toCharArray();
+            //偶数位，因为包含一个0，所以会比奇数位多1。
+            char[] r1 = new char[ch.length - ch.length / 2];
+            //奇数位
+            char[] r2 = new char[ch.length / 2];
+            for (int i = 0, j = 0, k = 0; i < ch.length; i++) {
+                if (i % 2 == 0) {
+                    r1[j] = ch[i];
+                    j++;
+                } else {
+                    r2[k] = ch[i];
+                    k++;
+                }
+            }
+            Arrays.sort(r1);
+            Arrays.sort(r2);
+            for (int i = 0, j = 0, k = 0; i < ch.length; i++) {
+                if (i % 2 == 0) {
+                    //char是基本类型，基本类型是不会为null的，只有对象（如String）才可以为null
+                    ch[i] = map.getOrDefault(r1[j], r1[j]);
+                    j++;
+                } else {
+                    ch[i] = map.getOrDefault(r2[k], r2[k]);
+                    k++;
+                }
+            }
+            s = new String(ch);
+            System.out.println(s);
+        }
+    }
+
 
     /**
      * HJ29 字符串加解密
@@ -684,21 +797,6 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * HJ5 进制转换
-     * 0xAA: 10*16+10
-     * Scanner类的next() 和nextLine()的区别:
-     * https://blog.csdn.net/weixin_44718865/article/details/121572499?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.pc_relevant_default&spm=1001.2101.3001.4242.1&utm_relevant_index=3
-     * Scanner是一个扫描器，我们录取到键盘的数据，先存到缓存区等待读取，它判断读取结束的标示是 空白符；比如空格，回车，tab 等等
-     * next():
-     * 1、一定要读取到有效字符后才可以结束输入。
-     * 2、对输入有效字符之前遇到的空白，next() 方法会自动将其去掉。
-     * 3、只有输入有效字符后才将其后面输入的空白作为分隔符或者结束符。
-     * 4、next() 不能得到带有空格的字符串。
-     * nextLine()：
-     * 1、以Enter为结束符,也就是说 nextLine()方法返回的是输入回车之前的所有字符。
-     * 2、可以获得空白。
-     */
     private static final int BASE = 16;
 
     public static void baseConvert() {

@@ -320,6 +320,7 @@
         <activity android:name=".study_jetpack.JetpackLiveData2Activity" />
         <activity android:name=".study_jetpack.JetpackViewModelActivity" />
         <activity android:name=".study_java.DynamicProxyActivity" />
+        <activity android:name=".study_java.DataStructActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

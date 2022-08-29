@@ -307,7 +307,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     //内存泄露检测工具 LeakCanary
-//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+//    releaseImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     //性能(卡顿)监控工具 BlockCanary
 //    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'

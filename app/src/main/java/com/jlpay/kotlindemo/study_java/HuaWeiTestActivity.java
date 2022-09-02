@@ -63,6 +63,97 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //    }
 
     /**
+     * HJ34 图片整理
+     */
+    public static void hj34() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.next();
+            char[] charArray = nextLine.toCharArray();
+            Arrays.sort(charArray);
+            for (char c : charArray) {
+                System.out.print(c);
+            }
+        }
+    }
+
+
+    /**
+     * HJ33 整数与IP地址间的转换
+     * Java split()用法：https://www.cnblogs.com/xiaoxiaohui2015/p/5838674.html
+     * 注意：以点分割要做转义
+     */
+    public static void hj33() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String next = scanner.next();
+            String result = ipDataConvert(next);
+            System.out.println(result);
+        }
+    }
+
+    private static String ipDataConvert(String next) {
+        // ipv4 -> int
+        if (next.contains(".")) {
+            String[] split = next.split("\\.");
+            long result = 0;
+            //ip地址以点分割开后共有四个字符串
+            for (int i = 0; i < 4; i++) {
+                result = result * 256 + Integer.parseInt(split[i]);
+            }
+            return "" + result;
+
+        } else {
+            // int -> ipv4
+            long ipv4 = Long.parseLong(next);
+            String result = "";
+            for (int i = 0; i < 4; i++) {
+                result = ipv4 % 256 + "." + result;
+                ipv4 /= 256;
+            }
+            return result.substring(0, result.length() - 1);
+        }
+    }
+
+
+    /**
+     * HJ32 密码截取
+     * 最长回文子串的中心扩散法，遍历每个字符作为中间位，进行左右比较
+     * ABA型：只需要从当前字符向两边扩散，比较左右字符是否相等，找出以当前字符为中心的最长回文子串长度
+     * BBA型：只需要从当前字符和下一个字符向两边扩散，比较左右字符是否相等，找出以当前字符和下一个字符为中心的最长回文子串长度
+     * 最后比对两种类型的长度，取自较长的长度
+     * <p>
+     * 时间复杂度：O(N^2)，需要遍历每个字符，复杂度为 O(N)，对于每个字符的处理也需要 O(N) 的复杂度，因此总的时间复杂度为 O(N^2)
+     * 空间复杂度：O(1)，只用到左右双指针，无需额外空间
+     */
+    public static void hj32() {
+        Scanner scanner = new Scanner(System.in);
+        String nextLine = scanner.nextLine();//可以获得空格
+        System.out.println(solution(nextLine));
+    }
+
+    private static int solution(String s) {
+        int res = 0;
+        for (int i = 0; i < s.length(); i++) {
+            // ABA型
+            int len1 = longest(s, i, i);
+            // ABBA型
+            int len2 = longest(s, i, i + 1);
+            res = Math.max(res, Math.max(len1, len2));
+        }
+        return res;
+    }
+
+    private static int longest(String s, int a, int b) {
+        while (a >= 0 && b < s.length() && s.charAt(a) == s.charAt(b)) {
+            a--;
+            b++;
+        }
+        return b - a - 1;
+    }
+
+
+    /**
      * HJ31 单词倒排
      */
     public static void hj31() {

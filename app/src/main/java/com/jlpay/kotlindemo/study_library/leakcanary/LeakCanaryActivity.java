@@ -35,6 +35,7 @@ public class LeakCanaryActivity extends AppCompatActivity {
     public void leakCanaryStudy(View view) {
         Toast.makeText(this, "leakCanaryStudy", Toast.LENGTH_SHORT).show();
         LeakCanary leakCanary = LeakCanary.INSTANCE;
+//        AppWatcherInstaller.onCreate();//入口函数
     }
 
     /**
@@ -83,9 +84,11 @@ public class LeakCanaryActivity extends AppCompatActivity {
                 ReferenceQueue<Activity> referenceQueue = new ReferenceQueue<>();
                 WeakReference<Activity> weakReference = new WeakReference<Activity>(activity, referenceQueue);
 
+                //手动触发GC，GC耗资源，耗时，卡顿，会影响启动，影响App性能
                 Runtime.getRuntime().gc();
 
                 Reference<Activity> poll;
+                //这个等价于weakReference.get() == null
                 while ((poll = (Reference<Activity>) referenceQueue.poll()) != null) {
                     Log.e("TAG", "onActivityDestroyed: 回收了" + poll);
                 }

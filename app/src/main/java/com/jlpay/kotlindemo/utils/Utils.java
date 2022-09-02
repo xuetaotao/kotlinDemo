@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -39,6 +43,29 @@ public class Utils {
         configuration.fontScale = 1.0f;//0.85:小号  1:标准  1.25:大号  1.4:巨无霸
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
         Log.d("DisplayMetrics ", "======" + resources.getDisplayMetrics().toString() + "\t,fontScale:" + configuration.fontScale);
+    }
+
+    /**
+     * 沉浸式状态栏
+     * （Android关于沉浸式状态栏总结：https://juejin.cn/post/6844903490402123789#heading-0）
+     * 下面代码摘自合伙人app，注意要放到setContentView()方法之前，不过好像放在后面也没事
+     */
+    public static void setStatusBarTransparent(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            // Translucent status bar
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+        if (null != activity.getActionBar()) {
+            activity.getActionBar().hide();
+        }
     }
 
     /**

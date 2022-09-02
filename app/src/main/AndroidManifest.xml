@@ -82,7 +82,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".daily.MainActivity">
+        <activity
+            android:name=".daily.SplashActivity"
+            android:theme="@style/AppTheme.Launcher.Picture">
             <intent-filter>
                 <!--  指定该Activity是程序的入口   -->
                 <action android:name="android.intent.action.MAIN" />
@@ -92,6 +94,10 @@
         </activity>
         <!--在Activity中添加了 android:configChanges属性，目的是当所指定属性(Configuration Changes)发生改变时，通知程序调用 onConfigurationChanged()函数
         就不会重启activity，同时能够监听系统设置的更改-->
+        <activity
+            android:name=".daily.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".study_android.ui.PracticeViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

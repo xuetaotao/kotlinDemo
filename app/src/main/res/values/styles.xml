@@ -1,6 +1,8 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--关闭ActionBar，默认是启用的    -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -24,6 +26,19 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowFrame">@null</item>
+    </style>
+
+    <style name="AppTheme.Launcher.Translucent" parent="AppTheme">
+        <!-- 将背景设置成透明的 -->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="AppTheme.Launcher.Picture" parent="AppTheme">
+        <!-- 设置应用启动时默认显示的图片 , 这样比白屏/黑屏体验好一些 -->
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <!--        <item name="android:windowBackground">@drawable/benghuai</item>-->
+        <!-- 将背景设置成透明的 -->
+<!--                <item name="android:windowIsTranslucent">true</item>-->
     </style>
 
 </resources>

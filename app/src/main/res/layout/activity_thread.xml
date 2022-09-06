@@ -10,7 +10,45 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/bg_blue_button"
-        android:onClick="threadLocalDemo"
+        android:onClick="synchronizedClick"
+        android:text="synchronized"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="waitNotifyAllJoinClick"
+        android:text="wait  notifyAll  join"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="sleepClick"
+        android:text="sleep"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/common_blue" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="threadLocalClick"
         android:text="ThreadLocal"
         android:textAllCaps="false"
         android:textColor="@color/common_white"
@@ -21,8 +59,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/bg_blue_button"
-        android:onClick="waitNotifyAllJoinDemo"
-        android:text="wait  NotifyAll   Join"
+        android:onClick="countDownLatchClick"
+        android:text="CountDownLatch"
         android:textAllCaps="false"
         android:textColor="@color/common_white"
         android:textSize="@dimen/sp_14" />

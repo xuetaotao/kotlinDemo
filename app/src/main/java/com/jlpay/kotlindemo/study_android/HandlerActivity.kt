@@ -261,6 +261,22 @@ class HandlerActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Activity效率优化之延迟任务优化
+     * IdleHandler，使用案例如：
+     * #ActivityThread.java-->handleResumeActivity(){Looper.myQueue().addIdleHandler(new Idler());}
+     */
+    fun idleHandlerDemo() {
+        Looper.myQueue().addIdleHandler(object : MessageQueue.IdleHandler {
+            override fun queueIdle(): Boolean {
+                //这里的执行是在主线程空闲的时候做的，比如做GC
+                //但是注意不要放耗时太长的任务
+                Log.e("TAG", "queueIdle: ")
+                return false
+            }
+        })
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         if (timer != null) {

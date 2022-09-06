@@ -82,6 +82,7 @@ public class CollectionActivity extends AppCompatActivity {
         }
 
         Map<String, String> hashMap = new HashMap<>();
+        hashMap.put("aa", "bb");
 
         Map<String, String> linkedHashMap = new LinkedHashMap<>();
 
@@ -96,7 +97,9 @@ public class CollectionActivity extends AppCompatActivity {
         // 其他段的数据也能被其他线程访问。这样就保证了每一把锁只是用于锁住一部分数据，那么当多线程访问Map里的不同数据段的
         // 数据时，线程间就不会存在锁竞争，从而可以有效提高并发访问效率
         //上述的处理机制明显区别于HashTable是给整体数据分配了一把锁的处理方法
+        //Key和Value都不能为null，否则会抛出异常，详见put方法
         Map<String, String> concurrentHashMap = new ConcurrentHashMap<>();
+        concurrentHashMap.put("aa", "bb");
     }
 
     /**

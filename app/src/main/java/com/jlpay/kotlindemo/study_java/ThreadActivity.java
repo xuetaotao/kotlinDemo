@@ -76,16 +76,8 @@ public class ThreadActivity extends AppCompatActivity {
 //        executor();
 //        callable();
 
-        //线程同步与线程安全
-//        runSynchronized1Demo();
-//        runSynchronized2Demo();
-//        runSynchronized3Demo();
-
         //线程间通信
 //        new ThreadInteractionDemo().runTest();
-
-        //CountDownLatch
-//        countDownLatchDemo();
 
         //Fork-Join
 //        forkJoinDemo();
@@ -181,13 +173,23 @@ public class ThreadActivity extends AppCompatActivity {
 
     /**
      * CountDownLatch 的学习
+     * https://blog.csdn.net/hbtj_1216/article/details/109655995
      * 主要作用：当某个线程，需要等待其他线程执行完毕后再去执行，就可以使用 CountDownLatch
      * 注：1、等待线程可以有多个；2、子线程数目不一定和CountDownLatch的扣减数一致；3、子线程countDown()执行后仍然可以继续运行；
      * <p>
+     * CountDownLatch 提供了一些方法：
+     * await()：使当前线程进入同步队列进行等待，直到latch的值被减到0或者当前线程被中断，当前线程就会被唤醒。
+     * countDown()：使latch的值减1，如果减到了0，则会唤醒所有等待在这个latch上的线程。
+     * getCount()：获得latch的数值。
      */
-    private static CountDownLatch countDownLatch = new CountDownLatch(6);
+    public void countDownLatchClick(View view) {
+        countDownLatchDemo();
+    }
+
+    private static CountDownLatch countDownLatch;
 
     private void countDownLatchDemo() {
+        countDownLatch = new CountDownLatch(6);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -213,6 +215,7 @@ public class ThreadActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //BusinessThread和MainThread都有await等待，它们两被唤醒执行的先后顺序是随机的
         Log.e(TAG, "countDownLatchDemo: " + Thread.currentThread() + "\n" + Thread.currentThread().getId() + "\t" + "do main work");
     }
 
@@ -261,7 +264,7 @@ public class ThreadActivity extends AppCompatActivity {
      */
     private int countNum = 0;
 
-    public void threadLocalDemo(View view) {
+    public void threadLocalClick(View view) {
         ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>() {
             @Nullable
             @Override
@@ -483,6 +486,13 @@ public class ThreadActivity extends AppCompatActivity {
 
 
     /*****************线程同步与线程安全*****************************************************/
+
+    public void synchronizedClick(View view) {
+        runSynchronized1Demo();
+//        runSynchronized2Demo();
+//        runSynchronized3Demo();
+    }
+
 
     private void runSynchronized1Demo() {
         new Synchronized1Demo().runTest();
@@ -755,9 +765,9 @@ public class ThreadActivity extends AppCompatActivity {
      * 1)wait()和notify()/notifyAll() 都需要放在同步代码块里,且它们两必须是同一个 monitor
      * wait:调用后会释放自己的锁，开始等待
      * notify()/notifyAll():调用后会唤醒其他等待的锁，但是不会释放锁
-     * join()://线程1插到主线程之前，通过join方法可以让线程之间的运行变为串行运行
+     * join():线程1插到主线程之前，通过join方法可以让线程之间的运行变为串行运行。被插入的线程必须等待插入线程执行完成才能继续执行。
      */
-    public void waitNotifyAllJoinDemo(View view) {
+    public void waitNotifyAllJoinClick(View view) {
         new WaitDemo().runTest();
     }
 
@@ -770,6 +780,7 @@ public class ThreadActivity extends AppCompatActivity {
             shareString = "rengwuxian";
             notifyAll();//会唤醒其他等待的锁，但是不会释放锁
             Log.e(TAG, "initString: notifyAll");
+            Log.e(TAG, "initString: notifyAll2了");
         }
 
         private synchronized void printString() {
@@ -826,6 +837,17 @@ public class ThreadActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Log.e(TAG, "主线程完了");
+        }
+    }
+
+    /**
+     * sleep
+     */
+    public void sleepClick(View view) {
+        try {
+            Thread.sleep(3000);//也不会释放锁
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

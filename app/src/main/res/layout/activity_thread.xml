@@ -10,6 +10,17 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/bg_blue_button"
+        android:onClick="threadClick"
+        android:text="Thread基础：创建与启动方法"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
         android:onClick="synchronizedClick"
         android:text="synchronized"
         android:textAllCaps="false"
@@ -59,8 +70,30 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
         android:background="@drawable/bg_blue_button"
+        android:onClick="threadPoolClick"
+        android:text="线程池：ThreadPool"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
         android:onClick="countDownLatchClick"
         android:text="CountDownLatch"
+        android:textAllCaps="false"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_14" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_blue_button"
+        android:onClick="atomicClick"
+        android:text="AtomicInteger"
         android:textAllCaps="false"
         android:textColor="@color/common_white"
         android:textSize="@dimen/sp_14" />

@@ -381,6 +381,9 @@
         <!-- granUriPermissions：是否允许授权文件的临时访问权限。如果 Content Provider 的 grantUriPermissions 属性值为“true”，则该Provider内所有的数据都能被授权访问。
         可它如果设为“false”，则只有本元素指定的数据子集才能被授权。一个 Provider内可以包含任意数量的<grant-uri-permission>元素。其中每一个只能指定一条路径（三种可能的属性之一）-->
         <!-- 在app开发过程中需要用到FileProvider的主要有：相机拍照以及图片裁剪；调用系统应用安装器安装apk（应用升级）       -->
+        <!-- https://developer.android.google.cn/guide/topics/manifest/provider-element       -->
+        <!-- https://developer.android.google.cn/guide/topics/manifest/meta-data-element       -->
+        <!-- https://developer.android.google.cn/guide/topics/providers/content-providers       -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.jlpay.kotlindemo.FileProvider"

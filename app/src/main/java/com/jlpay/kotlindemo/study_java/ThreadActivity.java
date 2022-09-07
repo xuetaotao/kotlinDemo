@@ -50,7 +50,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 问题：1、ABA问题  2、忘了  3、忘了
  * <p>
  * 悲观锁：synchronized
- * 乐观锁：CAS
+ * 乐观锁：CAS（compare and swap）
  * <p>
  * AtomicInteger：
  * 1、乐观锁，性能较强，利用CPU自身的特性保证原子性，即CPU的指令集封装compare and swap两个操作为一个指令来保证原子性  2、适合读多写少模式
@@ -70,10 +70,7 @@ public class ThreadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_thread);
 
         //多线程的使用
-//        thread();
-//        runnable();
 //        threadFactory();
-//        executor();
 //        callable();
 
         //线程间通信
@@ -133,6 +130,42 @@ public class ThreadActivity extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * AtomicInteger：
+     * 1）乐观锁，性能较强，利用CPU自身的特性保证原子性，即CPU的指令集封装compare and swap两个操作为一个指令来保证原子性
+     * 2）适合读多写少模式
+     * AtomicInteger与使用同步执行相同操作相比，使用它同样更快，更易读。使用场景：
+     * 1）作为多个线程同时使用的原子计数器
+     * 2）在比较和交换操作中实现非阻塞算法
+     */
+    public void atomicClick(View view) {
+        atomicDemo();
+    }
+
+
+    /**
+     * https://www.jianshu.com/p/073096a729f6
+     */
+    private void atomicDemo() {
+        AtomicInteger atomicInteger = new AtomicInteger(3);
+        //以原子方式将给定值添加到当前值，并在添加后返回新值
+        int addAndGet = atomicInteger.addAndGet(2);
+        //以原子方式将给定值添加到当前值并返回旧值
+        int getAndAdd = atomicInteger.getAndAdd(2);
+        //以原子方式将当前值递增1并在递增后返回新值。它相当于++ i操作(++ i 是指先把变量i的值加1，然后再把结果值赋值给左边变量)
+        int incrementAndGet = atomicInteger.incrementAndGet();
+        //以原子方式递增当前值并返回旧值。它相当于i ++操作(i ++ 是先把变量i的值赋值给左边变量，然后再把变量i的值加1)
+        int getAndIncrement = atomicInteger.getAndIncrement();
+        //原子地将当前值减1并在减量后返回新值。它等同于i-操作
+        int decrementAndGet = atomicInteger.decrementAndGet();
+        //以原子方式递减当前值并返回旧值。它相当于-i操作
+        int getAndDecrement = atomicInteger.getAndDecrement();
+
+        boolean result = atomicInteger.compareAndSet(102, 110);
+    }
+
+
     /**
      * Random 学习
      */
@@ -189,6 +222,7 @@ public class ThreadActivity extends AppCompatActivity {
     private static CountDownLatch countDownLatch;
 
     private void countDownLatchDemo() {
+        //countDownLatch = new CountDownLatch(0)的话，调await()方法不会阻塞
         countDownLatch = new CountDownLatch(6);
         new Thread(new Runnable() {
             @Override
@@ -297,10 +331,17 @@ public class ThreadActivity extends AppCompatActivity {
         //另外，threadLocal 也存在线程不安全的问题，例子暂时略过
     }
 
-
-    /*****************多线程的使用*****************************************************/
     /**
-     * Thread
+     * Thread基础：创建与启动方法
+     */
+    public void threadClick(View view) {
+        thread();
+        runnable();
+    }
+
+
+    /**
+     * Thread的创建方法一
      */
     private static void thread() {
         Thread thread = new Thread() {
@@ -315,7 +356,7 @@ public class ThreadActivity extends AppCompatActivity {
 
 
     /**
-     * Runnable
+     * Thread的创建方法二
      */
     private static void runnable() {
         Runnable runnable = new Runnable() {
@@ -357,42 +398,11 @@ public class ThreadActivity extends AppCompatActivity {
     }
 
     /**
-     * Executor和线程池
-     * 常用：newCachedThreadPool()
-     * <p>
-     * 彻底搞懂Java线程池的工作原理
-     * https://mp.weixin.qq.com/s/tyh_kDZyLu7SDiDZppCx5Q
-     * Java中的线程池有哪些
-     * https://baijiahao.baidu.com/s?id=1710203886182271419&wfr=spider&for=pc
+     * 线程池的创建与使用
      */
-    private static void executor() {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Log.e(TAG, "executor() started!");
-            }
-        };
-
-        //创建一个定长线程池,corePoolSize = maximumPoolSize = 传入值
-        //每当提交一个任务就创建一个工作线程，当线程 处于空闲状态时，它们并不会被回收，除非线程池被关闭了，
-        // 如果工作线程数量达到线程池初始的最大数，则将提交的任务存入到池队列(没有大小限制)中。
-        // 由于newFixedThreadPool只有核心线程并且这些核心线程不会被回收，这样它更加快速底相应外界的请求
-        ExecutorService executorService1 = Executors.newFixedThreadPool(3);
-
-        //创建一个定长线程池,corePoolSize = 传入值,主要用于执行定时任务和具有固定周期的重复任务
-        ExecutorService executorService2 = Executors.newScheduledThreadPool(3);
-
-        //创建一个单线程化的线程池
-        //内部只有一个核心线程，以无界队列方式来执行该线程，这使得这些任务之间不需要处理线程同步的问题
-        ExecutorService executorService3 = Executors.newSingleThreadExecutor();
-
-        //创建一个可缓存线程池程,适合执行大量的耗时较少的任务，当整个线程池都处于闲置状态时，线程池中的线程都会超时被停止
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.execute(runnable);// 使用线程池执行一个任务,execute 提交的线程任务不关心返回值
-        executor.execute(runnable);
-        executor.execute(runnable);
-//        executor.shutdown();// 关闭线程池,会阻止新任务提交，但不影响已提交的任务
-//        executor.shutdownNow();// 关闭线程池，阻止新任务提交，并且中断当前正在运行的线程(不一定能中断，除非自己处理了，因为Java的线程是协作式的)
+    public void threadPoolClick(View view) {
+        threadPoolExecutorDemo();
+//        executorsDemo();
     }
 
     /**
@@ -426,6 +436,47 @@ public class ThreadActivity extends AppCompatActivity {
                 3, 10, 60, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>(), sThreadFactory, new ThreadPoolExecutor.AbortPolicy());
     }
+
+
+    /**
+     * Executors使用学习
+     * 常用：newCachedThreadPool()
+     * <p>
+     * 彻底搞懂Java线程池的工作原理
+     * https://mp.weixin.qq.com/s/tyh_kDZyLu7SDiDZppCx5Q
+     * Java中的线程池有哪些
+     * https://baijiahao.baidu.com/s?id=1710203886182271419&wfr=spider&for=pc
+     */
+    private static void executorsDemo() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Log.e(TAG, "executor() started!");
+            }
+        };
+
+        //创建一个定长线程池,corePoolSize = maximumPoolSize = 传入值
+        //每当提交一个任务就创建一个工作线程，当线程 处于空闲状态时，它们并不会被回收，除非线程池被关闭了，
+        // 如果工作线程数量达到线程池初始的最大数，则将提交的任务存入到池队列(没有大小限制)中。
+        // 由于newFixedThreadPool只有核心线程并且这些核心线程不会被回收，这样它更加快速底相应外界的请求
+        ExecutorService executorService1 = Executors.newFixedThreadPool(3);
+
+        //创建一个定长线程池,corePoolSize = 传入值,主要用于执行定时任务和具有固定周期的重复任务
+        ExecutorService executorService2 = Executors.newScheduledThreadPool(3);
+
+        //创建一个单线程化的线程池
+        //内部只有一个核心线程，以无界队列方式来执行该线程，这使得这些任务之间不需要处理线程同步的问题
+        ExecutorService executorService3 = Executors.newSingleThreadExecutor();
+
+        //创建一个可缓存线程池程,适合执行大量的耗时较少的任务，当整个线程池都处于闲置状态时，线程池中的线程都会超时被停止
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.execute(runnable);// 使用线程池执行一个任务,execute 提交的线程任务不关心返回值
+        executor.execute(runnable);
+        executor.execute(runnable);
+//        executor.shutdown();// 关闭线程池,会阻止新任务提交，但不影响已提交的任务
+//        executor.shutdownNow();// 关闭线程池，阻止新任务提交，并且中断当前正在运行的线程(不一定能中断，除非自己处理了，因为Java的线程是协作式的)
+    }
+
 
     /**
      * Callable和 Future

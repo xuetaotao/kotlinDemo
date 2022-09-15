@@ -8,9 +8,11 @@ import android.os.Build
 import android.os.StrictMode
 import android.os.StrictMode.VmPolicy
 import androidx.multidex.MultiDex
+import com.github.moduth.blockcanary.BlockCanary
 import com.jlpay.kotlindemo.BuildConfig
-import com.jlpay.kotlindemo.net.ExceptionHandle
 import com.jlpay.kotlindemo.base.Constants
+import com.jlpay.kotlindemo.net.ExceptionHandle
+import com.jlpay.kotlindemo.study_library.blockcanary.AppBlockCanaryContext
 import com.jlpay.kotlindemo.utils.AppUtils
 import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.Beta
@@ -39,10 +41,9 @@ class MyApplication(
     tinkerResultIntent
 ) {
 
+    private lateinit var mContext: Context
+
     companion object {
-
-        lateinit var mContext: Context
-
         /**
          * 用户同意隐私政策后初始化第三方库
          */
@@ -113,7 +114,7 @@ class MyApplication(
         initBuglyHotFix()
         initBugly()
         //卡顿监控分析 (暂时屏蔽，影响 assembleRelease 命令执行，而且实际也未生效，原因待查询)
-//        BlockCanary.install(mContext, BlockCanaryContext()).start()
+        BlockCanary.install(mContext, AppBlockCanaryContext()).start()
     }
 
 

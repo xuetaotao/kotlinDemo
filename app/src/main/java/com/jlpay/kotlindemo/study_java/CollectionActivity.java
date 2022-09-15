@@ -236,6 +236,7 @@ public class CollectionActivity extends AppCompatActivity {
 
         //底层数据结构是哈希表(保证元素唯一)和链表(保证元素有序)，具有可预测的迭代顺序
         LinkedHashSet<String> linkedHashSet = new LinkedHashSet<>();
+        linkedHashSet.add("aa");
 
         //根据其元素的自然排序进行排序(从小到大)
         //自然排序就是让元素所属的类实现 Comparable 接口，重写 compareTo 方法

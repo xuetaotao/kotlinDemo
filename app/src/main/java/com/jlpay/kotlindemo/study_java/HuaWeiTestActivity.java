@@ -52,7 +52,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     }
 
     public void onClickTest(View view) {
-
+        hj36();
     }
 
 //    import java.util.Scanner;
@@ -61,6 +61,109 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //
 //        }
 //    }
+
+
+    /**
+     * HJ37 统计每个月兔子的总数
+     * 每太懂
+     * 斐波那契数列
+     */
+    public static int hj37(int month) {
+//        所有兔子就三种,每个月更新三种的数量，迭代完全部相加即为所有兔子数量
+//        k3-第三个月及以上，可生育
+//        k2-第二个月，不可生育
+//        k1-第一个月，小萌新
+        if (month < 3) {
+            return 1;
+        }
+        return hj37(month - 2) + hj37(month - 1);
+    }
+
+
+    /**
+     * HJ36 字符串加密
+     * 自己做的，复习时可以看看答案（人家用的是LinkedHashSet集合）
+     */
+    public static void hj36() {
+        //A B C D E F G H I G K L M N
+        //N I H A O B C D E F G J K L
+        //第一步，获取key，变成新字母表头部（需要经过字母去重）；按顺序补充未包含的26个其余字母，得到密码映射表。
+        //第二步，获取要加密的字符串，将字符串中的每个字母依次按照密码映射表得到新的字母，即是加密后的字符串。
+        Scanner scanner = new Scanner(System.in);
+        //另外，这两个值的获取可以用while循环判断一下while (sc.hasNext())，然后
+        //  {String s1 = sc.nextLine();
+        //            String s2 = sc.nextLine();}
+        String key = scanner.nextLine();//获取key
+//        String key = "nihao";//获取key
+        String str = scanner.nextLine().trim();//获取要加密的字符串
+//        String str = "ni";//获取要加密的字符串
+        char[] keyChars = key.toCharArray();
+        char[] alphaBetChars = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        List<Character> alphaBetList = new ArrayList<Character>();
+        List<Character> psdList = new ArrayList<>();//密码映射表
+        for (char keyChar : keyChars) {
+            if (!psdList.contains(keyChar)) {
+                psdList.add(keyChar);
+            }
+        }
+        for (char alphaBetChar : alphaBetChars) {
+            if (!psdList.contains(alphaBetChar)) {
+                psdList.add(alphaBetChar);
+            }
+            alphaBetList.add(alphaBetChar);
+        }
+
+        //第二步字符串加密
+        String[] splitStr = str.split(" ");
+        StringBuilder encodeStr = new StringBuilder();
+        for (String segmentStr : splitStr) {
+            char[] strChars = segmentStr.toCharArray();
+            for (char strChar : strChars) {
+                int index = alphaBetList.indexOf(strChar);
+                if (index != -1) {
+                    Character encodeStrChar = psdList.get(index);
+                    encodeStr.append(encodeStrChar);
+                }
+            }
+            encodeStr.append(" ");
+        }
+        System.out.println(encodeStr.toString());
+    }
+
+
+    /**
+     * HJ35 蛇形矩阵
+     * 只是简单看懂了
+     */
+    public static void hj35() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+            //读入正整数n
+            int n = scanner.nextInt();
+            //建立数组（n行）
+            int[][] result = new int[n][];
+            //记录依次赋予的数组值
+            int t = 1;
+            for (int i = 0; i < n; i++) {
+                //数组第i行有n-i个元素
+                result[i] = new int[n - i];
+                //对第i个对角线赋值，是按照1，2，3，4...的顺序依次赋值给对应位置
+                for (int j = 0; j < i + 1; j++) {
+                    result[i - j][j] = t;
+                    t++;
+                }
+            }
+            //输出数组值
+            for (int[] a : result) {
+                for (int a1 : a) {
+                    System.out.print(a1 + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
 
     /**
      * HJ34 图片整理

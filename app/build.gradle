@@ -311,7 +311,7 @@ dependencies {
 //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     //性能(卡顿)监控工具 BlockCanary
-//    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
+    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
 
     //--------------------------------------------------暂时没用到但是可以用的第三方库--------------------------------------------------//
 

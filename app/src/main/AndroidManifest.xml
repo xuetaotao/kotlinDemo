@@ -327,6 +327,8 @@
         <activity android:name=".study_jetpack.JetpackViewModelActivity" />
         <activity android:name=".study_java.DynamicProxyActivity" />
         <activity android:name=".study_java.DataStructActivity" />
+        <activity android:name=".study_android.PerformanceActivity" />
+        <activity android:name=".study_library.blockcanary.BlockCanaryActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

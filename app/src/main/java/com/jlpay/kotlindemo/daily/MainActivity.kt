@@ -26,6 +26,7 @@ import com.jlpay.kotlindemo.study_kotlin.CoroutinesActivity
 import com.jlpay.kotlindemo.study_kotlin.HigherAndExpandFuncActivity
 import com.jlpay.kotlindemo.study_kotlin.KotlinTestActivity
 import com.jlpay.kotlindemo.study_library.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity
+import com.jlpay.kotlindemo.study_library.blockcanary.BlockCanaryActivity
 import com.jlpay.kotlindemo.study_library.leakcanary.LeakCanaryActivity
 import com.jlpay.kotlindemo.study_library.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.study_library.rxjava.RxJavaActivity
@@ -220,12 +221,16 @@ class MainActivity : BaseMediaActivity() {
         //FrameWork
         addButton("FrameWork：Handler", HandlerActivity::class.java)
 
+        //性能优化
+        addButton("性能优化", PerformanceActivity::class.java)
+
         //开源框架
         addButton("开源框架：Pdf阅读器", PdfViewerActivity::class.java)
         addButton("开源框架：LeakCanary", LeakCanaryActivity::class.java)
         addButton("开源框架：RxJava2", RxJavaActivity::class.java)
         addButton("开源框架：RxJava2--RxLifecycle", RxLifecycleActivity::class.java)
         addButton("开源框架：RxJava2--RxAutoDispose", RxAutoDisposeActivity::class.java)
+        addButton("开源框架：BlockCanary", BlockCanaryActivity::class.java)
 
         //算法与数据结构
         addButton("算法与数据结构：华为笔试刷题", HuaWeiTestActivity::class.java)

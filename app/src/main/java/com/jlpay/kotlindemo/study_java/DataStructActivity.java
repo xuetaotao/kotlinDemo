@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.study_java;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Toast;
@@ -9,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jlpay.kotlindemo.R;
+
+import java.util.PriorityQueue;
 
 public class DataStructActivity extends AppCompatActivity {
 
@@ -19,7 +22,8 @@ public class DataStructActivity extends AppCompatActivity {
     }
 
     public void dataStructDemo(View view) {
-        sparseArrayDemo();
+//        sparseArrayDemo();
+        priorityQueueDemo();
 //        Toast.makeText(this, "dataStructDemo", Toast.LENGTH_SHORT).show();
     }
 
@@ -40,5 +44,23 @@ public class DataStructActivity extends AppCompatActivity {
         sKeys.put(7, "vm");
         String aa = sKeys.get(6);
         Toast.makeText(this, aa, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 小根堆，在 java 中就是优先级队列
+     * 优先级队列结构，底层就是堆结构。
+     */
+    public void priorityQueueDemo() {
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
+        heap.add(8);
+        heap.add(4);
+        heap.add(4);
+        heap.add(9);
+        heap.add(10);
+        heap.add(3);
+        while (!heap.isEmpty()) {
+            //依次弹出的话，是按照较小值先弹出，从小到大输出
+            Log.e("TAG", "priorityQueueDemo: " + heap.poll());
+        }
     }
 }

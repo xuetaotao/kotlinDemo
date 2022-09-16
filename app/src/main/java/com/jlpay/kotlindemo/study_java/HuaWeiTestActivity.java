@@ -173,7 +173,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         while (scanner.hasNext()) {
             String nextLine = scanner.next();
             char[] charArray = nextLine.toCharArray();
-            Arrays.sort(charArray);
+            Arrays.sort(charArray);//从小到大的顺序
             for (char c : charArray) {
                 System.out.print(c);
             }
@@ -334,8 +334,8 @@ public class HuaWeiTestActivity extends AppCompatActivity {
                     k++;
                 }
             }
-            Arrays.sort(r1);
-            Arrays.sort(r2);
+            Arrays.sort(r1);//从小到大的顺序
+            Arrays.sort(r2);//从小到大的顺序
             for (int i = 0, j = 0, k = 0; i < ch.length; i++) {
                 if (i % 2 == 0) {
                     //char是基本类型，基本类型是不会为null的，只有对象（如String）才可以为null
@@ -439,8 +439,8 @@ public class HuaWeiTestActivity extends AppCompatActivity {
             }
             char[] currentWorldArray = currentWorld.toCharArray();
             char[] worldArray = world.toCharArray();
-            Arrays.sort(currentWorldArray);
-            Arrays.sort(worldArray);
+            Arrays.sort(currentWorldArray);//从小到大的顺序
+            Arrays.sort(worldArray);//从小到大的顺序
             if (new String(currentWorldArray).equals(new String(worldArray))) {
                 brotherWorld.add(currentWorld);
             }
@@ -802,7 +802,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         for (int i = 0; i < nextInt; i++) {
             array[i] = sc.nextLine();
         }
-        Arrays.sort(array);
+        Arrays.sort(array);//从小到大的顺序
         for (String s : array) {
             System.out.println(s);
         }
@@ -1097,7 +1097,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ3 明明的随机数
      */
-    public static void randomSort2() {
+    public static void hj3() {
         Scanner sc = new Scanner(System.in);
         //获取个数
         int num = sc.nextInt();
@@ -1118,7 +1118,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
      * HJ3 明明的随机数
      */
 //    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void randomSort() {
+    public static void hj3two() {
         Scanner sc = new Scanner(System.in);
         int randomCount = Integer.parseInt(sc.nextLine());
         List<Integer> integerList = new ArrayList<>();
@@ -1130,7 +1130,8 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         }
 
         //排序方法一(直接排序)
-        Collections.sort(integerList);
+        Collections.sort(integerList);//Collections.sort是用来排序集合的，从小到大的顺序
+//        Arrays.sort(integerList);//Arrays.sort是用来排序数组的，从小到大的顺序
 
         //排序方法二  实现Comparable接口  该方法缺点就是只能对单一属性添加进行排序，而且写死在User类中
 
@@ -1140,12 +1141,17 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        Collections.sort(integerList, new Comparator<Integer>() {
 //            @Override
 //            public int compare(Integer o1, Integer o2) {
-//                //升序
+////         返回负数的时候，第一个参数排在前面
+////         返回正数的时候，第二个参数排在前面
+////         返回0的时候，谁在前面无所谓
+//                //升序，升序排列是把数据从小到大进行排列,而降序排列是把数据从大到小进行排列
 //                if (o1 > o2) {
-//                    return 1;
-//                } else {
-//                    return -1;
+//                    return 1;//o2 o1，升序排列，即从小到大排列
 //                }
+//                if (o1 < o2){
+//                    return -1;//o1 o2，升序排列，即从小到大排列
+//                }
+//                return 0;
 //            }
 //        });
         for (Integer i : integerList) {

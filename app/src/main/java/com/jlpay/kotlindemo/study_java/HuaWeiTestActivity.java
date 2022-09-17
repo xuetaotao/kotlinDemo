@@ -52,7 +52,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     }
 
     public void onClickTest(View view) {
-        hj36();
+        hj39TestIpConvert();
     }
 
 //    import java.util.Scanner;
@@ -62,6 +62,87 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        }
 //    }
 
+    /**
+     * HJ39 判断两个IP是否属于同一子网
+     */
+    public static void hj39TestIpConvert() {
+        String dataConvert = ipDataConvert("192.168.0.1");
+        System.out.println(dataConvert);
+        String ipAddress = ipDataConvert("3232235521");
+        System.out.println(ipAddress);
+    }
+
+    public static void hj39() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String subNetMask = scanner.next();//子网掩码
+            String ip1 = scanner.next();//ip地址1
+            String ip2 = scanner.next();//ip地址2
+            //第一步，若IP地址或子网掩码格式非法则输出1
+            if (!isLegalIp(subNetMask, false) || !isLegalIp(ip1, true) || !isLegalIp(ip2, true)) {
+                System.out.println(1);
+                continue;
+            }
+            //第二步，將IP地址分别与它们的子网掩码进行逻辑“与”运算后比較结果，相同则说明这两台主机在同一子网中。
+            //若IP1与IP2属于同一子网络输出0，若IP1与IP2不属于同一子网络输出2
+            Long subNetNum = Long.valueOf(ipDataConvert(subNetMask));//ipDataConvert这个方法重点看下
+            Long ip1Num = Long.valueOf(ipDataConvert(ip1));
+            Long ip2Num = Long.valueOf(ipDataConvert(ip2));
+            //这里直接使用十进制数进行按位与就可以了。
+            if ((subNetNum & ip1Num) == (subNetNum & ip2Num)) {
+                System.out.println(0);
+            } else {
+                System.out.println(2);
+            }
+        }
+    }
+
+    public static boolean isLegalIp(String ip, boolean isIp) {
+        boolean result = true;
+        if (ip == null || ip.length() == 0) {
+            result = false;
+            return result;
+        }
+        if (!ip.contains(".")) {
+            result = false;
+            return result;
+        }
+        String[] split = ip.split("\\.");
+        int[] subNetMaskArray = new int[split.length];
+        for (int i = 0; i < split.length; i++) {
+            Integer integer = Integer.valueOf(split[i]);
+            subNetMaskArray[i] = integer;
+            if (integer < 0 || integer > 255) {
+                result = false;
+                break;
+            }
+        }
+        if (!isIp) {
+            result = subNetMaskArray[0] >= subNetMaskArray[1] &&
+                    subNetMaskArray[1] >= subNetMaskArray[2] &&
+                    subNetMaskArray[2] >= subNetMaskArray[3];
+        }
+        return result;
+    }
+
+
+    /**
+     * HJ38 求小球落地5次后所经历的路程和第5次反弹的高度
+     */
+    public static void hj38(int height) {
+        int n = 5;//定义下面算的都是第5次
+        //第5次落地时，共经过多少米
+        double totalDistance = height;
+        for (int i = 1; i < n; i++) {
+            double heightN = height * 1.0d / (Math.pow(2, i));
+            totalDistance += heightN * 2;
+        }
+        System.out.println(totalDistance);
+
+        //第5次反弹高度
+        double height5 = height * 1.0d / (Math.pow(2, n));//Math.pow(2, 5)是2的5次方
+        System.out.println(height5);
+    }
 
     /**
      * HJ37 统计每个月兔子的总数

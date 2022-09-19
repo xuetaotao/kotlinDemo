@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityJlLibraryDebugBinding
-import com.jlpay.ocr.OcrManager
+//import com.jlpay.ocr.OcrManager
 
 /**
  * 嘉联 OCR 组件库功能测试
@@ -32,8 +32,8 @@ class JlLibraryDebugActivity : AppCompatActivity() {
         fun onClick(view: View) {
             when (view.id) {
                 R.id.button -> {
-                    OcrManager.with(this@JlLibraryDebugActivity)
-                        .start()
+//                    OcrManager.with(this@JlLibraryDebugActivity)
+//                        .start()
                 }
             }
         }

@@ -329,6 +329,7 @@
         <activity android:name=".study_java.DataStructActivity" />
         <activity android:name=".study_android.PerformanceActivity" />
         <activity android:name=".study_library.blockcanary.BlockCanaryActivity" />
+        <activity android:name=".study_library.blockcanary.BlockCanary2Activity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

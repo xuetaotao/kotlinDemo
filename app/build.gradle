@@ -287,7 +287,7 @@ dependencies {
 //    implementation 'com.jlpay.opensdk:imageload:2.0.1-SNAPSHOT'
 
     //ocr识别
-    implementation('com.jlpay.opensdk:ocr:2.0.3-SNAPSHOT')
+//    implementation('com.jlpay.opensdk:ocr:2.0.3-SNAPSHOT')
 
     //第三方分享
 //    implementation 'com.jlpay.opensdk:share:1.0.2'
@@ -312,6 +312,10 @@ dependencies {
 
     //性能(卡顿)监控工具 BlockCanary
     debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
+
+    //x2c框架：https://github.com/iReaderAndroid/X2C/blob/master/README_CN.md
+    implementation('com.zhangyue.we:x2c-lib:1.0.6')
+    annotationProcessor 'com.zhangyue.we:x2c-apt:1.1.2'
 
     //--------------------------------------------------暂时没用到但是可以用的第三方库--------------------------------------------------//
 

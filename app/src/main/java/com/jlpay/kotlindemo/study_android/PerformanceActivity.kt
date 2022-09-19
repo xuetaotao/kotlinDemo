@@ -1,7 +1,6 @@
 package com.jlpay.kotlindemo.study_android
 
 import android.os.Bundle
-import android.os.Debug
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,10 @@ import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.databinding.ActivityPerformanceBinding
 
 /**
- * 性能优化部分
+ * 性能优化部分，几个重要部分
+ * 1.内存泄漏   LeakCanaryActivity
+ * 2.卡顿监测   BlockCanaryActivity
+ * 3.启动优化   没写，DAG
  */
 class PerformanceActivity : AppCompatActivity() {
 
@@ -26,26 +28,9 @@ class PerformanceActivity : AppCompatActivity() {
         mBinding.lifecycleOwner = this
     }
 
-    /**
-     * SystemTrace的第二种用法：埋点
-     */
-    fun systemTraceDemo() {
-        //如果是做启动优化监测
-        //就在Application的onCreate()中调下面方法
-        Debug.startMethodTracing()
-//        Debug.startMethodTracingSampling()//这个方法也可以
-        //doSomething
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        //在MainActivity的onWindowFocusChanged()中调
-        Debug.stopMethodTracing()
-    }
 
     inner class OnClickProxy {
         fun performanceClick(view: View) {
-//            systemTraceDemo()
             Toast.makeText(this@PerformanceActivity, "hhh", Toast.LENGTH_SHORT).show()
         }
     }

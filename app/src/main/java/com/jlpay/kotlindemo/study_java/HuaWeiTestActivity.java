@@ -39,9 +39,20 @@ import java.util.regex.Pattern;
  * 2、对输入有效字符之前遇到的空白，next() 方法会自动将其去掉。
  * 3、只有输入有效字符后才将其后面输入的空白作为分隔符或者结束符。
  * 4、next() 不能得到带有空格的字符串。
+ * <p>
  * nextLine()：
  * 1、以Enter为结束符,也就是说 nextLine()方法返回的是输入回车之前的所有字符。
  * 2、可以获得空白。
+ * <p>
+ * hasNext()方法会判断接下来是否有非空字符.如果有,则返回true,否则返回false
+ * <p>
+ * hasNextLine() 方法会根据行匹配模式去判断接下来是否有一行(包括空行),如果有,则返回true,否则返回false
+ *
+ * <p>
+ * nextInt()：
+ * 1、nextInt()方法接收一个整形数据，该方法以空白符或者换行符作为分隔符读取输入中的下一个整形数据，
+ * 中间的多个空格符或者换行符都被跳过，读取完之后，光标依然停留在当前行。如需要让光标读取下一行的数据，
+ * 则需要用nextLine()方法读取缓存中的换行符之后移动到下一行。
  */
 public class HuaWeiTestActivity extends AppCompatActivity {
 
@@ -61,6 +72,148 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //
 //        }
 //    }
+
+    /**
+     * HJ42 学英语
+     */
+    public static void hj42() {
+        //第一步，做数字和英文的映射表
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            long nextLong = scanner.nextLong();
+            if (String.valueOf(nextLong).length() <= 9) {
+                System.out.println(getNumEnglish((int) nextLong));
+            } else {
+                System.out.println("error");
+            }
+        }
+        scanner.close();
+    }
+
+    public static String[] ones = new String[]{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+            "ten", "eleven", "twelve", "thirteen", "forteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"};
+
+    public static String[] twieties = new String[]{"zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+
+    public static String getNumEnglish(int num) {
+        String stren = "error";
+        if (num <= 20) {
+            stren = ones[num];
+        } else if (num < 100) {
+            int remainder = num % 10;
+            if (remainder == 0) {
+                stren = twieties[num / 10];
+            } else {
+                stren = twieties[num / 10] + " " + ones[remainder];
+            }
+        } else if (num < 1000) {
+            int remainder = num % 100;
+            if (remainder == 0) {
+                stren = ones[num / 100] + " hundred";
+            } else {
+                stren = ones[num / 100] + " hundred and " + getNumEnglish(remainder);
+            }
+        } else if (num < 1000000) {
+            int remainder = num % 1000;
+            if (remainder == 0) {
+                stren = getNumEnglish(num / 1000) + " thousand";
+            } else {
+                stren = getNumEnglish(num / 1000) + " thousand " + getNumEnglish(remainder);
+            }
+        } else if (num < 1000000000) {
+            int remainder = num % 1000000;
+            if (remainder == 0) {
+                stren = getNumEnglish(num / 1000000) + " million";
+            } else {
+                stren = getNumEnglish(num / 1000000) + " million " + getNumEnglish(remainder);
+            }
+        }
+        return stren;
+    }
+
+
+    /**
+     * HJ41 称砝码
+     */
+    public static void hj41() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            //第一步，获取三个参数，并把每种重量的砝码和对应的砝码数量放到Map中
+            //TODO 最好做下参数做范围检查
+            String weightTypeNum = scanner.nextLine();//砝码的种数(范围[1,10])
+            String weightEveryOne = scanner.nextLine();//每种砝码的重量(范围[1,2000])
+            String[] weightEveryOneSplit = weightEveryOne.split(" ");
+            String numEveryOne = scanner.nextLine();//每种砝码对应的数量(范围[1,10])
+            String[] numEveryOneSplit = numEveryOne.split(" ");
+            if (weightEveryOneSplit.length != numEveryOneSplit.length) {
+                return;
+            }
+            HashSet<Integer> resultSet = new HashSet<>();//存放所有可能的结果，不用担心重复问题
+            resultSet.add(0);
+            for (int i = 0; i < weightEveryOneSplit.length; i++) {
+                List<Integer> list = new ArrayList<>(resultSet);
+                for (int j = 0; j <= Integer.parseInt(numEveryOneSplit[i]); j++) {
+                    for (int k = 0; k < list.size(); k++) {
+                        resultSet.add(list.get(k) + Integer.parseInt(weightEveryOneSplit[i]) * j);
+                    }
+                }
+            }
+            System.out.println(resultSet.size());
+        }
+    }
+
+
+    /**
+     * HJ40 统计字符
+     */
+    public static void hj40Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            String nextLine = scanner.nextLine();
+            String s1 = nextLine.replaceAll("[A-Z]+[a-z]", "");
+            System.out.println(nextLine.length() - s1.length());
+            String s2 = s1.replaceAll(" ", "");
+            System.out.println(s1.length() - s2.length());
+            String s3 = s2.replaceAll("[0-9]", "");
+            System.out.println(s2.length() - s3.length());
+            System.out.println(s3.length());
+        }
+    }
+
+
+    public static void hj40() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            String nextLine = scanner.nextLine();
+            char[] charArray = nextLine.toCharArray();
+            int englishNum = 0;
+            int numberNum = 0;
+            int spaceNum = 0;
+            int otherNum = 0;
+            Pattern pattern = Pattern.compile("[A-Za-z]");
+            Pattern pattern2 = Pattern.compile("[0-9]");
+            for (char ch : charArray) {
+                Matcher matcher = pattern.matcher(String.valueOf(ch));
+                boolean matchEngOk = matcher.find();
+                Matcher matcher2 = pattern2.matcher(String.valueOf(ch));
+                boolean matchNumOk = matcher2.find();
+                if (ch == ' ') {
+                    spaceNum++;
+                } else if (matchEngOk) {
+                    englishNum++;
+                } else if (matchNumOk) {
+                    numberNum++;
+                } else {
+                    otherNum++;
+                }
+            }
+            System.out.println(englishNum);
+            System.out.println(spaceNum);
+            System.out.println(numberNum);
+            System.out.println(otherNum);
+        }
+    }
+
 
     /**
      * HJ39 判断两个IP是否属于同一子网
@@ -753,7 +906,9 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * 检查是否满足正则
      * Matcher  find()方法与matches()方法区别
-     * https://blog.csdn.net/weixin_30364147/article/details/95768264?spm=1001.2101.3001.6650.5&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5.pc_relevant_paycolumn_v3&utm_relevant_index=9
+     * https://www.cnblogs.com/hubingxu/archive/2012/02/17/2355516.html
+     * https://blog.csdn.net/weixin_43718346/article/details/120424459
+     * <p>
      * find()方法是部分匹配，是查找输入串中与模式匹配的子串，如果该匹配的串有组还可以使用group()函数
      * matches()是全部匹配，是将整个输入串与模式匹配，如果要验证一个输入的数据是否为数字类型或其他类型，一般要用matches()
      *

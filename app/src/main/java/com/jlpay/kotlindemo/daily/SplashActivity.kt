@@ -2,9 +2,6 @@ package com.jlpay.kotlindemo.daily
 
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import android.os.MessageQueue
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import com.jlpay.kotlindemo.utils.Utils

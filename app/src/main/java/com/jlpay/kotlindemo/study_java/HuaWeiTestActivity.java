@@ -19,10 +19,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -66,12 +69,105 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         hj39TestIpConvert();
     }
 
-//    import java.util.Scanner;
-//    public class Main {
-//        public static void main(String[] args){
-//
-//        }
-//    }
+
+    public static void hj43Two() {
+        //TODO
+    }
+
+    /**
+     * HJ43 迷宫问题
+     * 思路：广度优先遍历矩阵。代价相同的图中，广度优先遍历可以保证遍历到的目标点就是经过最短路径到达的点。
+     * 为此，我们可以创建一个Point类，属性为横纵坐标和父节点。从（0，0）出发，将经过的坐标点都设为1，
+     * 避免重复经过而进入死循环。把当前点的上下左右值为0的点都加入队列中，
+     * 直到遇见出口为止。遇到出口时，pos的father路径就是最短路径的逆路径。此时只需要把逆路径反转一下即可。
+     * <p>
+     * for循环中++i和i++的区别
+     * https://blog.csdn.net/qq_36484670/article/details/106236573
+     * 无论是i++ 还是 ++i，for循环中所引用的都是 i 计算后的值，因此在for循环中 ++i 和 i++ 的结果是一样的，
+     * 但是性能是不同的。在大量数据的时候++i的性能要比i++的性能好
+     */
+    public static void hj43() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+            int row = scanner.nextInt();
+            int column = scanner.nextInt();
+            int[][] grid = new int[row][column];
+            //注意这里是++i和++j
+            for (int i = 0; i < row; ++i) {
+                for (int j = 0; j < column; ++j) {
+                    grid[i][j] = scanner.nextInt();
+                }
+            }
+            Queue<Point> que = new LinkedList<>();//队列，先进先出
+            que.offer(new Point(0, 0, null));//入队。不超出容量限制的情况下插入队列
+            grid[0][0] = 1;
+            Point pos = null;
+            while (true) {
+                //获取当前点
+                pos = que.poll();//出队。返回此队列的头部，如果此队列为空，则返回 null。
+                if (pos == null) {
+                    break;
+                }
+                int px = pos.px;
+                int py = pos.py;
+                //到达矩阵右下角了
+                if (px == row - 1 && py == column - 1) {
+                    break;
+                } else {
+                    //把当前点的上下左右值为0的点都加入队列中
+                    //右
+                    if (px + 1 < row && grid[px + 1][py] == 0) {
+                        grid[px + 1][py] = 1;
+                        que.offer(new Point(px + 1, py, pos));
+                    }
+                    //上
+                    if (py - 1 >= 0 && grid[px][py - 1] == 0) {
+                        grid[px][py - 1] = 1;
+                        que.offer(new Point(px, py - 1, pos));
+                    }
+                    //左
+                    if (px - 1 >= 0 && grid[px - 1][py] == 0) {
+                        grid[px - 1][py] = 1;
+                        que.offer(new Point(px - 1, py, pos));
+                    }
+                    //下
+                    if (py + 1 < column && grid[px][py + 1] == 0) {
+                        grid[px][py + 1] = 1;
+                        que.offer(new Point(px, py + 1, pos));
+                    }
+                }
+            }
+            Stack<Point> stack = new Stack<>();//栈，先进后出
+            //这时候的pos就是矩阵右下角的点
+            //从尾到头入栈
+            while (pos != null) {
+                stack.push(pos);//入栈
+                pos = pos.father;
+            }
+            //从头到尾出栈
+            while (!stack.isEmpty()) {
+                Point temp = stack.peek();//查看此堆栈顶部的对象而不将其从堆栈中移除。
+                stack.pop();//出栈。移除此堆栈顶部的对象并将该对象作为此函数的值返回。
+                System.out.println("(" + temp.px + "," + temp.py + ")");
+            }
+        }
+    }
+
+    static class Point {
+        int px;
+        int py;
+        Point father;
+
+        Point(int px, int py, Point father) {
+            this.px = px;
+            this.py = py;
+            this.father = father;
+        }
+
+        Point() {
+        }
+    }
+
 
     /**
      * HJ42 学英语

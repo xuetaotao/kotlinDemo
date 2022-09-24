@@ -28,6 +28,7 @@ import com.jlpay.kotlindemo.study_kotlin.KotlinTestActivity
 import com.jlpay.kotlindemo.study_library.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity
 import com.jlpay.kotlindemo.study_library.blockcanary.BlockCanary2Activity
 import com.jlpay.kotlindemo.study_library.blockcanary.BlockCanaryActivity
+import com.jlpay.kotlindemo.study_library.httpdns.HttpDnsActivity
 import com.jlpay.kotlindemo.study_library.leakcanary.LeakCanaryActivity
 import com.jlpay.kotlindemo.study_library.rxjava.RxAutoDisposeActivity
 import com.jlpay.kotlindemo.study_library.rxjava.RxJavaActivity
@@ -233,6 +234,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("开源框架：LeakCanary", LeakCanaryActivity::class.java)
         addButton("开源框架：BlockCanary", BlockCanaryActivity::class.java)
         addButton("开源框架：BlockCanary2", BlockCanary2Activity::class.java)
+        addButton("阿里HttpDns框架：HttpDnsActivity", HttpDnsActivity::class.java)
 
         //算法与数据结构
         addButton("算法与数据结构：华为笔试刷题", HuaWeiTestActivity::class.java)

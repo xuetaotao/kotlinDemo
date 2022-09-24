@@ -29,6 +29,8 @@ android {
                 BAIDU_MAP_API_KEY  : "Ca3ngPa1TMn5S7ElnTcfN81rS0sISo4q",
                 TENCENT_MAP_API_KEY: "UFYBZ-ZUX6J-TWSFH-KMAIY-R7VBE-ANF5F"
         ]
+
+//        resConfigs "zh-rCN" // 不用支持国际化只需打包中文资源
     }
 
     //不要随意换签名文件，会影响百度和高德地图定位
@@ -316,6 +318,13 @@ dependencies {
     //x2c框架：https://github.com/iReaderAndroid/X2C/blob/master/README_CN.md
     implementation('com.zhangyue.we:x2c-lib:1.0.6')
     annotationProcessor 'com.zhangyue.we:x2c-apt:1.1.2'
+
+    //阿里Dns域名解析
+    implementation('com.aliyun.ams:alicloud-android-httpdns:1.3.3@aar') {
+        transitive true
+        exclude group: 'com.aliyun.ams', module: 'alicloud-android-utdid'
+    }
+    implementation 'com.aliyun.ams:alicloud-android-utdid:1.1.5.3'
 
     //--------------------------------------------------暂时没用到但是可以用的第三方库--------------------------------------------------//
 

@@ -83,11 +83,15 @@ public class CollectionActivity extends AppCompatActivity {
 
         Map<String, String> hashMap = new HashMap<>();
         hashMap.put("aa", "bb");
+        hashMap.put("aa", "cc");//这样会更新aa对应的value值，put方法既是新增又是更新
 
         Map<String, String> linkedHashMap = new LinkedHashMap<>();
 
         //根据其元素(这里是键，即Key)的自然排序进行排序(从小到大)
-        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+        TreeMap<Integer, String> treeMap = new TreeMap<>();
+        treeMap.put(2, "bb");
+        treeMap.put(3, "bb");
+        Integer firstKey = treeMap.firstKey();
 
         //线程安全,使用synchronized来修饰方法函数来保证线程安全,但是在多线程运行环境下效率表现非常低下
         Map<String, String> hashtable = new Hashtable<>();
@@ -227,6 +231,7 @@ public class CollectionActivity extends AppCompatActivity {
 
     /**
      * Set
+     * Set可以被认为是一个集合，集合内部是同类型的元素，他们之间没有先后顺序，但是不允许重复
      */
     private void setDemo() {
         Set<String> stringSet = new HashSet<>();

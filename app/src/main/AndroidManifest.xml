@@ -331,6 +331,7 @@
         <activity android:name=".study_library.blockcanary.BlockCanaryActivity" />
         <activity android:name=".study_library.blockcanary.BlockCanary2Activity" />
         <activity android:name=".study_library.httpdns.HttpDnsActivity" />
+        <activity android:name=".daily.practice.ShuDuGameActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

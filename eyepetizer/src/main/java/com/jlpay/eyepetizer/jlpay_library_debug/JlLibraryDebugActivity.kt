@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.jlpay.eyepetizer.R
 import com.jlpay.eyepetizer.databinding.ActivityJlLibraryDebugBinding
-import com.jlpay.features.imageload.ImagePicker
+//import com.jlpay.features.imageload.ImagePicker
 
 class JlLibraryDebugActivity : AppCompatActivity() {
 
@@ -33,29 +33,29 @@ class JlLibraryDebugActivity : AppCompatActivity() {
         fun onClick(view: View) {
             when (view.id) {
                 R.id.button -> {
-                    ImagePicker.with(this@JlLibraryDebugActivity)
-                        .isCamera(false)
-//                        .compress(true)
-//                        .compressType(ImageCompress.ImageCompressType.LuBan)
-//                        .compressIgnoreSize(1000)
-                        .crop(true)
-                        .imagePickerListener(object : ImagePicker.ImagePickerListener {
-                            override fun onFailed(msg: String, code: String) {
-                                Toast.makeText(
-                                    this@JlLibraryDebugActivity,
-                                    msg,
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                            }
-
-                            override fun onSuccess(imagePath: String) {
-                                Glide.with(this@JlLibraryDebugActivity)
-                                    .load(imagePath)
-                                    .into(mBinding.ivImage)
-                            }
-                        })
-                        .startPick()
+//                    ImagePicker.with(this@JlLibraryDebugActivity)
+//                        .isCamera(false)
+////                        .compress(true)
+////                        .compressType(ImageCompress.ImageCompressType.LuBan)
+////                        .compressIgnoreSize(1000)
+//                        .crop(true)
+//                        .imagePickerListener(object : ImagePicker.ImagePickerListener {
+//                            override fun onFailed(msg: String, code: String) {
+//                                Toast.makeText(
+//                                    this@JlLibraryDebugActivity,
+//                                    msg,
+//                                    Toast.LENGTH_SHORT
+//                                )
+//                                    .show()
+//                            }
+//
+//                            override fun onSuccess(imagePath: String) {
+//                                Glide.with(this@JlLibraryDebugActivity)
+//                                    .load(imagePath)
+//                                    .into(mBinding.ivImage)
+//                            }
+//                        })
+//                        .startPick()
                 }
             }
         }

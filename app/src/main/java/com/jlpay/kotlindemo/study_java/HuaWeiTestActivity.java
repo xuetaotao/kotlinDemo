@@ -67,8 +67,277 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     }
 
     public void onClickTest(View view) {
-        hj39TestIpConvert();
+//        hj39TestIpConvert();
+        arithmeticTest();
     }
+
+    /**
+     * HJ51 输出单向链表中倒数第k个结点
+     * 思路：在遍历到整数第k个时标记头节点，然后标记点和遍历点同时向后走，此时标记点和遍历点永远距离k，
+     * 当遍历完成后标记点走到倒数第k,直接输出。时间复杂度O(n)
+     * 也就是快慢指针思路，只不过这里的快慢指针速度相同
+     */
+    public static void hj51() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = Integer.parseInt(scanner.next());
+            ListNode51 head = new ListNode51(-1);
+            ListNode51 temp = head;
+            //生成链表
+            for (int i = 0; i < n; i++) {
+                ListNode51 node = new ListNode51(scanner.nextInt());
+                temp.next = node;
+                temp = temp.next;
+            }
+            int k = Integer.parseInt(scanner.next());
+            //使用快慢指针
+            if (getKthFromEnd(head.next, k) != null) {
+                System.out.println(getKthFromEnd(head.next, k).val);
+            } else {
+                System.out.println(0);
+            }
+        }
+    }
+
+    static ListNode51 getKthFromEnd(ListNode51 head, int k) {
+        if (head == null) {
+            return null;
+        }
+        ListNode51 fast = head;
+        ListNode51 slow = head;
+        //快指针先走k步
+        for (int i = 0; i < k; i++) {
+            if (fast == null) {
+                return fast;
+            }
+            fast = fast.next;
+        }
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    static class ListNode51 {
+        int val;
+        ListNode51 next;
+
+        public ListNode51(int val) {
+            this.val = val;
+        }
+
+        public ListNode51(int val, ListNode51 next) {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
+    /**
+     * HJ50 四则运算
+     * 注意：可能出现多个数字连在一起组成多位数，可能出现负数
+     * 利用栈（先进后出）求解
+     * TODO 没搞懂
+     */
+    public static void hj50() {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        int n = s.length();
+        //把加减乘除分成2组，分别是+-和*/
+        //用o1和o2来储存当前符号，具体定义为 :+号，o1=1；-号, o1=-1；*号 , o2=1；/号 , o2=-1；
+        int num1 = 0;
+        int o1 = 1;
+        int num2 = 1;
+        int o2 = 1;
+        Stack<Integer> stk = new Stack<>();
+        //时间复杂度：O(n)，时间复杂度和表达式长度正相关
+        //空间复杂度：O(n)，需要一个栈，长度和表达式长度正相关
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (Character.isDigit(c)) {
+                //遇到数字则定义num2
+                int cur = 0;
+                while (i < n && Character.isDigit(s.charAt(i))) {
+                    cur = cur * 10 + (s.charAt(i) - '0');
+                    i++;
+                }
+                i--;//用在下面 “-”是负号还是减号的判断
+                num2 = o2 == 1 ? num2 * cur : num2 / cur;
+
+            } else if (c == '*' || c == '/') {
+                //遇到×÷定义o2
+                o2 = c == '*' ? 1 : -1;
+
+            } else if (c == '{' || c == '[' || c == '(') {
+                //遇到括号则保存当前结果，并初始化
+                stk.push(num1);//入栈
+                stk.push(o1);
+                stk.push(num2);
+                stk.push(o2);
+                num1 = 0;
+                o1 = 1;
+                num2 = 1;
+                o2 = 1;
+
+            } else if (c == '+' || c == '-') {
+                //遇到加减，说明可以开始计算，计算num1并对定义其他几个变量
+                if (c == '-' &&
+                        (i == 0 || s.charAt(i - 1) == '(' || s.charAt(i - 1) == '[' || s.charAt(i - 1) == '{')
+                ) {
+                    //“-”是负号还是减号的判断，减号就跳出本次循环
+                    o1 = -1;
+                    continue;
+                }
+                num1 = num1 + o1 * num2;
+                o1 = (c == '+' ? 1 : -1);
+                num2 = 1;
+                o2 = 1;
+
+            } else {
+                //遇到右括号，则出栈，并计算num2
+                int cur = num1 + o1 * num2;
+                o2 = stk.pop();
+                num2 = stk.pop();
+                o1 = stk.pop();
+                num1 = stk.pop();
+                num2 = o2 == 1 ? num2 * cur : num2 / cur;
+            }
+        }
+        System.out.println(num1 + o1 * num2);
+    }
+
+
+    //四则运算测试
+    public static void arithmeticTest() {
+        int a = -4 / 2; //-2
+        System.out.println("结果是：" + a);
+    }
+
+    public static void hj48Two() {
+        Scanner in = new Scanner(System.in);
+        while (in.hasNext()) {
+            int n = Integer.parseInt(in.next());
+            int val = Integer.parseInt(in.next());
+            ListNode48 listNode48Head = new ListNode48(val);
+            for (int i = 1; i < n; i++) {
+                val = Integer.parseInt(in.next());
+                int node = Integer.parseInt(in.next());
+                insert48(val, node, listNode48Head);
+            }
+            int node = Integer.parseInt(in.next());
+            ListNode48 newHead = delete48(node, listNode48Head);
+            while (newHead != null) {
+                System.out.print(newHead.val + " ");
+                newHead = newHead.next;
+            }
+            System.out.println();
+        }
+    }
+
+    //在2->3->4 链表中插入节点值为5的节点变为 2->5->3->4
+    //val = 5, node = 2
+    static ListNode48 insert48(int val, int node, ListNode48 head) {
+        while (head.val != node) {
+            head = head.next;
+        }
+        ListNode48 newNode = new ListNode48(val, head.next);
+        head.next = newNode;
+        return head;
+    }
+
+    //node：节点上的值为node的节点
+    static ListNode48 delete48(int node, ListNode48 head) {
+        ListNode48 dummy = new ListNode48(0, head);
+        ListNode48 p = dummy;
+        while (p.next != null && p.next.val != node) {
+            p = p.next;
+        }
+        //如果找到了节点上的值为node的节点，就删除它
+        if (p.next != null) {
+            p.next = p.next.next;
+        }
+        //否则就不做任何处理
+        head = dummy.next;
+        return head;
+    }
+
+    static class ListNode48 {
+        int val;
+        ListNode48 next;
+
+        public ListNode48(int val) {
+            this.val = val;
+        }
+
+        public ListNode48(int val, ListNode48 next) {
+            this.val = val;
+            this.next = next;
+        }
+    }
+
+
+    //不需要链表，一个有插入功能的数组就可以了。比如Java中直接用一个ArrayList即可。
+    public static void hj48() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            int total = sc.nextInt();
+            int head = sc.nextInt();
+
+            List<Integer> linkedlist = new ArrayList<>();
+            linkedlist.add(head);
+            for (int i = 0; i < total - 1; i++) {
+                int value = sc.nextInt();
+                int target = sc.nextInt();
+                linkedlist.add(linkedlist.indexOf(target) + 1, value);
+            }
+            int remove = sc.nextInt();
+            linkedlist.remove(linkedlist.indexOf(remove));
+            for (int i = 0; i < linkedlist.size(); i++) {
+                System.out.print(linkedlist.get(i) + " ");
+            }
+            System.out.println();
+        }
+    }
+
+
+    /**
+     * HJ48 从单向链表中删除指定值的节点
+     * 自己的思路 未完成
+     */
+    public static void hj48Todo() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+            //第一步：获取 输入链表结点个数，输入头结点的值
+            int linkedListLen = scanner.nextInt();
+            int headNodeValue = scanner.nextInt();
+            //第二步：按照格式插入各个结点，完成链表
+            //注意：某个节点的next是可能发生变化的
+            Node<Integer> head = new Node<>(headNodeValue);
+            for (int i = 0; i < linkedListLen; i++) {
+                //value2->value1
+                int value1 = scanner.nextInt();
+                int value2 = scanner.nextInt();
+                //遍历链表，找到链表上节点值等于value2的节点，将它的next节点改为value1，
+                // 原来该节点后面的部分链接到新的value1节点后面
+                //TODO 不会写了
+            }
+        }
+        //第三步：获取要删除的结点的值，进行删除，打印删除节点后的新链表的值。
+    }
+
+    //定义一个单链表
+    static class Node<T> {
+        T value;
+        Node<T> next;
+
+        public Node(T value) {
+            this.value = value;
+        }
+
+        public Node() {
+        }
+    }
+
 
     /**
      * HJ46 截取字符串

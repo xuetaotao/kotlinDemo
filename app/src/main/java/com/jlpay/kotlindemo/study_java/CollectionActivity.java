@@ -1,8 +1,8 @@
 package com.jlpay.kotlindemo.study_java;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -63,7 +64,8 @@ public class CollectionActivity extends AppCompatActivity {
         Student[] students2 = new Student[]{student, student, student};
         Student[] students3 = {};//空数组
 
-        Toast.makeText(this, "OnClick", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "OnClick", Toast.LENGTH_SHORT).show();
+        mapDemo();
     }
 
     /**
@@ -84,6 +86,11 @@ public class CollectionActivity extends AppCompatActivity {
         Map<String, String> hashMap = new HashMap<>();
         hashMap.put("aa", "bb");
         hashMap.put("aa", "cc");//这样会更新aa对应的value值，put方法既是新增又是更新
+        String aa = hashMap.get("aa");
+        String bb = hashMap.get("bb");//bb会返回为null，不存在的key调用get方法会返回Null
+        Log.e("TAG", "mapDemo: " + bb);
+//        int cc = null;//基本类型不能赋值为Null
+        Integer cc2 = null;//引用类型就可以赋值为Null
 
         Map<String, String> linkedHashMap = new LinkedHashMap<>();
 
@@ -218,6 +225,14 @@ public class CollectionActivity extends AppCompatActivity {
         String linkedListLast = linkedList.getLast();//返回此列表中的最后一个元素
         String removeFirst = linkedList.removeFirst();//从此列表删除并返回第一个元素
         String removeLast = linkedList.removeLast();//从此列表删除并返回最后一个元素
+
+        //Deque
+        Deque<String> deque = new LinkedList<>();//队列，先进先出
+
+        //LinkedList是双向链表，双向链表是可以做队列的。
+        Queue<String> queue = new LinkedList<>();//队列，先进先出
+        queue.add("aa");//入队
+        String poll = queue.poll();//出队
 
 
         //线程安全,通过数组保存数据,其本质上是一个队列

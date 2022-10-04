@@ -24,6 +24,7 @@ public class DataStructActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data_struct);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void dataStructDemo(View view) {
 //        sparseArrayDemo();
 //        priorityQueueDemo();

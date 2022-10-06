@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jlpay.kotlindemo.R;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -70,6 +72,48 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        hj39TestIpConvert();
         arithmeticTest();
     }
+
+    /**
+     * TODO 没看懂
+     * HJ52 计算字符串的编辑距离
+     * Java版本,看到字符串修改代价第一时间想到动态规划
+     * A[0,...i-1]最后修改为B[0,...j-1]，有以下两种情况：
+     * （一）A[i-1] == B[j-1]时，最后一个元素不用动，只用考虑A[0,...i-2]编辑为B[0,...j-2]需要的代价,dp[i][j] = dp[i-1][j-1]
+     * （二）A[i-1]!=B[j-1]时，又可以分成以下三种情况：
+     * 1、从A[0,...i-2]编辑为B[0,...j-1]，再删除A[i-1]
+     * 2、从A[0,...i-1]编辑为B[0,...j-2]，再插入B[j-1]
+     * 3、从A[0,...i-2]编辑为B[0,...j-2]，再将A[i-1]修改为B[j-1]
+     * 每次取三种情况最小值
+     * 最后返回dp[n][m];
+     */
+    public static void hj52() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String s1 = sc.next();
+            String s2 = sc.next();
+            int dp[][] = new int[s1.length() + 1][s2.length() + 1];
+            dp[0][0] = 0;
+            //dp.length获取的是行数
+            for (int i = 1; i < dp.length; i++) {
+                dp[i][0] = i;
+            }
+            //dp[0].length获取的是列数
+            for (int i = 1; i < dp[0].length; i++) {
+                dp[0][i] = i;
+            }
+            for (int i = 1; i < dp.length; i++) {
+                for (int j = 1; j < dp[0].length; j++) {
+                    if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                        dp[i][j] = dp[i - 1][j - 1];
+                    } else {
+                        dp[i][j] = Math.min(dp[i - 1][j - 1] + 1, Math.min(dp[i][j - 1] + 1, dp[i - 1][j] + 1));
+                    }
+                }
+            }
+            System.out.println(dp[s1.length()][s2.length()]);
+        }
+    }
+
 
     /**
      * HJ51 输出单向链表中倒数第k个结点
@@ -1444,7 +1488,34 @@ public class HuaWeiTestActivity extends AppCompatActivity {
      * HJ19 简单错误记录
      */
     public static void hj19() {
-        //较难，可以先略过，有时间回来看
+        try {
+            BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+            Map<String, Integer> map = new LinkedHashMap<>();
+            String tstr = null;
+            while ((tstr = bf.readLine()) != null &&
+                    !tstr.equals("")) {
+                //"\\s+"匹配任意空白字符，如换页，换行符，回车符，制表符，垂直制表符
+                String[] str = tstr.split("\\s+");
+                String fname = str[0].substring(str[0].lastIndexOf("\\") + 1);
+                fname = fname.substring(Math.max(fname.length() - 16, 0)) + " " + str[1];
+                Integer tmp = map.get(fname);
+                if (tmp == null) {
+                    map.put(fname, 1);
+                } else {
+                    map.put(fname, tmp + 1);
+                }
+            }
+            int count = 0;
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                if (map.size() - count <= 8) {
+                    System.out.println(entry.getKey() + " " + entry.getValue());
+                }
+                count++;//注意，这个不能放在if里面,比如map.size()是10，一开始count是0,10-0>8，没有输出
+                //而最后只用输出最后出现的八条错误记录
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**
@@ -1502,10 +1573,63 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
 
     /**
+     * TODO 看不懂
      * HJ16 购物单
+     * 注意：1.如果要买归类为附件的物品，必须先买该附件所属的主件，且每件物品只能购买一次。
      */
     public static void hj16() {
-        //不会，过
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            int money = scanner.nextInt();//总钱数N
+            int m = scanner.nextInt();//希望购买的物品个数m
+            scanner.nextLine();
+            money /= 10;//每件物品的价格（都是 10 元的整数倍）
+            //定义个数组用来存放接下来输入的每件（每行）物品的基本数据：价格，重要度，主件还是附件
+            int[][] prices = new int[m + 1][3];
+            int[][] weights = new int[m + 1][3];
+            for (int i = 1; i <= m; i++) {
+                int a = scanner.nextInt();
+                int b = scanner.nextInt();
+                //从第 2 行到第 m+1 行，第 j 行给出了编号为 j-1 的物品的基本数据
+                //q就是这里的c,如果 q=0 ，表示该物品为主件，如果 q>0 ，表示该物品为附件， q 是所属主件的编号
+                int c = scanner.nextInt();
+                a /= 10;//price
+                b = b * a;//weight，该件商品的满意度
+                if (c == 0) {
+                    // 主件
+                    prices[i][0] = a;
+                    weights[i][0] = b;
+
+                } else if (prices[c][1] == 0) {
+                    // 附件1
+                    prices[c][1] = a;
+                    weights[c][1] = b;
+
+                } else {
+                    // 附件2
+                    prices[c][2] = a;
+                    weights[c][2] = b;
+                }
+                scanner.nextLine();
+            }
+            int[][] dp = new int[m + 1][money + 1];
+            for (int i = 1; i <= m; i++) {
+                for (int j = 1; j <= money; j++) {
+                    int a = prices[i][0];
+                    int b = weights[i][0];
+                    int c = prices[i][1];
+                    int d = weights[i][1];
+                    int e = prices[i][2];
+                    int f = weights[i][2];
+
+                    dp[i][j] = j - a >= 0 ? Math.max(dp[i - 1][j], dp[i - 1][j - a] + b) : dp[i - 1][j];
+                    dp[i][j] = j - a - c >= 0 ? Math.max(dp[i][j], dp[i - 1][j - a - c] + b + d) : dp[i][j];
+                    dp[i][j] = j - a - e >= 0 ? Math.max(dp[i][j], dp[i - 1][j - a - e] + b + f) : dp[i][j];
+                    dp[i][j] = j - a - c - e >= 0 ? Math.max(dp[i][j], dp[i - 1][j - a - c - e] + b + d + f) : dp[i][j];
+                }
+            }
+            System.out.println(dp[m][money] * 10);
+        }
     }
 
     /**

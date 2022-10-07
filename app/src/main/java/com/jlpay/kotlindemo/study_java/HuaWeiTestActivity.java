@@ -1185,9 +1185,74 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
     /**
      * HJ28 素数伴侣
+     * 匈牙利算法
+     * 思路：1.首先定义两个list容器，分别存储输入整数中的奇数和偶数
+     * 2.然后利用匈牙利算法找到“素数伴侣”对数最多时的配对数。匈牙利算法的核心思想是先到先得，能让就让。
+     * 3.最后输出“素数伴侣”最多时的对数。
      */
     public static void hj28() {
-        //不会，过
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//待挑选的自然数的个数
+            int[] arr = new int[n];//用于记录输入的n个整数
+            ArrayList<Integer> odds = new ArrayList<>();//用于存储所有的奇数
+            ArrayList<Integer> evens = new ArrayList<>();//用于存储所有的偶数
+            for (int i = 0; i < n; i++) {
+                arr[i] = scanner.nextInt();
+                //将奇数添加到odds
+                if (arr[i] % 2 == 1) {
+                    odds.add(arr[i]);
+                }
+                //将偶数添加到evens
+                if (arr[i] % 2 == 0) {
+                    evens.add(arr[i]);
+                }
+            }
+            //下标对应已经匹配的偶数的下标，值对应这个偶数的伴侣
+            int[] matcheven = new int[evens.size()];
+            //记录伴侣的对数
+            int count = 0;
+            for (int i = 0; i < odds.size(); i++) {
+                //用于标记对应的偶数是否查找过
+                boolean[] v = new boolean[evens.size()];
+                //如果匹配上，则计数加1
+                if (find28(odds.get(i), matcheven, evens, v)) {
+                    count++;
+                }
+            }
+            System.out.println(count);
+        }
+    }
+
+    //判断奇数x能否找到伴侣
+    public static boolean find28(int x, int[] matcheven, ArrayList<Integer> evens, boolean[] v) {
+        for (int i = 0; i < evens.size(); i++) {
+            //该位置偶数没被访问过，并且能与x组成素数伴侣
+            if (isPrime28(x + evens.get(i)) && v[i] == false) {
+                v[i] = true;
+                //如果i位置偶数还没有伴侣，则与x组成伴侣，如果已经有伴侣，并且这个伴侣能重新找到新伴侣，
+                //则把原来伴侣让给别人，自己与x组成伴侣
+                if (matcheven[i] == 0 || find28(matcheven[i], matcheven, evens, v)) {
+                    matcheven[i] = x;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //判断x是否是素数
+    public static boolean isPrime28(int x) {
+        if (x == 1) {
+            return false;
+        }
+        //如果能被2到根号x整除，则一定不是素数
+        for (int i = 2; i <= (int) Math.sqrt(x); i++) {
+            if (x % i == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -1281,31 +1346,105 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
     /**
      * HJ25 数据分类处理
+     * 根据题解可知：整数序列I 和 规则整数序列R
+     * 1、是根据R中元素到I序列中进行匹配查询并将I序列中出现的R[i]的索引(index)和I[i]的值进行记录
+     * 2、定义集合用于记录待查找条件R[i]和R[i]出现的次数(count),最后将第一步得到的集合放进来即可，此处也可使用StringBuffer
      */
     public static void hj25() {
-        //较难，先过
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int nI = scanner.nextInt();//整数序列I的个数
+            String[] arrI = new String[nI];
+            for (int i = 0; i < nI; i++) {
+                arrI[i] = String.valueOf(scanner.nextInt());
+            }
+            int nR = scanner.nextInt();//规则整数序列R的个数
+            Set<Integer> setR = new TreeSet<>();//使用TreeSet进行排序和去重
+            for (int i = 0; i < nR; i++) {
+                setR.add(scanner.nextInt());
+            }
+
+            List<Integer> listI = new ArrayList<>();//用于存储整数序列I
+            List<Integer> listR = new ArrayList<>();//用于存储规则整数序列R
+            for (Integer itemR : setR) {
+                int count = 0;//统计R中元素在I中出现的次数
+                for (int i = 0; i < arrI.length; i++) {
+                    if (arrI[i].contains(String.valueOf(itemR))) {
+                        count++;
+                        listI.add(i);//记录I序列中出现的R[i]的索引(index)
+                        listI.add(Integer.valueOf(arrI[i]));//记录I[i]的值
+                    }
+                }
+                if (count > 0) {
+                    listR.add(itemR);
+                    listR.add(count);
+                    listR.addAll(listI);
+                }
+                listI.clear();
+            }
+            System.out.print(listR.size() + " ");
+            for (Integer itemR : listR) {
+                System.out.print(itemR + " ");
+            }
+            System.out.println();
+        }
     }
 
     /**
      * HJ24 合唱队
+     * 动态规划
+     * 思路：先找到每一个位置i左侧的最长上升子序列长度left[i]
+     * 2、再找到每一个位置i右侧的最长下降子序列长度right[i]
+     * 3、然后求出所有位置的最长序列长度=左侧最长子序列长度+右侧最长子序列长度-1（因为该位置被算了两次，所以减1）
+     * 4、然后用数目减去最长序列长度就是答案，需要出队的人数
      */
     public static void hj24() {
         Scanner sc = new Scanner(System.in);
         while (sc.hasNext()) {
-            int n = sc.nextInt();
+            int n = sc.nextInt();//同学的总数 N
             int[] arr = new int[n];
             for (int i = 0; i < n; i++) {
+                // N 位同学的身高，以空格隔开，获取并存放到数组中
                 arr[i] = sc.nextInt();
             }
             //存储每个数左边小于其的数的个数
             int[] left = new int[n];
-            left[0] = 1;//最左边的数设为1
             //存储每个数右边小于其的数的个数
             int[] right = new int[n];
+            left[0] = 1;//最左边的数设为1
             right[n - 1] = 1;//最右边的数设为1
-
-            //计算每个位置左侧的最长递增
-            //不理解  过
+            //计算每个位置i 左侧的最长递增
+            for (int i = 0; i < n; i++) {
+                left[i] = 1;
+                for (int j = 0; j < i; j++) {
+                    if (arr[i] > arr[j]) {//动态规划
+                        left[i] = Math.max(left[j] + 1, left[i]);
+                    }
+                }
+            }
+            //计算每个位置i 右侧的最长递减
+            for (int i = n - 1; i >= 0; i--) {
+                right[i] = 1;
+                for (int j = n - 1; j > i; j--) {
+                    if (arr[i] > arr[j]) {//动态规划
+                        right[i] = Math.max(right[i], right[j] + 1);
+                    }
+                }
+            }
+            // 记录每个位置的值
+            int[] result = new int[n];
+            for (int i = 0; i < n; i++) {
+                //位置 i计算了两次 所以需要－1
+                result[i] = left[i] + right[i] - 1;//两个都包含本身
+            }
+            //找到最大的满足要求的值
+            int max = 1;
+            for (int i = 0; i < n; i++) {
+                max = Math.max(result[i], max);
+            }
+            System.out.println(n - max);
+            //时间复杂度：O(n^2)，需要多次遍历数组，两层for循环嵌套
+            //空间复杂度：O(n)，存每个位置的dp递增和递减数组。
         }
     }
 

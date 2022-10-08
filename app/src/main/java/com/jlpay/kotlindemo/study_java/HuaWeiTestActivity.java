@@ -13,6 +13,7 @@ import com.jlpay.kotlindemo.R;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -72,6 +73,140 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        hj39TestIpConvert();
         arithmeticTest();
     }
+
+    /**
+     * HJ58 输入n个整数，输出其中最小的k个
+     */
+    public static void hj58() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//输入n个整数
+            int k = scanner.nextInt();//找出其中最小的k个整数
+            int[] numArray = new int[n];
+            for (int i = 0; i < n; i++) {
+                int num = scanner.nextInt();
+                numArray[i] = num;
+            }
+            Arrays.sort(numArray);
+            for (int i = 0; i < k; i++) {
+                System.out.print(numArray[i] + " ");
+            }
+        }
+    }
+
+
+    /**
+     * HJ57 高精度整数加法
+     */
+    public static void hj57() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s1 = scanner.next();
+            String s2 = scanner.next();
+            BigInteger bigInteger1 = new BigInteger(s1);
+            BigInteger bigInteger2 = new BigInteger(s2);
+            System.out.println(bigInteger1.add(bigInteger2));
+
+            //Exception in thread "main" java.lang.NumberFormatException:
+            // For input string: "56763992306440108823"
+            //at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+            //Long aLong1 = Long.valueOf(s1);
+            //Long aLong2 = Long.valueOf(s2);
+            //System.out.println(aLong1 + aLong2);
+        }
+    }
+
+
+    /**
+     * HJ56 完全数计算
+     */
+    public static void hj56() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//
+            int comNunCount = 0;//用来记录不超过n(含n)的完全数的个数
+            ArrayList<Integer> approFactorList = new ArrayList<>();//用来保存每个测试数的真因子
+            for (int i = 1; i <= n; i++) {
+                //遍历从1<i<=n的所有数字，看它是不是完全数，i就是目前这个测试的这个数
+                //完全数需要满足条件：它所有的真因子（即除了自身以外的约数）的和（即因子函数），恰好等于它本身
+                //需要做2件事，
+
+                // 一求出i的真因子，
+//                for (int j = 1; j <= i/2; j++) {
+                for (int j = 1; j < i; j++) {
+                    if (i % j == 0) {
+                        approFactorList.add(j);
+                    }
+                }
+                // 二求i所有的真因子（即除了自身以外的约数）的和（即因子函数），判断是否等于i
+                int approFactorSum = 0;
+                for (Integer integer : approFactorList) {
+                    approFactorSum += integer;
+                }
+                if (i == approFactorSum) {
+                    comNunCount++;
+                }
+                approFactorList.clear();
+            }
+            System.out.println(comNunCount);
+        }
+    }
+
+
+    /**
+     * HJ55 挑7
+     */
+    public static void hj55() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int nextInt = scanner.nextInt();
+            int count = 0;
+            for (int i = 1; i <= nextInt; i++) {
+                if (i % 7 == 0) {
+                    count++;
+                } else {
+                    String s = String.valueOf(i);
+                    if (s.contains("7")) {
+                        count++;
+                    }
+                }
+            }
+            System.out.println(count);
+        }
+    }
+
+
+    /**
+     * HJ54 表达式求值
+     * 和 HJ50 四则运算 的解法一样，并且 HJ50 更复杂一些
+     */
+    public static void hj54() {
+        hj50();
+    }
+
+
+    /**
+     * HJ53 杨辉三角的变形
+     * 找规律的题，只要往下再写几行就可以看出奇偶的规律，而且每行只需要写前几个就可以了，
+     * 因为题目问的是第一个偶数的index。
+     * 于是我们会发现，只有n为1，2时，没有出现偶数，剩下的按照2 3 2 4的规律每四行循环一次。
+     */
+    public static void hj53() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextInt()) {
+            int num = scanner.nextInt();
+            if (num == 1 || num == 2) {
+                System.out.println(-1);
+            } else if (num % 4 == 0) {
+                System.out.println(3);
+            } else if (num % 4 == 1 || num % 4 == 3) {
+                System.out.println(2);
+            } else if (num % 4 == 2) {
+                System.out.println(4);
+            }
+        }
+    }
+
 
     /**
      * TODO 没看懂

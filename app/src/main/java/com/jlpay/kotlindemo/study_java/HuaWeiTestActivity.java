@@ -74,6 +74,69 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         arithmeticTest();
     }
 
+
+    /**
+     * HJ60 查找组成一个偶数最接近的两个素数
+     */
+    public static void hj60() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int num = scanner.nextInt();
+            int i = count60(num);
+            System.out.println(i);
+            System.out.println(num - i);
+        }
+    }
+
+    //判断是否为素数
+    public static boolean isPrime60(int num) {
+        if (num == 1) {
+            return false;
+        }
+        for (int i = 2; i <= num / i; i++) {
+//        for (int i = 2; i <= (int) Math.sqrt(num); i++) {//与上面等价
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int count60(int n) {
+        int i = n / 2;
+        int j = n - i;
+        while (!isPrime60(i) || !isPrime60(j)) {
+            i++;
+            j--;
+        }
+        return j;
+    }
+
+
+    /**
+     * HJ59 找出字符串中第一个只出现一次的字符
+     */
+    public static void hj59() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String str = scanner.next();
+            boolean singal = false;//是否存在只出现一次的字符
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (str.indexOf(c) == str.lastIndexOf(c)) {
+                    singal = true;
+                    System.out.println(c);
+                    break;
+                }
+            }
+            if (!singal) {
+                System.out.println(-1);
+            }
+            System.out.println();
+        }
+    }
+
+
     /**
      * HJ58 输入n个整数，输出其中最小的k个
      */

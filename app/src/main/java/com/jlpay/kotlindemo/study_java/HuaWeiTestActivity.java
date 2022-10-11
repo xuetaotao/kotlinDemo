@@ -74,6 +74,80 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         arithmeticTest();
     }
 
+    /**
+     * HJ63 DNA序列
+     */
+    public static void hj63() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String str = scanner.nextLine();
+            int num = Integer.parseInt(scanner.nextLine());
+            double cgLen = 0.0;
+            String result = "";
+            for (int i = 0; i < str.length() - num + 1; i++) {
+                String substring = str.substring(i, i + num);
+                //^表示求否，如[^abc]表示非a,b,c的任意字符
+                String s = substring.replaceAll("[^CG]", "");
+                double curLen = s.length() / (num * 1.0d);
+                if (curLen > cgLen) {
+                    cgLen = curLen;
+                    result = substring;
+                }
+            }
+            System.out.println(result);
+        }
+    }
+
+
+    /**
+     * HJ62 查找输入整数二进制中1的个数
+     */
+    public static void hj62() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int i = scanner.nextInt();
+            int count = 0;
+            while (i != 0) {
+                if (i % 2 == 1) {
+                    count++;
+                }
+                i = i >> 1;//右移运算符，num >> 1,相当于num除以2
+            }
+            System.out.println(count);
+        }
+    }
+
+
+    /**
+     * HJ61 放苹果
+     * 采用递归的思想将此事件无限细分，每个事件可以分为f(m,n)=f(m-n,n)+f(m,n-1);f(m-n,n)是当苹果数大于等于盘子数的情况，f(m,n-1)是当苹果数小于盘子数的情况。
+     * 当此事件分到苹果数为0或苹果数为1或盘子数为1的时候返回1，当苹果数小于0或盘子数小于等于0返回0.
+     */
+    public static void hj61() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int m = scanner.nextInt();
+            int n = scanner.nextInt();
+            System.out.println(count61(m, n));
+        }
+        scanner.close();
+    }
+
+    //m:苹果数  n:盘子数
+    public static int count61(int m, int n) {
+        //苹果数小于0或盘子数小于等于0返回0
+        if (m < 0 || n <= 0) {
+            return 0;
+        }
+        //苹果数为0或苹果数为1或盘子数为1的时候返回1
+        if (m == 1 || n == 1 || m == 0) {
+            return 1;
+        }
+        //将此事件无线细分
+        //f(m-n,n)是当苹果数大于等于盘子数的情况
+        //f(m,n-1)是当苹果数小于盘子数的情况
+        return count61(m, n - 1) + count61(m - n, n);
+    }
 
     /**
      * HJ60 查找组成一个偶数最接近的两个素数

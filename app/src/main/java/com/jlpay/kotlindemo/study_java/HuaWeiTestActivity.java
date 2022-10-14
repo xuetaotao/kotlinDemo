@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,6 +74,341 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        hj39TestIpConvert();
         arithmeticTest();
     }
+
+    /**
+     * HJ69 矩阵乘法
+     */
+    public static void hj69() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            int z = scanner.nextInt();
+            int[][] mat1 = new int[x][y];
+            int[][] mat2 = new int[y][z];
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    mat1[i][j] = scanner.nextInt();
+                }
+            }
+            for (int i = 0; i < y; i++) {
+                for (int j = 0; j < z; j++) {
+                    mat2[i][j] = scanner.nextInt();
+                }
+            }
+            int[][] res = mul69(mat1, mat2);
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < z; j++) {
+                    System.out.print(res[i][j] + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    public static int[][] mul69(int[][] mat1, int[][] mat2) {
+        int x = mat1.length;//获取mat1矩阵行数x
+        int y = mat2.length;//获取mat2矩阵行数y
+        int z = mat2[0].length;//获取mat2矩阵列数z
+        int[][] res = new int[x][z];
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < z; j++) {
+                for (int k = 0; k < y; k++) {
+                    res[i][j] += mat1[i][k] * mat2[k][j];
+                }
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * HJ68 成绩排序
+     */
+    public static void hj68() {
+        Scanner scanner = new Scanner(System.in);
+        HashMap<Integer, String> map = new HashMap<>();//TODO 这里Map的用法得好好理一下
+        while (scanner.hasNext()) {
+            int n = Integer.parseInt(scanner.nextLine());//要排序的人的个数
+            int flag = Integer.parseInt(scanner.nextLine());//排序的方式，0代表降序，1代表升序
+            int[][] score = new int[n][2];//姓名编号，成绩
+            for (int i = 0; i < n; i++) {
+                String[] nameAndScore = scanner.nextLine().split("\\s+");
+                score[i][0] = i;//输入的第i个人名和成绩
+                score[i][1] = Integer.parseInt(nameAndScore[1]);//成绩
+                map.put(i, nameAndScore[0]);//姓名
+            }
+            Arrays.sort(score, new Comparator<int[]>() {
+                @Override
+                public int compare(int[] o1, int[] o2) {
+                    if (flag == 0) {//降序
+                        return o2[1] - o1[1];
+                    } else {//升序
+                        return o1[1] - o2[1];
+                    }
+                }
+            });
+            for (int i = 0; i < n; i++) {
+                System.out.println(map.get(score[i][0]) + " " + score[i][1]);
+            }
+        }
+    }
+
+    //这种好理解一点
+    public static void hj68Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = Integer.parseInt(scanner.nextLine());//要排序的人的个数
+            int flag = Integer.parseInt(scanner.nextLine());//排序的方式，0代表降序，1代表升序
+            Student67[] student67s = new Student67[n];
+            for (int i = 0; i < n; i++) {
+                String[] nameAndScore = scanner.nextLine().split("\\s+");
+                Student67 student67 = new Student67(nameAndScore[0], Integer.parseInt(nameAndScore[1]));
+                student67s[i] = student67;
+            }
+            //传入comparator时，使用的是TimSort，是稳定排序
+            Arrays.sort(student67s, new Comparator<Student67>() {
+                @Override
+                public int compare(Student67 o1, Student67 o2) {
+                    if (flag == 0) {//降序
+                        return o2.grade - o1.grade;
+                    } else {//升序
+                        return o1.grade - o2.grade;
+                    }
+                }
+            });
+            for (int i = 0; i < student67s.length; i++) {
+                System.out.println(student67s[i].toString());
+            }
+        }
+    }
+
+    static class Student67 {
+        private int grade;
+        private String name;
+
+        @NonNull
+        @Override
+        public String toString() {
+            return name + " " + grade;
+        }
+
+        public Student67(String name, int grade) {
+            this.name = name;
+            this.grade = grade;
+        }
+    }
+
+    /**
+     * HJ67 24点游戏算法
+     */
+    public static void hj67() {
+        //不会，先过
+    }
+
+
+    /**
+     * HJ66 配置文件恢复
+     * 答案不对，暂时放弃
+     */
+    public static void hj66() {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, String> command = new HashMap<>();//建立命令哈希表
+        //向哈希表里添加命令键值对
+        command.put("reset", "reset what");
+        command.put("reset board", "board fault");
+        command.put("board add", "where to add");
+        command.put("board delete", "no board at all");
+        command.put("reboot backplane", "impossible");
+        command.put("backplane abort", "install first");
+        Set<String[]> order = new HashSet<>();//建立哈希命令视图
+        //遍历哈希表的set视图,向哈希命令表里添加命令
+        for (String s : command.keySet()) {
+            order.add(s.split(" "));
+        }
+        while (scanner.hasNext()) {
+            String input = scanner.nextLine();
+            //将输入字符串用空格分隔，以便比较
+            String[] inputChange = input.split(" ");
+            //匹配的命令字符串
+            String[] compitable = null;
+            int count = 0;//匹配次数
+            //开始遍历命令视图
+            for (String[] cmpOrder : order) {
+                //输入字符串数组长度为一
+                if (inputChange.length == 1) {
+                    //命令字符串数组长度为二，不匹配
+                    if (cmpOrder.length == 2) {
+                        continue;
+
+                    } else {
+                        //匹配成功
+                        if (cmpOrder[0].startsWith(inputChange[0])) {
+                            compitable = cmpOrder;
+                            count++;
+                            break;
+                        }
+                    }
+                }
+                //输入字符串数组长度为二的情况
+                if (inputChange.length == 2) {
+                    //如果待比较命令字符串长度为1，不匹配
+                    if (cmpOrder.length == 1) {
+                        continue;
+
+                    } else {
+                        //如果输入命令字符串与待比较命令字符串一一匹配，匹配成功
+                        if (cmpOrder[0].startsWith(inputChange[0]) && cmpOrder[1].startsWith(inputChange[1])) {
+                            compitable = cmpOrder;
+                            count++;
+                            break;
+                        }
+                    }
+                }
+            }
+            //从哈希表中找出命令的执行结果并输出
+            if (compitable == null || count > 1) {
+                System.out.println("unknown command");
+
+            } else if (compitable.length == 1) {
+                System.out.println(command.get(compitable[0]));
+
+            } else {
+                System.out.println(command.get(compitable[0] + " " + compitable[1]));
+            }
+            count = 0;
+        }
+    }
+
+
+    /**
+     * HJ65 查找两个字符串a,b中的最长公共子串
+     */
+    public static void hj65() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s1 = scanner.nextLine();
+            String s2 = scanner.nextLine();
+            String shortStr = s1.length() - s2.length() > 0 ? s2 : s1;
+            String longStr = s1.length() > s2.length() ? s1 : s2;
+            int shortLen = shortStr.length();
+            int longLen = longStr.length();
+            int maxLen = 0;
+            int start = 0;
+            for (int i = 0; i < shortLen; i++) {
+                // 剪枝，子串长度已经不可能超过maxLen，退出循环
+                if (shortLen - i + 1 <= maxLen) {
+                    break;
+                }
+                // 左指针i，右指针k, 右指针逐渐向左逼近
+                for (int k = shortLen; k > i; k--) {
+                    String subStr = shortStr.substring(i, k);
+                    if (longStr.contains(subStr) && maxLen < subStr.length()) {
+                        maxLen = subStr.length();
+                        start = i;
+                        // 找到就立即返回
+                        break;
+                    }
+                }
+            }
+            System.out.println(shortStr.substring(start, start + maxLen));
+        }
+    }
+
+
+    /**
+     * HJ64 MP3光标位置
+     * 解题思路：
+     * 模拟整个过程处理。情况分为歌曲数小于等于4和大于4两种情况，每种情况都要考虑特殊翻页、一般翻页、其他。
+     * 用n表示歌曲总数，first表示当前页面的第一首歌，num表示当前选中的歌。
+     * <p>
+     * 算法流程：
+     * 当歌曲数小于等于4时：
+     * 特殊向上翻页，移动光标到最后一首歌；
+     * 特殊向下翻页，移动光标到第一首歌；
+     * 一般向上翻页，光标向上移动一格；
+     * 一般向下翻页，光标向下移动一格；
+     * 当歌曲数大于4时：
+     * 特殊向上翻页，光标移动到最后一首歌，最后一页第一首歌为n-3；
+     * 特殊向下翻页，光标移动到第一首歌，第一页第一首歌为1；
+     * 一般向上翻页，光标向上移一格，当前页第一首歌和光标位置相同；
+     * 一般向下翻页，光标向下移一格，当前页第一首歌位置也向下移一格；
+     */
+    public static void hj64() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//歌曲数量
+            String cmd = scanner.next();//输入命令 U或者D
+            parseCmd64(cmd, n);
+        }
+    }
+
+    public static void parseCmd64(String str, int n) {
+        // 页面数据大小，默认4
+        int pageSize = 4;
+        // 页面的歌曲大小，最大为4
+        if (n < pageSize) {
+            pageSize = n;
+        }
+        // 根据指令移动current光标，可以当作歌曲编号
+        int current = 1;
+        // 记录光标在页面中的位置pageIndex，即歌曲编号
+        int pageIndex = 1;
+        for (int i = 0; i < str.length(); i++) {
+            // 上移
+            if (str.charAt(i) == 'U') {
+                // 特殊情况，当前光标在歌曲中第一首
+                if (current == 1) {
+                    // 从第一行上移，移动到最后的歌曲
+                    current = n;
+                    // 光标在页面的位置
+                    pageIndex = pageSize;
+
+                } else {
+                    // 一般情况，即光标不在第一行
+                    // 光标上移
+                    current--;
+                    if (pageIndex != 1) {
+                        pageIndex--;
+                    }
+                }
+
+            } else {
+                // 下移
+                // 特殊情况，已经到最后一首歌曲，光标到第一首歌曲
+                if (current == n) {
+                    current = 1;
+                    pageIndex = 1;
+
+                } else {
+                    // 一般情况，非最后一行，则光标下移即可
+                    current++;
+                    if (pageIndex != pageSize) {
+                        pageIndex++;
+                    }
+                }
+            }
+        }
+        // 计算光标前后数字个数
+        int next = pageSize - pageIndex;
+        int pre = pageSize - 1 - next;
+        // 打印页面
+        String page = "";
+        // 从当前光标前一个元素开始向前打印
+        for (int i = pre; i > 0; i--) {
+            page += (current - i) + " ";
+        }
+        page += current + " ";
+        for (int i = 1; i <= next; i++) {
+            page += (current + i) + " ";
+        }
+        // 去除尾部空格
+        page = page.substring(0, page.length() - 1);
+        System.out.println(page);
+        // 打印当前光标
+        System.out.println(current);
+    }
+
 
     /**
      * HJ63 DNA序列

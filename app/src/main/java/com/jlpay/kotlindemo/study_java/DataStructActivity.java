@@ -28,8 +28,10 @@ public class DataStructActivity extends AppCompatActivity {
     public void dataStructDemo(View view) {
 //        sparseArrayDemo();
 //        priorityQueueDemo();
-        priorityQueueDemo2();
+//        priorityQueueDemo2();
 //        Toast.makeText(this, "dataStructDemo", Toast.LENGTH_SHORT).show();
+
+        System.out.println("less money is：" + lessMoney(new int[]{2, 3, 4, 7, 9, 2}));
     }
 
     /**
@@ -97,5 +99,23 @@ public class DataStructActivity extends AppCompatActivity {
             // 返回0的时候，谁在上面无所谓
             return o2 - o1;
         }
+    }
+
+    /**
+     * 哈夫曼编码问题
+     */
+    public static int lessMoney(int[] arr) {
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+        for (int i = 0; i < arr.length; i++) {
+            priorityQueue.add(arr[i]);
+        }
+        int sum = 0;
+        int cur = 0;
+        while (priorityQueue.size() > 1) {
+            cur = priorityQueue.poll() + priorityQueue.poll();//弹栈
+            sum += cur;
+            priorityQueue.add(cur);
+        }
+        return sum;
     }
 }

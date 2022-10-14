@@ -399,6 +399,9 @@ public class ThreadActivity extends AppCompatActivity {
 
     /**
      * 线程池的创建与使用
+     * 重用线程池的线程，避免因为线程的创建和销毁锁带来的性能开销；
+     * 有效控制线程池的最大并发数，避免大量的线程之间因抢占系统资源而阻塞；
+     * 能够对线程进行简单的管理，并提供一下特定的操作如：可以提供定时、定期、单线程、并发数控制等功能。
      */
     public void threadPoolClick(View view) {
         threadPoolExecutorDemo();
@@ -727,6 +730,10 @@ public class ThreadActivity extends AppCompatActivity {
      * Lock 学习
      * Lock 可以尝试拿锁，而且拿到了锁可以释放锁，从而避免死锁问题
      */
+    public void lockClick(View view) {
+        new ReadWriteLockDemo().runTest();
+    }
+
     static class ReadWriteLockDemo implements ThreadDemo {
 
         private int x = 0;

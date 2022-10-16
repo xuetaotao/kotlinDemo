@@ -3,11 +3,14 @@ package com.jlpay.kotlindemo.study_android
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.TrafficStats
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Debug
 import android.os.PowerManager
 import android.provider.Settings
+import android.view.Choreographer
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -68,6 +71,48 @@ class PerformanceActivity : AppCompatActivity() {
         wakeLock.acquire()
         //do something
         wakeLock.release()
+    }
+
+    /**
+     * FPS卡顿检测指标
+     * https://github.com/Tencent/matrix/wiki/Matrix-Android-TraceCanary
+     */
+    fun fpsDemo() {
+        val choreographer: Choreographer = Choreographer.getInstance()
+        var mLastFrameTimeNanos: Long = 0
+        val frameCallback: Choreographer.FrameCallback = object : Choreographer.FrameCallback {
+            override fun doFrame(frameTimeNanos: Long) {
+                if (frameTimeNanos - mLastFrameTimeNanos > 100) {
+                    //...
+                }
+                mLastFrameTimeNanos = frameTimeNanos;
+                choreographer.postFrameCallback { this }
+            }
+        }
+        choreographer.postFrameCallback { frameCallback }
+    }
+
+    /**
+     * 流量消耗监控（并非网络监控）
+     * （某个时间段用户消耗了多少流量）
+     * https://blog.csdn.net/u012587637/article/details/51833253
+     */
+    fun flowDemo() {
+        val uid: Int = 1
+        val uidRxBytes: Long = TrafficStats.getUidRxBytes(uid)
+        //获取总的接受字节数，包含Mobile和WiFi等
+        val totalRxBytes = TrafficStats.getTotalRxBytes()
+        //总的发送字节数，包含Mobile和WiFi等
+        val totalTxBytes = TrafficStats.getTotalTxBytes()
+    }
+
+    /**
+     * 内存
+     * 线下系统API：Debug.MemoryInfo的使用
+     */
+    fun debugMemInfoDemo() {
+        val memoryInfo: Debug.MemoryInfo = Debug.MemoryInfo()
+        Debug.getMemoryInfo(memoryInfo)
     }
 
     inner class OnClickProxy {

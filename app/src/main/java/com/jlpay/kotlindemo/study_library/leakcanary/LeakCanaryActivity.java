@@ -18,6 +18,7 @@ import com.jlpay.kotlindemo.R;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.util.WeakHashMap;
 
 import leakcanary.LeakCanary;
 
@@ -84,8 +85,14 @@ public class LeakCanaryActivity extends AppCompatActivity {
                 ReferenceQueue<Activity> referenceQueue = new ReferenceQueue<>();
                 WeakReference<Activity> weakReference = new WeakReference<Activity>(activity, referenceQueue);
 
+                //可以先申请一块大内存，促进GC
                 //手动触发GC，GC耗资源，耗时，卡顿，会影响启动，影响App性能
                 Runtime.getRuntime().gc();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 Reference<Activity> poll;
                 //这个等价于weakReference.get() == null
@@ -135,6 +142,7 @@ public class LeakCanaryActivity extends AppCompatActivity {
      * 四大基本引用，详见ReferenceActivity
      */
     public void weakReferenceStudy(Activity activity) throws InterruptedException {
+        WeakHashMap<Activity, String> weakHashMap = new WeakHashMap<>();
         ReferenceQueue<Activity> referenceQueue = new ReferenceQueue<Activity>();
         WeakReference<Activity> weakReference = new WeakReference<Activity>(activity, referenceQueue);
         Activity myActivity = weakReference.get();

@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -72,7 +73,275 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
     public void onClickTest(View view) {
 //        hj39TestIpConvert();
-        arithmeticTest();
+//        arithmeticTest();
+        hj74();
+    }
+
+
+    /**
+     * HJ77 火车进站
+     * 答案没看懂
+     */
+    public static void hj77() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            List<String> list = new ArrayList<>();
+            int nums = scanner.nextInt();
+            int[] ids = new int[nums];
+            Stack<Integer> stack = new Stack<>();
+            for (int i = 0; i < nums; i++) {
+                ids[i] = scanner.nextInt();
+            }
+            trainOut77(ids, 0, stack, "", 0, list);
+            //对结果集排序
+            Collections.sort(list);
+            for (String s : list) {
+                System.out.println(s);
+            }
+        }
+        scanner.close();
+    }
+
+    //i为入栈次数，n为出栈次数，str存储一趟结果
+    public static void trainOut77(int[] id, int i, Stack<Integer> stack, String str, int n,
+                                  List<String> list) {
+        if (n == id.length) {
+            //如果所有火车均出栈则将当前结果保存
+            list.add(str);
+        }
+        if (!stack.empty()) {//栈非空时出栈
+            int temp = stack.pop();
+            trainOut77(id, i, stack, str + temp + " ", n + 1, list);
+            stack.push(temp);//恢复现场
+        }
+        if (i < id.length) {
+            stack.push(id[i]);
+            trainOut77(id, i + 1, stack, str, n, list);
+            stack.pop();//恢复现场
+        }
+    }
+
+    /**
+     * HJ76 尼科彻斯定理
+     * 高中的我们看到这个题的一瞬间，一定会觉得这是个弱智题。然而现在的我，想了好久。。
+     * 题目的意思是已知等差数列和 S{n}为m^{3}，项数n为m，公差d为2，求首项a{1}
+     * 公式：S{n}=na{1}+n*(n-1)/2*d
+     */
+    public static void hj76Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int m = scanner.nextInt();//正整数m
+            long sum = (long) Math.pow(m, 3);
+            int a1 = (int) sum / m - (m - 1);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < m - 1; i++) {
+                sb.append(a1).append("+");
+                a1 += 2;
+            }
+            sb.append(a1);
+            System.out.println(sb);
+        }
+    }
+
+    //自己写的
+    public static void hj76() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int m = scanner.nextInt();//正整数m
+            int pow = (int) Math.pow(m, 3);
+            int[] array = new int[m];
+            int middle = pow / m;
+            //m的立方写成m个连续奇数之和
+            if (m % 2 == 0) {//m是偶数
+                array[m / 2] = middle + 1;
+            } else {//m是奇数
+                array[m / 2] = middle;
+            }
+            for (int i = m / 2 - 1; i >= 0; i--) {
+                array[i] = array[m / 2] - 2 * (m / 2 - i);
+            }
+            for (int i = m / 2 + 1; i < m; i++) {
+                array[i] = array[m / 2] + 2 * (i - m / 2);
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < array.length - 1; i++) {
+                stringBuilder.append(array[i]).append("+");
+            }
+            stringBuilder.append(array[array.length - 1]);
+            System.out.println(stringBuilder.toString());
+        }
+    }
+
+
+    /**
+     * HJ75 公共子串计算
+     */
+    public static void hj75() {
+        //把最后的打印输出改为maxLen即可。
+        hj65();
+    }
+
+    /**
+     * HJ74 参数解析
+     */
+    public static void hj74() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String cmd = scanner.nextLine();//这里注意到读一整行，带空格的字符串
+//            String cmd = "xcopy /s c:\\\\ d:\\\\e";
+//            String cmd = "xcopy /s \"C:\\\\program files\" \"d:\\\"";
+            ArrayList<String> list = new ArrayList<>();//存放分割后的结果
+            StringBuilder stringBuilder = new StringBuilder();
+            boolean flag = false;
+            for (int i = 0; i < cmd.length(); i++) {
+                char c = cmd.charAt(i);
+                //双引号判断
+                if (String.valueOf(c).equals("\"")) {
+                    flag = !flag;
+                    continue;
+                }
+                if (String.valueOf(c).equals(" ") && !flag) {
+                    //空格判断，完成一次分割
+                    list.add(stringBuilder.toString());
+                    stringBuilder = null;
+                    stringBuilder = new StringBuilder();
+                } else {
+                    stringBuilder.append(c);
+                }
+            }
+            list.add(stringBuilder.toString());
+            System.out.println(list.size());
+            for (String s : list) {
+                System.out.println(s);
+            }
+        }
+    }
+
+
+    /**
+     * HJ73 计算日期到天数转换
+     */
+    public static void hj73() {
+        Scanner scanner = new Scanner(System.in);
+        int[] monthDay = new int[]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        while (scanner.hasNext()) {
+            int year = scanner.nextInt();
+            int month = scanner.nextInt();
+            int day = scanner.nextInt();
+            int result = 0;
+            //判断是否是闰年，能被400整除，或者能被4整除但不能被100整除。
+            if ((year % 4 == 0 && year % 100 != 0) ||
+                    (year % 400 == 0)) {
+                monthDay[1] = 29;
+            } else {
+                monthDay[1] = 28;
+            }
+            for (int i = 0; i < month - 1; i++) {
+                result += monthDay[i];
+            }
+            result += day;
+            System.out.println(result);
+        }
+    }
+
+    public static void hj73Two() {
+        Scanner in = new Scanner(System.in);
+        int y = in.nextInt();
+        int m = in.nextInt();
+        int d = in.nextInt();
+        Calendar calendar = Calendar.getInstance();
+        //注意月份从0开始
+        calendar.set(y, m - 1, d);
+        int result = calendar.get(Calendar.DAY_OF_YEAR);
+        System.out.println(result);
+    }
+
+
+    /**
+     * HJ72 百钱买百鸡问题
+     */
+    public static void hj72() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            //5x+3y+z/3=100，x+y+z=100
+            //得出7x+4y=100
+            int x, y, z;
+            for (int i = 0; i <= 14; i++) {
+                x = i;
+                if ((100 - 7 * x) % 4 == 0) {
+                    y = (100 - 7 * x) / 4;
+                    z = 100 - x - y;
+                    System.out.println(x + " " + y + " " + z);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * HJ71 字符串通配符
+     */
+    public static void hj71() {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        String value;//带有通配符的字符串
+        try {
+            while ((value = bufferedReader.readLine()) != null) {
+                String target = bufferedReader.readLine();//需要匹配的字符串
+                value = value.toLowerCase(Locale.ROOT);
+                target = target.toLowerCase(Locale.ROOT);
+                //带有通配符的字符串，将 * 字符最少出现过2次的，替换为 1个 * 号
+                String regex = value.replaceAll("\\*{2,}", "\\*");
+                //将 ? 字符 替换为 0到9或a到z的所有中的某一个字符 1次
+                regex = regex.replaceAll("\\?", "[0-9a-z]{1}");
+                //将 * 字符 替换为 0到9或a到z的所有中的某一个字符 0次或以上
+                regex = regex.replaceAll("\\*", "[0-9a-z]{0,}");
+                boolean matchesOrNot = target.matches(regex);
+                System.out.println(matchesOrNot);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * HJ70 矩阵乘法计算量估算
+     */
+    public static void hj70() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//矩阵个数n
+            int[][] a = new int[n][2];
+            for (int i = 0; i < n; i++) {
+                a[i][0] = scanner.nextInt();
+                a[i][1] = scanner.nextInt();
+            }
+            String s = scanner.next();//计算的法则
+            Stack<Integer> stack = new Stack<>();// 存放矩阵行数和列数
+            int sum = 0;
+            for (int i = s.length() - 1, j = n - 1; i >= 0; i--) {
+                if (s.charAt(i) >= 'A' && s.charAt(i) <= 'Z') {// 属于字母则把相应的矩阵列数和行数入栈
+                    stack.push(a[j][1]);
+                    stack.push(a[j][0]);
+                    j--;
+
+                } else if (s.charAt(i) == '(') {// 括号：推出计算
+                    // 矩阵尺寸x0*y0
+                    int x0 = stack.pop();
+                    int y0 = stack.pop();
+                    // 矩阵尺寸x1*y1
+                    int x1 = stack.pop();
+                    int y1 = stack.pop();
+                    // 两个矩阵的乘法次数为x0*y0*y1或x0*x1*y1（其中y0==x1）
+                    sum += x0 * y0 * y1;
+                    // 把相乘后得到的矩阵列数入栈
+                    stack.push(y1);
+                    // 把相乘后得到的矩阵行数入栈
+                    stack.push(x0);
+                }
+            }
+            System.out.println(sum);
+        }
     }
 
     /**

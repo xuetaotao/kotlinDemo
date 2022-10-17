@@ -79,6 +79,68 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
 
     /**
+     * HJ82 将真分数分解为埃及分数
+     */
+    public static void hj82() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String[] split = scanner.nextLine().split("/");
+            int f1 = Integer.parseInt(split[0]);//分子
+            int f2 = Integer.parseInt(split[1]);//分母
+            for (int i = 0; i < f1; i++) {
+                if (i + 1 < f1) {
+                    System.out.print("1/" + f2 + "+");
+                } else {
+                    System.out.print("1/" + f2);
+                }
+            }
+            System.out.println();
+        }
+    }
+
+
+    /**
+     * HJ81 字符串字符匹配
+     */
+    public static void hj81() {
+        Scanner scanner = new Scanner(System.in);
+        String shortStr = scanner.nextLine();
+        String longStr = scanner.nextLine();
+        boolean flag = true;
+        for (int i = 0; i < shortStr.length(); i++) {
+            char c = shortStr.charAt(i);
+            if (!longStr.contains(String.valueOf(c))) {
+                flag = false;
+                break;
+            }
+        }
+        System.out.println(flag);
+    }
+
+    /**
+     * HJ80 整型数组合并
+     */
+    public static void hj80() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            Set<Integer> integerSet = new TreeSet<>();
+            int array1Len = scanner.nextInt();
+            for (int i = 0; i < array1Len; i++) {
+                integerSet.add(scanner.nextInt());
+            }
+            //有人给了下面这个建议，但是貌似不加没什么影响
+            //需要去除回车键，增加： sc.nextLine();
+            int array2Len = scanner.nextInt();
+            for (int i = 0; i < array2Len; i++) {
+                integerSet.add(scanner.nextInt());
+            }
+            for (Integer integer : integerSet) {
+                System.out.print(integer);
+            }
+        }
+    }
+
+    /**
      * HJ77 火车进站
      * 答案没看懂
      */

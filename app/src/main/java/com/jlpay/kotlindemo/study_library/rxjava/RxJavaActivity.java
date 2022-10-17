@@ -1,10 +1,15 @@
 package com.jlpay.kotlindemo.study_library.rxjava;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,26 +17,35 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Lifecycle;
 
 import com.jlpay.kotlindemo.R;
+import com.jlpay.kotlindemo.base.BaseMvpActivity;
 import com.jlpay.kotlindemo.bean.BResponse;
 import com.jlpay.kotlindemo.bean.WxArticleBean;
 import com.jlpay.kotlindemo.net.RetrofitClient;
-import com.jlpay.kotlindemo.base.BaseMvpActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
@@ -58,7 +72,8 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
     private final String TAG = "RxJava2--------------";
 
     private TextView tv_rxjava2;
-//    private RxJavaPresenter presenter;
+    //    private RxJavaPresenter presenter;
+    private ImageView imageView;
 
     public static void newInstance(Context context) {
         Intent intent = new Intent(context, RxJavaActivity.class);
@@ -87,6 +102,7 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
     public void initView() {
         tv_rxjava2 = findViewById(R.id.tv_rxjava2);
 //        presenter = new RxJavaPresenter(this, this);
+        imageView = findViewById(R.id.imageView);
     }
 
     @Override
@@ -98,7 +114,11 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
 //        intervalUse();
 //        presenter.netRequest();
 //        mPresenter.netRequest();
-        publishSubjectTest();
+//        publishSubjectTest();
+    }
+
+    public void onClickTest(View view) {
+        justDemo();
     }
 
     @Override
@@ -165,11 +185,221 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
 
 
     /**
+     * just操作符
+     * 通过直接传入N个参数来批量发送事件(最多九个参数)
+     * 全部事件发送完毕后会回调onComplete方法
+     */
+    @SuppressLint("AutoDispose")
+    private void justDemo() {
+        String path = "https://scpic.chinaz.net/files/default/imgs/2022-09-26/c2ddb884ecac35cb.jpg";
+        final ProgressDialog[] progressDialog = new ProgressDialog[1];
+        Observable
+                //第2步
+                .just(path)
+                //第3步
+                .map(new Function<String, Bitmap>() {
+                    @Override
+                    public Bitmap apply(String s) throws Exception {
+                        URL url = new URL(path);
+                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                        httpURLConnection.setConnectTimeout(5000);
+                        int responseCode = httpURLConnection.getResponseCode();
+                        if (responseCode == HttpURLConnection.HTTP_OK) {
+                            InputStream inputStream = httpURLConnection.getInputStream();
+                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                            return bitmap;
+                        }
+                        return null;
+                    }
+                })
+                //subscribeOn() 指定的就是发射事件的线程，observerOn 指定的就是订阅者接收事件的线程。
+                //多次指定发射事件的线程只有第一次指定的有效，也就是说多次调用 subscribeOn() 只有第一次的有效，其余的会被忽略
+                //但多次指定订阅者接收线程是可以的，也就是说每调用一次 observerOn()，下游的线程就会切换一次
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+                .compose(ObservableTransformerDemo())
+                .subscribe(new Observer<Bitmap>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        //订阅开始。第一步
+                        progressDialog[0] = new ProgressDialog(RxJavaActivity.this);
+                        progressDialog[0].setTitle("下载中");
+                        progressDialog[0].show();
+                    }
+
+                    //第4步
+                    @Override
+                    public void onNext(Bitmap s) {
+                        //拿到事件
+                        imageView.setImageBitmap(s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    //第5步
+                    @Override
+                    public void onComplete() {
+                        if (progressDialog[0] != null) {
+                            progressDialog[0].dismiss();
+                        }
+                    }
+                });
+    }
+
+    /**
+     * ObservableTransformer学习
+     */
+    private <T> ObservableTransformer<T, T> ObservableTransformerDemo() {
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(Observable<T> upstream) {
+                //subscribeOn() 指定的就是发射事件的线程，observerOn 指定的就是订阅者接收事件的线程。
+                //多次指定发射事件的线程只有第一次指定的有效，也就是说多次调用 subscribeOn() 只有第一次的有效，其余的会被忽略
+                //但多次指定订阅者接收线程是可以的，也就是说每调用一次 observerOn()，下游的线程就会切换一次
+                return upstream.subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
+    /**
+     * Consumer的使用
+     */
+    @SuppressLint("AutoDispose")
+    private void consumerDemo() {
+        Disposable disposable = Observable.just(1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        Log.e(TAG, "accept: " + integer);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        String message = throwable.getMessage();
+                    }
+                });
+    }
+
+    /**
+     * flatMap的使用
+     * 将事件拦截然后转成被观察者再次发送
+     * 可以让网络请求按同步顺序先后请求，即拿到第一个请求的结果后再去请求第二个接口
+     * <p>
+     * doOnNext的作用
+     * Observable 每发送 onNext() 之前都会先回调这个方法。
+     * 应用场景：请求APi注册-->更新UI-->请求APi登录-->更新UI
+     */
+    @SuppressLint("AutoDispose")
+    private void flatMapDemo() {
+        Disposable disposable = Observable.just(1)
+                .doOnNext(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+
+                    }
+                })
+                //只给下面切换异步线程
+                .observeOn(Schedulers.io())
+                .flatMap(new Function<Integer, ObservableSource<Integer>>() {
+                    @Override
+                    public ObservableSource<Integer> apply(Integer integer) throws Exception {
+                        List<Integer> list = new ArrayList<>();
+                        list.add(integer);
+                        list.add(integer + 1);
+                        list.add(integer + 2);
+                        //直接发送一个 List 集合数据给观察者
+                        return Observable.fromIterable(list);
+
+//                        return Observable.create(new ObservableOnSubscribe<String>() {
+//                            @Override
+//                            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+//                                emitter.onNext("this is" + integer);
+//                            }
+//                        });
+                    }
+                })
+                .flatMap(new Function<Integer, ObservableSource<WxArticleBean>>() {
+                    @Override
+                    public ObservableSource<WxArticleBean> apply(Integer s) throws Exception {
+                        return RetrofitClient.get().getWxarticle2();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<WxArticleBean>() {
+                    @Override
+                    public void accept(WxArticleBean integer) throws Exception {
+
+                    }
+                });
+    }
+
+    /**
+     * RxJava的Hook
+     * 把这个方法放到rxJava执行之前就可以hook了
+     */
+    private void rxJavaHook() {
+        RxJavaPlugins.setOnObservableAssembly(new Function<Observable, Observable>() {
+            @Override
+            public Observable apply(Observable observable) throws Exception {
+                Log.e(TAG, "apply: 这是所有RxJava的Hook：" + observable);
+                return observable;//如果返回null，那么所有的操作符就不能使用了
+            }
+        });
+    }
+
+
+    /**
+     * zip 操作符
+     * 可以将多个发射器发送的事件对应发送顺序组合成一个然后统一一次接收事件, 遵守两两合并的原则.
+     * 如果存在异步情况, 将会等待需要合并的两个事件同时执行完毕后再发送给观察者;
+     * <p>
+     * 获取当前登录合伙人的分润规则
+     */
+//    public static void getMyProfitRule(@NonNull CallBackListener listener) {
+//        //查询卡类型
+//        Observable<CardTypeBean> cardObservable = getCardObservable();
+//        //查询机具类型
+//        Observable<PhysnTypeBean> physnTypeObservable = getPhysnTypeObservable();
+//        //查询分润规则类型
+//        Observable<RuleTypeBean> ruleTypeObservable = getRuleTypeObservable();
+//        //查询自身分润规则
+//        Observable<FenlunBean> fenlunObservable = getFenlunObservable();
+//
+//        Disposable disposable = Observable.zip(cardObservable, physnTypeObservable, ruleTypeObservable, fenlunObservable,
+//                new Function4<CardTypeBean, PhysnTypeBean, RuleTypeBean, FenlunBean, MyProfitListBean>() {
+//                    @Override
+//                    public MyProfitListBean apply(CardTypeBean cardTypebean, PhysnTypeBean physnTypeBean, RuleTypeBean ruleTypeBean, FenlunBean fenlunBean) throws Exception {
+//                        return getMyProfitListBean(cardTypebean, physnTypeBean, ruleTypeBean, fenlunBean);
+//                    }
+//                })
+//                .subscribe(new Consumer<MyProfitListBean>() {
+//                    @Override
+//                    public void accept(MyProfitListBean myProfitListBean) throws Exception {
+//                        listener.callBackSuccess(myProfitListBean.getMyProfitBeanList());
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                        listener.callBackFail(throwableHandle(throwable).message);
+//                    }
+//                });
+//    }
+
+
+    /**
      * interval 操作符
      * interval 会切换线程，使用的时候更新UI要注意切换回主线程
      * 创建一个每隔给定的时间间隔发射一个递增整数的Observable
      * 每隔一段时间就会发送一个事件，这个事件是从0开始，不断增1的数字
      * 可以用来设置定时器
+     * <p>
+     * Disposable的使用：避免内存泄漏问题
      */
     private void intervalUse() {
         Observable.interval(1, TimeUnit.SECONDS)
@@ -209,6 +439,29 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
                         Log.e(TAG, "onComplete");
                     }
                 });
+    }
+
+
+    /**
+     * 手动添加管理RxJava内存泄漏
+     */
+    static class CommonComposite {
+
+        private CompositeDisposable mCompositeDisposable;
+
+        public void addDisposable(Disposable disposable) {
+            if (mCompositeDisposable == null || mCompositeDisposable.isDisposed()) {
+                mCompositeDisposable = new CompositeDisposable();
+            }
+            mCompositeDisposable.add(disposable);
+        }
+
+        //在Activity销毁的时候调用
+        public void unDisposable() {
+            if (mCompositeDisposable != null) {
+                mCompositeDisposable.dispose();
+            }
+        }
     }
 
     /**
@@ -252,38 +505,41 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
      */
     @SuppressLint("AutoDispose")
     private void mapUse() {
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                emitter.onNext("我花两万块买了个包");
-            }
-        }).map(new Function<String, BResponse>() {
-            @Override
-            public BResponse apply(String s) throws Exception {
-                return new BResponse(s, "00");
-            }
-        }).subscribe(new Observer<BResponse>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+        Observable
+                .create(new ObservableOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                        emitter.onNext("我花两万块买了个包");
+                    }
+                })
+                .map(new Function<String, BResponse>() {
+                    @Override
+                    public BResponse apply(String s) throws Exception {
+                        return new BResponse(s, "00");
+                    }
+                })
+                .subscribe(new Observer<BResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(BResponse bResponse) {
-                Log.e(TAG, bResponse.getMsg());
-                Log.e(TAG, "收到了，败家娘们儿");
-            }
+                    @Override
+                    public void onNext(BResponse bResponse) {
+                        Log.e(TAG, bResponse.getMsg());
+                        Log.e(TAG, "收到了，败家娘们儿");
+                    }
 
-            @Override
-            public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
 
-            }
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
     }
 
 

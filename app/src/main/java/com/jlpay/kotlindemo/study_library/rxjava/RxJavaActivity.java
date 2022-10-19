@@ -270,7 +270,13 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
      */
     @SuppressLint("AutoDispose")
     private void consumerDemo() {
-        Disposable disposable = Observable.just(1)
+        Disposable disposable = Observable
+                .create(new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                        emitter.onNext(2000);
+                    }
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Integer>() {
@@ -518,6 +524,8 @@ public class RxJavaActivity extends BaseMvpActivity<RxJavaContract.Presenter> im
                         return new BResponse(s, "00");
                     }
                 })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {

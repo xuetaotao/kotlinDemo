@@ -32,6 +32,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -145,7 +146,9 @@ public class ThreadActivity extends AppCompatActivity {
 
 
     /**
+     * Atomic
      * https://www.jianshu.com/p/073096a729f6
+     * https://www.jianshu.com/p/3a1ac578d112
      */
     private void atomicDemo() {
         AtomicInteger atomicInteger = new AtomicInteger(3);
@@ -163,6 +166,13 @@ public class ThreadActivity extends AppCompatActivity {
         int getAndDecrement = atomicInteger.getAndDecrement();
 
         boolean result = atomicInteger.compareAndSet(102, 110);
+
+        //常见的有AtomicInteger、AtomicBoolean等java.util.concurrent包下面的类，但是这个只能并发修改一个属性，
+        // 如果我需要对多个属性同时进行并发修改，并且保证原子性呢
+        //AtomicReference和AtomicInteger非常类似，不同之处就在于AtomicInteger是对整数的封装，
+        //而AtomicReference则对应普通的对象引用，是操控多个属性的原子性的并发类
+        AtomicReference<Student> atomicReference = new AtomicReference<>();
+        atomicReference.get().age++;
     }
 
 
@@ -476,6 +486,7 @@ public class ThreadActivity extends AppCompatActivity {
         executor.execute(runnable);// 使用线程池执行一个任务,execute 提交的线程任务不关心返回值
         executor.execute(runnable);
         executor.execute(runnable);
+        Future<?> future = executor.submit(runnable);//submit提交的线程任务关心返回值
 //        executor.shutdown();// 关闭线程池,会阻止新任务提交，但不影响已提交的任务
 //        executor.shutdownNow();// 关闭线程池，阻止新任务提交，并且中断当前正在运行的线程(不一定能中断，除非自己处理了，因为Java的线程是协作式的)
     }

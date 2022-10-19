@@ -79,6 +79,169 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
 
     /**
+     * HJ86 求最大连续bit数
+     */
+    public static void hj86() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int nextInt = scanner.nextInt();
+            String binaryString = Integer.toBinaryString(nextInt);//整型转二进制
+//            System.out.println(binaryString);
+            //按0分割，比如 11001000 分割后就是 11 和 1 两个字符串
+            String[] split = binaryString.split("0");
+            int max = 0;
+            for (int i = 0; i < split.length; i++) {
+//                System.out.println(split[i]);
+                max = Math.max(split[i].length(), max);
+            }
+            System.out.println(max);
+        }
+    }
+
+    //java直接用位运算&，用当前数字和1做“&”操作，如果结果是1，说明此时的二进制第一位为1，然后右移一位，直至数字为0。
+    //注意java的>>是有符号右移，也就是说，负数用>>右移的话，会在左侧补1而不是0，这就会影响最终对1的计数。所以这里
+    // 我们要使用无符号右移>>>。
+    //另外题目的意思是我们需要接收一个byte数字，然而我们提交时第一个没通过的测试用例为200。
+    // 很显然，byte的取值范围为-128 ~ 127，题目有些莫名其妙，直接用int来接收是没有问题的
+    public static void hj86Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int nextInt = scanner.nextInt();
+            int count = 0;
+            int max = 0;
+            while (nextInt != 0) {
+                //用当前数字和1做“&”操作，如果结果是1，说明此时的二进制第一位为1
+                if ((nextInt & 1) == 1) {
+                    count++;
+                    max = Math.max(max, count);
+                } else {
+                    count = 0;
+                }
+                nextInt >>>= 1;
+            }
+            System.out.println(max);
+        }
+    }
+
+    /**
+     * HJ85 最长回文子串
+     */
+    public static void hj85() {
+        hj32();
+    }
+
+    public static void hj85Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.nextLine();
+            int max = 0;
+            for (int i = 0; i < nextLine.length(); i++) {
+                for (int j = nextLine.length(); j >= i; j--) {
+                    String substring = nextLine.substring(i, j);
+                    if (substring.equals(new StringBuilder(substring).reverse().toString())) {
+                        //这样不对，因为使用break也没法直接跳出两个for循环，所以后面更短的回文串也可能进来
+//                        max = substring.length();
+                        max = Math.max(max, substring.length());
+                    }
+                }
+            }
+            System.out.println(max);
+        }
+    }
+
+
+    /**
+     * HJ84 统计大写字母个数
+     */
+    public static void hj84() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.nextLine();
+            String s = nextLine.replaceAll("[A-Z]", "");
+            System.out.println(nextLine.length() - s.length());
+        }
+    }
+
+
+    /**
+     * HJ83 二维数组操作
+     */
+    public static void hj83() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int m = scanner.nextInt();//行数
+            int n = scanner.nextInt();//列数
+            //初始化表格是否成功，若成功则返回0， 否则返回-1
+            if (m <= 9 && n <= 9) {
+                System.out.println(0);
+            } else {
+                System.out.println(-1);
+            }
+            //要交换的两个单元格的行列值
+            int x1 = scanner.nextInt();
+            int y1 = scanner.nextInt();
+            int x2 = scanner.nextInt();
+            int y2 = scanner.nextInt();
+            //输出交换单元格是否成功
+            if ((x1 >= 0 && x1 <= m - 1) &&
+                    (y1 >= 0 && y1 <= n - 1) &&
+                    (x2 >= 0 && x2 <= m - 1) &&
+                    (y2 >= 0 && y2 <= n - 1)) {
+                System.out.println(0);
+            } else {
+                System.out.println(-1);
+            }
+            //输入要插入的行的数值
+            int x = scanner.nextInt();
+            //这里注意第二个条件
+            if (m < 9 && x < m) {
+                System.out.println(0);
+            } else {
+                System.out.println(-1);
+            }
+            int y = scanner.nextInt();
+            //这里注意第二个条件
+            if (n < 9 && y < n) {
+                System.out.println(0);
+            } else {
+                System.out.println(-1);
+            }
+            int xn = scanner.nextInt();
+            int yn = scanner.nextInt();
+            if ((xn >= 0 && xn <= m - 1) &&
+                    (yn >= 0 && yn <= n - 1)) {
+                System.out.println(0);
+            } else {
+                System.out.println(-1);
+            }
+        }
+    }
+
+    public static void hj83Two() {
+        Scanner in = new Scanner(System.in);
+        // 注意 hasNext 和 hasNextLine 的区别
+        while (in.hasNextInt()) { // 注意 while 处理多个 case
+            int m = in.nextInt();
+            int n = in.nextInt();
+            int[][] a = new int[m][n];
+            System.out.println((m > 9 || n > 9) ? -1 : 0);
+            int x1 = in.nextInt();
+            int y1 = in.nextInt();
+            int x2 = in.nextInt();
+            int y2 = in.nextInt();
+            System.out.println(((Math.max(x1, x2) >= m) || (Math.max(y1, y2) >= n)) ? -1 : 0);
+            int x = in.nextInt();
+            System.out.println((x >= m || (m + 1) > 9) ? -1 : 0);
+            int y = in.nextInt();
+            System.out.println((y >= n || (n + 1) > 9) ? -1 : 0);
+            x = in.nextInt();
+            y = in.nextInt();
+            System.out.println((x >= m || y >= n) ? -1 : 0);
+        }
+    }
+
+
+    /**
      * HJ82 将真分数分解为埃及分数
      */
     public static void hj82() {
@@ -768,6 +931,8 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
     /**
      * HJ62 查找输入整数二进制中1的个数
+     * （HJ86题目）注意java的>>是有符号右移，也就是说，负数用>>右移的话，会在左侧补1而不是0，这就会影响最终对1的计数。
+     * 所以一般我们要使用无符号右移>>>
      */
     public static void hj62() {
         Scanner scanner = new Scanner(System.in);
@@ -1963,6 +2128,8 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         return res;
     }
 
+    //cabad，ccaddab
+    //dabac，baddacc
     private static int longest(String s, int a, int b) {
         while (a >= 0 && b < s.length() && s.charAt(a) == s.charAt(b)) {
             a--;

@@ -37,7 +37,8 @@ import com.jlpay.kotlindemo.study_library.tinker.SmaliDexLibActivity
 import com.jlpay.kotlindemo.utils.Utils
 import com.jlpay.kotlindemo.widget.CustomDialog
 import okhttp3.*
-import java.io.IOException
+import okio.IOException
+import kotlin.concurrent.thread
 
 class MainActivity : BaseMediaActivity() {
 
@@ -242,7 +243,7 @@ class MainActivity : BaseMediaActivity() {
     }
 
     override fun initData() {
-//        okHttpTest()
+//        okHttpTestAsync()
     }
 
 
@@ -285,24 +286,66 @@ class MainActivity : BaseMediaActivity() {
             .show()
     }
 
-    fun okHttpTest() {
+    /**
+     * OkHttp异步请求
+     */
+    fun okHttpTestAsync() {
         val client: OkHttpClient = OkHttpClient.Builder().build()
         val request: Request = Request.Builder()
             .url("http://www.baidu.com")
             .get()
             .build()
-        client.newCall(request).enqueue(object : Callback {
+        //主线程main
+        Log.e("MainActivity", "okHttpTest:请求前当前线程： " + Thread.currentThread().name + "\n")
+        val call: Call = client.newCall(request)
+        //异步请求，也就是说enqueue会自动切换线程到子线程进行网络请求
+        call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e("MainActivity", "onFailure: " + Thread.currentThread().name)
+                Log.e("MainActivity", "onFailure:线程 " + Thread.currentThread().name)
             }
 
             override fun onResponse(call: Call, response: Response) {
+                //子线程，不能更新UI
                 Log.e(
                     "MainActivity",
-                    "onResponse: " + Thread.currentThread().name + "\n" + (response.body?.string()
+                    "onResponse:线程 " + Thread.currentThread().name + "\n" + (response.body?.string()
                         ?: "加载失败")
                 )
+                //切换到UI线程
+                runOnUiThread(object : Runnable {
+                    override fun run() {
+                        //这里是UI线程main
+                        Log.e("MainActivity", "run: 线程：" + Thread.currentThread().name + "\n")
+                    }
+                })
             }
         })
+    }
+
+    /**
+     * OkHttp同步请求
+     */
+    fun okHttpTestSync() {
+        val client: OkHttpClient = OkHttpClient.Builder().build()
+        val request: Request = Request.Builder()
+            .url("http://www.baidu.com")
+            .get()
+            .build()
+        //主线程main
+        Log.e("MainActivity", "okHttpTest:请求前当前线程： " + Thread.currentThread().name + "\n")
+        //同步请求，直接请求会抛出异常android.os.NetworkOnMainThreadException
+        // 需要自己手动切换到子线程进行请求
+        thread {
+            val response: Response = client.newCall(request).execute();
+            if (response.code == 200) {
+                //子线程
+                Log.e("MainActivity", "同步请求execute线程: " + Thread.currentThread().name + "\n")
+                Log.e("MainActivity", "okHttpTest同步请求结果: " + (response.body?.string() ?: "请求失败"))
+                //切换到UI线程
+                runOnUiThread {
+                    Log.e("MainActivity", "同步请求切换到UI线程: " + Thread.currentThread().name + "\n")
+                }
+            }
+        }
     }
 }

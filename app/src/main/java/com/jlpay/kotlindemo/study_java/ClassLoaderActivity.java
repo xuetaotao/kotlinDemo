@@ -29,7 +29,7 @@ public class ClassLoaderActivity extends AppCompatActivity {
 
     }
 
-    private void testClassLoader() {
+    private void testClassLoader() throws ClassNotFoundException {
         ClassLoader classLoader2 = Application.class.getClassLoader();//BootClassLoader
         ClassLoader classLoader1 = AppCompatActivity.class.getClassLoader();//PathClassLoader
         ClassLoader classLoader = Activity.class.getClassLoader();//BootClassLoader
@@ -37,6 +37,7 @@ public class ClassLoaderActivity extends AppCompatActivity {
         ClassLoader classLoader4 = getClassLoader();//PathClassLoader
         Log.e("LibTestJavaActivity", classLoader2.toString() + "\n\n" + classLoader1.toString() + "\n\n" +
                 classLoader.toString() + "\n\n" + classLoader3.toString() + "\n\n" + classLoader4.toString());
+        Class<?> classLoaderActivity = classLoader4.loadClass("ClassLoaderActivity");
     }
 
     private void relatedClass() {

@@ -3,6 +3,7 @@ package com.jlpay.kotlindemo.study_library.leakcanary;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -18,6 +19,8 @@ import com.jlpay.kotlindemo.R;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 import leakcanary.LeakCanary;
@@ -142,7 +145,6 @@ public class LeakCanaryActivity extends AppCompatActivity {
      * 四大基本引用，详见ReferenceActivity
      */
     public void weakReferenceStudy(Activity activity) throws InterruptedException {
-        WeakHashMap<Activity, String> weakHashMap = new WeakHashMap<>();
         ReferenceQueue<Activity> referenceQueue = new ReferenceQueue<Activity>();
         WeakReference<Activity> weakReference = new WeakReference<Activity>(activity, referenceQueue);
         Activity myActivity = weakReference.get();
@@ -152,6 +154,51 @@ public class LeakCanaryActivity extends AppCompatActivity {
         Runtime.getRuntime().gc();
         Thread.sleep(1000);
     }
+
+    /**
+     * 链接：https://juejin.cn/post/6872151038305140744
+     * <p>
+     * WeakHashMap最大的特点是其key对象被自动弱引用，可以被回收，利用这个特点，
+     * 用其key监听Activity回收就能达到泄露监测的目的
+     * <p>
+     * 线上选择监测没必要实时，将其延后到APP进入后台的时候，在APP进入后台之后主动触发一次GC，然后延时10s，
+     * 进行检查，之所以延时10s，是因为GC不是同步的，为了让GC操作能够顺利执行完，这里选择10s后检查。
+     * 在检查前分配一个4M的大内存块，再次确保GC执行，之后就可以根据WeakHashMap的特性，
+     * 查找有多少Activity还保留在其中，这些Activity就是泄露Activity
+     * <p>
+     * https://blog.csdn.net/qiuhao9527/article/details/80775524
+     * WeakHashMap的键是“弱键”。在 WeakHashMap 中，当某个键不再正常使用时，会被从WeakHashMap中被自动移除。
+     * WeakHashMap的key是“弱键”，即是WeakReference类型的；ReferenceQueue是一个队列，它会保存被GC回收的“弱键”。
+     */
+    public void weakHashMapDemo(Activity activity) {
+        WeakHashMap<Activity, String> weakHashMap = new WeakHashMap<>();
+        //放入map，进行监听
+        weakHashMap.put(activity, activity.getClass().getSimpleName());
+        Runtime.getRuntime().gc();
+        //申请个稍微大的对象，促进GC
+        byte[] leakHelpBytes = new byte[4 * 1024 * 1024];
+        for (int i = 0; i < leakHelpBytes.length; i += 1024) {
+            leakHelpBytes[i] = 1;
+        }
+        Runtime.getRuntime().gc();
+        SystemClock.sleep(100);
+        System.runFinalization();
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        for (Map.Entry<Activity, String> activityStringEntry : weakHashMap.entrySet()) {
+            String name = activityStringEntry.getKey().getClass().getName();
+            Integer value = hashMap.get(name);
+            if (value == null) {
+                hashMap.put(name, 1);
+            } else {
+                hashMap.put(name, value + 1);
+            }
+        }
+        for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+            //这里也可以搞个回调Listener回调出去
+            System.out.println(entry.getKey() + entry.getValue());
+        }
+    }
+
 
     /**
      * 技术点三：ContentProvider中启动LeakCanary

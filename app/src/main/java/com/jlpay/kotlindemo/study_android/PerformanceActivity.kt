@@ -99,6 +99,7 @@ class PerformanceActivity : AppCompatActivity() {
      */
     fun flowDemo() {
         val uid: Int = 1
+        //获取某个进程的接受字节数
         val uidRxBytes: Long = TrafficStats.getUidRxBytes(uid)
         //获取总的接受字节数，包含Mobile和WiFi等
         val totalRxBytes = TrafficStats.getTotalRxBytes()
@@ -108,11 +109,20 @@ class PerformanceActivity : AppCompatActivity() {
 
     /**
      * 内存
-     * 线下系统API：Debug.MemoryInfo的使用
+     * 线下系统API：Debug.MemoryInfo的使用 获取各项指标
+     * https://juejin.cn/post/6872151038305140744
      */
     fun debugMemInfoDemo() {
         val memoryInfo: Debug.MemoryInfo = Debug.MemoryInfo()
         Debug.getMemoryInfo(memoryInfo)
+        //shl(bits) – 左移位 (Java’s <<)
+        //shr(bits) – 右移位 (Java’s >>)
+        //native内存
+        val appNativePss = memoryInfo.nativePss shr 10
+        //java内存 OOM原因
+        val appDalvikPss = memoryInfo.dalvikPss shr 10
+        //整体内存，native+dalvik+共享
+        val appTotalPss = memoryInfo.totalPss shr 10
     }
 
     inner class OnClickProxy {

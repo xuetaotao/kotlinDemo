@@ -18,6 +18,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Exchanger;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -149,6 +150,9 @@ public class ThreadActivity extends AppCompatActivity {
      * Atomic
      * https://www.jianshu.com/p/073096a729f6
      * https://www.jianshu.com/p/3a1ac578d112
+     * 场景：
+     * 1、作为多个线程同时使用的原子计数器
+     * 2、在比较和交换操作中实现非阻塞算法。
      */
     private void atomicDemo() {
         AtomicInteger atomicInteger = new AtomicInteger(3);
@@ -461,6 +465,7 @@ public class ThreadActivity extends AppCompatActivity {
      * https://baijiahao.baidu.com/s?id=1710203886182271419&wfr=spider&for=pc
      */
     private static void executorsDemo() {
+        Executor executor22 = Executors.newSingleThreadExecutor();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

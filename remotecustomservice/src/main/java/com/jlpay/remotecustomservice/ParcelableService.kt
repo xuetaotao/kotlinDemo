@@ -42,6 +42,10 @@ class ParcelableService : Service() {
         super.onDestroy()
     }
 
+    //Service的实现类需要去继承这个stub服务桩类。Service的onBind方法会返回实现类的对象，之后你就可以使用它了
+    //交互过程client<-->proxy<-->stub<-->service
+    //stub和proxy是为了方便client/service交互而生成出来的代码，这样client/service的代码就会比较干净，
+    // 不会嵌入很多很难懂的与业务无关的代码
     inner class PetBinder : IPet.Stub() {
 
         override fun getPets(owner: Person?): MutableList<Pet>? {

@@ -74,9 +74,224 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     public void onClickTest(View view) {
 //        hj39TestIpConvert();
 //        arithmeticTest();
-        hj74();
+//        hj74();
+        hj87();
     }
 
+    /**
+     * HJ89 24点运算
+     */
+    public static void hj89() {
+
+    }
+
+
+    /**
+     * HJ88 扑克牌大小
+     */
+    public static void hj88() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String input = scanner.nextLine();
+            String[] split = input.split("-");
+            System.out.println(helper88(split[0], split[1]));
+        }
+    }
+
+    public static String helper88(String s1, String s2) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        hashMap.put("A", 14);
+        hashMap.put("2", 15);
+        hashMap.put("3", 3);
+        hashMap.put("4", 4);
+        hashMap.put("5", 5);
+        hashMap.put("6", 6);
+        hashMap.put("7", 7);
+        hashMap.put("8", 8);
+        hashMap.put("9", 9);
+        hashMap.put("10", 10);
+        hashMap.put("J", 11);
+        hashMap.put("Q", 12);
+        hashMap.put("K", 13);
+        hashMap.put("joker", 16);
+        hashMap.put("JOKER", 17);
+        if (s1.equals("joker JOKER") || s1.equals("JOKER joker")) {
+            return s1;
+        } else if (s2.equals("joker JOKER") || s2.equals("JOKER joker")) {
+            return s2;
+        }
+        String[] s1Array = s1.split(" ");
+        Integer n1 = hashMap.get(s1Array[0]);
+        String[] s2Array = s2.split(" ");
+        Integer n2 = hashMap.get(s2Array[0]);
+        if (isBoom88(s1) && isBoom88(s2)) {
+            return n1 > n2 ? s1 : s2;
+        } else if (isBoom88(s1)) {
+            return s1;
+        } else if (isBoom88(s2)) {
+            return s2;
+        } else if (s1Array.length == s2Array.length) {
+            return n1 > n2 ? s1 : s2;
+        } else {
+            return "ERROR";
+        }
+    }
+
+    public static boolean isBoom88(String s1) {
+        String[] split = s1.split(" ");
+        if (split.length != 4) {
+            return false;
+        }
+        String s0 = split[0];
+        for (int i = 1; i < split.length; i++) {
+            if (!s0.equals(split[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * HJ87 密码强度等级
+     */
+    public static void hj87() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String password = scanner.nextLine();
+//            String password = "Aa1(";
+            int score = 0;
+            //一、密码长度
+            int length = password.length();
+            if (length <= 4) {
+                score += 5;
+            } else if (length <= 7) {
+                score += 10;
+            } else {
+                score += 25;
+            }
+            //二、字母
+            String lowercase = password.replaceAll("[a-z]", "");
+            int lowercaseLen = password.length() - lowercase.length();
+            String upperCase = password.replaceAll("[A-Z]", "");
+            int upperCaseLen = password.length() - upperCase.length();
+            if (lowercaseLen == 0 && upperCaseLen == 0) {
+                score += 0;
+            } else if (lowercaseLen == 0 || upperCaseLen == 0) {
+                score += 10;
+            } else {
+                score += 20;
+            }
+            //三、数字
+            int numLen = password.length() - password.replaceAll("[0-9]", "")
+                    .length();
+            if (numLen == 0) {
+                score += 0;
+            } else if (numLen == 1) {
+                score += 10;
+            } else {
+                score += 20;
+            }
+            //四、符号
+            char[] symbolStr = password.replaceAll("[0-9a-zA-Z]", "").toCharArray();
+            int symbolNum = 0;
+            symbolNum = symbolStr.length;
+            //可以直接用上面的
+//            for (int i = 0; i < symbolStr.length; i++) {
+//                char c = symbolStr[i];
+//                if ((c >= 0x21 && c <= 0x2F) || (c >= 0x3A && c <= 0x40) || (c >= 0x5B && c <= 0x60) || (c >= 0x7B && c <= 0x7E)) {
+//                    symbolNum++;
+//                }
+//            }
+            if (symbolNum == 0) {
+                score += 0;
+            } else if (symbolNum == 1) {
+                score += 10;
+            } else {
+                score += 25;
+            }
+            //五、奖励（只能选符合最多的那一种奖励），注意这里的先后顺序
+            if (lowercaseLen > 0 && upperCaseLen > 0 && numLen > 0 && symbolNum > 0) {
+                score += 5;
+            } else if (lowercaseLen + upperCaseLen > 0 && numLen > 0 && symbolNum > 0) {
+                score += 3;
+            } else if (lowercaseLen + upperCaseLen > 0 && numLen > 0) {
+                score += 2;
+            }
+            //最后的评分标准
+            if (score >= 90) {
+                System.out.println("VERY_SECURE");
+            } else if (score >= 80) {
+                System.out.println("SECURE");
+            } else if (score >= 70) {
+                System.out.println("VERY_STRONG");
+            } else if (score >= 60) {
+                System.out.println("STRONG");
+            } else if (score >= 50) {
+                System.out.println("AVERAGE");
+            } else if (score >= 25) {
+                System.out.println("WEAK");
+            } else if (score >= 0) {
+                System.out.println("VERY_WEAK");
+            }
+        }
+    }
+
+    public static void hj87Two() {
+        Scanner in = new Scanner(System.in);
+
+        while (in.hasNextLine()) {
+            char[] ch = in.nextLine().toCharArray();
+            int score = 0;
+
+            //统计长度
+            int len = ch.length;
+            if (len <= 4) score += 5;
+            else if (len > 4 && len < 8) score += 10;
+            else score += 25;
+
+            //遍历获取大小写字母、数字、符号数目
+            int upCount = 0;
+            int lowCount = 0;
+            int numCount = 0;
+            int sigCount = 0;
+
+            for (int i = 0; i < len; i++) {
+                if (Character.isUpperCase(ch[i])) ++upCount;
+                else if (Character.isLowerCase(ch[i])) ++lowCount;
+                else if (Character.isDigit(ch[i])) ++numCount;
+                else ++sigCount;
+            }
+
+            //字母分数
+            if ((upCount > 0 && lowCount == 0) || (upCount == 0 && lowCount > 0)) score += 10;
+            else if (upCount > 0 && lowCount > 0) score += 20;
+            else score += 0;
+
+            //数字分数
+            if (numCount == 1) score += 10;
+            else if (numCount > 1) score += 20;
+            else score += 0;
+
+            //符号分数
+            if (sigCount == 1) score += 10;
+            else if (sigCount > 1) score += 25;
+            else score += 0;
+
+            //奖励分数
+            if (numCount > 0 && upCount > 0 && lowCount > 0 && sigCount > 0) score += 5;
+            else if (numCount > 0 && sigCount > 0 && (upCount > 0 || lowCount > 0)) score += 3;
+            else if (numCount > 0 && (upCount > 0 || lowCount > 0)) score += 2;
+
+            //评分
+            if (score >= 90) System.out.println("VERY_SECURE");
+            else if (score >= 80) System.out.println("SECURE");
+            else if (score >= 70) System.out.println("VERY_STRONG");
+            else if (score >= 60) System.out.println("STRONG");
+            else if (score >= 50) System.out.println("AVERAGE");
+            else if (score >= 25) System.out.println("WEAK");
+            else System.out.println("VERY_WEAK");
+        }
+    }
 
     /**
      * HJ86 求最大连续bit数

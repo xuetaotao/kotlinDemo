@@ -75,16 +75,379 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        hj39TestIpConvert();
 //        arithmeticTest();
 //        hj74();
-        hj87();
+        hj92();
     }
+
+    /**
+     * HJ94 记票统计
+     */
+    public static void hj94() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//候选人的人数n
+            LinkedHashMap<String, Integer> hashMap = new LinkedHashMap<>();
+            for (int i = 0; i < n; i++) {
+                String name = scanner.next();
+                hashMap.put(name, 0);
+            }
+            hashMap.put("Invalid", 0);
+            int peopleNum = scanner.nextInt();//投票人的人数
+            for (int i = 0; i < peopleNum; i++) {
+                String str = scanner.next();
+                boolean isInvalid = false;
+                for (String s : hashMap.keySet()) {
+                    if (s.equals(str)) {
+                        Integer integer = hashMap.get(s);
+                        hashMap.put(s, integer + 1);
+                        isInvalid = true;
+                    }
+                }
+                if (!isInvalid) {
+                    Integer invalid = hashMap.get("Invalid");
+                    hashMap.put("Invalid", invalid + 1);
+                }
+            }
+            for (Map.Entry<String, Integer> entry : hashMap.entrySet()) {
+                System.out.println(entry.getKey() + " : " + entry.getValue());
+            }
+        }
+    }
+
+    /**
+     * HJ93 数组分组
+     */
+    public static void hj93() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            ArrayList<Integer> list = new ArrayList<>();
+            int sum3 = 0;
+            int sum5 = 0;
+            int sum = 0;
+            for (int i = 0; i < n; i++) {
+                int anInt = scanner.nextInt();
+                if (anInt % 3 == 0) {
+                    sum3 += anInt;
+                } else if (anInt % 5 == 0) {
+                    sum5 += anInt;
+                } else {
+                    list.add(anInt);
+                }
+                sum += anInt;
+            }
+
+            int target = sum / 2 - sum3;
+            if (sum % 2 != 0) {
+                System.out.println("false");
+            } else {
+                System.out.println(helper93(0, list, target));
+            }
+        }
+    }
+
+    public static boolean helper93(int i, List<Integer> list, int target) {
+        if (i == list.size()) {
+            return target == 0;
+        }
+        return helper93(i + 1, list, target - list.get(i)) || helper93(i + 1, list, target);
+    }
+
+
+    /**
+     * HJ92 在字符串中找出连续最长的数字串
+     * String的split（String regex，int limit）方法：
+     * https://blog.csdn.net/wx1528159409/article/details/90243537
+     * limit 参数通过控制分割次数从而影响分割结果
+     * 如果传入 n(n>0) 那么字符串最多被分割 n-1 次,分割得到数组长度最大是 n
+     * 如果 n = -1 将会以最大分割次数分割
+     * 如果 n = 0 将会以最大分割次数分割,但是分割结果会舍弃末位的空串
+     */
+    public static void hj92Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String inputStr = scanner.nextLine();
+            String[] ss = inputStr.split("[^0-9]+");
+            int max = 0;
+            List<String> list = new ArrayList<>();
+            for (String s : ss) {
+                if (s.length() > max) {
+                    max = s.length();
+                    list.clear();
+                    list.add(s);
+                } else if (s.length() == max) {
+                    list.add(s);
+                }
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String s : list) {
+                stringBuilder.append(s);
+            }
+            stringBuilder.append(",").append(max);
+            System.out.println(stringBuilder);
+        }
+    }
+
+
+    //自己做的
+    public static void hj92() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String inputStr = scanner.nextLine();
+//            String inputStr = "abcd12345ed125ss123058789";
+            List<StringBuilder> list = new ArrayList<>();
+            StringBuilder stringBuilder;
+            int maxNumLen = 0;
+            for (int i = 0; i < inputStr.length(); i++) {
+                char c = inputStr.charAt(i);
+                if (Character.isDigit(c)) {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.append(c);
+                    for (int j = i + 1; j < inputStr.length(); j++) {
+                        char c1 = inputStr.charAt(j);
+                        if (Character.isDigit(c1)) {
+                            stringBuilder.append(c1);
+                            if (j + 1 == inputStr.length()) {
+                                if (stringBuilder.length() > maxNumLen) {
+                                    maxNumLen = stringBuilder.length();
+                                    list.clear();
+                                    list.add(stringBuilder);
+                                } else if (stringBuilder.length() == maxNumLen) {
+                                    list.add(stringBuilder);
+                                }
+                            }
+
+                        } else {
+                            if (stringBuilder.length() > maxNumLen) {
+                                maxNumLen = stringBuilder.length();
+                                list.clear();
+                                list.add(stringBuilder);
+                            } else if (stringBuilder.length() == maxNumLen) {
+                                list.add(stringBuilder);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            if (list.size() > 1) {
+                StringBuilder result = new StringBuilder();
+                int len = 0;
+                for (StringBuilder sb : list) {
+                    result.append(sb);
+                    len = sb.length();
+                }
+                result.append(",").append(len);
+                System.out.println(result);
+
+            } else if (list.size() == 1) {
+                System.out.println(list.get(0).toString() + "," + list.get(0).toString().length());
+            }
+        }
+    }
+
+
+    /**
+     * HJ91 走方格的方案数
+     */
+    public static void hj91() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            int m = scanner.nextInt();
+            System.out.println(calc91(n, m));
+        }
+    }
+
+    public static int calc91(int n, int m) {
+        if (n == 1 || m == 1) {
+            return n + m;
+        } else {
+            return calc91(n - 1, m) + calc91(n, m - 1);
+        }
+    }
+
+    /**
+     * HJ90 合法IP
+     */
+    public static void hj90() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.nextLine();
+            String[] split = nextLine.split("\\.");
+            String result = "YES";
+            if (split.length == 4) {
+                for (String s : split) {//遍历每个元素，合不合法
+                    if (s.length() == 0 || s.length() > 3) {//每段长度等于0，或者长度大于4，都不合法
+                        result = "NO";
+                        break;
+                    }
+                    for (char c : s.toCharArray()) {//每段的字符必须是数字
+                        if (!Character.isDigit(c)) {
+                            result = "NO";
+                            break;
+                        }
+                    }
+                    if (s.charAt(0) == '0' && s.length() != 1) {//除0以外，所有0开头的字符串都是非法的
+                        result = "NO";
+                        break;
+                    }
+                    if (Integer.parseInt(s) > 255) {//每段对应的数大于255，也是非法的
+                        result = "NO";
+                        break;
+                    }
+                }
+            } else {
+                result = "NO";
+            }
+            System.out.println(result);
+        }
+    }
+
 
     /**
      * HJ89 24点运算
      */
     public static void hj89() {
-
+        Scanner scanner = new Scanner(System.in);
+        //用于初步读取String储存
+        LinkedList<String> list1 = new LinkedList<>();
+        //用于将String转化成int储存
+        LinkedList<Integer> list = new LinkedList<>();
+        //用于还原：（1->A; 13->K）
+        LinkedList<String> list2 = new LinkedList<>();
+        list2.add("0");
+        list2.add("A");
+        for (int i = 2; i <= 10; i++) {
+            list2.add(Integer.toString(i));
+        }
+        list2.add("J");
+        list2.add("Q");
+        list2.add("K");
+        while (scanner.hasNext()) {
+            list1.add(scanner.next());
+        }
+        int flag = 0;
+        //转换成Integer：//遇到JOKER 直接输出ERROR
+        for (int i = 0; i < 4; i++) {
+            String cur = list1.get(i);
+            if (cur.equals("JOKER") || cur.equals("joker")) {
+                System.out.println("ERROR");
+                flag = -1;
+                break;
+            } else if (cur.equals("A")) {
+                list.add(1);
+            } else if (cur.equals("K")) {
+                list.add(13);
+            } else if (cur.equals("Q")) {
+                list.add(12);
+            } else if (cur.equals("J")) {
+                list.add(11);
+            } else {
+                list.add(Integer.valueOf(cur));
+            }
+        }
+        //暴力遍历四个数的排列组合
+        if (flag == 0) {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (j == i) {
+                        continue;
+                    }
+                    if (flag == 1) {
+                        break;
+                    }
+                    for (int k = 0; k < 4; k++) {
+                        if (k == i || k == j) {
+                            continue;
+                        }
+                        if (flag == 1) {
+                            break;
+                        }
+                        for (int p = 0; p < 4; p++) {
+                            if (p == i || p == j || p == k) {
+                                continue;
+                            }
+                            if (flag == 1) {
+                                break;
+                            }
+                            //将四个数给如helper function做判断：
+                            String out = helper89(list.get(i), list.get(j), list.get(k), list.get(p));
+                            //输出非NONE，生成答案：
+                            if (!out.equals("NONE")) {
+                                String res = "";
+                                res += list2.get(list.get(i));
+                                res += out.substring(0, 1);
+                                res += list2.get(list.get(j));
+                                res += out.substring(1, 2);
+                                res += list2.get(list.get(k));
+                                res += out.substring(2, 3);
+                                res += list2.get(list.get(p));
+                                System.out.println(res);
+                                flag = 1;
+                            }
+                        }
+                    }
+                }
+            }
+            //helepr function输出为NONE输出NONE：
+            if (flag == 0) {
+                System.out.println("NONE");
+            }
+        }
     }
 
+    //重载：输出的是三个有序运算符号
+    public static String helper89(int a, int b, int c, int d) {
+        if (!helper89(a * b, c, d).equals("NONE")) {
+            return "*" + helper89(a * b, c, d);
+
+        } else if (!helper89(a + b, c, d).equals("NONE")) {
+            return "+" + helper89(a + b, c, d);
+
+        } else if (!helper89(a - b, c, d).equals("NONE")) {
+            return "-" + helper89(a - b, c, d);
+
+            //TODO 这里不懂为什么要a % b == 0，也就是要必须整除，2/3=0，5/3=1啊
+            //自己测试之后不要这个&& a % b条件也可以
+        } else if (b != 0 && a % b == 0 && !helper89(a / b, c, d).equals("NONE")) {
+            return "/" + helper89(a / b, c, d);
+        } else {
+            return "NONE";
+        }
+    }
+
+    //重载
+    static public String helper89(int a, int b, int c) {
+        if (!helper89(a * b, c).equals("NONE")) {
+            return "*" + helper89(a * b, c);
+
+        } else if (!helper89(a + b, c).equals("NONE")) {
+            return "+" + helper89(a + b, c);
+
+        } else if (!helper89(a - b, c).equals("NONE")) {
+            return "-" + helper89(a - b, c);
+
+        } else if (b != 0 && a % b == 0 && !helper89(a / b, c).equals("NONE")) {
+            return "/" + helper89(a / b, c);
+
+        } else {
+            return "NONE";
+        }
+    }
+
+    static public String helper89(int a, int b) {
+        if (a * b == 24) {
+            return "*";
+        } else if (a + b == 24) {
+            return "+";
+        } else if (a - b == 24) {
+            return "-";
+        } else if (b != 0 && a % b == 0 && a / b == 24) {
+            return "/";
+        } else {
+            return "NONE";
+        }
+    }
 
     /**
      * HJ88 扑克牌大小

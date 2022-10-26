@@ -78,8 +78,148 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         hj92();
     }
 
+
+    /**
+     * HJ97 记负均正
+     */
+    public static void hj97() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            int[] array = new int[n];
+            int countNegative = 0;
+            int countPositive = 0;
+            int sumPositive = 0;
+            for (int i = 0; i < n; i++) {
+                array[i] = scanner.nextInt();
+                if (array[i] < 0) {
+                    countNegative++;
+                } else if (array[i] > 0) {
+                    sumPositive += array[i];
+                    countPositive++;
+                }
+            }
+
+            double aver = 0;
+            if (countPositive == 0) {
+                aver = 0.0;
+            } else {
+                aver = sumPositive / (countPositive * 1.0d);
+            }
+
+//            DecimalFormat decimalFormat = new DecimalFormat("0.0");
+//            String format = decimalFormat.format(aver);
+            String format = String.format("%.1f", aver);
+            System.out.println(countNegative + " " + format);
+        }
+    }
+
+
+    /**
+     * HJ96 表示数字
+     */
+    public static void hj96() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.nextLine();
+            String result = nextLine.replaceAll("([0-9]+)", "*$1*");
+            System.out.println(result);
+        }
+    }
+
+    /**
+     * HJ95 人民币转换
+     */
+    public static String[] ten95 = {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"};
+    public static String[] power95 = {"万", "亿"};
+    public static String[] daiwei95 = {"元", "角", "分", "整"};
+
+    public static void hj95() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            //分割为整数部分和小数部分
+            String[] split = scanner.nextLine().split("\\.");
+            if (split[1].equals("00")) {
+                System.out.println("人民币" + solveZheng95(Double.parseDouble(split[0])) + "元整");
+            } else if (split[0].equals("0")) {
+                System.out.println("人民币" + solveXiao95(split[1]));
+            } else {
+                System.out.println("人民币" + solveZheng95(Double.parseDouble(split[0])) + "元"
+                        + solveXiao95(split[1]));
+            }
+        }
+    }
+
+    public static String solveXiao95(String s2) {
+        StringBuilder stringBuilder = new StringBuilder();
+        int jiao = Integer.parseInt(s2.substring(0, 1));
+        int fen = Integer.parseInt(s2.substring(1, 2));
+        if (jiao != 0) {
+            stringBuilder.append(ten95[jiao]);
+            stringBuilder.append("角");
+        }
+        if (fen != 0) {
+            stringBuilder.append(ten95[fen]);
+            stringBuilder.append("分");
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String solveZheng95(double zheng) {
+        StringBuilder sb = new StringBuilder();
+        int pow = 0;
+        while ((int) zheng != 0) {
+            if (pow != 0) {
+                sb.append(power95[pow - 1]);
+            }
+            int temp = (int) (zheng % 10000);
+            //个位
+            int gewei = temp % 10;
+            int shiwei = (temp / 10) % 10;
+            int baiwei = (temp / 100) % 10;
+            int qianwei = (temp / 1000) % 10;
+            if (gewei != 0) {
+                sb.append(ten95[gewei]);
+            }
+            if (shiwei != 0) {
+                sb.append("拾");
+                if (shiwei != 1) {
+                    sb.append(ten95[shiwei]);
+                }
+            } else {
+                if (gewei != 0 && (temp > 99 || (int) zheng > 10000)) {
+                    sb.append(ten95[0]);
+                }
+            }
+            if (baiwei != 0) {
+                sb.append("佰");
+                sb.append(ten95[baiwei]);
+            } else {
+                if (shiwei != 0 && (temp > 999 || (int) zheng > 10000)) {
+                    sb.append(ten95[0]);
+                }
+            }
+            if (qianwei != 0) {
+                sb.append("仟");
+                sb.append(ten95[qianwei]);
+            } else {
+                if (baiwei != 0 && ((int) zheng > 10000)) {
+                    sb.append(ten95[0]);
+                }
+            }
+            zheng /= 10000;
+            pow++;
+            if (pow > 2) {
+                pow = 1;
+            }
+        }
+        return sb.reverse().toString();
+    }
+
+
     /**
      * HJ94 记票统计
+     * 这个题目的答案里有nextLine的换行使用方法
      */
     public static void hj94() {
         Scanner scanner = new Scanner(System.in);

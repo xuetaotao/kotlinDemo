@@ -75,7 +75,184 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        hj39TestIpConvert();
 //        arithmeticTest();
 //        hj74();
-        hj92();
+    }
+
+    /**
+     * HJ103 Redraiment的走法
+     */
+    public static void hj103Error() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            int[] array = new int[n];
+            for (int i = 0; i < n; i++) {
+                array[i] = scanner.nextInt();
+            }
+            int result = 0;
+            for (int i = 0; i < array.length; i++) {
+                result = Math.max(result, getNext103(i, array, 1));
+            }
+            System.out.println(result);
+        }
+    }
+
+    //出错的原因是优先选择了下一个比它的数，以2 5 1 5 4 5为例
+    //1为开始步的时候，这样递归下一个数就是5，而不会走4 5
+    public static int getNext103(int i, int[] array, int result) {
+        for (int j = i + 1; j < array.length; j++) {
+            if (array[j] > array[i]) {
+                result = getNext103(j, array, result + 1);
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * HJ102 字符统计
+     */
+    public static void hj102Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String inputStr = scanner.nextLine();
+//            String inputStr = "aaddccdc";
+            //创建字符ascll码对应的整型数组，ascll码有128个
+            int[] charArray = new int[129];
+            for (int i = 0; i < inputStr.length(); i++) {
+                int cToInt = (int) inputStr.charAt(i);
+                charArray[cToInt]++;
+            }
+            int charMax = 0;
+            //找出字符数量最多的ascll码值
+            for (int i : charArray) {
+                charMax = Math.max(i, charMax);
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = charMax; i > 0; i--) {
+                for (int j = 0; j < charArray.length; j++) {
+                    if (charArray[j] == i) {
+                        sb.append((char) j);
+                    }
+                }
+            }
+            System.out.println(sb.toString());
+        }
+    }
+
+
+    public static void hj102() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String inputStr = scanner.nextLine();
+            HashMap<Character, Integer> hashMap = new HashMap<>();
+            for (int i = 0; i < inputStr.length(); i++) {
+                char c = inputStr.charAt(i);
+                if (hashMap.containsKey(c)) {
+                    Integer integer = hashMap.get(c);
+                    hashMap.put(c, integer + 1);
+                } else {
+                    hashMap.put(c, 1);
+                }
+            }
+            Set<Map.Entry<Character, Integer>> entries = hashMap.entrySet();
+            List<Map.Entry<Character, Integer>> list = new ArrayList<>(entries);
+            Collections.sort(list, new Comparator<Map.Entry<Character, Integer>>() {
+                @Override
+                public int compare(Map.Entry<Character, Integer> o1, Map.Entry<Character, Integer> o2) {
+                    int value = o1.getValue() - o2.getValue();
+                    if (value != 0) {//不同字母出现次数的降序表示
+                        return o2.getValue() - o1.getValue();//负数 o1.getValue() o2.getValue()
+                    } else {//若出现次数相同，则按ASCII码的升序输出
+                        int o1Key = o1.getKey() - '0';
+                        int o2Key = o2.getKey() - '0';
+                        return o1Key - o2Key;//负数 o1Key o2Key
+                    }
+                }
+            });
+            for (Map.Entry<Character, Integer> temp : list) {
+                System.out.print(temp.getKey());
+            }
+        }
+    }
+
+
+    /**
+     * HJ101 输入整型数组和排序标识，对其元素按照升序或降序进行排序
+     */
+    public static void hj101() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            scanner.nextLine();//指针移到下一行开头
+            Integer[] array = new Integer[n];
+            for (int i = 0; i < n; i++) {
+                array[i] = scanner.nextInt();
+            }
+            scanner.nextLine();
+            int order = scanner.nextInt();
+            if (0 == order) {//0代表升序排序
+                Arrays.sort(array);
+
+            } else if (1 == order) {//1代表降序排序
+                Arrays.sort(array, new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        return o2 - o1;//负数： o1  o2
+                    }
+                });
+            }
+            for (Integer temp : array) {
+                System.out.print(temp + " ");
+            }
+        }
+    }
+
+
+    /**
+     * HJ100 等差数列
+     */
+    public static void hj100() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            long sum = n * 2 + (n * (n - 1) / 2) * 3;
+            System.out.println(sum);
+        }
+    }
+
+
+    /**
+     * HJ99 自守数
+     */
+    public static void hj99() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int nextInt = scanner.nextInt();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i <= nextInt; i++) {
+                String iStr = String.valueOf(i);
+                int x2 = (int) Math.pow(i, 2);
+                String x2Str = String.valueOf(x2);
+                //方式一
+//                String substring = x2Str.substring(x2Str.length() - iStr.length(), x2Str.length());
+//                if (substring.equals(iStr)) {
+//                    list.add(i);
+//                }
+                //方式二
+                if (x2Str.endsWith(iStr)) {
+                    list.add(i);
+                }
+            }
+            System.out.println(list.size());
+        }
+    }
+
+    /**
+     * HJ98 自动售货系统
+     */
+    public static void hj98() {
+        //不会，暂时略过
     }
 
 

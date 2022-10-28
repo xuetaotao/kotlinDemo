@@ -38,6 +38,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * 牛客网华为机试：
+ * https://www.nowcoder.com/exam/oj/ta?page=1&tpId=37&type=37
+ * <p>
  * HJ5 进制转换
  * 0xAA: 10*16+10
  * Scanner类的next() 和nextLine()的区别:
@@ -75,12 +78,138 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 //        hj39TestIpConvert();
 //        arithmeticTest();
 //        hj74();
+        hj103();
     }
+
+
+    /**
+     * HJ108 求最小公倍数
+     * 只要一个数逐渐累加自身到可以整除另一个数时就是既可以整除自己也可以整除另一个数，
+     * 此时结果就是要得到的公倍数
+     */
+    public static void hj108() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+            int c = a;
+            System.out.println(count108(a, b, c));
+        }
+    }
+
+    public static int count108(int a, int b, int c) {
+        if (a % b == 0) {
+            return a;
+        }
+        return count108(a + c, b, c);
+    }
+
+    /**
+     * HJ107 求解立方根
+     */
+    public static void hj107() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            double input = scanner.nextDouble();
+            double num = input > 0 ? input : -input;//负数 当正数来处理
+            double bottom = 0;
+            double top = 0;
+            while (top * top * top < num) {
+                top++;
+            }
+            bottom = top - 1;
+            double mid = bottom + (top - bottom) / 2;
+            double mul = mid * mid * mid;
+            while (top - bottom > 0.1) {// 因为只保留一位小数
+                if (mul > num) {
+                    top = mid;
+                } else if (mul < num) {
+                    bottom = mid;
+                } else {
+                    break;
+                }
+                mid = bottom + (top - bottom) / 2;
+                mul = mid * mid * mid;
+            }
+            if (input < 0) {
+                mid = -mid;// 原数为负,结果也应该为负
+            }
+            System.out.println(String.format("%.1f", mid));
+        }
+    }
+
+    /**
+     * HJ106 字符逆序
+     */
+    public static void hj106() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.nextLine();
+            StringBuilder sb = new StringBuilder(nextLine);
+            System.out.println(sb.reverse());
+        }
+    }
+
+
+    /**
+     * HJ105 记负均正II
+     */
+    public static void hj105() {
+        Scanner scanner = new Scanner(System.in);
+        int countNegative = 0;
+        int countOthers = 0;
+        int sumOthers = 0;
+        while (scanner.hasNext()) {
+            int num = scanner.nextInt();
+            if (num < 0) {
+                countNegative++;
+            } else {
+                countOthers++;
+                sumOthers += num;
+            }
+        }
+        double aver = 0;
+        if (countOthers == 0) {
+            aver = 0.0;
+        } else {
+            aver = sumOthers / (countOthers * 1.0d);
+        }
+//            DecimalFormat decimalFormat = new DecimalFormat("0.0");
+//            String format = decimalFormat.format(aver);
+        //其中%表示小数点前的位数，1表示保留小数点后1位，f表示转换位float型（找过一下好像没有可以转换为double的）
+        String format = String.format("%.1f", aver);
+        System.out.println(countNegative + "\n" + format);
+    }
+
 
     /**
      * HJ103 Redraiment的走法
      */
-    public static void hj103Error() {
+    public static void hj103() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            int[] array = new int[n];
+//            int n = 6;
+//            int[] array = new int[]{2,5,1,5,4,5};
+            for (int i = 0; i < n; i++) {
+                array[i] = scanner.nextInt();
+            }
+            int[] kArray = new int[n];
+            for (int i = 1; i < n; i++) {
+                for (int j = 0; j < i; j++) {
+                    if (array[j] < array[i]) {
+                        kArray[i] = Math.max(kArray[i], kArray[j] + 1);
+                    }
+                }
+            }
+            Arrays.sort(kArray);
+            System.out.println(kArray[n - 1] + 1);
+        }
+    }
+
+    //暴力递归
+    public static void hj103Two() {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()) {
             int n = scanner.nextInt();
@@ -88,24 +217,24 @@ public class HuaWeiTestActivity extends AppCompatActivity {
             for (int i = 0; i < n; i++) {
                 array[i] = scanner.nextInt();
             }
-            int result = 0;
-            for (int i = 0; i < array.length; i++) {
-                result = Math.max(result, getNext103(i, array, 1));
-            }
-            System.out.println(result);
+            System.out.println(count103(array));
         }
     }
 
-    //出错的原因是优先选择了下一个比它的数，以2 5 1 5 4 5为例
-    //1为开始步的时候，这样递归下一个数就是5，而不会走4 5
-    public static int getNext103(int i, int[] array, int result) {
-        for (int j = i + 1; j < array.length; j++) {
-            if (array[j] > array[i]) {
-                result = getNext103(j, array, result + 1);
-                break;
+
+    public static int count103(int[] array) {
+        int[] dp = new int[array.length + 1];
+        Arrays.fill(dp, 1);//初始化为1
+        int max = 1;
+        for (int i = 1; i < array.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (array[j] < array[i]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+                max = Math.max(dp[i], max);
             }
         }
-        return result;
+        return max;
     }
 
 

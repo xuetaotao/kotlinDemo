@@ -239,6 +239,7 @@ class MainActivity : BaseMediaActivity() {
 
         //算法与数据结构
         addButton("算法与数据结构：华为笔试刷题", HuaWeiTestActivity::class.java)
+        addButton("算法与数据结构：算法刷题", AlgorithmActivity::class.java)
         addButton("算法与数据结构：数据结构", DataStructActivity::class.java)
     }
 

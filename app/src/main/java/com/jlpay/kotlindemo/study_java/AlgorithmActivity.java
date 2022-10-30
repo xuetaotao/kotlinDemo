@@ -19,6 +19,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -40,6 +41,501 @@ public class AlgorithmActivity extends AppCompatActivity {
     public void algorDemo(View view) {
         Toast.makeText(this, "牛客网算法100题", Toast.LENGTH_SHORT).show();
     }
+
+
+    /**
+     * BM26 求二叉树的层序遍历
+     * 方法一：队列
+     * 队列是一种仅支持在表尾进行插入操作、在表头进行删除操作的线性表，插入端称为队尾，删除端称为队首，
+     * 因整体类似排队的队伍而得名。它满足先进先出的性质，元素入队即将新元素加在队列的尾，
+     * 元素出队即将队首元素取出，它后一个作为新的队首。
+     */
+    public ArrayList<ArrayList<Integer>> bm26(TreeNode root) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            //如果是空，则直接返回空数组
+            return res;
+        }
+        //队列存储，进行层次遍历
+        Queue<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            //记录二叉树的某一行
+            ArrayList<Integer> row = new ArrayList<>();
+            int n = queue.size();
+            //因先进入的是根节点，故每层节点多少，队列大小就是多少
+            for (int i = 0; i < n; i++) {
+                TreeNode cur = queue.poll();//弹出元素
+                row.add(cur.val);
+                //若是左右孩子存在，则存入左右孩子作为下一个层次
+                if (cur.left != null) {
+                    queue.add(cur.left);
+                }
+                if (cur.right != null) {
+                    queue.add(cur.right);
+                }
+            }
+            //每一层加入输出
+            res.add(row);
+        }
+        return res;
+    }
+
+    //方法二：递归（扩展思路）
+    public ArrayList<ArrayList<Integer>> bm26Two(TreeNode root) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            //如果是空，则直接返回
+            return res;
+        }
+        //递归层次遍历
+        traverse26(root, 1, res);
+        return res;
+    }
+
+    public void traverse26(TreeNode root, int depth, ArrayList<ArrayList<Integer>> res) {
+        if (root != null) {
+            //新的一层
+            if (res.size() < depth) {
+                ArrayList<Integer> row = new ArrayList<>();
+                res.add(row);
+                row.add(root.val);
+
+            } else {
+                //读取该层的一维数组，将元素加入末尾
+                ArrayList<Integer> row = res.get(depth - 1);
+                row.add(root.val);
+            }
+        } else {
+            return;
+        }
+        //递归左右时深度记得加1
+        traverse26(root.left, depth + 1, res);
+        traverse26(root.right, depth + 1, res);
+    }
+
+    /**
+     * BM25 二叉树的后序遍历（左右根）
+     * 方法一：递归（推荐使用）
+     */
+    public int[] bm25(TreeNode root) {
+        //添加遍历结果的数组
+        List<Integer> list = new ArrayList<>();
+        //递归后序遍历
+        postorder25(list, root);
+        //返回的结果
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    public void postorder25(List<Integer> list, TreeNode root) {
+        //遇到空节点则返回
+        if (root == null) {
+            return;
+        }
+        //先去左子树
+        postorder25(list, root.left);
+        //再去右子树
+        postorder25(list, root.right);
+        //最后访问根节点
+        list.add(root.val);
+    }
+
+    //栈思路
+    public int[] bm25Two(TreeNode root) {
+        //添加遍历结果的数组
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode pre = null;
+        while (root != null || !stack.isEmpty()) {
+            //每次先找到最左边的节点
+            while (root != null) {
+                stack.push(root.left);
+                root = root.left;
+            }
+            //弹出栈顶
+            TreeNode node = stack.pop();
+            //如果该元素的右边没有或是已经访问过
+            if (node.right == null || node.right == pre) {
+                //访问中间的节点
+                list.add(node.val);
+                //且记录为访问过了
+                pre = node;
+            } else {
+                //该节点入栈
+                stack.push(node);
+                //先访问右边
+                root = node.right;
+            }
+        }
+        //返回的结果
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    /**
+     * BM24 二叉树的中序遍历(左根右)
+     * 方法一：递归（推荐使用）
+     * <p>
+     * 具体做法：
+     * step 1：准备数组用来记录遍历到的节点值，Java可以用List，C++可以直接用vector。
+     * step 2：从根节点开始进入递归，遇到空节点就返回，否则优先进入左子树进行递归访问。
+     * step 3：左子树访问完毕再回到根节点访问。
+     * step 4：最后进入根节点的右子树进行递归。
+     */
+    public int[] bm24(TreeNode root) {
+        //添加遍历结果的数组
+        List<Integer> list = new ArrayList<>();
+        //递归中序遍历
+        inorder24(list, root);
+        //返回的结果
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    public void inorder24(List<Integer> list, TreeNode root) {
+        //遇到空节点则返回
+        if (root == null) {
+            return;
+        }
+        //先去左子树
+        inorder24(list, root.left);
+        //再访问根节点
+        list.add(root.val);
+        //最后去右子树
+        inorder24(list, root.right);
+    }
+
+    /**
+     * 栈思路
+     */
+    public int[] bm24Two(TreeNode root) {
+        //添加遍历结果的数组
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        //空树返回空数组
+        if (root == null) {
+            return new int[0];
+        }
+        //当树节点不为空或栈中有节点时
+        while (root != null || !stack.isEmpty()) {
+            //每次找到最左节点
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            //访问该节点
+            TreeNode node = stack.pop();
+            list.add(node.val);
+            //进入右节点
+            root = node.right;
+        }
+        //返回的结果
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    /**
+     * BM23 二叉树的前序遍历(根左右)
+     * 方法一：递归（推荐使用）
+     * 具体做法：
+     * step 1：准备数组用来记录遍历到的节点值，Java可以用List，C++可以直接用vector。
+     * step 2：从根节点开始进入递归，遇到空节点就返回，否则将该节点值加入数组。
+     * step 3：依次进入左右子树进行递归。
+     */
+    public int[] bm23(TreeNode root) {
+        //添加遍历结果的数组
+        List<Integer> list = new ArrayList<>();
+        //递归前序遍历
+        preorder23(list, root);
+        //返回的结果
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    public void preorder23(List<Integer> list, TreeNode root) {
+        //遇到空节点则返回
+        if (root == null) {
+            return;
+        }
+        //先遍历根节点
+        list.add(root.val);
+        //再去左子树
+        preorder23(list, root.left);
+        //最后去右子树
+        preorder23(list, root.right);
+    }
+
+
+    /**
+     * 栈实现
+     * 具体做法：
+     * step 1：优先判断树是否为空，空树不遍历。
+     * step 2：准备辅助栈，首先记录根节点。
+     * step 3：每次从栈中弹出一个元素，进行访问，然后验证该节点的左右子节点是否存在，存的话的加入栈中，
+     * 优先加入右节点。
+     */
+    public int[] bm23Two(TreeNode root) {
+        //添加遍历结果的数组
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        //空树返回空数组
+        if (root == null) {
+            return new int[0];
+        }
+        //根节点先进栈
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            //每次栈顶就是访问的元素
+            TreeNode treeNode = stack.pop();//从栈中取出
+            list.add(treeNode.val);
+            //如果右边还有右子节点进栈
+            if (treeNode.right != null) {
+                stack.push(treeNode.right);
+            }
+            //如果左边还有左子节点进栈
+            if (treeNode.left != null) {
+                stack.push(treeNode.left);
+            }
+        }
+        //返回的结果
+        int[] res = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    public static class TreeNode {
+        int val = 0;
+        TreeNode left = null;
+        TreeNode right = null;
+
+        public TreeNode(int val) {
+            this.val = val;
+        }
+    }
+
+
+    /**
+     * BM22 比较版本号
+     * 方法一：双指针遍历截取（推荐使用）
+     */
+    public int bm22(String version1, String version2) {
+        int n1 = version1.length();
+        int n2 = version2.length();
+        int i = 0, j = 0;
+        //直到某个字符串结束
+        while (i < n1 || j < n2) {
+            long num1 = 0;
+            //从下一个点前截取数字
+            while (i < n1 && version1.charAt(i) != '.') {
+                num1 = num1 * 10 + (version1.charAt(i) - '0');
+                i++;
+            }
+            //跳过点
+            i++;
+            long num2 = 0;
+            //从下一个点前截取数字
+            while (j < n2 && version2.charAt(j) != '.') {
+                num2 = num2 * 10 + (version2.charAt(j) - '0');
+                j++;
+            }
+            //跳过点
+            j++;
+            //比较数字大小
+            if (num1 > num2) {
+                return 1;
+            }
+            if (num1 < num2) {
+                return -1;
+            }
+        }
+        //版本号相同
+        return 0;
+    }
+
+
+    /**
+     * BM21 旋转数组的最小数字
+     * 方法一：二分法（推荐使用）
+     */
+    public int bm21(int[] array) {
+        int left = 0;
+        int right = array.length - 1;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (array[mid] > array[right]) {
+                //最小的数字在mid右边
+                left = mid + 1;
+            } else if (array[mid] == array[right]) {
+                //无法判断，一个一个试
+                right--;
+            } else {
+                //最小数字要么是mid要么在mid左边
+                right = mid;
+            }
+        }
+        return array[left];
+    }
+
+
+    /**
+     * BM20 数组中的逆序对
+     * <p>
+     * 具体做法：
+     * step 1： 划分阶段：将待划分区间从中点划分成两部分，两部分进入递归继续划分，直到子数组长度为1.
+     * step 2： 排序阶段：使用归并排序递归地处理子序列，同时统计逆序对，因为在归并排序中，我们会依次比较相邻两组子数组各个元素的大小，并累计遇到的逆序情况。而对排好序的两组，右边大于左边时，它大于了左边的所有子序列，基于这个性质我们可以不用每次加1来统计，减少运算次数。
+     * step 3： 合并阶段：将排好序的子序列合并，同时累加逆序对。
+     */
+    public int bm20(int[] array) {
+        int n = array.length;
+        int[] res = new int[n];
+        return mergeSort20(0, n - 1, array, res);
+    }
+
+    public int mergeSort20(int left, int right, int[] data, int[] temp) {
+        int mod = 1000000007;
+        //停止划分
+        if (left >= right) {
+            return 0;
+        }
+        //取中间
+        int mid = left + (right - left) / 2;
+        //左右划分合并
+        int res = mergeSort20(left, mid, data, temp) + mergeSort20(mid + 1, right, data, temp);
+        //防止溢出
+        res %= mod;
+        int i = left, j = mid + 1;
+        for (int k = left; k <= right; k++) {
+            temp[k] = data[k];
+        }
+        for (int k = left; k <= right; k++) {
+            if (i == mid + 1) {
+                data[k] = temp[j++];
+            } else if (j == right + 1 || temp[i] <= temp[j]) {
+                data[k] = temp[i++];
+            } else {
+                //左边比右边大，答案增加
+                data[k] = temp[j++];
+                // 统计逆序对
+                res += mid - i + 1;
+            }
+        }
+        return res % mod;
+    }
+
+
+    /**
+     * BM19 寻找峰值
+     * 方法：二分查找（推荐使用）
+     * 具体做法：
+     * step 1：二分查找首先从数组首尾开始，每次取中间值，直到首尾相遇。
+     * step 2：如果中间值的元素大于它右边的元素，说明往右是向下，我们不一定会遇到波峰，但是那就往左收缩区间。
+     * step 3：如果中间值大于右边的元素，说明此时往右是向上，向上一定能有波峰，那我们往右收缩区间。
+     * step 4：最后区间收尾相遇的点一定就是波峰。
+     */
+    public int bm19(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        //二分法
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            //右边是往下，不一定有坡峰
+            if (nums[mid] > nums[mid + 1]) {
+                right = mid;
+            } else {
+                //右边是往上，一定能找到波峰
+                left = mid + 1;
+            }
+        }
+        //其中一个波峰
+        return right;
+    }
+
+    /**
+     * BM18 二维数组中的查找
+     * 方法：二分查找（推荐使用）
+     * <p>
+     * 具体做法：
+     * step 1：首先获取矩阵的两个边长，判断特殊情况。
+     * step 2：首先以左下角为起点，若是它小于目标元素，则往右移动去找大的，若是他大于目标元素，则往上移动去找小的。
+     * step 3：若是移动到了矩阵边界也没找到，说明矩阵中不存在目标值。
+     */
+    public boolean bm18(int target, int[][] array) {
+        //优先判断特殊
+        if (array.length == 0) {
+            return false;
+        }
+        int n = array.length;//获取行数
+        if (array[0].length == 0) {
+            return false;
+        }
+        int m = array[0].length;//获取列数
+        //从最左下角的元素开始往右或往上
+        for (int i = n - 1, j = 0; i >= 0 && j < m; ) {
+            //元素较大，往上走
+            if (array[i][j] > target) {
+                i--;
+
+            } else if (array[i][j] < target) {
+                //元素较小，往右走
+                j++;
+
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * BM17 二分查找-I
+     * 方法：二分法（推荐使用）
+     * 具体做法：
+     * <p>
+     * step 1：从数组首尾开始，每次取中点值。
+     * step 2：如果中间值等于目标即找到了，可返回下标，如果中点值大于目标，说明中点以后的都大于目标，因此目标在中点左半区间，如果中点值小于目标，则相反。
+     * step 3：根据比较进入对应的区间，直到区间左右端相遇，意味着没有找到。
+     */
+    public static int bm17(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        //从数组首尾开始，直到二者相遇
+        while (left <= right) {
+            //每次检查中点的值
+//            int mid = (left + right) / 2;
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            }
+            //进入左的区间
+            if (nums[mid] > target) {
+                right = mid - 1;
+            } else {
+                //进入右区间
+                left = mid + 1;
+            }
+        }
+        return -1;
+    }
+
 
     /**
      * BM16 删除有序链表中重复的元素-II

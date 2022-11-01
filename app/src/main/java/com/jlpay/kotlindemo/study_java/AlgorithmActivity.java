@@ -44,6 +44,217 @@ public class AlgorithmActivity extends AppCompatActivity {
         Toast.makeText(this, "牛客网算法100题", Toast.LENGTH_SHORT).show();
     }
 
+
+    /**
+     * BM54 三数之和
+     */
+    public ArrayList<ArrayList<Integer>> bm54(int[] num) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        int n = num.length;
+        //不够三元组
+        if (n < 3) {
+            return res;
+        }
+        //排序
+        Arrays.sort(num);
+        for (int i = 0; i < n - 2; i++) {
+            if (i != 0 && num[i] == num[i - 1]) {
+                continue;
+            }
+            //后续的收尾双指针
+            int left = i + 1;
+            int right = n - 1;
+            //设置当前数的负值为目标
+            int target = -num[i];
+            while (left < right) {
+                //双指针指向的二值相加为目标，则可以与num[i]组成0
+                if (num[left] + num[right] == target) {
+                    ArrayList<Integer> temp = new ArrayList<>();
+                    temp.add(num[i]);
+                    temp.add(num[left]);
+                    temp.add(num[right]);
+                    res.add(temp);
+                    while (left + 1 < right && num[left] == num[left + 1]) {
+                        left++;//去重
+                    }
+                    while (right - 1 > left && num[right] == num[right - 1]) {
+                        right--;//去重
+                    }
+                    //双指针向中间收缩
+                    left++;
+                    right--;
+
+                } else if (num[left] + num[right] > target) {
+                    //双指针指向的二值相加大于目标，右指针向左
+                    right--;
+
+                } else {
+                    //双指针指向的二值相加小于目标，左指针向右
+                    left++;
+                }
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * BM53 缺失的第一个正整数
+     * n个长度的数组，没有重复，则如果数组填满了1～n，那么缺失n+1，
+     * 如果数组填不满1～n，那么缺失的就是1～n中的数字。
+     */
+    public int bm53(int[] nums) {
+        int n = nums.length;
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            hashMap.put(nums[i], 1);
+        }
+        int res = 1;
+        while (hashMap.containsKey(res)) {
+            res++;
+        }
+        return res;
+    }
+
+    //前面提到了数组要么缺失1～n1～n1～n中的某个数字，要么缺失n+1，
+    // 而数组正好有下标0～n−1可以对应数字1～n，因此只要数字1～n中某个数字出现，我们就可以将对应下标的值做一个标记，
+    // 最后没有被标记的下标就是缺失的值。
+    public int bm53Two(int[] nums) {
+        int n = nums.length;
+        //遍历数组
+        for (int i = 0; i < n; i++) {
+            //负数全部记为n+1
+            if (nums[i] <= 0) {
+                nums[i] = n + 1;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            //对于1-n中的数字
+            if (Math.abs(nums[i]) <= n) {
+                //这个数字的下标标记为负数
+                nums[Math.abs(nums[i]) - 1] = -1 * Math.abs(nums[Math.abs(nums[i]) - 1]);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            //找到第一个元素不为负数的下标
+            if (nums[i] > 0) {
+                return i + 1;
+            }
+        }
+        return n + 1;
+    }
+
+    /**
+     * BM52 数组中只出现一次的两个数字
+     * 既然有两个数字只出现了一次，我们就统计每个数字的出现次数，利用哈希表的快速根据key值访问其频率值
+     */
+    public int[] bm52(int[] array) {
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        ArrayList<Integer> res = new ArrayList<>();
+        //遍历数组
+        for (int i = 0; i < array.length; i++) {
+            //统计每个数出现的频率
+            if (!hashMap.containsKey(array[i])) {
+                hashMap.put(array[i], 1);
+            } else {
+                hashMap.put(array[i], hashMap.get(array[i]) + 1);
+            }
+        }
+        //再次遍历数组
+        for (int i = 0; i < array.length; i++) {
+            if (hashMap.get(array[i]) == 1) {
+                res.add(array[i]);
+            }
+        }
+        //整理次序
+        if (res.get(0) < res.get(1)) {
+            return new int[]{res.get(0), res.get(1)};
+        } else {
+            return new int[]{res.get(1), res.get(0)};
+        }
+    }
+
+    //异或运算（扩展思路）
+    public int[] bm52Two(int[] array) {
+        int res1 = 0;
+        int res2 = 0;
+        int temp = 0;
+        //遍历数组得到a^b
+        for (int i = 0; i < array.length; i++) {
+            temp ^= array[i];
+        }
+        int k = 1;
+        //找到两个数不相同的第一位
+        while ((k & temp) == 0) {
+            k <<= 1;
+        }
+        for (int i = 0; i < array.length; i++) {
+            //遍历数组，对每个数分类
+            if ((k & array[i]) == 0) {
+                res1 ^= array[i];
+            } else {
+                res2 ^= array[i];
+            }
+        }
+        //整理次序
+        if (res1 < res2) {
+            return new int[]{res1, res2};
+        } else {
+            return new int[]{res2, res1};
+        }
+    }
+
+    /**
+     * BM51 数组中出现次数超过一半的数字
+     * 数组某个元素出现次数超过了数组长度的一半，那它肯定出现最多，
+     * 而且只要超过了一半，其他数字不可能超过一半了，必定是它。
+     */
+    public int bm51(int[] array) {
+        //哈希表统计每个数字出现的次数
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        //遍历数组
+        for (int i = 0; i < array.length; i++) {
+            //统计频率
+            if (!hashMap.containsKey(array[i])) {
+                hashMap.put(array[i], 1);
+            } else {
+                hashMap.put(array[i], hashMap.get(array[i]) + 1);
+            }
+            //一旦有个数大于长度一半的情况即可返回
+            if (hashMap.get(array[i]) > array.length / 2) {
+                return array[i];
+            }
+        }
+        return 0;
+    }
+
+
+    /**
+     * BM50 两数之和
+     * 方法：哈希表（推荐使用）
+     * 哈希表是一种根据关键码（key）直接访问值（value）的一种数据结构。而这种直接访问意味着
+     * 只要知道key就能在O(1)O(1)O(1)时间内得到value，因此哈希表常用来统计频率、快速检验某个元素是否出现过等。
+     * <p>
+     * 对于数组中出现的一个数a，如果目标值减去a的值已经出现过了，那这不就是我们要找的一对元组
+     */
+    public int[] bm50(int[] numbers, int target) {
+        int[] res = new int[0];
+        //创建哈希表,两元组分别表示值、下标
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        //在哈希表中查找target-numbers[i]
+        for (int i = 0; i < numbers.length; i++) {
+            int temp = target - numbers[i];
+            //若是没找到，将此信息计入哈希表
+            if (!hashMap.containsKey(temp)) {
+                hashMap.put(numbers[i], i);
+            } else {
+                //否则返回两个下标+1
+                return new int[]{hashMap.get(temp) + 1, i + 1};
+            }
+        }
+        return res;
+    }
+
     /**
      * BM49 表达式求值
      * 方法：栈 + 递归（推荐使用）

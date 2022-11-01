@@ -74,6 +74,7 @@ public class DataStructActivity extends AppCompatActivity {
 
     /**
      * 大根堆
+     * 从大到小排序
      * 如果优先级队列里传入了自定义的比较器，就可以变成大根堆
      */
     @RequiresApi(api = Build.VERSION_CODES.N)

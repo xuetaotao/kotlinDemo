@@ -160,6 +160,13 @@ class HandlerActivity : AppCompatActivity() {
                             tvResult.text =
                                 "runOnUiThread\tcurrentThread:${Thread.currentThread().name}\n${nums.toString()}"
                         }
+                        sleep(5000);
+                        //通过View.post(Runnable r)方法切换到主线程
+                        tvResult.post {
+                            tvResult.text = "通过View.post(Runnable r)方法切换到主线程：\n" +
+                                    "${Thread.currentThread().name}\n" +
+                                    nums.toString()
+                        }
                         //------------------更新显示UI----------------------------------------------------
                     }
                 }

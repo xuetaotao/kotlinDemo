@@ -13,6 +13,7 @@ import com.jlpay.kotlindemo.R;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
@@ -40,6 +42,465 @@ public class AlgorithmActivity extends AppCompatActivity {
 
     public void algorDemo(View view) {
         Toast.makeText(this, "牛客网算法100题", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * BM49 表达式求值
+     * 方法：栈 + 递归（推荐使用）
+     */
+    public int bm49(String s) {
+        ArrayList<Integer> res = function49(s, 0);
+        return res.get(0);
+    }
+
+    public ArrayList<Integer> function49(String s, int index) {
+        Stack<Integer> stack = new Stack<>();
+        int num = 0;
+        char op = '+';
+        int i;
+        for (i = index; i < s.length(); i++) {
+            //数字转换成int数字
+            //判断是否为数字
+            if (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+                num = num * 10 + s.charAt(i) - '0';
+                if (i != s.length() - 1) {
+                    continue;
+                }
+            }
+            //碰到'('时，把整个括号内的当成一个数字处理
+            if (s.charAt(i) == '(') {
+                //递归处理括号
+                ArrayList<Integer> res = function49(s, i + 1);
+                num = res.get(0);
+                i = res.get(1);
+                if (i != s.length() - 1) {
+                    continue;
+                }
+            }
+            switch (op) {
+                //加减号先入栈
+                case '+':
+                    stack.push(num);
+                    break;
+                case '-':
+                    //相反数
+                    stack.push(-num);
+                    break;
+                //优先计算乘号
+                case '*':
+                    int temp = stack.pop();
+                    stack.push(temp * num);
+                    break;
+            }
+            num = 0;
+            //右括号结束递归
+            if (s.charAt(i) == ')') {
+                break;
+            } else {
+                op = s.charAt(i);
+            }
+        }
+        int sum = 0;
+        //栈中元素相加
+        while (!stack.isEmpty()) {
+            sum += stack.pop();
+        }
+        ArrayList<Integer> temp = new ArrayList<>();
+        temp.add(sum);
+        temp.add(i);
+        return temp;
+    }
+
+    /**
+     * BM48 数据流中的中位数
+     */
+    public class bm48 {
+
+        private ArrayList<Integer> val = new ArrayList<>();
+
+        public void Insert(Integer num) {
+            if (val.isEmpty()) {
+                //val中没有数据，直接加入
+                val.add(num);
+            } else {
+                //val中有数据，需要插入排序
+                int i = 0;
+                //遍历找到插入点
+                for (; i < val.size(); i++) {
+                    if (num <= val.get(i)) {
+                        break;
+                    }
+                }
+                //插入相应位置
+                val.add(i, num);
+            }
+        }
+
+        public Double GetMedian() {
+            int n = val.size();
+            //奇数个数字
+            if (n % 2 == 1) {
+                //类型转换
+                return (double) val.get(n / 2);
+            } else {
+                //偶数个数字
+                double a = val.get(n / 2);
+                double b = val.get(n / 2 - 1);
+                return (a + b) / 2;
+            }
+        }
+    }
+
+    //方法二：堆排序（扩展思路）
+    //维护两个堆，分别是大顶堆min，用于存储较小的值，其中顶部最大；
+    // 小顶堆max，用于存储较大的值，其中顶部最小，则中位数只会在两个堆的堆顶出现
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public class bm48Two {
+        //小顶堆，元素数值都比大顶堆大
+        private PriorityQueue<Integer> max = new PriorityQueue<>();
+        private PriorityQueue<Integer> min = new PriorityQueue<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;//负数 o1 o2，降序
+//                return o2.compareTo(o1);
+            }
+        });
+
+        //维护两个堆，取两个堆顶部即与中位数相关
+        public void Insert(Integer num) {
+            //先加入较小部分
+            min.offer(num);
+            //将较小部分的最大值取出，送入到较大部分
+            max.offer(min.poll());
+            //平衡两个堆的数量
+            if (min.size() < max.size()) {
+                min.offer(max.poll());
+            }
+        }
+
+        public Double GetMedian() {
+            //奇数个
+            if (min.size() > max.size()) {
+                return (double) min.peek();
+            } else {
+                //偶数个
+                return (double) (min.peek() + max.peek()) / 2;
+            }
+        }
+    }
+
+
+    /**
+     * BM47 寻找第K大
+     * 方法：快排+二分查找（推荐使用）
+     */
+    public int bm47(int[] a, int n, int K) {
+        return partition47(a, 0, n - 1, K);
+    }
+
+    public int partition47(int[] a, int low, int high, int k) {
+        //随机快排划分
+        Random r = new Random();
+        int x = Math.abs(r.nextInt()) % (high - low + 1) + low;
+        swap47(a, low, x);
+        int v = a[low];
+        int i = low + 1;
+        int j = high;
+        while (true) {
+            //小于标杆的在右
+            while (j >= low + 1 && a[j] < v) {
+                j--;
+            }
+            //大于标杆的在左
+            while (i <= high && a[i] > v) {
+                i++;
+            }
+            if (i > j) {
+                break;
+            }
+            swap47(a, i, j);
+            i++;
+            j--;
+        }
+        swap47(a, low, j);
+        //从0开始，所以为第j+1大
+        if (j + 1 == k) {
+            return a[j];
+        } else if (j + 1 < k) {
+            //继续划分右侧部分
+            return partition47(a, j + 1, high, k);
+        } else {
+            //继续划分左侧部分
+            return partition47(a, low, j - 1, k);
+        }
+    }
+
+    public void swap47(int arr[], int a, int b) {
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+
+    public int bm47Two(int[] a, int n, int K) {
+        return quickSort47Two(a, 0, a.length - 1, K);
+    }
+
+    public int quickSort47Two(int[] arr, int left, int right, int k) {
+        int p = partition47Two(arr, left, right);
+        // 改进后，很特殊的是，p是全局下标，只要p对上topK坐标就可以返回
+        if (p == arr.length - k) {
+            return arr[p];
+        } else if (p < arr.length - k) {
+            // 如果基准在左边，这在右边找
+            return quickSort47Two(arr, p + 1, right, k);
+        } else {
+            return quickSort47Two(arr, left, p - 1, k);
+        }
+    }
+
+    public int partition47Two(int[] arr, int left, int right) {
+        // 可优化成随机，或中位数
+        int key = arr[left];
+        while (left < right) {
+            while (left < right && arr[right] >= key) {
+                right--;
+            }
+            arr[left] = arr[right];
+            while (left < right && arr[left] <= key) {
+                left++;
+            }
+            arr[right] = arr[left];
+        }
+        arr[left] = key;
+        return left;
+    }
+
+
+    /**
+     * BM46 最小的K个数
+     * 方法一：堆排序（推荐使用）
+     * 优先队列即PriorityQueue，是一种内置的机遇堆排序的容器，分为大顶堆与小顶堆，大顶堆的堆顶为最大元素，
+     * 其余更小的元素在堆下方，小顶堆与其刚好相反。且因为容器内部的次序基于堆排序，因此每次插入元素时间复杂度
+     * 都是O(log2n)，而每次取出堆顶元素都是直接取出。
+     * <p>
+     * 思路：
+     * 要找到最小的k个元素，只需要准备k个数字，之后每次遇到一个数字能够快速的与这k个数字中最大的值比较，
+     * 每次将最大的值替换掉，那么最后剩余的就是k个最小的数字了。
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public ArrayList<Integer> bm46(int[] input, int k) {
+        ArrayList<Integer> res = new ArrayList<>();
+        //排除特殊情况
+        if (k == 0 || input.length == 0) {
+            return res;
+        }
+        //大根堆
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<Integer>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;//负数 o1 o2，从大到小排序
+//                return o2.compareTo(o1);
+            }
+        });
+        //构建一个k个大小的堆
+        for (int i = 0; i < k; i++) {
+            priorityQueue.offer(input[i]);
+        }
+        for (int i = k; i < input.length; i++) {
+            //较小元素入堆
+            //peek()方法用于返回第一个元素，而不从此PriorityQueue中删除一个元素
+            if (priorityQueue.peek() > input[i]) {
+                priorityQueue.poll();// 获取并移除第一个
+                priorityQueue.offer(input[i]);
+            }
+        }
+        //堆中元素取出入数组
+        for (int i = 0; i < k; i++) {
+            res.add(priorityQueue.poll());
+        }
+        return res;
+    }
+
+    //方法二：sort排序法（扩展思路）
+    public ArrayList<Integer> bm46Two(int[] input, int k) {
+        ArrayList<Integer> res = new ArrayList<>();
+        //排除特殊情况
+        if (k == 0 || input.length == 0) {
+            return res;
+        }
+        //排序
+        Arrays.sort(input);
+        //因为k<=input.length,取前k小
+        for (int i = 0; i < k; i++) {
+            res.add(input[i]);
+        }
+        return res;
+    }
+
+
+    /**
+     * BM45 滑动窗口的最大值
+     * 方法一：双向队列（推荐使用）
+     * <p>
+     * 知识点：双向队列
+     * 如果说队列是一种只允许从尾部进入，从头部出来的线性数据结构，那双向队列就是一种特殊的队列了，
+     * 双向队列两边，即头部和尾部都可以进行插入元素和删除元素的操作，但是也只能插入到最尾部或者最头部，
+     * 每次也只能取出头部元素或者尾部元素后才能取出里面的元素。
+     */
+    public ArrayList<Integer> bm45(int[] num, int size) {
+        ArrayList<Integer> res = new ArrayList<>();
+        //窗口大于数组长度的时候，返回空
+        if (size <= num.length && size != 0) {
+            //双向队列
+            ArrayDeque<Integer> arrayDeque = new ArrayDeque<Integer>();
+            //先遍历一个窗口
+            for (int i = 0; i < size; i++) {
+                //去掉比自己先进队列的小于自己的值
+                while (!arrayDeque.isEmpty() && num[arrayDeque.peekLast()] < num[i]) {
+                    arrayDeque.pollLast();
+                }
+                arrayDeque.add(i);
+            }
+            //遍历后续数组元素
+            for (int i = size; i < num.length; i++) {
+                //取窗口内的最大值
+                res.add(num[arrayDeque.peekFirst()]);
+                while (!arrayDeque.isEmpty() && arrayDeque.peekFirst() < (i - size + 1)) {
+                    //弹出窗口移走后的值
+                    arrayDeque.pollFirst();
+                }
+                //加入新的值前，去掉比自己先进队列的小于自己的值
+                while (!arrayDeque.isEmpty() && num[arrayDeque.peekLast()] < num[i]) {
+                    arrayDeque.pollLast();
+                }
+                arrayDeque.add(i);
+            }
+            res.add(num[arrayDeque.pollFirst()]);
+        }
+        return res;
+    }
+
+    //方法二：暴力法（扩展思路）
+    //step 1：第一次遍历数组每个位置作为窗口的起点
+    //step 2：从每个起点开始遍历窗口长度，查找其中的最大值。
+    public ArrayList<Integer> bm45Two(int[] num, int size) {
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        //窗口大于数组长度的时候，返回空
+        if (size <= num.length && size != 0) {
+            //数组后面要空出窗口大小，避免越界
+            for (int i = 0; i <= num.length - size; i++) {
+                //寻找每个窗口最大值
+                int max = 0;
+                for (int j = i; j < i + size; j++) {
+                    if (num[j] > max) {
+                        max = num[j];
+                    }
+                }
+                arrayList.add(max);
+            }
+        }
+        return arrayList;
+    }
+
+    /**
+     * BM44 有效括号序列
+     * 方法：栈（推荐使用）
+     */
+    public boolean bm44(String s) {
+        //辅助栈
+        Stack<Character> stack = new Stack<>();
+        //遍历字符串
+        for (int i = 0; i < s.length(); i++) {
+            //遇到左小括号
+            if (s.charAt(i) == '(') {
+                //期待遇到右小括号
+                stack.push(')');
+            } else if (s.charAt(i) == '[') {
+                //遇到左中括号，期待遇到右中括号
+                stack.push(']');
+            } else if (s.charAt(i) == '{') {
+                //遇到左大括号，期待遇到右打括号
+                stack.push('}');
+            } else if (stack.isEmpty() || stack.pop() != s.charAt(i)) {
+                return false;
+            }
+        }
+        //栈中是否还有元素
+        return stack.isEmpty();
+    }
+
+
+    /**
+     * BM43 包含min函数的栈
+     */
+    public class bm43 {
+
+        //用于栈的push 与 pop
+        Stack<Integer> stack1 = new Stack<>();
+        //用于存储最小min
+        Stack<Integer> stack2 = new Stack<>();
+
+        public void push(int node) {
+            stack1.push(node);
+            //空或者新元素较小，则入栈
+            if (stack2.isEmpty() || stack2.peek() > node) {
+                stack2.push(node);
+            } else {
+                //重复加入栈顶
+                stack2.push(stack2.peek());
+            }
+        }
+
+        public void pop() {
+            stack1.pop();
+            stack2.pop();
+        }
+
+        public int top() {
+            return stack1.peek();
+        }
+
+        public int min() {
+            return stack2.peek();
+        }
+    }
+
+
+    /**
+     * BM42 用两个栈实现队列
+     * 队列：元素不可直接下标访问，先进先出
+     * 栈：元素不可直接访问，先进后出
+     * 方法：双栈法（推荐使用）
+     * 栈是一种仅支持在表尾进行插入和删除操作的线性表，这一端被称为栈顶，另一端被称为栈底。
+     * 元素入栈指的是把新元素放到栈顶元素的上面，使之成为新的栈顶元素；元素出栈指的是从一个栈
+     * 删除元素又称作出栈或退栈，它是把栈顶元素删除掉，使其相邻的元素成为新的栈顶元素。
+     * <p>
+     * 队列是一种仅支持在表尾进行插入操作、在表头进行删除操作的线性表，插入端称为队尾，
+     * 删除端称为队首，因整体类似排队的队伍而得名。它满足先进先出的性质，元素入队即
+     * 将新元素加在队列的尾，元素出队即将队首元素取出，它后一个作为新的队首。·
+     */
+    public class bm42 {
+        Stack<Integer> stack1 = new Stack<Integer>();
+        Stack<Integer> stack2 = new Stack<Integer>();
+
+        public void push(int node) {
+            stack1.push(node);//入栈
+        }
+
+        //出栈
+        public int pop() {
+            //将第一个栈中内容弹出放入第二个栈中
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+            //第二个栈栈顶就是最先进来的元素，即队首
+            int res = stack2.pop();
+            //再将第二个栈的元素放回第一个栈
+            while (!stack2.isEmpty()) {
+                stack1.push(stack2.pop());
+            }
+            return res;
+        }
     }
 
 

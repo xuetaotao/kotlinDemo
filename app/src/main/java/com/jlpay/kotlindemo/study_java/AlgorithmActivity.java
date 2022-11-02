@@ -46,6 +46,462 @@ public class AlgorithmActivity extends AppCompatActivity {
 
 
     /**
+     * BM61 矩阵最长递增路径
+     * <p>
+     * 知识点：深度优先搜索（dfs）
+     * 既然是查找最长的递增路径长度，那我们首先要找到这个路径的起点，起点不好直接找到，就从上到下从左到右遍历矩阵的
+     * 每个元素。然后以每个元素都可以作为起点查找它能到达的最长递增路径。如何查找以某个点为起点的最长递增路径呢？
+     * 我们可以考虑深度优先搜索，因为我们查找递增路径的时候，每次选中路径一个点，然后找到与该点相邻的递增位置，
+     * 相当于进入这个相邻的点，继续查找递增路径，这就是递归的子问题。
+     */
+    //记录四个方向
+    private int[][] dirs61 = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    private int n61, m61;
+
+    public int bm61(int[][] matrix) {
+        //矩阵不为空
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int res = 0;
+        n61 = matrix.length;
+        m61 = matrix[0].length;
+        //i，j处的单元格拥有的最长递增路径
+        int[][] dp = new int[m61 + 1][n61 + 1];
+        for (int i = 0; i < n61; i++) {
+            for (int j = 0; j < m61; j++) {
+                //更新最大值
+                res = Math.max(res, dfs61(matrix, dp, i, j));
+            }
+        }
+        return res;
+    }
+
+    //深度优先搜索，返回最大单元格数
+    public int dfs61(int[][] matrix, int[][] dp, int i, int j) {
+        if (dp[i][j] != 0) {
+            return dp[i][j];
+        }
+        dp[i][j]++;
+        for (int k = 0; k < 4; k++) {
+            int nexti = i + dirs61[k][0];
+            int nextj = j + dirs61[k][1];
+            //判断条件
+            if (nexti >= 0 && nexti < n61 && nextj >= 0 && nextj < m61 && matrix[nexti][nextj] > matrix[i][j]) {
+                dp[i][j] = Math.max(dp[i][j], dfs61(matrix, dp, nexti, nextj) + 1);
+            }
+        }
+        return dp[i][j];
+    }
+
+    /**
+     * 知识点：广度优先搜索（bfs）
+     * 我们可以将矩阵看成是一个有向图，一个元素到另一个元素递增，代表有向图的箭头。
+     * 这样我们可以根据有向图的出度入度找到最长的路径，且这个路径在矩阵中就是递增的。
+     * <p>
+     * 利用拓扑排序的思想，从所有出度为0的单元格开始进行广度优先搜索。
+     */
+    public int bm61Two(int[][] matrix) {
+        int[][] dirs = new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int n, m;
+        //矩阵不为空
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int res = 0;
+        n = matrix.length;
+        m = matrix[0].length;
+        //i，j处的单元格拥有的最长递增路径
+        int[][] outdegrees = new int[m + 1][n + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                for (int k = 0; k < 4; k++) {
+                    int nexti = i + dirs[k][0];
+                    int nextj = j + dirs[k][1];
+                    if (nexti >= 0 && nexti < n && nextj >= 0 && nextj < m &&
+                            matrix[nexti][nextj] > matrix[i][j]) {
+                        //符合条件，记录出度
+                        outdegrees[i][j]++;
+                    }
+                }
+            }
+        }
+        //辅助队列
+        Queue<Integer> q1 = new LinkedList<>();
+        Queue<Integer> q2 = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (outdegrees[i][j] == 0) {
+                    //找到出度为0的入队列
+                    q1.offer(i);
+                    q2.offer(j);
+                }
+            }
+        }
+        while (!q1.isEmpty()) {
+            res++;
+            int size = q1.size();
+            for (int x = 0; x < size; x++) {
+                int i = q1.poll();
+                int j = q2.poll();
+                //四个方向
+                for (int k = 0; k < 4; k++) {
+                    int nexti = i + dirs[k][0];
+                    int nextj = j + dirs[k][1];
+                    //逆向搜索，所以下一步是小于
+                    if (nexti >= 0 && nexti < n && nextj >= 0 && nextj < m && matrix[nexti][nextj] < matrix[i][j]) {
+                        //符合条件，出度递减
+                        outdegrees[nexti][nextj]--;
+                        if (outdegrees[nexti][nextj] == 0) {
+                            q1.offer(nexti);
+                            q2.offer(nextj);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * BM60 括号生成
+     * 知识点：递归与回溯
+     */
+    public ArrayList<String> bm60(int n) {
+        //记录结果
+        ArrayList<String> res = new ArrayList<>();
+        //递归
+        recursion60(0, 0, "", res, n);
+        return res;
+    }
+
+    public void recursion60(int left, int right, String temp, ArrayList<String> res, int n) {
+        //左右括号都用完了，就加入结果
+        if (left == n && right == n) {
+            res.add(temp);
+            return;
+        }
+        //使用一次左括号
+        if (left < n) {
+            recursion60(left + 1, right, temp + "(", res, n);
+        }
+        //使用右括号个数必须少于左括号
+        if (right < n && left > right) {
+            recursion60(left, right + 1, temp + ")", res, n);
+        }
+    }
+
+
+    /**
+     * BM59 N皇后问题
+     * 方法：递归（推荐使用）
+     * n个皇后，不同行不同列，那么肯定棋盘每行都会有一个皇后，每列都会有一个皇后。
+     * 如果我们确定了第一个皇后的行号与列号，则相当于接下来在n−1行中查找n−1个皇后，
+     * 这就是一个子问题，因此使用递归；
+     */
+    private int res59;
+
+    public int bm59(int n) {
+        res59 = 0;
+        //下标为行号，元素为列号，记录皇后位置
+        int[] pos = new int[n];
+        Arrays.fill(pos, 0);
+        //递归
+        recursion59(n, 0, pos);
+        return res59;
+    }
+
+    //递归查找皇后种类
+    public void recursion59(int n, int row, int[] pos) {
+        //完成全部行都选择了位置
+        if (row == n) {
+            res59++;
+            return;
+        }
+        //遍历所有列
+        for (int i = 0; i < n; i++) {
+            //检查该位置是否符合条件
+            if (isValid59(pos, row, i)) {
+                //加入位置
+                pos[row] = i;
+                //递归继续查找
+                recursion59(n, row + 1, pos);
+            }
+        }
+    }
+
+    //判断皇后是否符合条件
+    public boolean isValid59(int[] pos, int row, int col) {
+        //遍历所有已经记录的行
+        for (int i = 0; i < row; i++) {
+            //不能同行同列同一斜线
+            if (row == i || col == pos[i] || Math.abs(row - i) == Math.abs(col - pos[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * BM58 字符串的排列
+     * 方法：递归+回溯（推荐使用）
+     */
+    public ArrayList<String> bm58(String str) {
+        ArrayList<String> res = new ArrayList<>();
+        if (str == null || str.length() == 0) {
+            return res;
+        }
+        //转字符数组
+        char[] charStr = str.toCharArray();
+        // 按字典序排序
+        Arrays.sort(charStr);
+        boolean[] vis = new boolean[str.length()];
+        //标记每个位置的字符是否被使用过
+        Arrays.fill(vis, false);
+        StringBuffer temp = new StringBuffer();
+        //递归获取
+        recursion58(res, charStr, temp, vis);
+        return res;
+    }
+
+    public void recursion58(ArrayList<String> res, char[] str, StringBuffer temp, boolean[] vis) {
+        //临时字符串满了加入输出
+        if (temp.length() == str.length) {
+            res.add(new String(temp));
+            return;
+        }
+        //遍历所有元素选取一个加入
+        for (int i = 0; i < str.length; i++) {
+            //如果该元素已经被加入了则不需要再加入了
+            if (vis[i]) {
+                continue;
+            }
+            if (i > 0 && str[i - 1] == str[i] && !vis[i - 1]) {
+                //当前的元素str[i]与同一层的前一个元素str[i-1]相同且str[i-1]已经用过了
+                continue;
+            }
+            //标记为使用过
+            vis[i] = true;
+            //加入临时字符串
+            temp.append(str[i]);
+            recursion58(res, str, temp, vis);
+            //回溯
+            vis[i] = false;
+            temp.deleteCharAt(temp.length() - 1);
+        }
+    }
+
+
+    /**
+     * BM57 岛屿数量
+     * <p>
+     * 知识点：深度优先搜索（dfs） 深度优先搜索一般用于树或者图的遍历，其他有分支的（如二维矩阵）也适用。
+     * 它的原理是从初始点开始，一直沿着同一个分支遍历，直到该分支结束，然后回溯到上一级继续沿着一个分支走到底，
+     * 如此往复，直到所有的节点都有被访问到。
+     * <p>
+     * 递归实现
+     */
+    public int bm57(char[][] grid) {
+        int n = grid.length;//获取行数
+        //空矩阵的情况
+        if (n == 0) {
+            return 0;
+        }
+        int m = grid[0].length;//获取列数
+        //记录岛屿数
+        int count = 0;
+        //遍历矩阵
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                //遍历到1的情况
+                if (grid[i][j] == '1') {
+                    //计数
+                    count++;
+                    //将与这个1相邻的所有1置为0
+                    dfs57(grid, i, j);
+                }
+            }
+        }
+        return count;
+    }
+
+    //深度优先遍历与i，j相邻的所有1
+    public void dfs57(char[][] grid, int i, int j) {
+        int n = grid.length;//获取行数
+        int m = grid[0].length;//获取列数
+        // 置为0
+        grid[i][j] = '0';
+        //后续四个方向遍历
+        if (i - 1 >= 0 && grid[i - 1][j] == '1') {
+            dfs57(grid, i - 1, j);
+        }
+        if (i + 1 < n && grid[i + 1][j] == '1') {
+            dfs57(grid, i + 1, j);
+        }
+        if (j - 1 >= 0 && grid[i][j - 1] == '1') {
+            dfs57(grid, i, j - 1);
+        }
+        if (j + 1 < m && grid[i][j + 1] == '1') {
+            dfs57(grid, i, j + 1);
+        }
+    }
+
+    /**
+     * 知识点：广度优先搜索（bfs）
+     * <p>
+     * 广度优先搜索与深度优先搜索不同，它是将与某个节点直接相连的其它所有节点依次访问一次之后，
+     * 再往更深处，进入与其他节点直接相连的节点。bfs的时候我们常常会借助队列的先进先出，因为从某个节点出发，
+     * 我们将与它直接相连的节点都加入队列，它们优先进入，则会优先弹出，在它们弹出的时候再将与它们直接相连的节点加入，
+     * 由此就可以依次按层访问。
+     */
+    public int bm57Two(char[][] grid) {
+        int n = grid.length;//获取行数
+        //空矩阵的情况
+        if (n == 0) {
+            return 0;
+        }
+        int m = grid[0].length;
+        //记录岛屿数
+        int count = 0;
+        //遍历矩阵
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                //遇到1要将这个1及与其相邻的1都置为0
+                if (grid[i][j] == '1') {
+                    //岛屿数增加
+                    count++;
+                    grid[i][j] = '0';
+                    //记录后续bfs的坐标
+                    Queue<Integer> queue1 = new LinkedList<>();
+                    Queue<Integer> queue2 = new LinkedList<>();
+                    queue1.offer(i);
+                    queue2.offer(j);
+                    //bfs
+                    while (!queue1.isEmpty()) {
+                        int row = queue1.poll();
+                        int col = queue2.poll();
+                        //四个方向依次检查：不越界且为1
+                        if (row - 1 >= 0 && grid[row - 1][col] == '1') {
+                            queue1.offer(row - 1);
+                            queue2.offer(col);
+                            grid[row - 1][col] = '0';
+                        }
+                        if (row + 1 < n && grid[row + 1][col] == '1') {
+                            queue1.offer(row + 1);
+                            queue2.offer(col);
+                            grid[row + 1][col] = '0';
+                        }
+                        if (col - 1 >= 0 && grid[row][col - 1] == '1') {
+                            queue1.offer(row);
+                            queue2.offer(col - 1);
+                            grid[row][col - 1] = '0';
+                        }
+                        if (col + 1 < m && grid[row][col + 1] == '1') {
+                            queue1.offer(row);
+                            queue2.offer(col + 1);
+                            grid[row][col + 1] = '0';
+                        }
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+
+    /**
+     * BM56 有重复项数字的全排列
+     */
+    public ArrayList<ArrayList<Integer>> bm56(int[] num) {
+        //先按字典序排序
+        Arrays.sort(num);
+        Boolean[] vis = new Boolean[num.length];
+        Arrays.fill(vis, false);
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        ArrayList<Integer> temp = new ArrayList<>();
+        recursion56(res, num, temp, vis);
+        return res;
+    }
+
+    public void recursion56(ArrayList<ArrayList<Integer>> res, int[] num, ArrayList<Integer> temp, Boolean[] vis) {
+        //临时数组满了加入输出
+        if (temp.size() == num.length) {
+            res.add(new ArrayList<Integer>(temp));//这里不new的话会报错，原因待查
+            return;
+        }
+        //遍历所有元素选取一个加入
+        for (int i = 0; i < num.length; i++) {
+            //如果该元素已经被加入了则不需要再加入了
+            if (vis[i]) {
+                continue;
+            }
+            if (i > 0 && num[i - 1] == num[i] && !vis[i - 1]) {
+                //当前的元素num[i]与同一层的前一个元素num[i-1]相同且num[i-1]已经用过了
+                continue;
+            }
+            //标记为使用过
+            vis[i] = true;
+            //加入数组
+            temp.add(num[i]);
+            recursion56(res, num, temp, vis);
+            //回溯
+            vis[i] = false;
+            temp.remove(temp.size() - 1);
+        }
+    }
+
+
+    /**
+     * BM55 没有重复项数字的全排列
+     * <p>
+     * 知识点：递归与回溯
+     * 递归是一个过程或函数在其定义或说明中有直接或间接调用自身的一种方法，
+     * 它通常把一个大型复杂的问题层层转化为一个与原问题相似的规模较小的问题来求解。因此递归过程，
+     * 最重要的就是查看能不能讲原本的问题分解为更小的子问题，这是使用递归的关键。
+     * <p>
+     * 如果是线型递归，子问题直接回到父问题不需要回溯，但是如果是树型递归，父问题有很多分支，
+     * 我需要从子问题回到父问题，进入另一个子问题。因此回溯是指在递归过程中，从某一分支的子问题回到父问题
+     * 进入父问题的另一子问题分支，因为有时候进入第一个子问题的时候修改过一些变量，因此回溯的时候会要求
+     * 改回父问题时的样子才能进入第二子问题分支。
+     */
+    public ArrayList<ArrayList<Integer>> bm55(int[] num) {
+        //先按字典序排序
+        Arrays.sort(num);
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        ArrayList<Integer> numList = new ArrayList<>();
+        //数组转ArrayList
+        for (int i = 0; i < num.length; i++) {
+            numList.add(num[i]);
+        }
+        recursion55(res, numList, 0);
+        return res;
+    }
+
+    public void recursion55(ArrayList<ArrayList<Integer>> res, ArrayList<Integer> numList, int index) {
+        //分枝进入结尾，找到一种排列
+        if (index == numList.size() - 1) {
+            res.add(numList);
+        } else {
+            //遍历后续的元素
+            for (int i = index; i < numList.size(); i++) {
+                //交换二者
+                swap55(numList, i, index);
+                //继续往后找
+                recursion55(res, numList, index + 1);
+                //回溯
+                swap55(numList, i, index);
+            }
+        }
+    }
+
+    public void swap55(ArrayList<Integer> num, int i1, int i2) {
+        int temp = num.get(i1);
+        num.set(i1, num.get(i2));
+        num.set(i2, temp);
+    }
+
+    /**
      * BM54 三数之和
      */
     public ArrayList<ArrayList<Integer>> bm54(int[] num) {

@@ -91,6 +91,26 @@ public class ThreadActivity extends AppCompatActivity {
 //        AbstractQueuedSynchronizerDemo();
     }
 
+    //https://mp.weixin.qq.com/s/EIpDaT2FASWftgpTdVmc8Q
+    public void testA() {
+        Student student = new Student();
+        new Thread() {
+            @Override
+            public void run() {
+//                super.run();
+                int a = 1;
+                //这行代码其实在JDK1.8之前是会报错的，因为线程之间是不能访问的，所以我们在Thread线程里是
+                // 无法访问到person的，
+                //所以此时是要用final去修饰person,这时候person就会放到方法区里，变成共享了
+                //这样其实就是通过一个第三者（公共者）来存值，从而实现传值，而两个栈没发生过共享数据的
+                //而JDK1.8之后当在方法内匿名类引用局部变量（上面这种情况时），虚拟机默认已经替我们去修饰了，
+                //所以我们可以不用final也不会报错。
+                Student student1 = student;
+            }
+        }.start();
+    }
+
+
     /**
      * AQS 学习
      * 可以用来自定义锁

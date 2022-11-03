@@ -46,6 +46,194 @@ public class AlgorithmActivity extends AppCompatActivity {
 
 
     /**
+     * BM65 最长公共子序列(二)
+     * 方法一：动态规划+递归获取（推荐使用）
+     */
+    private String x = "";
+    private String y = "";
+
+    public String bm65(String s1, String s2) {
+        //特殊情况
+        if (s1.length() == 0 || s2.length() == 0) {
+            return "-1";
+        }
+        int len1 = s1.length();
+        int len2 = s2.length();
+        x = s1;
+        y = s2;
+        //dp[i][j]表示第一个字符串到第i位，第二个字符串到第j位为止的最长公共子序列长度
+        int[][] dp = new int[len1 + 1][len2 + 1];
+        //动态规划数组相加的方向
+        int[][] b = new int[len1 + 1][len2 + 1];
+        //遍历两个字符串每个位置求的最长长度
+        for (int i = 1; i <= len1; i++) {
+            for (int j = 1; j <= len2; j++) {
+                //遇到两个字符相等
+                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    //考虑由二者都向前一位
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    //来自于左上方
+                    b[i][j] = 1;
+                }
+                //遇到的两个字符不同
+                else {
+                    //左边的选择更大，即第一个字符串后退一位
+                    if (dp[i - 1][j] > dp[i][j - 1]) {
+                        dp[i][j] = dp[i - 1][j];
+                        //来自于左方
+                        b[i][j] = 2;
+                    }
+                    //右边的选择更大，即第二个字符串后退一位
+                    else {
+                        dp[i][j] = dp[i][j - 1];
+                        //来自于上方
+                        b[i][j] = 3;
+                    }
+                }
+            }
+        }
+        //获取答案字符串
+        String res = ans65(len1, len2, b);
+        //检查答案是否位空
+        if (res.isEmpty()) {
+            return "-1";
+        } else {
+            return res;
+        }
+    }
+
+    //获取最长公共子序列
+    String ans65(int i, int j, int[][] b) {
+        String res = "";
+        //递归终止条件
+        if (i == 0 || j == 0)
+            return res;
+        //根据方向，往前递归，然后添加本级字符
+        if (b[i][j] == 1) {
+            res += ans65(i - 1, j - 1, b);
+            res += x.charAt(i - 1);
+        } else if (b[i][j] == 2)
+            res += ans65(i - 1, j, b);
+        else if (b[i][j] == 3)
+            res += ans65(i, j - 1, b);
+        return res;
+    }
+
+
+    /**
+     * BM64 最小花费爬楼梯
+     * 知识点：动态规划
+     */
+    public int bm64(int[] cost) {
+        //dp[i]表示爬到第i阶楼梯需要的最小花费
+        int[] dp = new int[cost.length + 1];
+        for (int i = 2; i <= cost.length; i++) {
+            //每次选取最小的方案
+            dp[i] = Math.min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);
+        }
+        return dp[cost.length];
+    }
+
+
+    /**
+     * BM63 跳台阶
+     * 方法一：递归
+     */
+    public int bm63(int target) {
+        if (target <= 1) {
+            return 1;
+        }
+        return bm63(target - 1) + bm63(target - 2);
+    }
+
+    //记忆化搜索
+    private int f63[] = new int[50];
+
+    public int bm63Two(int target) {
+        if (target <= 1) {
+            return 1;
+        }
+        if (f63[target] > 0) {
+            return f63[target];
+        }
+        return f63[target] = (bm63Two(target - 1) + bm63Two(target - 2));
+    }
+
+    //方法三：动态规划
+    public int bm63Three(int target) {
+        int a = 1, b = 1, c = 1;
+        for (int i = 2; i <= target; i++) {
+            c = a + b;
+            a = b;
+            b = c;
+        }
+        return c;
+    }
+
+    /**
+     * BM62 斐波那契数列
+     * <p>
+     * 知识点：动态规划
+     * 动态规划算法的基本思想是：将待求解的问题分解成若干个相互联系的子问题，先求解子问题，
+     * 然后从这些子问题的解得到原问题的解；对于重复出现的子问题，只在第一次遇到的时候对它进行求解，
+     * 并把答案保存起来，让以后再次遇到时直接引用答案，不必重新求解。动态规划算法将问题的解决方案
+     * 视为一系列决策的结果。
+     * <p>
+     * 具体做法：
+     * step 1：低于2项的数列，直接返回n。
+     * step 2：初始化第0项，与第1项分别为0，1.
+     * step 3：从第2项开始，逐渐按照公式累加，并更新相加数始终为下一项的前两项。
+     */
+    public int bm62(int n) {
+        //从0开始，第0项是0，第一项是1
+        if (n <= 1) {
+            return n;
+        }
+        int res = 0;
+        int a = 0;
+        int b = 1;
+        //因n=2时也为1，初始化的时候把a=0，b=1
+        for (int i = 2; i <= n; i++) {
+            //第三项开始是前两项的和,然后保留最新的两项，更新数据相加
+            res = (a + b);
+            a = b;
+            b = res;
+        }
+        return res;
+    }
+
+    /**
+     * 知识点：递归
+     * 递归是一个过程或函数在其定义或说明中有直接或间接调用自身的一种方法，
+     * 它通常把一个大型复杂的问题层层转化为一个与原问题相似的规模较小的问题来求解。
+     * 因此递归过程，最重要的就是查看能不能讲原本的问题分解为更小的子问题，这是使用递归的关键。
+     */
+    public int bm62Two(int n) {
+        //从0开始，第0项是0，第一项是1
+        if (n <= 1) {
+            return n;
+        } else {
+            //根据公式递归调用函数
+            return bm62Two(n - 1) + bm62Two(n - 2);
+        }
+    }
+
+    public int bm62Three(int n) {
+        //从0开始，第0项是0，第一项是1
+        if (n <= 1) {
+            return n;
+        }
+        int[] fib = new int[n + 1];
+        fib[0] = 0;
+        fib[1] = 1;
+        //依次相加
+        for (int i = 2; i <= n; i++) {
+            fib[i] = fib[i - 2] + fib[i - 1];
+        }
+        return fib[n];
+    }
+
+    /**
      * BM61 矩阵最长递增路径
      * <p>
      * 知识点：深度优先搜索（dfs）

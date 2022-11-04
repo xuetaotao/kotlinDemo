@@ -27,6 +27,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 /**
  * 牛客网算法100题：
@@ -42,6 +43,267 @@ public class AlgorithmActivity extends AppCompatActivity {
 
     public void algorDemo(View view) {
         Toast.makeText(this, "牛客网算法100题", Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * BM86 大数加法
+     * 方法：模拟法（建议使用）
+     */
+    public String bm86(String s, String t) {
+        //若是其中一个为空，返回另一个
+        if (s.length() <= 0) {
+            return t;
+        }
+        if (t.length() <= 0) {
+            return s;
+        }
+        //让s为较长的，t为较短的
+        if (s.length() < t.length()) {
+            String temp = s;
+            s = t;
+            t = temp;
+        }
+        int carry = 0;//进位标志
+        char[] res = new char[s.length()];
+        //从后往前遍历较长的字符串
+        for (int i = s.length() - 1; i >= 0; i--) {
+            //转数字加上进位
+            int temp = s.charAt(i) - '0' + carry;
+            //转较短的字符串相应的从后往前的下标
+            int j = i - s.length() + t.length();
+            //如果较短字符串还有
+            if (j >= 0) {
+                //转数组相加
+                temp += t.charAt(j) - '0';
+            }
+            //取进位
+            carry = temp / 10;
+            //去十位
+            temp = temp % 10;
+            //修改结果
+            res[i] = (char) (temp + '0');
+        }
+        String output = String.valueOf(res);
+        //最后的进位
+        if (carry == 1) {
+            output = '1' + output;
+        }
+        return output;
+    }
+
+    /**
+     * BM85 验证IP地址
+     * 方法一：分割字符串比较法（推荐使用）
+     * step 1：写一个split函数（或者内置函数）。
+     * step 2：遍历IP字符串，遇到.或者:将其分开储存在一个数组中。
+     * step 3：遍历数组，对于IPv4，需要依次验证分组为4，分割不能缺省，没有前缀0或者其他字符，数字在0-255范围内。
+     * step 4：对于IPv6，需要依次验证分组为8，分割不能缺省，每组不能超过4位，不能出现除数字小大写a-f以外的字符。
+     */
+    public String bm85(String IP) {
+        if (isIPv4EightyFive(IP)) {
+            return "IPv4";
+        } else if (isIPv6EightyFive(IP)) {
+            return "IPv6";
+        } else {
+            return "Neither";
+        }
+    }
+
+    public boolean isIPv4EightyFive(String ip) {
+        if (ip.indexOf('.') == -1) {
+            return false;
+        }
+        String[] s = ip.split("\\.");
+        //IPv4必定为4组
+        if (s.length != 4) {
+            return false;
+        }
+        for (int i = 0; i < s.length; i++) {
+            //不可缺省，有一个分割为零，说明两个点相连
+            if (s[i].length() == 0) {
+                return false;
+            }
+            //比较数字位数及不为零时不能有前缀零
+            if (s[i].length() < 0 || s[i].length() > 3 || (s[i].charAt(0) == '0' && s[i].length() != 1)) {
+                return false;
+            }
+            int num = 0;
+            //遍历每个分割字符串，必须为数字
+            for (int j = 0; j < s[i].length(); j++) {
+                char c = s[i].charAt(j);
+                if (c < '0' || c > '9') {
+                    return false;
+                }
+                //转化为数字比较，0-255之间
+                num = num * 10 + (int) (c - '0');
+                if (num < 0 || num > 255) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isIPv6EightyFive(String ip) {
+        if (ip.indexOf(':') == -1) {
+            return false;
+        }
+        //https://blog.csdn.net/qq_39936292/article/details/89359855
+        //字符串以regex方式进行split，获得数组长度：length（方便理解），若limit参数大于等于这个length或limit参数
+        // 为非正数，则字符串以regex方式进行最大split；若limit参数处于0和length之间，则字符串以regex方式进行
+        // limit- 1次split，split后剩下的字符不会再进行split。
+        String[] s = ip.split(":", -1);
+        //IPv6必定为8组
+        if (s.length != 8) {
+            return false;
+        }
+        for (int i = 0; i < s.length; i++) {
+            //每个分割不能缺省，不能超过4位
+            if (s[i].length() == 0 || s[i].length() > 4) {
+                return false;
+            }
+            for (int j = 0; j < s[i].length(); j++) {
+                //不能出现a-fA-F以外的大小写字符
+                char c = s[i].charAt(j);
+                boolean expr = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+                if (!expr) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    //正则表达式（扩展思路）
+    //step 1：IPv4的正则表达式限制数字在0-255，且没有前缀0，用3个点隔开共4组。
+    //step 2：IPv6的正则表达式限制出现8组，0-9a-fA-F的数，个数必须是1-4个，用冒号隔开。
+    //step 3：调用函数依次比较给定字符串与模板串之间是否匹配，匹配哪一个就属于哪一种IP地址，否则都不是。
+    public String bm85Two(String IP) {
+        //正则表达式限制0-255 且没有前缀0 四组齐全
+        String ipv4 = "(([0-9][1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
+        Pattern ipv4Pattern = Pattern.compile(ipv4);
+        //正则表达式限制出现8组，0-9a-fA-F的数，个数必须是1-4个
+        String ipv6 = "([0-9a-fA-F]{1,4}\\:){7}[0-9a-fA-F]{1,4}";
+        Pattern ipv6Pattern = Pattern.compile(ipv6);
+        //调用正则匹配函数
+        if (ipv4Pattern.matcher(IP).matches()) {
+            return "IPv4";
+        } else if (ipv6Pattern.matcher(IP).matches()) {
+            return "IPv6";
+        } else {
+            return "Neither";
+        }
+    }
+
+
+    /**
+     * BM84 最长公共前缀
+     * 方法：遍历查找(推荐使用)
+     */
+    public String bm84(String[] strs) {
+        int n = strs.length;
+        //空字符串数组
+        if (n == 0) {
+            return "";
+        }
+        //遍历第一个字符串的长度
+        for (int i = 0; i < strs[0].length(); i++) {
+            char temp = strs[0].charAt(i);
+            //遍历后续的字符串
+            for (int j = 1; j < n; j++) {
+                //比较每个字符串该位置是否和第一个相同
+                if (i == strs[j].length() || strs[j].charAt(i) != temp) {
+                    //不相同则结束
+                    return strs[0].substring(0, i);
+                }
+            }
+        }
+        //后续字符串有整个字一个字符串的前缀
+        return strs[0];
+    }
+
+
+    /**
+     * BM83 字符串变形
+     * 方法一：双逆转（推荐使用）
+     */
+    public String bm83(String s, int n) {
+        if (n == 0) {
+            return s;
+        }
+        StringBuffer res = new StringBuffer();
+        for (int i = 0; i < n; i++) {
+            //大小写转换
+            if (s.charAt(i) <= 'Z' && s.charAt(i) >= 'A') {
+                res.append((char) (s.charAt(i) - 'A' + 'a'));
+            } else if (s.charAt(i) <= 'z' && s.charAt(i) >= 'a') {
+                res.append((char) (s.charAt(i) - 'a' + 'A'));
+            } else {
+                //空格直接复制
+                res.append(s.charAt(i));
+            }
+        }
+        //翻转整个字符串
+        res = res.reverse();
+        for (int i = 0; i < n; i++) {
+            int j = i;
+            //以空格为界，二次翻转
+            while (j < n && res.charAt(j) != ' ') {
+                j++;
+            }
+            String temp = res.substring(i, j);
+            StringBuffer stringBuffer = new StringBuffer(temp);
+            temp = stringBuffer.reverse().toString();
+            res.replace(i, j, temp);
+            i = j;
+        }
+        return res.toString();
+    }
+
+    //分割字符串+栈（扩展思路）
+    public String bm83Two(String s, int n) {
+        if (n == 0) {
+            return s;
+        }
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < n; i++) {
+            //大小写转换
+            if (s.charAt(i) <= 'Z' && s.charAt(i) >= 'A') {
+                stringBuffer.append((char) (s.charAt(i) - 'A' + 'a'));
+            } else if (s.charAt(i) <= 'z' && s.charAt(i) >= 'a') {
+                stringBuffer.append((char) (s.charAt(i) - 'a' + 'A'));
+            } else {
+                //空格直接复制
+                stringBuffer.append(s.charAt(i));
+            }
+        }
+        Stack<String> stack = new Stack<>();
+        for (int i = 0; i < n; i++) {
+            int j = i;
+            while (j < n && s.charAt(j) != ' ') {
+                j++;
+            }
+            //单词进栈
+            stack.push(stringBuffer.substring(i, j));
+            i = j;
+        }
+        //排除结尾空格的特殊情况
+        if (s.charAt(n - 1) == ' ') {
+            stringBuffer = new StringBuffer(" ");
+        } else {
+            stringBuffer = new StringBuffer();
+        }
+        //栈遵循先进后厨，单词顺序是反的
+        while (!stack.isEmpty()) {
+//            stringBuffer.append(stack.peek());
+//            stack.pop();
+            stringBuffer.append(stack.pop());
+            if (!stack.isEmpty()) {
+                stringBuffer.append(" ");
+            }
+        }
+        return stringBuffer.toString();
     }
 
 

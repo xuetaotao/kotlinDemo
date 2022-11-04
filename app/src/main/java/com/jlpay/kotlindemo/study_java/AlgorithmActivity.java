@@ -45,6 +45,107 @@ public class AlgorithmActivity extends AppCompatActivity {
         Toast.makeText(this, "牛客网算法100题", Toast.LENGTH_SHORT).show();
     }
 
+
+    /**
+     * BM96 主持人调度（二）
+     * 方法一：排序+遍历比较（推荐使用）
+     */
+    public int bm96(int n, int[][] startEnd) {
+        int[] start = new int[n];
+        int[] end = new int[n];
+        //分别得到活动起始时间
+        for (int i = 0; i < n; i++) {
+            start[i] = startEnd[i][0];
+            end[i] = startEnd[i][1];
+        }
+        //单独排序
+//        Arrays.sort(start, 0, start.length);
+//        Arrays.sort(end, 0, end.length);
+        Arrays.sort(start);
+        Arrays.sort(end);
+        int res = 0;
+        int j = 0;
+        for (int i = 0; i < n; i++) {
+            //新开始的节目大于上一轮结束的时间，主持人不变
+            if (start[i] >= end[j]) {
+                j++;
+            } else {
+                res++;//主持人增加
+            }
+        }
+        return res;
+    }
+
+    //方法二：重载排序+大顶堆（扩展思路）
+    public int bm96Two(int n, int[][] startEnd) {
+//        int A[] = new int[n];
+//        int k = 0;
+        //按列排序，按开始时间递增排
+        Arrays.sort(startEnd, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] > o2[0]) {
+                    return 1;
+                } else if (o1[0] == o2[0]) {
+                    return 0;
+                } else {
+                    return -1;//o1 o2
+                }
+            }
+        });
+        //小顶堆
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<Integer>();
+        //可能有负区间
+        priorityQueue.offer(Integer.MIN_VALUE);
+        for (int i = 0; i < n; i++) {
+            //最近的活动结束时间小于当前活动开始时间
+            if (priorityQueue.peek() <= startEnd[i][0]) {
+                priorityQueue.poll();
+            }
+            priorityQueue.offer(startEnd[i][1]);
+        }
+        //剩余的活动等于主持人数
+        return priorityQueue.size();
+    }
+
+
+    /**
+     * BM95 分糖果问题
+     * <p>
+     * 知识点：贪心思想
+     * 贪心思想属于动态规划思想中的一种，其基本原理是找出整体当中给的每个局部子结构的最优解，
+     * 并且最终将所有的这些局部最优解结合起来形成整体上的一个最优解。
+     */
+    public int bm95(int[] arr) {
+        int n = arr.length;
+        if (n <= 1) {
+            return n;
+        }
+        int[] nums = new int[n];
+        //初始化
+        Arrays.fill(nums, 1);
+        //从左到右遍历
+        for (int i = 1; i < arr.length; i++) {
+            //如果右边在递增，每次增加一个
+            if (arr[i] > arr[i - 1]) {
+                nums[i] = nums[i - 1] + 1;
+            }
+        }
+        //记录总糖果数
+        int res = nums[arr.length - 1];
+        //从右到左遍历
+        for (int i = arr.length - 2; i >= 0; i--) {
+            //如果左边更大但是糖果数更小
+            if (arr[i] > arr[i + 1] && nums[i] <= nums[i + 1]) {
+                nums[i] = nums[i + 1] + 1;
+            }
+            //累加和
+            res += nums[i];
+        }
+        return res;
+    }
+
+
     /**
      * BM94 接雨水问题
      */

@@ -45,6 +45,313 @@ public class AlgorithmActivity extends AppCompatActivity {
         Toast.makeText(this, "牛客网算法100题", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * BM94 接雨水问题
+     */
+    public long bm94(int[] arr) {
+        //排除空数组
+        if (arr.length == 0) {
+            return 0;
+        }
+        long res = 0;
+        //左右双指针
+        int left = 0;
+        int right = arr.length - 1;
+        //中间区域的边界高度
+        int maxL = 0;
+        int maxR = 0;
+        //直到左右指针相遇
+        while (left < right) {
+            //每次维护往中间的最大边界
+            maxL = Math.max(maxL, arr[left]);
+            maxR = Math.max(maxR, arr[right]);
+            //较短的边界确定该格子的水量
+            if (maxR > maxL) {
+                res += maxL - arr[left++];
+            } else {
+                res += maxR - arr[right--];
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * BM93 盛水最多的容器
+     * 直接用较短边长乘底部两边距离就可以得到当前情况下的容积。但是要怎么找最大值呢？
+     * <p>
+     * 可以利用贪心思想：我们都知道容积与最短边长和底边长有关，与长的底边一定以首尾为边，
+     * 但是首尾不一定够高，中间可能会出现更高但是底边更短的情况，因此我们可以使用对撞双指针向中间靠，
+     * 这样底边长会缩短，因此还想要有更大容积只能是增加最短变长，此时我们每次指针移动就移动较短的一边，
+     * 因为贪心思想下较长的一边比较短的一边更可能出现更大容积。
+     */
+    public int bm93(int[] height) {
+        //排除不能形成容器的情况
+        if (height.length < 2) {
+            return 0;
+        }
+        int res = 0;
+        //双指针左右界
+        int left = 0;
+        int right = height.length - 1;
+        //共同遍历完所有的数组
+        while (left < right) {
+            //计算区域水容量
+            int capacity = Math.min(height[left], height[right]) * (right - left);
+            //维护最大值
+            res = Math.max(res, capacity);
+            //优先舍弃较短的边
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * BM92 最长无重复子数组
+     * 方法：滑动窗口(推荐使用)
+     */
+    public int bm92(int[] arr) {
+        //哈希表记录窗口内非重复的数字
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        int res = 0;
+        //设置窗口左右边界
+        for (int left = 0, right = 0; right < arr.length; right++) {
+            //窗口右移进入哈希表统计出现次数
+            if (hashMap.containsKey(arr[right])) {
+                hashMap.put(arr[right], hashMap.get(arr[right]) + 1);
+            } else {
+                hashMap.put(arr[right], 1);
+            }
+            //出现次数大于1，则窗口内有重复
+            while (hashMap.get(arr[right]) > 1) {
+                //窗口左移，同时减去该数字的出现次数
+                hashMap.put(arr[left], hashMap.get(arr[left++]) - 1);
+            }
+            //维护子数组长度最大值
+            res = Math.max(res, right - left + 1);
+        }
+        return res;
+    }
+
+    /**
+     * BM91 反转字符串
+     * 开辟一个和str长度大小相同的一个字符串ans，把传入的str倒序赋值到ans字符串上，
+     */
+    public String bm91(String str) {
+        char[] ans = str.toCharArray();
+        int len = str.length();
+        for (int i = 0; i < len; i++) {
+            ans[i] = str.charAt(len - 1 - i);
+        }
+        return new String(ans);
+    }
+
+    public String bm91Two(String str) {
+        char[] ans = str.toCharArray();
+        int len = str.length();
+        for (int i = 0; i < len / 2; i++) {
+            char t = ans[i];
+            ans[i] = ans[len - 1 - i];
+            ans[len - 1 - i] = t;
+        }
+        return new String(ans);
+    }
+
+    public String bm91Three(String str) {
+        StringBuffer sb = new StringBuffer(str);//此方法针对的是io流，不能针对字符串。
+        return sb.reverse().toString();
+    }
+
+
+    /**
+     * BM90 最小覆盖子串
+     * 方法：哈希表匹配（推荐使用）
+     */
+    public String bm90(String S, String T) {
+        int cnt = S.length() + 1;
+        //记录目标字符串T的字符个数
+        int[] hash = new int[128];
+        for (int i = 0; i < T.length(); i++) {
+            //初始化哈希表都为负数，找的时候再加为正
+            hash[T.charAt(i)] -= 1;
+        }
+        int slow = 0, fast = 0;
+        //记录左右区间
+        int left = -1, right = -1;
+        for (; fast < S.length(); fast++) {
+            char c = S.charAt(fast);
+            //目标字符匹配+1
+            hash[c]++;
+            //没有小于0的说明都覆盖了，缩小窗口
+            while (check90(hash)) {
+                //取最优解
+                if (cnt > fast - slow + 1) {
+                    cnt = fast - slow + 1;
+                    left = slow;
+                    right = fast;
+                }
+                c = S.charAt(slow);
+                //缩小窗口的时候减1
+                hash[c]--;
+                //窗口缩小
+                slow++;
+            }
+        }
+        //找不到的情况
+        if (left == -1) {
+            return "";
+        }
+        return S.substring(left, right + 1);
+    }
+
+    //检查是否有小于0的
+    public boolean check90(int[] hash) {
+        for (int i = 0; i < hash.length; i++) {
+            if (hash[i] < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     * BM89 合并区间
+     * 方法: 排序+贪心(推荐使用)
+     * 知识点：贪心思想
+     * 贪心思想属于动态规划思想中的一种，其基本原理是找出整体当中给的每个局部子结构的最优解，
+     * 并且最终将所有的这些局部最优解结合起来形成整体上的一个最优解。
+     */
+    public ArrayList<Interval> bm89(ArrayList<Interval> intervals) {
+        ArrayList<Interval> res = new ArrayList<>();
+        //去除特殊情况
+        if (intervals.size() == 0) {
+            return res;
+        }
+        //重载比较，按照区间首排序
+        Collections.sort(intervals, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval o1, Interval o2) {
+                if (o1.start != o2.start) {
+                    //按照起点位置升序排列
+                    return o1.start - o2.start;//负数 o1  o2
+                } else {
+                    //如果起点位置相同，按照尾点升序排序
+                    return o1.end - o2.end;//负数 o1  o2
+                }
+            }
+        });
+        //放入第一个区间,起点值最小的区间
+        res.add(intervals.get(0));
+        int count = 0;
+        //遍历后续区间，查看是否与末尾有重叠
+        for (int i = 1; i < intervals.size(); i++) {
+            Interval o1 = intervals.get(i);
+            Interval origin = res.get(count);
+            if (o1.start > origin.end) {
+                //没有区间重叠
+                res.add(o1);
+                count++;
+            } else {
+                //区间有重叠，更新结尾
+                res.remove(count);
+                Interval s = new Interval(origin.start, o1.end);
+                if (o1.end < origin.end) {
+                    s.end = origin.end;
+                }
+                res.add(s);
+            }
+        }
+        return res;
+    }
+
+    public class Interval {
+        int start;
+        int end;
+
+        Interval() {
+            start = 0;
+            end = 0;
+        }
+
+        Interval(int s, int e) {
+            start = s;
+            end = e;
+        }
+    }
+
+    /**
+     * BM88 判断是否为回文字符串
+     * 方法一：首尾依次比较法（推荐使用）
+     * 知识点：双指针
+     */
+    public boolean bm88(String str) {
+        //首指针
+        int left = 0;
+        //尾指针
+        int right = str.length() - 1;
+        //首尾往中间靠
+        while (left < right) {
+            //比较前后是否相同
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    //方法二：反转字符串比较法（扩展思路）
+    public boolean bm88Two(String str) {
+        StringBuffer sb = new StringBuffer(str);
+        String s = sb.reverse().toString();
+        if (s.equals(str)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * BM87 合并两个有序的数组
+     * <p>
+     * 方法：归并排序思想(推荐使用)
+     * 知识点：双指针
+     * 双指针指的是在遍历对象的过程中，不是普通的使用单个指针进行访问，而是使用两个指针（
+     * 特殊情况甚至可以多个），两个指针或是同方向访问两个链表、或是同方向访问一个链表（快慢指针）、
+     * 或是相反方向扫描（对撞指针），从而达到我们需要的目的。
+     */
+    public void bm87(int A[], int m, int B[], int n) {
+        //指向数组A的结尾
+        int i = m - 1;
+        //指向数组B的结尾
+        int j = n - 1;
+        //指向数组A空间的结尾处
+        int k = m + n - 1;
+        //从两个数组最大的元素开始，直到某一个数组遍历完
+        while (i >= 0 && j >= 0) {
+            //将较大的元素放到最后
+            if (A[i] > B[j]) {
+                A[k--] = A[i--];
+            } else {
+                A[k--] = B[j--];
+            }
+        }
+        //数组A遍历完了，数组B还有，则还需要添加到数组A前面
+        if (i < 0) {
+            while (j >= 0) {
+                A[k--] = B[j--];
+            }
+        }
+        //数组B遍历完了，数组A前面正好有，不用再添加
+    }
+
 
     /**
      * BM86 大数加法

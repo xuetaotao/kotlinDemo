@@ -47,6 +47,378 @@ public class AlgorithmActivity extends AppCompatActivity {
 
 
     /**
+     * BM101 设计LFU缓存结构
+     */
+    public class bm101 {
+        //设置节点结构
+        class Node {
+            int freq;
+            int key;
+            int val;
+
+            //初始化
+            public Node(int freq, int key, int val) {
+                this.freq = freq;
+                this.key = key;
+                this.val = val;
+            }
+        }
+
+        //频率到双向链表的哈希表
+        private Map<Integer, LinkedList<Node>> freq_mp = new HashMap<>();
+        //key到节点的哈希表
+        private Map<Integer, Node> mp = new HashMap<>();
+        //记录缓存剩余容量
+        private int size = 0;
+        //记录当前最小频次
+        private int min_freq = 0;
+
+
+        /**
+         * lfu design
+         *
+         * @param operators int整型二维数组 ops
+         * @param k         int整型 the k
+         * @return int整型一维数组
+         */
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public int[] LFU(int[][] operators, int k) {
+            //构建初始化连接
+            //链表剩余大小
+            this.size = k;
+            //获取操作数
+            int len = (int) Arrays.stream(operators).filter(x -> x[0] == 2).count();
+            int[] res = new int[len];
+            //遍历所有操作
+            for (int i = 0, j = 0; i < operators.length; i++) {
+                if (operators[i][0] == 1)
+                    //set操作
+                    set(operators[i][1], operators[i][2]);
+                else
+                    //get操作
+                    res[j++] = get(operators[i][1]);
+            }
+            return res;
+        }
+
+        //调用函数时更新频率或者val值
+        private void update(Node node, int key, int value) {
+            //找到频率
+            int freq = node.freq;
+            //原频率中删除该节点
+            freq_mp.get(freq).remove(node);
+            //哈希表中该频率已无节点，直接删除
+            if (freq_mp.get(freq).isEmpty()) {
+                freq_mp.remove(freq);
+                //若当前频率为最小，最小频率加1
+                if (min_freq == freq)
+                    min_freq++;
+            }
+            if (!freq_mp.containsKey(freq + 1))
+                freq_mp.put(freq + 1, new LinkedList<Node>());
+            //插入频率加一的双向链表表头，链表中对应：freq key value
+            freq_mp.get(freq + 1).addFirst(new Node(freq + 1, key, value));
+            mp.put(key, freq_mp.get(freq + 1).getFirst());
+        }
+
+        //set操作函数
+        private void set(int key, int value) {
+            //在哈希表中找到key值
+            if (mp.containsKey(key))
+                //若是哈希表中有，则更新值与频率
+                update(mp.get(key), key, value);
+            else {
+                //哈希表中没有，即链表中没有
+                if (size == 0) {
+                    //满容量取频率最低且最早的删掉
+                    int oldkey = freq_mp.get(min_freq).getLast().key;
+                    //频率哈希表的链表中删除
+                    freq_mp.get(min_freq).removeLast();
+                    if (freq_mp.get(min_freq).isEmpty())
+                        freq_mp.remove(min_freq);
+                    //链表哈希表中删除
+                    mp.remove(oldkey);
+                }
+                //若有空闲则直接加入，容量减1
+                else
+                    size--;
+                //最小频率置为1
+                min_freq = 1;
+                //在频率为1的双向链表表头插入该键
+                if (!freq_mp.containsKey(1))
+                    freq_mp.put(1, new LinkedList<Node>());
+                freq_mp.get(1).addFirst(new Node(1, key, value));
+                //哈希表key值指向链表中该位置
+                mp.put(key, freq_mp.get(1).getFirst());
+            }
+        }
+
+        //get操作函数
+        private int get(int key) {
+            int res = -1;
+            //查找哈希表
+            if (mp.containsKey(key)) {
+                Node node = mp.get(key);
+                //根据哈希表直接获取值
+                res = node.val;
+                //更新频率
+                update(node, key, res);
+            }
+            return res;
+        }
+    }
+
+
+    /**
+     * BM100 设计LRU缓存结构
+     * 方法：哈希表+双向链表（推荐使用）
+     * <p>
+     * 知识点1：哈希表
+     * 哈希表是一种根据关键码（key）直接访问值（value）的一种数据结构。
+     * 而这种直接访问意味着只要知道key就能在O(1)O(1)O(1)时间内得到value，因此哈希表常用来统计频率、
+     * 快速检验某个元素是否出现过等。
+     * <p>
+     * 知识点2：双向链表
+     * 双向链表是一种特殊的链表，它除了链表具有的每个节点指向后一个节点的指针外，还拥有一个每个节点
+     * 指向前一个节点的指针，因此它可以任意向前或者向后访问，每次更改节点连接状态的时候，需要变动两个指针。
+     */
+    public class bm100 {
+
+        //哈希表
+        private Map<Integer, Node100> map = new HashMap<>();
+        //设置一个头
+        private Node100 head = new Node100(-1, -1);
+        //设置一个尾
+        private Node100 tail = new Node100(-1, -1);
+        private int size = 0;
+
+        public bm100(int capacity) {
+            // write code here
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        public int[] LRU(int[][] operators, int k) {
+            //构建初始化连接
+            //链表剩余大小
+            this.size = k;
+            this.head.next = this.tail;
+            this.tail.pre = this.head;
+            //获取操作数
+            int len = (int) Arrays.stream(operators).filter(x -> x[0] == 2).count();
+            int[] res = new int[len];
+            //遍历所有操作
+            for (int i = 0, j = 0; i < operators.length; i++) {
+                if (operators[i][0] == 1) {
+                    //set操作
+                    set(operators[i][1], operators[i][2]);
+                } else {
+                    //get操作
+                    res[j++] = get(operators[i][1]);
+                }
+            }
+            return res;
+        }
+
+        //获取数据函数
+        public int get(int key) {
+            int res = -1;
+            if (map.containsKey(key)) {
+                Node100 node100 = map.get(key);
+                res = node100.val;
+                moveToHead(node100);
+            }
+            return res;
+        }
+
+        //插入函数
+        public void set(int key, int value) {
+            //没有见过这个key，新值加入
+            if (!map.containsKey(key)) {
+                Node100 node100 = new Node100(key, value);
+                map.put(key, node100);
+                //超出大小，移除最后一个
+                if (size <= 0) {
+                    removeLast();
+                } else {
+                    //大小还有剩余，大小减1
+                    size--;
+                }
+                //加到链表头
+                insertFirst(node100);
+            } else {
+                //哈希表中已经有了，即链表里也已经有了
+                map.get(key).val = value;
+                //访问过后，移到表头
+                moveToHead(map.get(key));
+            }
+        }
+
+        //移到表头函数
+        private void moveToHead(Node100 node100) {
+            //已经到了表头
+            if (node100.pre == head) {
+                return;
+            }
+            //将节点断开，取出来
+            node100.pre.next = node100.next;
+            node100.next.pre = node100.pre;
+            //插入第一个前面
+            insertFirst(node100);
+        }
+
+        //将节点插入表头函数
+        private void insertFirst(Node100 node100) {
+            node100.pre = head;
+            node100.next = head.next;
+            head.next.pre = node100;
+            head.next = node100;
+        }
+
+        //删去表尾函数，最近最少使用
+        private void removeLast() {
+            //哈希表去掉key
+            map.remove(tail.pre.key);
+            //断连该节点
+            tail.pre.pre.next = tail;
+            tail.pre = tail.pre.pre;
+        }
+    }
+
+    //设置双向链表结构
+    static class Node100 {
+        int key;
+        int val;
+        Node100 pre;
+        Node100 next;
+
+        //初始化
+        public Node100(int key, int val) {
+            this.key = key;
+            this.val = val;
+            this.pre = null;
+            this.next = null;
+        }
+    }
+
+
+    /**
+     * BM99 顺时针旋转矩阵
+     */
+    public int[][] bm99(int[][] mat, int n) {
+        int length = mat.length;
+        //矩阵转置
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < i; j++) {
+                //交换上三角与下三角对应的元素
+                int temp = mat[i][j];
+                mat[i][j] = mat[j][i];
+                mat[j][i] = temp;
+            }
+        }
+        //每行翻转
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < length / 2; j++) {
+                int temp = mat[i][j];
+                mat[i][j] = mat[i][length - j - 1];
+                mat[i][length - j - 1] = temp;
+            }
+        }
+        return mat;
+    }
+
+
+    /**
+     * BM98 螺旋矩阵
+     * 方法：边界模拟法（推荐使用）
+     */
+    public ArrayList<Integer> bm98(int[][] matrix) {
+        ArrayList<Integer> res = new ArrayList<>();
+        //先排除特殊情况
+        if (matrix.length == 0) {
+            return res;
+        }
+        //左边界
+        int left = 0;
+        //右边界
+        int right = matrix[0].length - 1;//列数-1
+        //上边界
+        int up = 0;
+        //下边界
+        int down = matrix.length - 1;//行数-1
+        //直到边界重合
+        while (left <= right && up <= down) {
+            //上边界的从左到右
+            for (int i = left; i <= right; i++) {
+                res.add(matrix[up][i]);
+            }
+            //上边界向下
+            up++;
+            if (up > down) {
+                break;
+            }
+            //右边界的从上到下
+            for (int i = up; i <= down; i++) {
+                res.add(matrix[i][right]);
+            }
+            //右边界向左
+            right--;
+            if (left > right) {
+                break;
+            }
+            //下边界的从右到左
+            for (int i = right; i >= left; i--) {
+                res.add(matrix[down][i]);
+            }
+            //下边界向上
+            down--;
+            if (up > down) {
+                break;
+            }
+            //左边界的从下到上
+            for (int i = down; i >= up; i--) {
+                res.add(matrix[i][left]);
+            }
+            //左边界向右
+            left++;
+            if (left > right) {
+                break;
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * BM97 旋转数组
+     */
+    public int[] bm97(int n, int m, int[] a) {
+        //取余，因为每次长度为n的旋转数组相当于没有变化
+        m = m % n;
+        //第一次逆转全部数组元素
+        reverse97(a, 0, n - 1);
+        //第二次只逆转开头m个
+        reverse97(a, 0, m - 1);
+        //第三次只逆转结尾m个
+        reverse97(a, m, n - 1);
+        return a;
+    }
+
+    //反转函数
+    public void reverse97(int[] nums, int start, int end) {
+        while (start < end) {
+            swap97(nums, start++, end--);
+        }
+    }
+
+    //交换函数
+    public void swap97(int[] nums, int a, int b) {
+        int temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
+    }
+
+
+    /**
      * BM96 主持人调度（二）
      * 方法一：排序+遍历比较（推荐使用）
      */

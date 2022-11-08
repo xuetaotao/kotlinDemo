@@ -3969,7 +3969,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ11 数字颠倒
      */
-    public static void reverseOrder() {
+    public static void hj11() {
         Scanner sc = new Scanner(System.in);
         String nextLine = sc.nextLine();
         StringBuilder sb = new StringBuilder(nextLine);
@@ -3981,7 +3981,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ10 字符个数统计
      */
-    public static void getCharNum() {
+    public static void hj10() {
         Scanner sc = new Scanner(System.in);
         String s = sc.next();
 
@@ -4013,7 +4013,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ9 提取不重复的整数
      */
-    public static void getNotRepeating() {
+    public static void hj9() {
         Scanner sc = new Scanner(System.in);
         while (sc.hasNext()) {
             int nextInt = sc.nextInt();
@@ -4036,12 +4036,16 @@ public class HuaWeiTestActivity extends AppCompatActivity {
      * 数据表记录包含表索引index和数值value（int范围的正整数），请对表索引相同的记录进行合并，即将相同索引的数值进行求和运算，输出按照index值升序进行输出
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void mergeTable() {
+    public static void hj8() {
         Scanner sc = new Scanner(System.in);
 
         //方法一
 //        int tableNum = sc.nextInt();
-//        Map<String, Integer> map = new HashMap<>();
+        //用到了hashmap底层原理 其中最关键的是楼主直接创建的是tablesize的集合这样每个key占用一个位置 不会生成链表
+        // 否则最后得到的hashmap会产生链表不是一一对应顺序不能实现排序
+        //hashmap默认是不排序的，但是由于键入的key是int,int值的hash还是Int，只要键入的值小于此时hashmap的初始化大小的数组的时候，
+        // 就会将键入的值放入数组中，放入的规则是根据hash值也就是键入的int值的大小。所以会排序。
+//        Map<String, Integer> map = new HashMap<>(tableNum);
 //        for (int i = 0; i <= tableNum; i++) {
 //            String s = sc.nextLine();
 //            String[] keyAndValue = s.split(" ");
@@ -4062,6 +4066,9 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
         //方法二
         // 输出结果要求有序
+        //对于顺序验证过： Hashtable.keySet()-降序；TreeMap.keySet()-升序;HashMap.keySet()-乱序;
+        // LinkedHashMap.keySet() 原序。
+        // 此处要求升序，可用TreeMap
         TreeMap<Integer, Integer> treeMap = new TreeMap<>();
         while (sc.hasNextInt()) {
             int n = sc.nextInt();
@@ -4082,7 +4089,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
      * 写出一个程序，接受一个正浮点数值，输出该数值的近似整数值。如果小数点后数值大于等于 0.5 ,向上取整；小于 0.5 ，
      * 则向下取整
      */
-    public static void approNumber() {
+    public static void hj7() {
         Scanner sc = new Scanner(System.in);
         double nextDouble = sc.nextDouble();
         long result = (long) (nextDouble + 0.5);
@@ -4094,7 +4101,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
      * HJ6 质数因子
      * 功能:输入一个正整数，按照从小到大的顺序输出它的所有质因子（重复的也要列举）（如180的质因子为2 2 3 3 5 ）
      */
-    public static void primeFactor() {
+    public static void hj6() {
         Scanner sc = new Scanner(System.in);
         long nextInt = sc.nextLong();
 
@@ -4121,7 +4128,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
 
     private static final int BASE = 16;
 
-    public static void baseConvert() {
+    public static void hj5() {
         Map<Character, Integer> map = new HashMap<>();
         map.put('0', 0);
         map.put('1', 1);
@@ -4162,7 +4169,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ4 字符串分隔
      */
-    public static void strSplit2() {
+    public static void hj4Two() {
         Scanner sc = new Scanner(System.in);
         while (sc.hasNext()) {
             String str = sc.nextLine();
@@ -4186,7 +4193,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ4 字符串分隔
      */
-    public static void strSplit() {
+    public static void hj4() {
         Scanner sc = new Scanner(System.in);
 
         while (sc.hasNext()) {
@@ -4225,7 +4232,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ3 明明的随机数
      */
-    public static void hj3() {
+    public static void hj3() throws IOException {
         Scanner sc = new Scanner(System.in);
         //获取个数
         int num = sc.nextInt();
@@ -4239,6 +4246,21 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         for (Integer integer : treeSet) {
             System.out.println(integer);
         }
+
+
+//        Scanner scanner = new Scanner(System.in);
+//        Set<Integer> set = new HashSet();
+//        while (scanner.hasNext()){
+//            int n = scanner.nextInt();
+//            for (int i = 0; i < n; i++) {
+//                set.add(scanner.nextInt());
+//            }
+//        }
+//        List<Integer> list = new ArrayList(set);
+//        Collections.sort(list);
+//        for(int i=0;i<list.size();i++){
+//            System.out.println(list.get(i));
+//        }
     }
 
 
@@ -4310,7 +4332,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ2 计算某字符出现次数
      */
-    public static void getCharTimes() {
+    public static void hj2() {
         Scanner sc = new Scanner(System.in);
         String str = sc.nextLine().toLowerCase();
         String s = sc.nextLine().toLowerCase();
@@ -4322,7 +4344,7 @@ public class HuaWeiTestActivity extends AppCompatActivity {
     /**
      * HJ1 字符串最后一个单词的长度
      */
-    public static void getLastLength() {
+    public static void hj1() {
         Scanner sc = new Scanner(System.in);
         String str = sc.nextLine();//控制台可以录入带空格的字符串
         if (str == null || str.length() == 0) {

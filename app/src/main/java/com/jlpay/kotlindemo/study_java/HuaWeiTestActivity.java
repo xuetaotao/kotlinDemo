@@ -1964,7 +1964,8 @@ public class HuaWeiTestActivity extends AppCompatActivity {
             int i = scanner.nextInt();
             int count = 0;
             while (i != 0) {
-                if (i % 2 == 1) {
+                if ((i & 1) == 1) {
+//                if (i % 2 == 1) {
                     count++;
                 }
                 i = i >> 1;//右移运算符，num >> 1,相当于num除以2
@@ -3258,6 +3259,57 @@ public class HuaWeiTestActivity extends AppCompatActivity {
         }
     }
 
+    //Integer.toBinaryString() ： 将十进制转二进制
+    //Integer.parseInt(s, 16)：将16进制的字符串s转化为十进制
+    //Integer.parseInt(binary.toString(), 2)： //把二进制字符串转成10进制
+    //Integer.toHexString(n)：将十进制整数n转化为16进制字符串
+    //String.toUpperCase()：将字符串转化为大写的
+    //StringBuilder.replace(i, i + 1, hexString)：将sb的i到i+1位替换为hexString
+    public static void hj30Two() {
+        Scanner scanner = new Scanner(System.in);
+        String str1 = scanner.next();
+        String str2 = scanner.next();
+        //1.合并
+        String str = str1 + str2;
+        //2.排序
+        ArrayList<Character> list1 = new ArrayList<>();//存放偶数位字符
+        ArrayList<Character> list2 = new ArrayList<>();//存放奇数位字符
+        for (int i = 0; i < str.length(); i++) {
+            if (i % 2 == 0) {
+                list1.add(str.charAt(i));
+            } else {
+                list2.add(str.charAt(i));
+            }
+        }
+        Collections.sort(list1);
+        Collections.sort(list2);
+        //重新拼接
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < list1.size(); i++) { //list1.size()>=list2.size()
+            builder.append(list1.get(i));
+            if (i <= list2.size() - 1) { //防止越界
+                builder.append(list2.get(i));
+            }
+        }
+        //3.对字符进行转换操作
+        for (int i = 0; i < builder.length(); i++) {
+            String s = builder.substring(i, i + 1);
+            if (s.matches("[0-9a-fA-F]")) {
+                //把16进制转成10进制，再转成二进制
+                StringBuilder binary = new StringBuilder(Integer.toBinaryString(Integer.parseInt(s, 16)));
+                int len = binary.length();
+                for (int j = 0; j < 4 - len; j++) { //补零
+                    binary.insert(0, "0");
+                }
+                binary = binary.reverse();//翻转
+                int n = Integer.parseInt(binary.toString(), 2); //把二进制转成10进制
+                String hexString = Integer.toHexString(n).toUpperCase();//转成16进制字符串大写
+                builder.replace(i, i + 1, hexString);//替换
+            }
+        }
+        System.out.println(builder.toString());
+    }
+
 
     /**
      * HJ29 字符串加解密
@@ -3456,7 +3508,9 @@ public class HuaWeiTestActivity extends AppCompatActivity {
             letters.sort(new Comparator<Character>() {
                 @Override
                 public int compare(Character o1, Character o2) {
-                    return Character.toLowerCase(o1) - Character.toLowerCase(o2);
+                    //这一步是将char转换成小写后再排序，那么A和a转换后相减等于0，就不排序，保持原有的顺序
+                    //jdk帮我们排序采用的算法是“稳定”的，也就是a和A会保持原顺序
+                    return Character.toLowerCase(o1) - Character.toLowerCase(o2);//负数 o1 o2
                 }
             });
             //把包括非字母的所有字符重新排序

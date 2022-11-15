@@ -1,10 +1,20 @@
 package com.jlpay.kotlindemo.study_java;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
@@ -20,6 +30,16 @@ public class HuaWeiTest2 {
 
 
     //**********************************困难(看答案后也不太懂)***************************************************
+    //****hj16******hj24***************************************
+
+    /**
+     * HJ24 合唱队
+     * 动态规划 队列
+     */
+    public static void hj24() {
+
+    }
+
 
     /**
      * HJ16 购物单
@@ -31,6 +51,49 @@ public class HuaWeiTest2 {
 
 
     //**********************************中等(看答案后可以做对)***************************************************
+    //********hj6*****hj18****hj26***************************************
+
+
+    /**
+     * HJ26 字符串排序
+     */
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void hj26() {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String s = bufferedReader.readLine();
+            List<Character> list = new ArrayList<>();
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (Character.isLetter(c)) {
+                    list.add(c);
+                }
+            }
+            list.sort(new Comparator<Character>() {
+                @Override
+                public int compare(Character o1, Character o2) {
+                    //这一步是将char转换成小写后再排序，那么A和a转换后相减等于0，就不排序，保持原有的顺序
+                    //jdk帮我们排序采用的算法是“稳定”的，也就是a和A会保持原顺序
+                    return Character.toLowerCase(o1) - Character.toLowerCase(o2);
+                }
+            });
+            StringBuilder res = new StringBuilder();
+            for (int i = 0, j = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                if (Character.isLetter(c)) {
+                    //把原来位置上是字母的字符全部重排序，原来位置非字母的保留
+                    res.append(list.get(j));
+                    j++;
+                    continue;
+                }
+                res.append(c);
+            }
+            System.out.println(res);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /**
@@ -152,6 +215,103 @@ public class HuaWeiTest2 {
 
 
     //**********************************简单(不看答案可以做对)***************************************************
+
+
+    /**
+     * HJ25 数据分类处理
+     */
+    public static void hj25() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int iNum = scanner.nextInt();
+            int[] iNumArray = new int[iNum];
+            for (int i = 0; i < iNum; i++) {
+                iNumArray[i] = scanner.nextInt();
+            }
+            int rNum = scanner.nextInt();
+            TreeSet<Integer> treeSet = new TreeSet<>();
+            for (int i = 0; i < rNum; i++) {
+                treeSet.add(scanner.nextInt());//序列R排序并去重
+            }
+            StringBuilder res = new StringBuilder();
+            List<Integer> resList = new ArrayList<>();
+            List<Integer> iNumList = new ArrayList<>();
+            for (Integer temp : treeSet) {
+                String tempStr = String.valueOf(temp);
+                for (int i = 0; i < iNumArray.length; i++) {
+                    String iNumTemp = String.valueOf(iNumArray[i]);
+                    if (iNumTemp.contains(tempStr)) {
+                        iNumList.add(i);
+                        iNumList.add(iNumArray[i]);
+                    }
+                }
+                if (iNumList.size() > 0) {
+                    resList.add(temp);
+                    resList.add(iNumList.size() / 2);
+                    resList.addAll(iNumList);
+                    iNumList.clear();
+                }
+            }
+            res.append(resList.size()).append(" ");
+            for (Integer temp : resList) {
+                res.append(temp).append(" ");
+            }
+            System.out.println(res);
+        }
+    }
+
+
+    /**
+     * HJ23 删除字符串中出现次数最少的字符
+     */
+    public static void hj23() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.nextLine();
+            HashMap<Character, Integer> hashMap = new HashMap<>();
+            for (int i = 0; i < nextLine.length(); i++) {
+                char c = nextLine.charAt(i);
+                if (hashMap.containsKey(c)) {
+                    hashMap.put(c, hashMap.get(c) + 1);
+                } else {
+                    hashMap.put(c, 1);
+                }
+            }
+            int min = Integer.MAX_VALUE;
+            List<Character> list = new ArrayList<>();
+            for (Map.Entry<Character, Integer> entry : hashMap.entrySet()) {
+                if (entry.getValue() < min) {
+                    min = entry.getValue();
+                    list.clear();
+                    list.add(entry.getKey());
+                } else if (entry.getValue() == min) {
+                    list.add(entry.getKey());
+                }
+            }
+            String res = nextLine;
+            for (Character temp : list) {
+                res = res.replace(String.valueOf(temp), "");
+            }
+            System.out.println(res);
+
+        }
+    }
+
+
+    /**
+     * HJ22 汽水瓶
+     */
+    public static void hj22() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int nextInt = scanner.nextInt();
+            if (nextInt == 0) {
+                break;
+            }
+            System.out.println(nextInt / 2);
+        }
+    }
+
 
     /**
      * HJ21 简单密码

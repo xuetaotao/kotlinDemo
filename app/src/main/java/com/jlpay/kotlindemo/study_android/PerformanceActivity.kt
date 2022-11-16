@@ -82,6 +82,7 @@ class PerformanceActivity : AppCompatActivity() {
         var mLastFrameTimeNanos: Long = 0
         val frameCallback: Choreographer.FrameCallback = object : Choreographer.FrameCallback {
             override fun doFrame(frameTimeNanos: Long) {
+                //60fps，意味着每一帧只有16ms=1000/60的时间处理所有任务
                 if (frameTimeNanos - mLastFrameTimeNanos > 100) {
                     //...
                 }

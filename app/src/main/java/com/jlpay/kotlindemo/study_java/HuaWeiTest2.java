@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,7 +31,82 @@ public class HuaWeiTest2 {
 
 
     //**********************************困难(看答案后也不太懂)***************************************************
-    //****hj16******hj24***************************************
+    //****hj16******hj24****hj28***********************************
+
+    /**
+     * HJ28 素数伴侣
+     * 匈牙利算法：先到先得，能让就让
+     * 这里自己写的有问题，后面再研究一下
+     */
+    public static void hj28() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();
+            List<Integer> jiList = new ArrayList<>();
+            List<Integer> ouList = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                int temp = scanner.nextInt();
+                if (temp % 2 == 0) {
+                    ouList.add(temp);
+                } else {
+                    jiList.add(temp);
+                }
+            }
+            boolean[] ouHasUsed = new boolean[ouList.size()];
+            HashMap<Integer, Integer> hashMap = new HashMap<>();
+            for (Integer tempJi : jiList) {
+                helper28(tempJi, ouList, ouHasUsed, hashMap);
+            }
+            System.out.println(hashMap.size());
+        }
+    }
+
+
+    public static boolean helper28(Integer tempJi, List<Integer> ouList, boolean[] ouHasUsed,
+                                   HashMap<Integer, Integer> hashMap) {
+        boolean res = false;
+        for (int i = 0; i < ouList.size(); i++) {
+            if (isPrime28(tempJi + ouList.get(i)) && ouHasUsed[i] == false) {
+                ouHasUsed[i] = true;
+                if (hashMap.get(ouList.get(i)) == null ||
+                        helper28(hashMap.get(ouList.get(i)), ouList, ouHasUsed, hashMap)) {
+                    hashMap.put(ouList.get(i), tempJi);
+                    return true;
+                }
+            }
+
+//            if (isPrime28(tempJi + ouList.get(i))) {
+//                if (!ouHasUsed[i]) {//先到先得
+//                    hashMap.put(ouList.get(i), tempJi);
+//                    ouHasUsed[i] = true;
+//                    res = true;
+//                    break;
+//                } else {//能让就让
+//                    res = helper28(hashMap.get(ouList.get(i)), ouList, ouHasUsed, hashMap);
+//                    if (res) {
+//                        hashMap.put(ouList.get(i), tempJi);
+//                        break;
+//                    }
+//                }
+//            }
+        }
+        return res;
+    }
+
+    //素数判断
+    public static boolean isPrime28(Integer temp) {
+        if (temp == 1) {
+            return false;
+        }
+        boolean res = true;
+        for (int i = 2; i <= (int) Math.sqrt(temp); i++) {
+            if (temp % i == 0) {
+                res = false;
+            }
+        }
+        return res;
+    }
+
 
     /**
      * HJ24 合唱队
@@ -50,7 +126,7 @@ public class HuaWeiTest2 {
     }
 
 
-    //**********************************中等(看答案后可以做对)***************************************************
+    //**********************************中等(看答案后可以自己默写写对)***************************************************
     //********hj6*****hj18****hj26***************************************
 
 
@@ -216,6 +292,154 @@ public class HuaWeiTest2 {
 
     //**********************************简单(不看答案可以做对)***************************************************
 
+    /**
+     * HJ29 字符串加解密
+     */
+    public static void hj29() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String str1 = scanner.nextLine();
+            String str2 = scanner.nextLine();
+            System.out.println(encode29(str1));
+            System.out.println(decode29(str2));
+        }
+    }
+
+    public static String encode29(String str) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c >= 'a' && c <= 'z') {
+                if (c == 'z') {
+                    res.append('A');
+                } else {
+                    res.append((char) (c - 'a' + 'A' + 1));
+                }
+            } else if (c >= 'A' && c <= 'Z') {
+                if (c == 'Z') {
+                    res.append('a');
+                } else {
+                    res.append((char) (c - 'A' + 'a' + 1));
+                }
+            } else if (c >= '0' && c <= '9') {
+                if (c == '9') {
+                    res.append('0');
+                } else {
+                    res.append((char) (c + 1));
+                }
+            }
+        }
+        return res.toString();
+    }
+
+    public static String decode29(String str) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (c >= 'a' && c <= 'z') {
+                if (c == 'a') {
+                    res.append('Z');
+                } else {
+                    res.append((char) (c - 'a' + 'A' - 1));
+                }
+            } else if (c >= 'A' && c <= 'Z') {
+                if (c == 'A') {
+                    res.append('z');
+                } else {
+                    res.append((char) (c - 'A' + 'a' - 1));
+                }
+            } else if (c >= '0' && c <= '9') {
+                if (c == '0') {
+                    res.append('9');
+                } else {
+                    res.append((char) (c - 1));
+                }
+            }
+        }
+        return res.toString();
+    }
+
+    /**
+     * HJ27 查找兄弟单词
+     */
+    public static void hj27() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//字典中单词的个数n
+            String[] strArr = new String[n];
+            for (int i = 0; i < n; i++) {
+                strArr[i] = scanner.next();
+            }
+            String str = scanner.next();
+            int k = scanner.nextInt();
+            List<String> resList = new ArrayList<>();
+            int[] array = new int[128];
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                array[c]++;
+            }
+            for (int i = 0; i < strArr.length; i++) {
+                if (strArr[i].equals(str)) {
+                    continue;
+                }
+                if (strArr[i].length() != str.length()) {
+                    continue;
+                }
+                int[] tempArr = new int[128];
+                for (int j = 0; j < strArr[i].length(); j++) {
+                    tempArr[strArr[i].charAt(j)]++;
+                }
+                boolean isBrother = true;
+                for (int j = 0; j < 128; j++) {
+                    if (array[j] != tempArr[j]) {
+                        isBrother = false;
+                        break;
+                    }
+                }
+                if (isBrother) {
+                    resList.add(strArr[i]);
+                }
+            }
+            System.out.println(resList.size());
+            if (k < resList.size()) {
+                Collections.sort(resList);
+                System.out.println(resList.get(k - 1));
+            }
+        }
+    }
+
+
+    //看答案后的思路
+    public static void hj27Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//字典中单词的个数n
+            String[] strArr = new String[n];
+            for (int i = 0; i < n; i++) {
+                strArr[i] = scanner.next();
+            }
+            String str = scanner.next();
+            int k = scanner.nextInt();
+            List<String> resList = new ArrayList<>();
+            for (int i = 0; i < strArr.length; i++) {
+                if (strArr[i].equals(str) || strArr[i].length() != str.length()) {
+                    continue;
+                }
+                char[] charsTemp = strArr[i].toCharArray();
+                char[] chars = str.toCharArray();
+                Arrays.sort(charsTemp);
+                Arrays.sort(chars);
+                if (new String(chars).equals(new String(charsTemp))) {
+                    resList.add(strArr[i]);
+                }
+            }
+            System.out.println(resList.size());
+            if (k < resList.size()) {
+                Collections.sort(resList);
+                System.out.println(resList.get(k - 1));
+            }
+        }
+    }
 
     /**
      * HJ25 数据分类处理

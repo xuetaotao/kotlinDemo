@@ -291,6 +291,7 @@ public class CollectionActivity extends AppCompatActivity {
      */
     private void linkedListDemo() {
         LinkedList<String> linkedList = new LinkedList<>();
+        ConcurrentLinkedQueue<String> concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
     }
 
     /**

@@ -41,7 +41,8 @@ class CoroutinesActivity : AppCompatActivity() {
 
     fun customTest(view: View) {
 //        okHttpTest()
-        requestBaidu()
+//        requestBaidu()
+        studyDemo()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -121,6 +122,7 @@ class CoroutinesActivity : AppCompatActivity() {
                     "requestBaidu2-->A: Thread:${Thread.currentThread().name}\nTime:${System.currentTimeMillis()}"
                 )
                 baiduRequest()
+//                Log.e(TAG, "requestBaidu2-->A: AfterRequest")
             }
             Log.e(
                 TAG,
@@ -138,6 +140,32 @@ class CoroutinesActivity : AppCompatActivity() {
             val result = suspendBaiduRequest()
             mBinding.tvContent.text = result.body?.string() ?: "加载失败"
         }
+    }
+
+    /**
+     * 挂起与阻塞的区别
+     * 下面两段代码放到按键点击时间中的话：
+     * studyDemo()并不会导致主线程卡顿丢帧，按键也会立即正常显示点击完成回弹的效果。
+     * 但是studyDemo1()就会报主线程丢帧，按键也不会显示点击完成回弹的效果，直到10秒之后。它阻塞了主线程。
+     */
+    fun studyDemo() {
+        //如果这段代码多次触发（如被多次点击），会启动多个协程，打印多次
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(10000)//延时10秒，是一个挂起函数
+            Log.e(TAG, "studyDemo: 延时完毕;${Thread.currentThread().name}")//这行代码延时结束后才会打印，是被阻塞的
+        }
+        Log.e(TAG, "studyDemo: 协程之外")
+        //结果:
+        //22:55:06.641   studyDemo: 协程之外
+        //22:55:16.654   studyDemo: 延时完毕;main
+    }
+
+    fun studyDemo1() {
+        //如果这段代码多次触发（如被多次点击），会报ANR
+        Thread.sleep(10000)//阻塞，放在主线程会报丢帧
+        Log.e(TAG, "studyDemo1: 延时完毕;${Thread.currentThread().name}")
+        //studyDemo1: 延时完毕;main
+        //Choreographer: Skipped 1202 frames!  The application may be doing too much work on its main thread.
     }
 
     suspend fun suspendBaiduRequest(): Response {

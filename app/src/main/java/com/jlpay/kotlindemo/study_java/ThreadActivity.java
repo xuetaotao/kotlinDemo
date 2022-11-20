@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.Semaphore;
@@ -469,9 +470,16 @@ public class ThreadActivity extends AppCompatActivity {
             }
         };
 
+        //SynchronousQueue：无缓冲等待队列(不存储元素的堵塞队列，添加元素后等待其他线程取走后才能继续添加)
+        //这两个AsyncTask也有使用，详见 https://mp.weixin.qq.com/s/m0hjeOcz4fpOU7dFPTz-HA
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
                 3, 10, 60, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>(), sThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+
+        //LinkedBlockingDeque：堵塞队列，无界堵塞链表，此处设置了最大值128，超出上限会抛异常
+        //如果不设置128，就是无界堵塞，最大值是 Integer.MAX_VALUE
+        ThreadPoolExecutor threadPoolExecutor1 = new ThreadPoolExecutor(3, 10, 60, TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>(128), sThreadFactory, new ThreadPoolExecutor.AbortPolicy());
     }
 
 

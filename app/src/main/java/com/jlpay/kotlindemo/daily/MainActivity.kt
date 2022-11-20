@@ -22,9 +22,11 @@ import com.jlpay.kotlindemo.study_jetpack.mvvm1.MvvmDemoActivity
 import com.jlpay.kotlindemo.study_jetpack.mvvm2.ImageMvvmActivity
 import com.jlpay.kotlindemo.study_jetpack.mvvm3.WanActivity
 import com.jlpay.kotlindemo.study_jetpack.mvvm5.MyLoginActivity
+import com.jlpay.kotlindemo.study_jetpack.mvvm6.ViewModelScopeActivity
 import com.jlpay.kotlindemo.study_kotlin.CoroutinesActivity
 import com.jlpay.kotlindemo.study_kotlin.HigherAndExpandFuncActivity
 import com.jlpay.kotlindemo.study_kotlin.KotlinTestActivity
+import com.jlpay.kotlindemo.study_kotlin.MainScopeActivity
 import com.jlpay.kotlindemo.study_library.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity
 import com.jlpay.kotlindemo.study_library.blockcanary.BlockCanary2Activity
 import com.jlpay.kotlindemo.study_library.blockcanary.BlockCanaryActivity
@@ -193,7 +195,8 @@ class MainActivity : BaseMediaActivity() {
         //Kotlin基础；TODO(扩展函数)
         addButton("Kotlin基础：Kotlin基本使用", KotlinTestActivity::class.java)
         addButton("Kotlin基础：高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
-        addButton("Kotlin协程", CoroutinesActivity::class.java)
+        addButton("Kotlin协程：CoroutinesActivity", CoroutinesActivity::class.java)
+        addButton("Kotlin协程：MainScopeActivity", MainScopeActivity::class.java)
 
         //Android基础
         addButton("Android基础：文件管理器(未完成)", FileManagerActivity::class.java)
@@ -220,6 +223,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Jetpack：ViewModel", JetpackViewModelActivity::class.java)
         addButton("MVVM：每日一图", ImageMvvmActivity::class.java)
         addButton("MVVM：简易登录页面", MyLoginActivity::class.java)
+        addButton("MVVM：协程ViewModelScope学习", ViewModelScopeActivity::class.java)
 
         //FrameWork
         addButton("FrameWork：Handler", HandlerActivity::class.java)

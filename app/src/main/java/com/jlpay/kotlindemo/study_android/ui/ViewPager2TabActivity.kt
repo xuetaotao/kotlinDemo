@@ -17,7 +17,7 @@ class ViewPager2TabActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityViewpager2TabBinding
     private val fragments: ArrayList<Fragment> by lazy { ArrayList() }
-    private val tabTitles: List<String> = arrayListOf<String>("微信", "通讯录", "发现", "我")
+    private val tabTitles: ArrayList<String> = arrayListOf<String>("微信", "通讯录", "发现", "我")
     private val viewPager2Adapter by lazy { MyViewPager2Adapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {

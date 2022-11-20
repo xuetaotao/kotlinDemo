@@ -2,50 +2,35 @@ package com.jlpay.kotlindemo;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
 public class ExampleUnitJavaTest {
 
     @Test
     public void hj01() {
-        hj23("aabcddd");
+        hj32();
     }
 
 
-    public static void hj23(String nextLine) {
+    public static void hj32() {
 //        Scanner scanner = new Scanner(System.in);
 //        while (scanner.hasNext()) {
-//            String nextLine = scanner.nextLine();
-            HashMap<Character, Integer> hashMap = new HashMap<>();
-            for (int i = 0; i < nextLine.length(); i++) {
-                char c = nextLine.charAt(i);
-                if (hashMap.containsKey(c)) {
-                    hashMap.put(c, hashMap.get(c) + 1);
-                } else {
-                    hashMap.put(c, 1);
-                }
-            }
-            int min = Integer.MAX_VALUE;
-            List<Character> list = new ArrayList<>();
-            for (Map.Entry<Character, Integer> entry : hashMap.entrySet()) {
-                if (entry.getValue() < min) {
-                    min = entry.getValue();
-                    list.clear();
-                    list.add(entry.getKey());
-                } else if (entry.getValue() == min) {
-                    list.add(entry.getKey());
-                }
-            }
-            String res = nextLine;
-            for (Character temp : list) {
-                res = res.replace(String.valueOf(temp), "");
-            }
-            System.out.println(res);
-
+        String s = "LONNNNP";
+        int max = 0;
+        for (int i = 0; i < s.length(); i++) {
+            //ABA型
+            int len1 = getLongestStr32(s, i, i);
+            //ABBA型
+            int len2 = getLongestStr32(s, i, i + 1);
+            max = Math.max(max, Math.max(len1, len2));
         }
+        System.out.println(max);
+//        }
+    }
 
+    public static int getLongestStr32(String str, int left, int right) {
+        while (left >= 0 && right <= str.length() - 1 && str.charAt(left) == str.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
 }

@@ -31,6 +31,10 @@ class CoroutinesActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityCoroutinesBinding
 
+    //MainScope用法一
+    //MainScope，在Activity中使用，可以在onDestroy中取消协程
+    private val mainScope = MainScope()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView<ActivityCoroutinesBinding>(
@@ -41,8 +45,9 @@ class CoroutinesActivity : AppCompatActivity() {
 
     fun customTest(view: View) {
 //        okHttpTest()
-//        requestBaidu()
-        studyDemo()
+//        requestBaidu2()
+//        studyDemo2()
+        mainScopeDemo2()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -88,8 +93,18 @@ class CoroutinesActivity : AppCompatActivity() {
             val result = baiduRequest()
             launch(Dispatchers.Main) {
                 mBinding.tvContent.text = result.body?.string()
+                Log.e(TAG, "requestBaidu测: ${Thread.currentThread().name}")
             }
+            Log.e(
+                TAG, "requestBaidu里: ${Thread.currentThread().name}\n" +
+                        "result：${result.peekBody(1024).string()}"
+            )
         }
+        Log.e(TAG, "requestBaidu外: ${Thread.currentThread().name}")
+        //结果：
+        //requestBaidu外: main
+        //requestBaidu里: DefaultDispatcher-worker-1  result：<!DOCTYPE html>...(已拿到请求结果)
+        //requestBaidu测: main
     }
 
     /**
@@ -132,6 +147,10 @@ class CoroutinesActivity : AppCompatActivity() {
 //            Log.e(TAG, "requestBaidu2: Result:${result.body?.string()}")//这样会崩溃，原因不知道
             mBinding.tvContent.text = result.body?.string() ?: "加载失败"
         }
+        //结果：
+        //requestBaidu2-->A: Thread:DefaultDispatcher-worker-1   Time:1668769605619
+        //requestBaidu2-->B: Thread:main   Time:1668769605813
+        //requestBaidu2: Result:Response{protocol=http/1.1, code=200, message=OK, url=http://www.baidu.com/}
     }
 
     fun requestBaidu3() {
@@ -140,6 +159,61 @@ class CoroutinesActivity : AppCompatActivity() {
             val result = suspendBaiduRequest()
             mBinding.tvContent.text = result.body?.string() ?: "加载失败"
         }
+    }
+
+    suspend fun suspendBaiduRequest(): Response {
+        return withContext(Dispatchers.IO) {
+            baiduRequest()
+        }
+    }
+
+    fun baiduRequest(): Response {
+        val okHttpClient = OkHttpClient.Builder().build()
+        val request = Request.Builder().url("http://www.baidu.com").get().build()
+        return okHttpClient.newCall(request).execute()
+    }
+
+    //mainScope学习
+    fun mainScopeDemo() {
+        mainScope.launch {
+            //如果使用的是Retrofit请求，它会自动识别挂起函数，切换到IO线程，
+            //不需要我们自己写withContext(Dispatchers.IO)
+            val result = withContext(Dispatchers.IO) {
+                Log.e(TAG, "mainScopeDemo-->1: ${Thread.currentThread().name}")
+                baiduRequest()
+            }
+            mBinding.tvContent.text = result.body?.string()
+            Log.e(TAG, "mainScopeDemo-->2: ${Thread.currentThread().name}")
+        }
+        //结果：
+        //mainScopeDemo-->1: DefaultDispatcher-worker-1
+        //mainScopeDemo-->2: main
+    }
+
+    //mainScope学习2：验证协程的取消
+    fun mainScopeDemo2() {
+        mainScope.launch {
+            try {
+                delay(10000)//延时10秒，是一个挂起函数
+            } catch (e: Exception) {
+                //延时未结束关闭Activity的话就会抛出异常
+                //kotlinx.coroutines.JobCancellationException: Job was cancelled;
+                e.printStackTrace()
+                Log.e(TAG, "mainScopeDemo2: 协程异常抛出,${e.message}")
+            }
+            Log.e(TAG, "mainScopeDemo2-->1: ${Thread.currentThread().name}")
+        }
+        //延时未结束关闭Activity的结果:
+        //mainScopeDemo2: 协程异常抛出,Job was cancelled
+        //mainScopeDemo2-->1: main
+        //正常结果是延时10秒后打印 mainScopeDemo2-->1: main
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //MainScope，在Activity中使用，可以在onDestroy中取消协程
+        //协程在取消的时候就会抛出异常
+        mainScope.cancel()
     }
 
     /**
@@ -168,17 +242,22 @@ class CoroutinesActivity : AppCompatActivity() {
         //Choreographer: Skipped 1202 frames!  The application may be doing too much work on its main thread.
     }
 
-    suspend fun suspendBaiduRequest(): Response {
-        return withContext(Dispatchers.IO) {
-            baiduRequest()
+    fun studyDemo2() {
+        //所有的协程必须在调度器中运行，即使它们在主线程中运行也是如此。
+        //如果像下面协程没有指定调度器，就默认在Dispatchers.Default中运行
+        GlobalScope.launch {
+            Log.e(TAG, "studyDemo2: ${Thread.currentThread().name}")
         }
+        Log.e(TAG, "studyDemo2: ${Thread.currentThread().name} 线程中继续运行")
+        GlobalScope.launch(Dispatchers.IO) {
+            Log.e(TAG, "studyDemo2: 切换到${Thread.currentThread().name}线程了")
+        }
+        //结果：
+        //studyDemo2: main 线程中继续运行
+        //studyDemo2: DefaultDispatcher-worker-1
+        //studyDemo2: 切换到DefaultDispatcher-worker-1线程了
     }
 
-    fun baiduRequest(): Response {
-        val okHttpClient = OkHttpClient.Builder().build()
-        val request = Request.Builder().url("http://www.baidu.com").get().build()
-        return okHttpClient.newCall(request).execute()
-    }
 
     /**
      * Continuation 接口

@@ -333,6 +333,8 @@
         <activity android:name=".study_library.httpdns.HttpDnsActivity" />
         <activity android:name=".daily.practice.ShuDuGameActivity" />
         <activity android:name=".study_java.AlgorithmActivity" />
+        <activity android:name=".study_kotlin.MainScopeActivity" />
+        <activity android:name=".study_jetpack.mvvm6.ViewModelScopeActivity" />
 
         <service android:name=".service.SimpleService" />
         <service android:name=".service.MyIntentService" />

@@ -31,12 +31,55 @@ public class HuaWeiTest2 {
 
 
     //**********************************困难(看答案后也不太懂)***************************************************
-    //****hj16******hj24****hj28***********************************
+    //****hj16******hj24****hj28***hj32********************************
+
+    /**
+     * HJ32 密码截取
+     * 动态规划
+     * https://blog.nowcoder.net/n/1d36e8f19915468db8e1375c61c3aa2c?f=comment
+     * https://blog.nowcoder.net/n/74a83d052c2d4742a24984169aa3e244?f=comment
+     */
+    public static void hj32Two() {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        String s = "";
+        try {
+            while ((s = bufferedReader.readLine()) != null) {
+                int len = s.length();
+                // 状态：对比的两个字符索引起始和终止索引位置
+                // 定义: 字符串s的i到j字符组成的子串是否为回文子串
+                //回文子串：正着读和倒序读都一样
+                boolean[][] dp = new boolean[len][len];
+                int res = 0;
+                // base case
+                for (int i = 0; i < len - 1; i++) {
+                    dp[i][i] = true;
+                }
+                for (int right = 1; right < len; right++) {
+                    for (int left = 0; left < right; left++) {
+                        // 状态转移：如果左右两字符相等,同时[l+1...r-1]范围内的字符是回文子串
+                        // 则 [l...r] 也是回文子串
+                        // right - left <= 2 是因为 要么left和right处相同，要么left和right+1相同
+                        if (s.charAt(left) == s.charAt(right) &&
+                                (right - left <= 2 || dp[left + 1][right - 1])) {
+                            dp[left][right] = true;//s的子串(截取left到right)是回文子串
+                            // 不断更新最大长度
+                            res = Math.max(res, right - left + 1);
+                        }
+                    }
+                }
+                System.out.println(res);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * HJ28 素数伴侣
      * 匈牙利算法：先到先得，能让就让
-     * 这里自己写的有问题，后面再研究一下
+     * TODO 这里自己写的有问题，后面再研究一下
      */
     public static void hj28() {
         Scanner scanner = new Scanner(System.in);
@@ -127,8 +170,38 @@ public class HuaWeiTest2 {
 
 
     //**********************************中等(看答案后可以自己默写写对)***************************************************
-    //********hj6*****hj18****hj26***************************************
+    //********hj6*****hj18****hj26***hj32************************************
 
+
+    /**
+     * HJ32 密码截取
+     * 动态规划，循环迭代做法
+     */
+    public static void hj32() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s = scanner.nextLine();
+            int max = 0;
+            for (int i = 0; i < s.length(); i++) {
+                //ABA型
+                int len1 = getLongestStr32(s, i, i);
+                //ABBA型
+                int len2 = getLongestStr32(s, i, i + 1);
+                max = Math.max(max, Math.max(len1, len2));
+            }
+            System.out.println(max);
+        }
+    }
+
+    //循环做法
+    public static int getLongestStr32(String str, int left, int right) {
+        while (left >= 0 && right <= str.length() - 1 &&
+                str.charAt(left) == str.charAt(right)) {
+            left--;
+            right++;
+        }
+        return right - left - 1;
+    }
 
     /**
      * HJ26 字符串排序
@@ -291,6 +364,90 @@ public class HuaWeiTest2 {
 
 
     //**********************************简单(不看答案可以做对)***************************************************
+
+
+    /**
+     * HJ31 单词倒排
+     */
+    public static void hj31() {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String s = bufferedReader.readLine();
+            String[] s1 = s.split("[^a-zA-Z]");
+            StringBuilder res = new StringBuilder();
+            for (int i = s1.length - 1; i >= 0; i--) {
+                res.append(s1[i]).append(" ");
+            }
+            System.out.println(res);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * HJ30 字符串合并处理
+     * 还有一种做法是把'0'~'9'、'A'~'F'和'a'~'f'的结果直接方法Map中，第三步直接查
+     */
+    public static void hj30() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            StringBuilder res = new StringBuilder();
+            String s1 = scanner.next();
+            String s2 = scanner.next();
+            res.append(s1).append(s2);
+            //第二步：对合并后的字符串进行排序
+            List<Character> jiList = new ArrayList<>();
+            List<Character> ouList = new ArrayList<>();
+            for (int i = 0; i < res.length(); i++) {
+                char c = res.charAt(i);
+                if (i % 2 == 0) {
+                    ouList.add(c);
+                } else {
+                    jiList.add(c);
+                }
+            }
+            Collections.sort(jiList);
+            Collections.sort(ouList);
+            int len = res.length();
+            res.delete(0, res.length());
+            for (int i = 0; i < len; i++) {
+                if (i % 2 == 0) {
+                    res.append(ouList.get(i / 2));
+                } else {
+                    res.append(jiList.get((i - 1) / 2));
+                }
+            }
+            //第三步：对排序后的字符串中的'0'~'9'、'A'~'F'和'a'~'f'字符，需要进行转换操作
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < res.length(); i++) {
+                char c = res.charAt(i);
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')) {
+                    //将16进制字符串变成10进制整数
+                    int cInt = Integer.parseInt(String.valueOf(c), 16);
+                    //将10进制整数转换为2进制字符串
+                    String twoRadixStr = Integer.toBinaryString(cInt);
+                    StringBuilder temp = new StringBuilder();
+                    //注意不足4位的要补0
+                    if (twoRadixStr.length() < 4) {
+                        for (int j = 4 - twoRadixStr.length(); j > 0; j--) {
+                            temp.append("0");
+                        }
+                    }
+                    temp.append(twoRadixStr);//TODO 如果把这行代码加到下面一行就会出问题，原因不详
+                    //将2进制字符串倒序
+                    String reverseTwoRadixStr = temp.reverse().toString();
+                    //将倒序后的2进制字符串再转换成对应的十六进制大写字符
+                    String s = Integer.toHexString(Integer.parseInt(reverseTwoRadixStr, 2)).toUpperCase();
+                    result.append(s);
+                } else {
+                    result.append(c);
+                }
+            }
+            System.out.println(result);
+        }
+    }
+
 
     /**
      * HJ29 字符串加解密

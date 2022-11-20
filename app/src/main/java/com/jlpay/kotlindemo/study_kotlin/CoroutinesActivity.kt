@@ -14,6 +14,7 @@ import okhttp3.*
 import java.io.IOException
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.CoroutineContext
+import kotlin.system.measureTimeMillis
 
 /**
  * 协程是什么？就是切线程,他就是一个比较方便的线程框架，好在哪？好在方便。最方便的地方是，它能够在同一个代码块里进行多次的线程切换
@@ -47,7 +48,8 @@ class CoroutinesActivity : AppCompatActivity() {
 //        okHttpTest()
 //        requestBaidu2()
 //        studyDemo2()
-        mainScopeDemo2()
+//        mainScopeDemo2()
+        runBlockingDemo6()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -75,6 +77,152 @@ class CoroutinesActivity : AppCompatActivity() {
             Log.e(TAG, "jobByAsyncResult:--->$jobByAsyncResult")
             delay(1300L)
         }
+        //结果：
+        //launch:---> main
+        //async:--->main
+        //jobByAsyncResult:--->Hello
+    }
+
+    //学习协程构建器：runBlocking,launch,async
+    //runBlocking可以把主线程变成一个协程
+    fun runBlockingDemo() = runBlocking {
+        Log.e(TAG, "runBlockingDemo-->A: ${Thread.currentThread().name}")
+        //下面启动的这两个协程属于runBlocking主协程的子协程
+        //launch返回一个Job并且不附带任何结果值
+        val job1 = launch {
+            Log.e(TAG, "runBlockingDemo-->B: ${Thread.currentThread().name}")
+            delay(8000)
+            Log.e(TAG, "runBlockingDemo: job1 finished")
+        }
+        //async返回一个Deferred(Job的子接口)，可以使用它的await()方法在一个延期的值上得到最终结果
+        val job2 = async {
+            Log.e(TAG, "runBlockingDemo-->C: ${Thread.currentThread().name}")
+            delay(8000)
+            Log.e(TAG, "runBlockingDemo: job2 finished")
+            "job2 result"
+        }
+        Log.e(TAG, "runBlockingDemo-->D: ${Thread.currentThread().name}")
+        Log.e(TAG, "runBlockingDemo: job2===${job2.await()}")//TODO 这个居然最后打印，why?
+        //结果：
+        //runBlockingDemo-->A: main
+        //runBlockingDemo-->D: main
+        //runBlockingDemo-->B: main
+        //runBlockingDemo-->C: main
+        //runBlockingDemo: job1 finished
+        //runBlockingDemo: job2 finished
+        //runBlockingDemo: job2===job2 result
+    }
+
+    //场景：等待第一个协程执行完毕，再执行第二个第三个
+    //先看launch启动的协程
+    fun runBlockingDemo2() = runBlocking {
+        val job1 = launch {
+            Log.e(TAG, "runBlockingDemo2-->A: ${Thread.currentThread().name}")
+            delay(6000)
+            Log.e(TAG, "runBlockingDemo2: job1 finished")
+        }
+        job1.join()
+        val job2 = launch {
+            Log.e(TAG, "runBlockingDemo2-->B: ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "runBlockingDemo2: job2 finished")
+        }
+        val job3 = launch {
+            Log.e(TAG, "runBlockingDemo2-->C: ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "runBlockingDemo2: job3 finished")
+        }
+        //结果：
+        //runBlockingDemo2-->A: main
+        //runBlockingDemo2: job1 finished
+        //runBlockingDemo2-->B: main
+        //runBlockingDemo2-->C: main
+        //runBlockingDemo2: job2 finished
+        //runBlockingDemo2: job3 finished
+    }
+
+    //场景：等待第一个协程执行完毕，再执行第二个第三个
+    //再看async启动的协程
+    fun runBlockingDemo3() = runBlocking {
+        val job1 = async {
+            Log.e(TAG, "runBlockingDemo2-->A: ${Thread.currentThread().name}")
+            delay(6000)
+            Log.e(TAG, "runBlockingDemo2: job1 finished")
+        }
+        job1.await()
+        val job2 = async {
+            Log.e(TAG, "runBlockingDemo2-->B: ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "runBlockingDemo2: job2 finished")
+        }
+        val job3 = async {
+            Log.e(TAG, "runBlockingDemo2-->C: ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "runBlockingDemo2: job3 finished")
+        }
+        //结果：
+        //runBlockingDemo2-->A: main
+        //runBlockingDemo2: job1 finished
+        //runBlockingDemo2-->B: main
+        //runBlockingDemo2-->C: main
+        //runBlockingDemo2: job2 finished
+        //runBlockingDemo2: job3 finished
+    }
+
+    //组合并发场景
+    //同步
+    fun runBlockingDemo4() = runBlocking {
+        val time = measureTimeMillis {
+            val one = doOne()
+            val two = doTwo()
+            Log.e(TAG, "The Result is:${one + two} \t ${Thread.currentThread().name}")
+        }
+        Log.e(TAG, "Completed in $time ms \t ${Thread.currentThread().name}")
+        //结果：
+        //The Result is:12 	 main
+        //Completed in 2004 ms 	 main
+    }
+
+    suspend fun doOne(): Int {
+        delay(1000)
+        return 5;
+    }
+
+    suspend fun doTwo(): Int {
+        delay(1000)
+        return 7;
+    }
+
+    //异步
+    fun runBlockingDemo5() = runBlocking {
+        val time = measureTimeMillis {
+            val one = async { doOne() }
+            val two = async { doTwo() }
+            Log.e(
+                TAG,
+                "The Result is:${one.await() + two.await()} \t ${Thread.currentThread().name}"
+            )
+        }
+        Log.e(TAG, "Completed in $time ms \t ${Thread.currentThread().name}")
+        //结果：
+        //The Result is:12 	 main
+        //Completed in 1007 ms 	 main
+    }
+
+    //异步没用好变成了同步
+    fun runBlockingDemo6() = runBlocking {
+        val time = measureTimeMillis {
+            val one = async { doOne() }.await()
+            val two = async { doTwo() }.await()
+            Log.e(
+                TAG,
+                "The Result is:${one + two} \t ${Thread.currentThread().name}"
+            )
+        }
+        Log.e(TAG, "Completed in $time ms \t ${Thread.currentThread().name}")
+        //结果：
+        //The Result is:12 	 main
+        //Completed in 2009 ms 	 main
     }
 
 

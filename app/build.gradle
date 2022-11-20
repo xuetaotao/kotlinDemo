@@ -317,7 +317,7 @@ dependencies {
 //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
     //性能(卡顿)监控工具 BlockCanary
-    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
+//    debugImplementation 'com.github.markzhai:blockcanary-android:1.5.0'
 
     //x2c框架：https://github.com/iReaderAndroid/X2C/blob/master/README_CN.md
     implementation('com.zhangyue.we:x2c-lib:1.0.6')

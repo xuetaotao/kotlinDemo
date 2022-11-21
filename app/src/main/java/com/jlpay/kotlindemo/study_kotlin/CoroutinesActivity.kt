@@ -49,7 +49,9 @@ class CoroutinesActivity : AppCompatActivity() {
 //        requestBaidu2()
 //        studyDemo2()
 //        mainScopeDemo2()
-        runBlockingDemo6()
+//        runBlockingDemo3()
+//        startModeDemo5()
+        scopeConstruct2()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -153,20 +155,20 @@ class CoroutinesActivity : AppCompatActivity() {
         val job2 = async {
             Log.e(TAG, "runBlockingDemo2-->B: ${Thread.currentThread().name}")
             delay(2000)
-            Log.e(TAG, "runBlockingDemo2: job2 finished")
+            Log.e(TAG, "runBlockingDemo2: job2 finished\t ${Thread.currentThread().name}")
         }
         val job3 = async {
             Log.e(TAG, "runBlockingDemo2-->C: ${Thread.currentThread().name}")
             delay(2000)
-            Log.e(TAG, "runBlockingDemo2: job3 finished")
+            Log.e(TAG, "runBlockingDemo2: job3 finished\t ${Thread.currentThread().name}")
         }
         //结果：
         //runBlockingDemo2-->A: main
         //runBlockingDemo2: job1 finished
         //runBlockingDemo2-->B: main
         //runBlockingDemo2-->C: main
-        //runBlockingDemo2: job2 finished
-        //runBlockingDemo2: job3 finished
+        //runBlockingDemo2: job2 finished  main
+        //runBlockingDemo2: job3 finished  main
     }
 
     //组合并发场景
@@ -223,6 +225,148 @@ class CoroutinesActivity : AppCompatActivity() {
         //结果：
         //The Result is:12 	 main
         //Completed in 2009 ms 	 main
+    }
+
+    //协程的启动模式:CoroutineStart
+    //CoroutineStart.DEFAULT
+    //协程创建后，立即开始调度，在调度前如果协程被取消，其将直接进入取消响应的状态
+    fun startModeDemo() = runBlocking {
+        val job = launch(start = CoroutineStart.DEFAULT) {
+            Log.e(TAG, "startModeDemo: Job start \t ${Thread.currentThread().name}")
+            delay(5000)
+            Log.e(TAG, "startModeDemo: Job finished \t ${Thread.currentThread().name}")
+        }
+        delay(1000)
+        Log.e(TAG, "startModeDemo: ${Thread.currentThread().name}")
+        job.cancel()
+        //结果：
+        //startModeDemo: Job start 	 main
+        //startModeDemo: main
+        //如果没有job.cancel()，会在5秒后打印：startModeDemo: Job finished 	 main
+    }
+
+    //CoroutineStart.ATOMIC
+    //协程创建后，立即开始调度，协程执行到第一个挂起点之前不响应取消
+    fun startModeDemo2() = runBlocking {
+        val job = launch(start = CoroutineStart.ATOMIC) {
+            Log.e(TAG, "startModeDemo: Job start \t ${Thread.currentThread().name}")
+            //协程执行到第一个挂起点之前不响应取消，也就是说，下面这行之前的代码不响应取消
+            delay(5000)
+            Log.e(TAG, "startModeDemo: Job finished \t ${Thread.currentThread().name}")
+        }
+        delay(1000)
+        Log.e(TAG, "startModeDemo: ${Thread.currentThread().name}")
+        job.cancel()
+        //结果：
+        //startModeDemo: Job start 	 main
+        //startModeDemo: main
+        //如果没有job.cancel()，会在5秒后打印：startModeDemo: Job finished 	 main
+    }
+
+    //CoroutineStart.LAZY
+    //只有协程被需要时，包括主动调用协程的start，join或者await等函数时才会开始调度，如果调度前就被取消，
+    //那么该协程将直接进入异常结束状态
+    fun startModeDemo3() = runBlocking {
+        val job = async(start = CoroutineStart.LAZY) {
+            Log.e(TAG, "startModeDemo: Job start \t ${Thread.currentThread().name}")
+            29
+        }
+        var res = 3 + 5;
+        Log.e(TAG, "startModeDemo-->A:$res \t ${Thread.currentThread().name}")
+        //这行没有就不会执行协程
+        val jobRes = job.await()
+        res += jobRes
+        Log.e(TAG, "startModeDemo-->B:$res \t ${Thread.currentThread().name}")
+        //结果：
+        //startModeDemo-->A:8 	 main
+        //startModeDemo: Job start 	 main
+        //startModeDemo-->B:37 	 main
+    }
+
+    //CoroutineStart.UNDISPATCHED
+    //协程创建后立即在当前函数调用栈中执行，直到遇到第一个真正挂起的点
+    fun startModeDemo4() = runBlocking {
+        val job = async(context = Dispatchers.IO, start = CoroutineStart.UNDISPATCHED) {
+            Log.e(TAG, "startModeDemo: Job start \t ${Thread.currentThread().name}")
+            delay(5000)
+            Log.e(TAG, "startModeDemo: Job finished \t ${Thread.currentThread().name}")
+        }
+        Log.e(TAG, "startModeDemo: ${Thread.currentThread().name}")
+        //结果：
+        //startModeDemo: Job start 	 main
+        //startModeDemo: main
+        //startModeDemo: Job finished 	 DefaultDispatcher-worker-1
+    }
+
+    //对比上面startModeDemo4
+    fun startModeDemo5() = runBlocking {
+        val job = async(context = Dispatchers.IO, start = CoroutineStart.DEFAULT) {
+            Log.e(TAG, "startModeDemo: Job start \t ${Thread.currentThread().name}")
+            delay(5000)
+            Log.e(TAG, "startModeDemo: Job finished \t ${Thread.currentThread().name}")
+        }
+        Log.e(TAG, "startModeDemo: ${Thread.currentThread().name}")
+        //结果：
+        //startModeDemo: main
+        //startModeDemo: Job start 	 DefaultDispatcher-worker-1
+        //startModeDemo: Job finished 	 DefaultDispatcher-worker-1
+    }
+
+    //协程的作用域构建器
+    //runBlocking与coroutineScope
+    //runBlocking是常规函数，而coroutineScope是挂起函数
+    //它们都会等待其协程体以及所有子协程结束，主要区别是runBlocking方法会阻塞当前线程来等待
+    //而coroutineScope只是挂起，会释放底层线程用于其他用途
+    fun scopeConstruct() = runBlocking {
+        coroutineScope {
+            val job1 = launch {
+                Log.e(TAG, "startModeDemo: Job1 start \t ${Thread.currentThread().name}")
+                delay(4000)
+                Log.e(TAG, "startModeDemo: Job1 finished \t ${Thread.currentThread().name}")
+            }
+            val job2 = async {
+                Log.e(TAG, "startModeDemo: Job2 start \t ${Thread.currentThread().name}")
+                delay(2000)
+//                throw IllegalArgumentException()
+                Log.e(TAG, "startModeDemo: Job2 finished \t ${Thread.currentThread().name}")
+                "job2 result"
+            }
+            //没有throw IllegalArgumentException()的结果:
+            //startModeDemo: Job1 start 	 main
+            //startModeDemo: Job2 start 	 main
+            //startModeDemo: Job2 finished 	 main
+            //startModeDemo: Job1 finished 	 main
+            //加上throw IllegalArgumentException()的结果:会崩溃，而且没有下面这个结果
+            //startModeDemo: Job2 finished 	 main
+            //startModeDemo: Job1 finished 	 main
+        }
+    }
+
+    //supervisorScope与coroutineScope
+    //coroutineScope:一个协程失败了，所有其他兄弟协程也会被取消
+    //supervisorScope:一个协程失败了，不会影响其他兄弟协程
+    fun scopeConstruct2() = runBlocking {
+        supervisorScope {
+            val job1 = launch {
+                Log.e(TAG, "startModeDemo: Job1 start \t ${Thread.currentThread().name}")
+                delay(4000)
+                Log.e(TAG, "startModeDemo: Job1 finished \t ${Thread.currentThread().name}")
+            }
+            val job2 = async {
+                Log.e(TAG, "startModeDemo: Job2 start \t ${Thread.currentThread().name}")
+                delay(2000)
+                throw IllegalArgumentException()
+                Log.e(TAG, "startModeDemo: Job2 finished \t ${Thread.currentThread().name}")
+                "job2 result"
+            }
+            //没有throw IllegalArgumentException()的结果:
+            //startModeDemo: Job1 start 	 main
+            //startModeDemo: Job2 start 	 main
+            //startModeDemo: Job2 finished 	 main
+            //startModeDemo: Job1 finished 	 main
+            //加上throw IllegalArgumentException()的结果:不会崩溃，没有下面这个结果
+            //startModeDemo: Job2 finished 	 main
+        }
     }
 
 

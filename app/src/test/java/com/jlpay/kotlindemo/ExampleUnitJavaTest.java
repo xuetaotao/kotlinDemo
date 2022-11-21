@@ -11,26 +11,36 @@ public class ExampleUnitJavaTest {
 
 
     public static void hj32() {
-//        Scanner scanner = new Scanner(System.in);
-//        while (scanner.hasNext()) {
-        String s = "LONNNNP";
-        int max = 0;
-        for (int i = 0; i < s.length(); i++) {
-            //ABA型
-            int len1 = getLongestStr32(s, i, i);
-            //ABBA型
-            int len2 = getLongestStr32(s, i, i + 1);
-            max = Math.max(max, Math.max(len1, len2));
-        }
-        System.out.println(max);
-//        }
+        String binaryString = Integer.toBinaryString(167773121);//1010000000000000001111000001
+        System.out.println(binaryString);
+        System.out.println("========");
+        System.out.println(tenRadixToBinary("167773121"));
+        System.out.println("========");
+        System.out.println(binaryRadixToTen(tenRadixToBinary("167773121")));
     }
 
-    public static int getLongestStr32(String str, int left, int right) {
-        while (left >= 0 && right <= str.length() - 1 && str.charAt(left) == str.charAt(right)) {
-            left--;
-            right++;
+    public static String binaryRadixToTen(String binaryStr) {
+        long res = 0;
+        for (int i = 0; i < binaryStr.length(); i++) {
+            int anInt = Integer.parseInt(String.valueOf(binaryStr.charAt(i)));
+            res = res * 2 + anInt;
         }
-        return right - left - 1;
+        return String.valueOf(res);
+    }
+
+
+    public static String tenRadixToBinary(String tenRadixStr) {
+        long aLong = Long.parseLong(tenRadixStr);
+        StringBuilder sb = new StringBuilder();
+        while (aLong != 0) {
+//            if ((aLong % 2) == 1) {
+            if ((aLong & 1) == 1) {
+                sb.append("1");
+            } else {
+                sb.append("0");
+            }
+            aLong = aLong >>> 1;
+        }
+        return sb.reverse().toString();
     }
 }

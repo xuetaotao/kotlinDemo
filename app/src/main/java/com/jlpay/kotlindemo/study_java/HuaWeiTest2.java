@@ -365,6 +365,123 @@ public class HuaWeiTest2 {
 
     //**********************************简单(不看答案可以做对)***************************************************
 
+    /**
+     * HJ34 图片整理
+     */
+    public static void hj34() {
+
+    }
+
+    /**
+     * HJ33 整数与IP地址间的转换
+     */
+    public static void hj33() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s = scanner.nextLine();
+            String res = "";
+            if (s.contains(".")) {
+                //IP地址-->10进制整数
+                String[] split = s.split("\\.");
+                StringBuilder binarySb = new StringBuilder();
+                for (int i = 0; i < split.length; i++) {
+                    String temp = split[i];//十进制字符串
+                    //注意：这个方法不会补足前面的0，只会从1开始
+                    String binaryString = Integer.toBinaryString(Integer.parseInt(temp));
+                    if (binaryString.length() < 8) {
+                        for (int j = 8 - binaryString.length(); j > 0; j--) {
+                            binarySb.append("0");
+                        }
+                    }
+                    binarySb.append(binaryString);
+                }
+                //这里注意可能超过Integer的最大范围
+                res = String.valueOf(Long.parseLong(binarySb.toString(), 2));
+
+            } else {
+                //10进制整数-->IP地址
+                //这里注意可能超过Integer的最大范围
+                String binaryString = Long.toBinaryString(Long.parseLong(s));
+                StringBuilder binarySb = new StringBuilder();
+                if (binaryString.length() < 32) {
+                    for (int i = 32 - binaryString.length(); i > 0; i--) {
+                        binarySb.append("0");
+                    }
+                }
+                binarySb.append(binaryString);
+                String binaryStr = binarySb.toString();
+                int[] ipArr = new int[4];
+                int p = 0;
+                while (binaryStr.length() >= 8) {
+                    String substring = binaryStr.substring(0, 8);
+                    ipArr[p++] = Integer.parseInt(substring, 2);
+                    binaryStr = binaryStr.substring(8);
+                }
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < ipArr.length; i++) {
+                    sb.append(ipArr[i]);
+                    if (i != ipArr.length - 1) {
+                        sb.append(".");
+                    }
+                }
+                res = sb.toString();
+            }
+            System.out.println(res);
+        }
+    }
+
+    public static void hj33Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s = scanner.nextLine();
+            if (s.contains(".")) {
+                //ipv4-->int
+                long res = 0;
+                String[] split = s.split("\\.");
+                for (int i = 0; i < split.length; i++) {
+                    String temp = split[i];
+                    res = res * 256 + Integer.parseInt(temp);
+                }
+                System.out.println(res);
+
+            } else {
+                //int-->ipv4
+                long aLong = Long.parseLong(s);
+                StringBuilder res = new StringBuilder();
+                for (int i = 0; i < 4; i++) {
+                    res.insert(0, aLong % 256 + ".");
+                    aLong = aLong / 256;
+                }
+                System.out.println(res.substring(0, res.length() - 1));
+            }
+        }
+    }
+
+    //10进制字符串转为2进制字符串
+    public static String tenRadixToBinary(String tenRadixStr) {
+        long aLong = Long.parseLong(tenRadixStr);
+        StringBuilder sb = new StringBuilder();
+        while (aLong != 0) {
+//            if ((aLong % 2) == 1) {
+            if ((aLong & 1) == 1) {
+                sb.append("1");
+            } else {
+                sb.append("0");
+            }
+            aLong = aLong >>> 1;
+        }
+        return sb.reverse().toString();
+    }
+
+    //2进制字符串转为10进制字符串
+    public static String binaryRadixToTen(String binaryStr) {
+        long res = 0;
+        for (int i = 0; i < binaryStr.length(); i++) {
+            int anInt = Integer.parseInt(String.valueOf(binaryStr.charAt(i)));
+            res = res * 2 + anInt;
+        }
+        return String.valueOf(res);
+    }
 
     /**
      * HJ31 单词倒排

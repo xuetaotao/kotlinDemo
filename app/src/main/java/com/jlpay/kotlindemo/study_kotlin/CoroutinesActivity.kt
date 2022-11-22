@@ -51,7 +51,8 @@ class CoroutinesActivity : AppCompatActivity() {
 //        mainScopeDemo2()
 //        runBlockingDemo3()
 //        startModeDemo5()
-        scopeConstruct2()
+//        scopeConstruct2()
+        scopeCancelDemo3()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -318,6 +319,7 @@ class CoroutinesActivity : AppCompatActivity() {
     //它们都会等待其协程体以及所有子协程结束，主要区别是runBlocking方法会阻塞当前线程来等待
     //而coroutineScope只是挂起，会释放底层线程用于其他用途
     fun scopeConstruct() = runBlocking {
+        //coroutineScope会继承runBlocking的协程上下文
         coroutineScope {
             val job1 = launch {
                 Log.e(TAG, "startModeDemo: Job1 start \t ${Thread.currentThread().name}")
@@ -369,6 +371,90 @@ class CoroutinesActivity : AppCompatActivity() {
         }
     }
 
+    //协程的取消
+    //取消作用域会取消它的子协程
+    fun scopeCancelDemo() = runBlocking {
+        Log.e(TAG, "scopeCancelDemo-->A:  ${Thread.currentThread().name}")
+        //通过自己创建的协程作用域没有继续runBlocking的协程上下文
+        val scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
+            Log.e(TAG, "scopeCancelDemo: Job1 start \t ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "scopeCancelDemo: Job1 finished \t ${Thread.currentThread().name}")
+        }
+        scope.launch {
+            Log.e(TAG, "scopeCancelDemo: Job2 start \t ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "scopeCancelDemo: Job2 finished \t ${Thread.currentThread().name}")
+        }
+//        delay(1000)
+//        scope.cancel()
+        Log.e(TAG, "scopeCancelDemo-->B:  ${Thread.currentThread().name}")
+        //结果：注，这个结果和老师讲的不一样，另外Job1两次执行线程不一样原因也不知
+        //scopeCancelDemo-->A:  main
+        //scopeCancelDemo-->B:  main
+        //scopeCancelDemo: Job1 start 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo: Job2 start 	 DefaultDispatcher-worker-3
+        //scopeCancelDemo: Job2 finished 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo: Job1 finished 	 DefaultDispatcher-worker-3
+        //放开注释掉的两行的结果：
+        //scopeCancelDemo-->A:  main
+        //scopeCancelDemo: Job1 start 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo: Job2 start 	 DefaultDispatcher-worker-2
+        //scopeCancelDemo-->B:  main
+    }
+
+    //协程的取消
+    //被取消的子协程并不会影响其余兄弟协程
+    fun scopeCancelDemo2() = runBlocking {
+        Log.e(TAG, "scopeCancelDemo-->A:  ${Thread.currentThread().name}")
+        //通过自己创建的协程作用域没有继续runBlocking的协程上下文
+        val scope = CoroutineScope(Dispatchers.Default)
+        val job1 = scope.launch {
+            Log.e(TAG, "scopeCancelDemo: Job1 start \t ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "scopeCancelDemo: Job1 finished \t ${Thread.currentThread().name}")
+        }
+        val job2 = scope.launch {
+            Log.e(TAG, "scopeCancelDemo: Job2 start \t ${Thread.currentThread().name}")
+            delay(2000)
+            Log.e(TAG, "scopeCancelDemo: Job2 finished \t ${Thread.currentThread().name}")
+        }
+        delay(1000)
+        job1.cancel()
+        Log.e(TAG, "scopeCancelDemo-->B:  ${Thread.currentThread().name}")
+        //结果：
+        //scopeCancelDemo-->A:  main
+        //scopeCancelDemo: Job1 start 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo: Job2 start 	 DefaultDispatcher-worker-2
+        //scopeCancelDemo-->B:  main
+        //scopeCancelDemo: Job2 finished 	 DefaultDispatcher-worker-1
+    }
+
+    //协程的取消
+    //协程通过抛出一个特殊的异常CancellationException来处理取消操作
+    //所有kotlinx.coroutines中的挂起函数(withContext, delay等)都是可取消的
+    fun scopeCancelDemo3() = runBlocking {
+        Log.e(TAG, "scopeCancelDemo-->A:  ${Thread.currentThread().name}")
+        val job1 = GlobalScope.launch {
+            try {
+                Log.e(TAG, "scopeCancelDemo: Job1 start \t ${Thread.currentThread().name}")
+                delay(1000)
+                Log.e(TAG, "scopeCancelDemo: Job1 finished \t ${Thread.currentThread().name}")
+            } catch (e: Exception) {
+                e.printStackTrace()//java.util.concurrent.CancellationException: 取消
+            }
+        }
+        delay(100);
+        job1.cancel(CancellationException("取消"))
+        job1.join()
+//        job1.cancelAndJoin()
+        Log.e(TAG, "scopeCancelDemo-->B:  ${Thread.currentThread().name}")
+        //结果：
+        //scopeCancelDemo-->A:  main
+        //scopeCancelDemo: Job1 start 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo-->B:  main
+    }
 
     /**
      * launch方法参数解释：

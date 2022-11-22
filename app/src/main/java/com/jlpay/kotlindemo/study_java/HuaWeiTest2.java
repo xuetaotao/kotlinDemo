@@ -366,10 +366,45 @@ public class HuaWeiTest2 {
     //**********************************简单(不看答案可以做对)***************************************************
 
     /**
+     * HJ35 蛇形矩阵
+     */
+    public static void hj35() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int anInt = scanner.nextInt();
+            int[][] arr = new int[anInt][];
+            for (int i = 0; i < anInt; i++) {
+                int[] temp = new int[anInt - i];
+                arr[i] = temp;
+            }
+            int num = 1;
+            for (int x = 0; x < arr.length; x++) {
+                int temp = x;
+                for (int y = 0; temp >= 0; y++) {
+                    arr[temp--][y] = num;
+                    num++;
+                }
+            }
+            for (int[] ints : arr) {
+                for (int i : ints) {
+                    System.out.print(i + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    /**
      * HJ34 图片整理
      */
     public static void hj34() {
-
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s = scanner.nextLine();
+            char[] charArray = s.toCharArray();
+            Arrays.sort(charArray);
+            System.out.println(new String(charArray));
+        }
     }
 
     /**

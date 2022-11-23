@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -3035,6 +3036,44 @@ public class HuaWeiTestActivity extends AppCompatActivity {
             encodeStr.append(" ");
         }
         System.out.println(encodeStr.toString());
+    }
+
+    public static void hj36Two() {
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+            String s1 = sc.nextLine().toUpperCase();
+            String s2 = sc.nextLine();
+            char[] chars1 = s1.toCharArray();
+            char[] chars2 = s2.toCharArray();
+            LinkedHashSet<Character> set = new LinkedHashSet<Character>();
+            for (int i = 0; i < chars1.length; i++) {
+                set.add(chars1[i]);
+            }
+            int k = 0;
+            while (set.size() < 26) {
+                char a = (char) ('A' + k);
+                set.add(a);
+                k++;
+            }
+            ArrayList<Character> list = new ArrayList<>(set);
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < chars2.length; i++) {
+                if (chars2[i] == ' ') {
+                    sb.append(chars2[i]);
+                } else if (chars2[i] < 'a') {
+                    int n = (int) (chars2[i] - 'A');
+                    char c = list.get(n);
+                    sb.append(c);
+                } else {
+                    int n = (int) (chars2[i] - 'a');
+                    char c = (char) (list.get(n) + 'a' - 'A');
+                    sb.append(c);
+                }
+
+            }
+
+            System.out.println(sb.toString());
+        }
     }
 
 

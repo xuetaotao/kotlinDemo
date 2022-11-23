@@ -2,39 +2,46 @@ package com.jlpay.kotlindemo;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Scanner;
 
 public class ExampleUnitJavaTest {
 
     @Test
     public void hj01() {
-        hj35();
+        hj36Two();
     }
 
 
-    public static void hj35() {
+    public static void hj36Two() {
 //        Scanner scanner = new Scanner(System.in);
 //        while (scanner.hasNext()) {
-            int anInt = 4;
-            int[][] arr = new int[anInt][];
-            for (int i = 0; i < anInt; i++) {
-                int[] temp = new int[anInt - i];
-                arr[i] = temp;
+            String key = "trailblazers";
+            String str = "Attack AT DAWN";
+            LinkedHashSet<Character> linkedHashSet = new LinkedHashSet<>();
+            for (int i = 0; i < key.length(); i++) {
+                linkedHashSet.add(Character.toLowerCase(key.charAt(i)));
             }
-            int num = 1;
-            for (int x = 0; x < arr.length; x++) {
-                int temp = x;
-                for (int y = 0; temp >= 0; y++) {
-                    arr[temp--][y] = num;
-                    num++;
+            for (int i = 0; i < 26; i++) {
+                linkedHashSet.add((char) ('a' + i));
+            }
+            List<Character> list = new ArrayList<>(linkedHashSet);
+            StringBuilder res = new StringBuilder();
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == ' ') {
+                    res.append(c);
+                } else if (c >= 'A' && c <= 'Z') {//大写字母
+                    int index = (int) (c - 'A');
+                    res.append((char) (list.get(index) - 'a' + 'A'));
+                } else if (c >= 'a' && c <= 'z') {
+                    int index = (int) (c - 'a');
+                    res.append(list.get(index));
                 }
             }
-            for (int i = 0; i < arr.length; i++) {
-                for (int j = 0; j < arr[i].length; j++) {
-                    System.out.print(arr[i][j] + " ");
-                }
-                System.out.println();
-            }
+            System.out.println(res);
 //        }
     }
 

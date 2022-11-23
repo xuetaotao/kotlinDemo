@@ -365,6 +365,109 @@ public class HuaWeiTest2 {
 
     //**********************************简单(不看答案可以做对)***************************************************
 
+
+    /**
+     * HJ37 统计每个月兔子的总数
+     */
+    public static void hj37() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int month = scanner.nextInt();
+//            System.out.println(cal37(month));
+            System.out.println(cal37Two(month));
+        }
+    }
+
+    //递归方式实现
+    public static int cal37(int month) {
+        if (month == 1 || month == 2) {
+            return 1;
+        }
+        return cal37(month - 2) + cal37(month - 1);
+    }
+
+    //动态规划方式实现，迭代
+    public static int cal37Two(int month) {
+        if (month < 3) {
+            return 1;
+        } else {
+            int a = 1;//n-1个月
+            int b = 1;//n-2个月
+            int n = 3;//代表月份
+            while (n <= month) {
+                int temp = a + b;
+                b = a;
+                a = temp;
+                n++;
+            }
+            return a;
+        }
+    }
+
+    /**
+     * HJ36 字符串加密
+     * 自己写的虽然能通过机测，但是没有考虑空格和大写的情况，可以看看答案
+     */
+    public static void hj36() {
+        Scanner scanner = new Scanner(System.in);
+        char[] arr = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        while (scanner.hasNext()) {
+            String key = scanner.next();
+            char[] pasArr = new char[26];
+            Set<Character> set = new HashSet<>();
+            String str = scanner.next();
+            int j = 0;
+            for (int i = 0; i < key.length(); i++) {
+                char c = key.charAt(i);
+                if (set.add(c)) {
+                    pasArr[j++] = c;
+                }
+            }
+            for (int i = 0; i < arr.length; i++) {
+                if (set.add(arr[i])) {
+                    pasArr[j++] = arr[i];
+                }
+            }
+            StringBuilder res = new StringBuilder();
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                res.append(pasArr[(int) (c - 'a')]);
+            }
+            System.out.println(res);
+        }
+    }
+
+    public static void hj36Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String key = scanner.nextLine();
+            String str = scanner.nextLine();
+            LinkedHashSet<Character> linkedHashSet = new LinkedHashSet<>();
+            for (int i = 0; i < key.length(); i++) {
+                linkedHashSet.add(Character.toLowerCase(key.charAt(i)));
+            }
+            for (int i = 0; i < 26; i++) {
+                linkedHashSet.add((char) ('a' + i));
+            }
+            List<Character> list = new ArrayList<>(linkedHashSet);
+            StringBuilder res = new StringBuilder();
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == ' ') {
+                    res.append(c);
+                } else if (c >= 'A' && c <= 'Z') {//大写字母
+                    int index = (int) (c - 'A');//密码映射表里都是小写
+                    res.append((char) (list.get(index) - 'a' + 'A'));//注意这里是-('a'-'A')
+                } else if (c >= 'a' && c <= 'z') {
+                    int index = (int) (c - 'a');
+                    res.append(list.get(index));
+                }
+            }
+            System.out.println(res);
+        }
+    }
+
     /**
      * HJ35 蛇形矩阵
      */

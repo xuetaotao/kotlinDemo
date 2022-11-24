@@ -2,48 +2,50 @@ package com.jlpay.kotlindemo;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Scanner;
-
 public class ExampleUnitJavaTest {
 
     @Test
     public void hj01() {
-        hj36Two();
+        insertionSort(new int[]{5, 4, 3, 2, 1});
     }
 
 
-    public static void hj36Two() {
-//        Scanner scanner = new Scanner(System.in);
-//        while (scanner.hasNext()) {
-            String key = "trailblazers";
-            String str = "Attack AT DAWN";
-            LinkedHashSet<Character> linkedHashSet = new LinkedHashSet<>();
-            for (int i = 0; i < key.length(); i++) {
-                linkedHashSet.add(Character.toLowerCase(key.charAt(i)));
-            }
-            for (int i = 0; i < 26; i++) {
-                linkedHashSet.add((char) ('a' + i));
-            }
-            List<Character> list = new ArrayList<>(linkedHashSet);
-            StringBuilder res = new StringBuilder();
-            for (int i = 0; i < str.length(); i++) {
-                char c = str.charAt(i);
-                if (c == ' ') {
-                    res.append(c);
-                } else if (c >= 'A' && c <= 'Z') {//大写字母
-                    int index = (int) (c - 'A');
-                    res.append((char) (list.get(index) - 'a' + 'A'));
-                } else if (c >= 'a' && c <= 'z') {
-                    int index = (int) (c - 'a');
-                    res.append(list.get(index));
+    public void insertionSort(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
                 }
             }
-            System.out.println(res);
-//        }
+        }
+        for (int temp : arr) {
+            System.out.print(temp + " ");
+        }
     }
+
+    public void selectionSort(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return;
+        }
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[i] > arr[j]) {
+                    int temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+        for (int temp : arr) {
+            System.out.print(temp + " ");
+        }
+    }
+
 
     public static String binaryRadixToTen(String binaryStr) {
         long res = 0;

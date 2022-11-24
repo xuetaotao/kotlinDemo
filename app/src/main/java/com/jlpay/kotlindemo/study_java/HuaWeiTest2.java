@@ -365,6 +365,30 @@ public class HuaWeiTest2 {
 
     //**********************************简单(不看答案可以做对)***************************************************
 
+    /**
+     * HJ38 求小球落地5次后所经历的路程和第5次反弹的高度
+     */
+    public static void hj38() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            double m = scanner.nextDouble();//初始高度
+            int n = 5;//第n次落地
+            double res = 0.0;//第n次落地共经历多少米
+            for (int i = 1; i <= n; i++) {
+                //先落地后反弹
+                //第i次落地时共经历多少米
+                if (i == 1) {
+                    res += m;
+                } else {
+                    res += (m * 2);
+                }
+                //第i次落地反弹多高
+                m = m / 2;
+            }
+            System.out.println(res);
+            System.out.println(m);
+        }
+    }
 
     /**
      * HJ37 统计每个月兔子的总数

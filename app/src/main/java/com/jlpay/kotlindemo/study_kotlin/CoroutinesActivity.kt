@@ -11,7 +11,10 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.produce
 import okhttp3.*
+import java.io.BufferedReader
+import java.io.ByteArrayInputStream
 import java.io.IOException
+import java.io.InputStreamReader
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.CoroutineContext
 import kotlin.system.measureTimeMillis
@@ -52,7 +55,7 @@ class CoroutinesActivity : AppCompatActivity() {
 //        runBlockingDemo3()
 //        startModeDemo5()
 //        scopeConstruct2()
-        scopeCancelDemo3()
+        scopeCancelDemo9()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -447,13 +450,195 @@ class CoroutinesActivity : AppCompatActivity() {
         }
         delay(100);
         job1.cancel(CancellationException("取消"))
-        job1.join()
+        job1.join()//这里之所以先cancel再join，是因为cancel调用了后可能正在cancelling，还没有完成，所以要避免结束
 //        job1.cancelAndJoin()
         Log.e(TAG, "scopeCancelDemo-->B:  ${Thread.currentThread().name}")
         //结果：
         //scopeCancelDemo-->A:  main
         //scopeCancelDemo: Job1 start 	 DefaultDispatcher-worker-1
         //scopeCancelDemo-->B:  main
+    }
+
+    //CPU密集型任务取消
+    //isActive是一个可以被使用在CoroutineScope中的扩展属性，检查job是否处于活跃状态(Job的生命周期)
+    fun scopeCancelDemo4() = runBlocking {
+        val startTime = System.currentTimeMillis();
+        val job = launch(Dispatchers.Default) {
+            var nextPrintTime = startTime
+            var i = 0;
+            //这种叫CPU密集型任务，while循环？
+//            while (i < 5) {//1
+            while (i < 5 && isActive) {//2
+                if (System.currentTimeMillis() >= nextPrintTime) {
+                    Log.e(
+                        TAG,
+                        "scopeCancelDemo4-->A:Job I'm sleeping ${i++} \t ${Thread.currentThread().name}"
+                    )
+                    nextPrintTime += 500;
+                }
+            }
+        }
+        delay(1300)
+        Log.e(TAG, "scopeCancelDemo4-->B:I'm tried to cancel \t ${Thread.currentThread().name}")
+        job.cancelAndJoin()
+        Log.e(TAG, "scopeCancelDemo4-->C:Now i can quit ")
+        //情况1(while (i < 5))结果：可以看到协程任务没有取消成功
+        //scopeCancelDemo4-->A:Job I'm sleeping 0 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->A:Job I'm sleeping 1 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->A:Job I'm sleeping 2 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->B:I'm tried to cancel 	 main
+        //scopeCancelDemo4-->A:Job I'm sleeping 3 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->A:Job I'm sleeping 4 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->C:Now i can quit
+
+        //情况2(while (i < 5 && isActive))结果：可以看到协程任务取消成功
+        //scopeCancelDemo4-->A:Job I'm sleeping 0 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->A:Job I'm sleeping 1 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->A:Job I'm sleeping 2 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo4-->B:I'm tried to cancel 	 main
+        //scopeCancelDemo4-->C:Now i can quit
+    }
+
+    //ensureActive()，如果job处于非活跃状态，这个方法会立即抛出异常
+    //本质还是判断isActive属性，会抛出CancellationException异常，但是会静默处理（不崩溃，但是日志有提示）
+    //Choreographer: Skipped 159 frames!  The application may be doing too much work on its main thread.
+    //应该是job.cancelAndJoin()的原因
+    fun scopeCancelDemo5() = runBlocking {
+        val startTime = System.currentTimeMillis();
+        val job = launch(Dispatchers.Default) {
+            var nextPrintTime = startTime
+            var i = 0;
+            //这种叫CPU密集型任务，while循环？
+            while (i < 5) {
+                ensureActive()
+                if (System.currentTimeMillis() >= nextPrintTime) {
+                    Log.e(
+                        TAG,
+                        "scopeCancelDemo5-->A:Job I'm sleeping ${i++} \t ${Thread.currentThread().name}"
+                    )
+                    nextPrintTime += 500;
+                }
+            }
+        }
+        delay(1300)
+        Log.e(TAG, "scopeCancelDemo5-->B:I'm tried to cancel \t ${Thread.currentThread().name}")
+        job.cancelAndJoin()
+        Log.e(TAG, "scopeCancelDemo5-->C:Now i can quit ")
+        //结果：
+        //scopeCancelDemo5-->A:Job I'm sleeping 0 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo5-->A:Job I'm sleeping 1 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo5-->A:Job I'm sleeping 2 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo5-->B:I'm tried to cancel 	 main
+        //scopeCancelDemo5-->C:Now i can quit
+    }
+
+
+    //yield函数会检查所在协程的状态，如果已经取消，则抛出JobCancellationException异常予以响应。
+    //此外，他还会尝试出让线程的执行权，给其他协程提供执行机会
+    fun scopeCancelDemo6() = runBlocking {
+        val startTime = System.currentTimeMillis();
+        val job = launch(Dispatchers.Default) {
+            var nextPrintTime = startTime
+            var i = 0;
+            //这种叫CPU密集型任务，while循环？
+            while (i < 5) {
+                yield()
+                if (System.currentTimeMillis() >= nextPrintTime) {
+                    Log.e(
+                        TAG,
+                        "scopeCancelDemo5-->A:Job I'm sleeping ${i++} \t ${Thread.currentThread().name}"
+                    )
+                    nextPrintTime += 500;
+                }
+            }
+        }
+        delay(1300)
+        Log.e(TAG, "scopeCancelDemo5-->B:I'm tried to cancel \t ${Thread.currentThread().name}")
+        job.cancelAndJoin()
+        Log.e(TAG, "scopeCancelDemo5-->C:Now i can quit ")
+        //结果：
+        //scopeCancelDemo5-->A:Job I'm sleeping 0 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo5-->A:Job I'm sleeping 1 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo5-->A:Job I'm sleeping 2 	 DefaultDispatcher-worker-1
+        //scopeCancelDemo5-->B:I'm tried to cancel 	 main
+        //scopeCancelDemo5-->C:Now i can quit
+    }
+
+    //协程取消的副作用
+    //在finally中释放资源
+    fun scopeCancelDemo7() = runBlocking {
+        val job = launch {
+            try {
+                repeat(1000) { i ->
+                    Log.e(
+                        TAG,
+                        "scopeCancelDemo7A:Job I'm sleeping ${i} \t ${Thread.currentThread().name}",
+                    )
+                    delay(500L)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e(TAG, "scopeCancelDemo7:Exception is ${e.message}")
+            } finally {
+                Log.e(TAG, "scopeCancelDemo7: I'm running finally")
+            }
+        }
+        delay(1300)
+        Log.e(TAG, "scopeCancelDemo7-->B:I'm tried to cancel \t ${Thread.currentThread().name}")
+        job.cancelAndJoin()
+        Log.e(TAG, "scopeCancelDemo7-->C:Now i can quit ")
+        //结果：
+        //scopeCancelDemo7A:Job I'm sleeping 0 	 main
+        //scopeCancelDemo7A:Job I'm sleeping 1 	 main
+        //scopeCancelDemo7A:Job I'm sleeping 2 	 main
+        //scopeCancelDemo7-->B:I'm tried to cancel 	 main
+        //scopeCancelDemo7:Exception is StandaloneCoroutine was cancelled
+        //scopeCancelDemo7: I'm running finally
+        //scopeCancelDemo7-->C:Now i can quit
+    }
+
+    //use函数：该函数只能被实现了Closeable的对象使用，程序结束的时候会自动调用close方法，适合文件对象
+    fun scopeCancelDemo8() = runBlocking {
+        val str: String = "aa\nbb\ncc"
+        var br = BufferedReader(InputStreamReader(ByteArrayInputStream(str.toByteArray())))
+        with(br) {
+            var line: String?
+            try {
+                while (true) {
+                    line = readLine() ?: break
+                    Log.e(TAG, "scopeCancelDemo8-->A:${line} \t ${Thread.currentThread().name}")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "scopeCancelDemo8-->A: Exception is ${e.message}")
+            } finally {
+                close()
+            }
+        }
+        //结果：
+        //scopeCancelDemo8-->A:aa 	 main
+        //scopeCancelDemo8-->A:bb 	 main
+        //scopeCancelDemo8-->A:cc 	 main
+    }
+
+    //use函数：该函数只能被实现了Closeable的对象使用，程序结束的时候会自动调用close方法，适合文件对象
+    fun scopeCancelDemo9() = runBlocking {
+        val str: String = "aa\nbb\ncc"
+        //使用use函数
+        BufferedReader(InputStreamReader(ByteArrayInputStream(str.toByteArray()))).use {
+            var line: String?
+            try {
+                while (true) {
+                    line = it.readLine() ?: break
+                    Log.e(TAG, "scopeCancelDemo8-->B:${line} \t ${Thread.currentThread().name}")
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "scopeCancelDemo8-->B: Exception is ${e.message}")
+            }
+        }
+        //结果：
+        //scopeCancelDemo8-->B:aa 	 main
+        //scopeCancelDemo8-->B:bb 	 main
+        //scopeCancelDemo8-->B:cc 	 main
     }
 
     /**

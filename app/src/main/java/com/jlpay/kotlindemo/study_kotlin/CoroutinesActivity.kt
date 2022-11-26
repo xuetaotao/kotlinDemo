@@ -55,7 +55,8 @@ class CoroutinesActivity : AppCompatActivity() {
 //        runBlockingDemo3()
 //        startModeDemo5()
 //        scopeConstruct2()
-        scopeCancelDemo9()
+//        scopeCancelDemo12()
+        coroutineScopeContextDemo3()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -639,6 +640,168 @@ class CoroutinesActivity : AppCompatActivity() {
         //scopeCancelDemo8-->B:aa 	 main
         //scopeCancelDemo8-->B:bb 	 main
         //scopeCancelDemo8-->B:cc 	 main
+    }
+
+    //不能取消的任务
+    //处于取消中状态的协程不能够挂起（运行不能取消的代码），当协程被取消后需要调用挂起函数，
+    //我们需要将清理任务的代码放置于 NonCancellable CoroutineContext中
+    //这样挂起运行中的代码，并保持协程的取消中状态直到任务处理完成
+    fun scopeCancelDemo10() = runBlocking {
+        val job = launch {
+            try {
+                repeat(1000) { i ->
+                    Log.e(
+                        TAG,
+                        "scopeCancelDemo10-->A:Job I'm sleeping ${i} \t ${Thread.currentThread().name}",
+                    )
+                    delay(500L)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "scopeCancelDemo10:Exception is ${e.message}")
+            } finally {
+                //测试一：
+                //例如这里，当协程进入了取消状态，这里的耗时操作是没法挂起的
+//                Log.e(TAG, "scopeCancelDemo10: I'm running finally")
+//                delay(1000)
+//                Log.e(TAG, "scopeCancelDemo10: I have just delayed for 1 sec after cancel")
+                //测试二：
+                withContext(NonCancellable) {
+                    Log.e(TAG, "scopeCancelDemo10: I'm running finally")
+                    delay(1000)
+                    Log.e(TAG, "scopeCancelDemo10: I have just delayed for 1 sec after cancel")
+                }
+            }
+        }
+        delay(1300)
+        Log.e(TAG, "scopeCancelDemo10-->B:I'm tried to cancel \t ${Thread.currentThread().name}")
+        job.cancelAndJoin()
+        Log.e(TAG, "scopeCancelDemo10-->C:Now i can quit ")
+        //测试一结果：
+        //scopeCancelDemo10-->A:Job I'm sleeping 0 	 main
+        //scopeCancelDemo10-->A:Job I'm sleeping 1 	 main
+        //scopeCancelDemo10-->A:Job I'm sleeping 2 	 main
+        //scopeCancelDemo10-->B:I'm tried to cancel 	 main
+        //scopeCancelDemo10:Exception is StandaloneCoroutine was cancelled
+        //scopeCancelDemo10: I'm running finally
+        //测试二结果：会打印完下面这行后，再打印最后那行
+        //scopeCancelDemo10: I have just delayed for 1 sec after cancel
+        //scopeCancelDemo10-->C:Now i can quit
+    }
+
+    //超时任务
+    //很多情况下取消一个协程的理由是它有可能超时
+    //withTimeOutOrNull通过返回null来进行超时操作，从而替代抛出一个异常
+    fun scopeCancelDemo11() = runBlocking {
+        //会崩溃，抛出TimeoutCancellationException异常
+        withTimeout(1300) {
+            repeat(1000) { i ->
+                Log.e(
+                    TAG,
+                    "scopeCancelDemo11-->A:Job I'm sleeping ${i} \t ${Thread.currentThread().name}"
+                )
+                delay(500L)
+            }
+        }
+    }
+
+    fun scopeCancelDemo12() = runBlocking {
+        //会崩溃，抛出TimeoutCancellationException异常
+        val res = withTimeoutOrNull(1300) {
+            repeat(1000) { i ->
+                Log.e(
+                    TAG,
+                    "scopeCancelDemo11-->A:Job I'm sleeping ${i} \t ${Thread.currentThread().name}"
+                )
+                delay(500L)
+            }
+            "Done"
+        } ?: "Jack"
+        Log.e(TAG, "scopeCancelDemo12: result is ${res}\t ${Thread.currentThread().name}")
+        //结果：
+        //scopeCancelDemo11-->A:Job I'm sleeping 0 	 main
+        //scopeCancelDemo11-->A:Job I'm sleeping 1 	 main
+        //scopeCancelDemo11-->A:Job I'm sleeping 2 	 main
+        //scopeCancelDemo12: result is Jack	 main
+    }
+
+    /**
+     * 协程的上下文
+     * CoroutineContext是一组用于定义协程行为的元素。它由如下几项构成：
+     * Job：控制协程的生命周期；
+     * CoroutineDispatcher：向合适的线程分发任务；就是我们调度器Dispatchers。
+     * CoroutineName：协程的名字，调试的时候很有用。
+     * CoroutineExceptionHandler：处理未被捕获的异常。
+     */
+    //组合上下文中的元素
+    //有时我们需要在协程上下文中定义多个元素。我们可以使用+操作符来实现。
+    //比如，我们可以显式指定一个调度器来启动协程并且同时显式指定一个命名
+    fun coroutineScopeContextDemo() = runBlocking {
+        Log.e(TAG, "coroutineScopeContextDemo-->A: ${Thread.currentThread().name}")
+        launch(Dispatchers.Default + CoroutineName("test")) {
+            Log.e(
+                TAG,
+                "coroutineScopeContextDemo-->B:I'm working in ${Thread.currentThread().name}" +
+                        "\t ${coroutineContext[CoroutineName]}"
+            )
+        }
+        //结果：很奇怪，这个协程的名字没有生效，原因未知
+        //coroutineScopeContextDemo-->A: main
+        //coroutineScopeContextDemo-->B:I'm working in DefaultDispatcher-worker-1  CoroutineName(test)
+    }
+
+    //协程上下文的继承
+    //对于新创建的协程，它的CoroutineContext会包含一个全新的Job实例，它会帮助我们控制协程的生命周期。
+    //而剩下的元素会从CoroutineContext的父类继承，该父类可能是另外一个协程或者创建该协程的CoroutineScope。
+    fun coroutineScopeContextDemo2() = runBlocking {
+        val scope = CoroutineScope(Job() + Dispatchers.IO + CoroutineName("test2"))
+        val job = scope.launch {
+            Log.e(
+                TAG,
+                "coroutineScopeContextDemo2-->A:${coroutineContext[Job]}\t${Thread.currentThread().name}" +
+                        "\t${coroutineContext[CoroutineName]}}"
+            )
+            val res = async {
+                Log.e(
+                    TAG,
+                    "coroutineScopeContextDemo2-->B:${coroutineContext[Job]}\t${Thread.currentThread().name}" +
+                            "\t${coroutineContext[CoroutineName]}}"
+                )
+                "OK"
+            }.await()
+        }
+        job.join()
+        //结果：
+        //coroutineScopeContextDemo2-->A:StandaloneCoroutine{Active}@d8e9dc9	DefaultDispatcher-worker-1	CoroutineName(test2)}
+        //coroutineScopeContextDemo2-->B:DeferredCoroutine{Active}@c429cce	DefaultDispatcher-worker-3	CoroutineName(test2)}
+    }
+
+    //协程上下文的继承
+    //协程的上下文=默认值 + 继承的CoroutineContext + 参数
+    //一些元素包含默认值：Dispatchers.Default是默认的 CoroutineDispatcher，以及 "coroutine" 作为默认的CoroutineName
+    //继承的CoroutineContext是CoroutineScope或者其父协程的CoroutineContext
+    //传入协程构建器的参数的优先级高于继承的上下文参数，因此会覆盖对应的参数值
+    fun coroutineScopeContextDemo3() = runBlocking {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "coroutineScopeContextDemo3-->A: Caught $throwable")
+        }
+        val scope = CoroutineScope(Job() + Dispatchers.Main + coroutineExceptionHandler)
+        scope.launch {
+            Log.e(
+                TAG,
+                "coroutineScopeContextDemo3--B: ${Thread.currentThread().name}\t${coroutineContext[CoroutineName]}}"
+            )
+            throw IllegalArgumentException()
+        }
+        scope.launch(Dispatchers.IO) {
+            Log.e(
+                TAG,
+                "coroutineScopeContextDemo3--C: ${Thread.currentThread().name}\t${coroutineContext[CoroutineName]}}"
+            )
+        }
+        //结果：
+        //coroutineScopeContextDemo3--C: DefaultDispatcher-worker-1	null}
+        //coroutineScopeContextDemo3--B: main	null}
+        //coroutineScopeContextDemo3-->A: Caught java.lang.IllegalArgumentException
     }
 
     /**

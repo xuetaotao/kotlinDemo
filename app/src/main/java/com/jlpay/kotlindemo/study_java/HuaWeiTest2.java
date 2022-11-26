@@ -366,6 +366,122 @@ public class HuaWeiTest2 {
     //**********************************简单(不看答案可以做对)***************************************************
 
     /**
+     * HJ40 统计字符
+     */
+    public static void hj40() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String nextLine = scanner.nextLine();
+            String engStr = nextLine.replaceAll("[^a-zA-Z]", "");
+            int engStrLen = engStr.length();
+            System.out.println(engStrLen);
+            String spaceStr = nextLine.replace(" ", "");
+            int spaceStrLen = nextLine.length() - spaceStr.length();
+            System.out.println(spaceStrLen);
+            String numStr = nextLine.replaceAll("[0-9]", "");
+            int numStrLen = nextLine.length() - numStr.length();
+            System.out.println(numStrLen);
+            System.out.println(nextLine.length() - engStrLen - spaceStrLen - numStrLen);
+        }
+    }
+
+    /**
+     * HJ39 判断两个IP是否属于同一子网
+     */
+    public static void hj39() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String res = "";
+            String netMark = scanner.nextLine();
+            String ip1 = scanner.nextLine();
+            String ip2 = scanner.nextLine();
+            if (!checkIpAndMark39(netMark, false) || !checkIpAndMark39(ip1, true) ||
+                    !checkIpAndMark39(ip2, true)) {
+                res = "1";
+            } else {
+                String[] netMarkSplit = netMark.split("\\.");
+                String[] ip1Split = ip1.split("\\.");
+                String[] ip2Split = ip2.split("\\.");
+                boolean isSucc = true;
+                for (int i = 0; i < 4; i++) {
+                    int netMarkInt = Integer.parseInt(netMarkSplit[i]);
+                    int ip1Int = Integer.parseInt(ip1Split[i]);
+                    int ip2Int = Integer.parseInt(ip2Split[i]);
+                    if ((netMarkInt & ip1Int) != (netMarkInt & ip2Int)) {
+                        isSucc = false;
+                        res = "2";
+                        break;
+                    }
+                }
+                if (isSucc) {
+                    res = "0";
+                }
+            }
+            System.out.println(res);
+        }
+    }
+
+    //校验子网掩码和IP地址的合法性
+    //可以改造一下，因为错误的情况太多，正确的情况就一种，可以默认res为false，只写正确的情况
+    //true:合法  false:非法
+    public static boolean checkIpAndMark39(String str, boolean isIp) {
+        boolean res = true;
+        String[] split = str.split("\\.");
+        if (split.length != 4) {
+            res = false;
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < split.length; i++) {
+                if (split[i].length() == 0 || split[i] == null) {
+                    res = false;
+                    break;
+                }
+                try {
+                    int parseInt = Integer.parseInt(split[i]);
+                    if (parseInt < 0 || parseInt > 255) {
+                        res = false;
+                        break;
+                    }
+                    if (!isIp) {//子网掩码
+                        //将子网掩码转化为二进制形式
+                        String binaryStr = tenToBinaryStr39(parseInt);
+                        if (binaryStr.length() < 8) {
+                            for (int j = 8 - binaryStr.length(); j > 0; j--) {
+                                sb.append("0");
+                            }
+                        }
+                        sb.append(binaryStr);
+                    }
+
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    res = false;
+                    break;
+                }
+            }
+            if (!isIp && (sb.lastIndexOf("1") > sb.indexOf("0"))) {
+                res = false;
+            }
+        }
+        return res;
+    }
+
+    //十进制转二进制
+    public static String tenToBinaryStr39(int temp) {
+        StringBuilder res = new StringBuilder();
+        while (temp > 0) {
+            if ((temp & 1) == 1) {
+//            if (temp % 2 == 1) {
+                res.append("1");
+            } else {
+                res.append("0");
+            }
+            temp = temp >>> 1;
+        }
+        return res.reverse().toString();
+    }
+
+    /**
      * HJ38 求小球落地5次后所经历的路程和第5次反弹的高度
      */
     public static void hj38() {

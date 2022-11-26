@@ -16,8 +16,55 @@ public class Algorithm2 {
     /////////////////////////////////排序算法/////////////////////////////////////////////////////////////////////
 
     /**
+     * 归并排序法
+     * 时间复杂度：O(N*logN)，空间复杂度：O(N)，具有稳定性
+     * 实质就是一个简单递归，将要排序的数组等分，左边排好序，右边排好序，然后进行合并让其整体有序
+     * https://www.runoob.com/w3cnote/merge-sort.html
+     */
+    public void mergeSort(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return;
+        }
+        splitArr(arr, 0, arr.length - 1);
+        for (int temp : arr) {
+            System.out.print(temp + " ");
+        }
+    }
+
+    public void splitArr(int[] arr, int left, int right) {
+        if (left == right) {
+            return;
+        }
+        int mid = left + ((right - left) >> 1);//left+(right-left)/2
+        splitArr(arr, left, mid);
+        splitArr(arr, mid + 1, right);
+        merge(arr, left, mid, right);
+    }
+
+    public void merge(int[] arr, int left, int mid, int right) {
+        int p1 = left;
+        int p2 = mid + 1;
+        int[] helpArr = new int[right - left + 1];//注意这里的数组长度
+        int i = 0;
+        while (p1 <= mid && p2 <= right) {
+            helpArr[i++] = arr[p1] <= arr[p2] ? arr[p1++] : arr[p2++];
+        }
+        while (p1 <= mid) {
+            helpArr[i++] = arr[p1++];
+        }
+        while (p2 <= right) {
+            helpArr[i++] = arr[p2++];
+        }
+        for (int j = 0; j < helpArr.length; j++) {
+            arr[left + j] = helpArr[j];//这里arr的数组初始长度不一定是0
+        }
+    }
+
+
+    /**
      * 插入排序法
      * 时间复杂度：O(N^2)，空间复杂度：O(1)，具有稳定性
+     * https://www.runoob.com/w3cnote/insertion-sort.html
      */
     public void insertionSort(int[] arr) {
         if (arr == null || arr.length == 0) {
@@ -32,6 +79,16 @@ public class Algorithm2 {
                 }
             }
         }
+        //方式二
+//        for (int i = 1; i < arr.length; i++) {
+//            for (int j = i; j > 0; j--) {
+//                if (arr[j] < arr[j - 1]) {
+//                    int temp = arr[j];
+//                    arr[j] = arr[j - 1];
+//                    arr[j - 1] = temp;
+//                }
+//            }
+//        }
         for (int temp : arr) {
             System.out.print(temp + " ");
         }
@@ -41,6 +98,7 @@ public class Algorithm2 {
     /**
      * 选择排序法
      * 时间复杂度：O(N^2)，空间复杂度：O(1)，不具有稳定性
+     * https://www.runoob.com/w3cnote/selection-sort.html
      */
     public void selectionSort(int[] arr) {
         if (arr == null || arr.length == 0) {
@@ -64,6 +122,7 @@ public class Algorithm2 {
     /**
      * 冒泡排序法
      * 时间复杂度：O(N^2)，空间复杂度：O(1)，具有稳定性
+     * https://www.runoob.com/w3cnote/bubble-sort.html
      */
     public void bubbleSort(int[] arr) {
         if (arr == null || arr.length == 0) {

@@ -170,7 +170,41 @@ public class HuaWeiTest2 {
 
 
     //**********************************中等(看答案后可以自己默写写对)***************************************************
-    //********hj6*****hj18****hj26***hj32************************************
+    //********hj6*****hj18****hj26***hj32****hj41********************************
+
+    /**
+     * HJ41 称砝码
+     */
+    public static void hj41() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int n = scanner.nextInt();//砝码的种数(范围[1,10])
+            int[] weightArr = new int[n];//每种砝码的重量(范围[1,2000])
+            for (int i = 0; i < n; i++) {
+                weightArr[i] = scanner.nextInt();
+            }
+            int[] numArr = new int[n];//每种砝码对应的数量(范围[1,10])
+            for (int i = 0; i < n; i++) {
+                numArr[i] = scanner.nextInt();
+            }
+            Set<Integer> res = new HashSet<>();
+            res.add(0);//这句必须要有，否则最内层的for循环就执行不了
+            List<Integer> tempList = new ArrayList<>();
+            //遍历每种质量的砝码，即weightArr数组
+            for (int i = 0; i < weightArr.length; i++) {
+                tempList.clear();
+                tempList.addAll(res);
+                //注意这里是<=，因为这里的意义是数量个数
+                for (int j = 0; j <= numArr[i]; j++) {
+                    int tempWeight = weightArr[i] * j;
+                    for (int k = 0; k < tempList.size(); k++) {
+                        res.add(tempList.get(k) + tempWeight);
+                    }
+                }
+            }
+            System.out.println(res.size());
+        }
+    }
 
 
     /**

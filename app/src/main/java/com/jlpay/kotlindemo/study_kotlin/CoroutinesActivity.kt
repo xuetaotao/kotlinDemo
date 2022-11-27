@@ -56,7 +56,8 @@ class CoroutinesActivity : AppCompatActivity() {
 //        startModeDemo5()
 //        scopeConstruct2()
 //        scopeCancelDemo12()
-        coroutineScopeContextDemo3()
+//        coroutineScopeContextDemo3()
+        exceptionDemo2()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -802,6 +803,53 @@ class CoroutinesActivity : AppCompatActivity() {
         //coroutineScopeContextDemo3--C: DefaultDispatcher-worker-1	null}
         //coroutineScopeContextDemo3--B: main	null}
         //coroutineScopeContextDemo3-->A: Caught java.lang.IllegalArgumentException
+    }
+
+    //异常的传播
+    //协程构建器有两种形式：自动传播异常(launch与actor)，向用户暴露异常(async与produce)；
+    //当这些构建器用于创建一个根协程时（该协程不是另一个协程的子协程）
+    //前者这类构建器，异常会在它发生的第一时间被抛出，而后者则依赖用户来最终消费异常，例如await或者receive
+    fun exceptionDemo() = runBlocking {
+        //创建一个根协程
+        val job = GlobalScope.launch {
+            //异常会在它发生的第一时间被抛出
+            try {
+                throw IndexOutOfBoundsException()
+            } catch (e: Exception) {
+                Log.e(TAG, "exceptionDemo-->A: ${e.message}\t${Thread.currentThread().name}")
+            }
+        }
+        job.join()
+        val deferred = GlobalScope.async {
+            //异常依赖用户来最终消费异常，例如await或者receive
+            throw ArithmeticException()
+        }
+        //如果把deferred.await()这段代码注释掉，那么就不会发出ArithmeticException异常了，不会崩溃
+        try {
+            deferred.await()
+        } catch (e: Exception) {
+            Log.e(TAG, "exceptionDemo-->B: ${e.message}\t${Thread.currentThread().name}")
+        }
+        delay(1000)
+        //结果：
+        //exceptionDemo-->A: null	DefaultDispatcher-worker-1
+        //exceptionDemo-->B: null	mains
+    }
+
+    //非根协程的异常
+    //其他协程所创建的协程中，产生的异常总是会被传播
+    fun exceptionDemo2() = runBlocking {
+        val scope = CoroutineScope(Job())
+        val job = scope.launch {
+            //其他协程所创建的协程中，产生的异常总是会被传播
+            //不用去调用await()
+            async {
+                throw IllegalArgumentException()
+            }
+        }
+        job.join()
+        //结果：
+        //崩溃，报IllegalArgumentException
     }
 
     /**

@@ -57,7 +57,7 @@ class CoroutinesActivity : AppCompatActivity() {
 //        scopeConstruct2()
 //        scopeCancelDemo12()
 //        coroutineScopeContextDemo3()
-        exceptionDemo2()
+        exceptionDemo5()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -850,6 +850,97 @@ class CoroutinesActivity : AppCompatActivity() {
         job.join()
         //结果：
         //崩溃，报IllegalArgumentException
+    }
+
+    //SupervisorJob
+    //使用SupervisorJob时，一个子协程的运行失败不会影响到其他子协程。
+    //SupervisorJob不会传播异常给它的父级，它会让子协程自己处理异常。
+    //这种需求常见于在作用域内定义作业的UI组件，如果任何一个UI的子作业执行失败了，它并不总是有必要取消整个UI组件，
+    //但是如果UI组件被销毁了，由于它的结果不再被需要了，它就有必要使所有的子作业执行失败。
+    fun exceptionDemo3() = runBlocking {
+        //测试一:
+//        val supervisor = CoroutineScope(Job())
+        //测试二:
+        val supervisor = CoroutineScope(SupervisorJob())
+        val job1 = supervisor.launch {
+            delay(100)
+            Log.e(TAG, "exceptionDemo3-->A: job1\t${Thread.currentThread().name}")
+            throw IllegalArgumentException()
+        }
+        val job2 = supervisor.launch {
+            try {
+                Log.e(TAG, "exceptionDemo3--B: job2 start\t${Thread.currentThread().name}")
+                delay(Long.MAX_VALUE)
+            } catch (e: Exception) {
+                Log.e(TAG, "exceptionDemo3-->C: catch ${e.message}")
+            } finally {
+                Log.e(TAG, "exceptionDemo3-->D: job2 finished\t${Thread.currentThread().name}")
+            }
+        }
+        //测试三：下面2行代码
+        delay(200)
+        supervisor.cancel()
+
+        joinAll(job1, job2)
+        //测试二结果：
+        //会崩溃，老师的结果是job1会抛出异常，但是job2会不受影响继续执行
+        //测试一结果：
+        //会崩溃，老师的结果是job1会抛出异常，但是job2也会被取消，打印 job2 finished
+        //测试三结果：
+        //会崩溃，老师的结果是job1会抛出异常，但是因为调用了supervisor.cancel()，job2也会被取消，打印 job2 finished
+    }
+
+    //supervisorScope
+    //当作业自身执行失败的时候，所有子作业将会被全部取消
+    fun exceptionDemo4() = runBlocking {
+        supervisorScope {
+            launch {
+                delay(100)
+                Log.e(TAG, "exceptionDemo4-->A: job1\t${Thread.currentThread().name}")
+                throw IllegalArgumentException()
+            }
+            launch {
+                try {
+                    Log.e(TAG, "exceptionDemo4--B: job2 start\t${Thread.currentThread().name}")
+                    delay(Long.MAX_VALUE)
+                } catch (e: Exception) {
+                    Log.e(TAG, "exceptionDemo4-->C: catch ${e.message}")
+                } finally {
+                    Log.e(TAG, "exceptionDemo4-->D: job2 finished\t${Thread.currentThread().name}")
+                }
+            }
+            //结果：
+            //会崩溃，老师的结果是job1会抛出异常，但是job2会不受影响继续执行
+        }
+    }
+
+    //supervisorScope
+    //当作业自身执行失败的时候，所有子作业将会被全部取消
+    fun exceptionDemo5(): Nothing = runBlocking {
+        supervisorScope {
+            val child = launch {
+                try {
+                    Log.e(
+                        TAG,
+                        "exceptionDemo5-->A: child is sleeping\t${Thread.currentThread().name}",
+                    )
+                    delay(Long.MAX_VALUE)
+                } catch (e: Exception) {
+                    Log.e(TAG, "exceptionDemo5-->B: catch ${e.message}")
+                } finally {
+                    Log.e(TAG, "exceptionDemo5-->C: The child is cancelled")
+                }
+            }
+            yield()
+            Log.e(TAG, "exceptionDemo5-->D: Throwing an exception from the scope")
+            throw AssertionError()
+        }
+        //结果：正常来说，子协程会一直执行，但是这里作用域中抛了个异常，导致子协程被取消掉了
+        //会崩溃
+        //exceptionDemo5-->A: child is sleeping	main
+        //exceptionDemo5-->D: Throwing an exception from the scope
+        //exceptionDemo5-->B: catch Parent job is Cancelling
+        //exceptionDemo5-->C: The child is cancelled
     }
 
     /**

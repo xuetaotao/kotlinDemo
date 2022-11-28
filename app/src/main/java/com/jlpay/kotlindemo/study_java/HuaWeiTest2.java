@@ -400,6 +400,60 @@ public class HuaWeiTest2 {
     //**********************************简单(不看答案可以做对)***************************************************
 
     /**
+     * HJ42 学英语
+     */
+    public static void hj42() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            long num = scanner.nextLong();
+            System.out.println(readEnglish42(num));
+        }
+    }
+
+    //空格都只管自己前面的，也就是自己有值，自己前面加空格
+    //另外加空格只管自己当前范围内如何加，不管其他范围怎么加
+    public static String readEnglish42(long num) {
+        String[] geArr = new String[]{"zero", "one", "two", "three", "four", "five", "six", "seven",
+                "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+                "seventeen", "eighteen", "nineteen"};
+        String[] shiArr = new String[]{"zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy",
+                "eighty", "ninety"};
+        StringBuilder res = new StringBuilder();
+        if (num < 20) {
+            res.append(geArr[(int) num]);
+        } else if (num < 100) {
+            int shi = (int) (num / 10);
+            int ge = (int) (num % 10);
+            res.append(shiArr[shi]);
+            if (ge != 0) {
+                res.append(" ").append(geArr[ge]);
+            }
+        } else if (num < 1000) {
+            int bai = (int) (num / 100);
+            res.append(geArr[bai]).append(" hundred");
+            if ((int) (num % 100) != 0) {
+                res.append(" and ").append(readEnglish42((int) (num % 100)));
+            }
+        } else if (num < 1000000) {
+            int qian = (int) (num / 1000);
+            res.append(readEnglish42(qian)).append(" thousand");
+            if ((int) (num % 1000) != 0) {
+                res.append(" ").append(readEnglish42((int) (num % 1000)));
+            }
+        } else if (num < 1000000000) {
+            int baiwan = (int) (num / 1000000);
+            res.append(readEnglish42(baiwan)).append(" million");
+            if ((int) (num % 1000000) != 0) {
+                res.append(" ").append(readEnglish42((int) (num % 1000000)));
+            }
+        }
+//        else if (num < 1000000000000) {
+//
+//        }
+        return res.toString();
+    }
+
+    /**
      * HJ40 统计字符
      */
     public static void hj40() {

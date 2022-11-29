@@ -11,13 +11,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
@@ -170,7 +173,197 @@ public class HuaWeiTest2 {
 
 
     //**********************************中等(看答案后可以自己默写写对)***************************************************
-    //********hj6*****hj18****hj26***hj32****hj41********************************
+    //********hj6*****hj18****hj26***hj32****hj41***hj43*****************************
+
+    //题目已经提示了 【迷宫只有一条通道】，则直接使用 DFS 找路径就行了，如不有多条路径找最短考虑使用 BFS
+    //dfs实现，不使用栈，使用递归
+    //DFS：https://blog.nowcoder.net/n/0d2578cbbd5f4119806a6accc64a030c?f=comment
+    public static void hj43() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int m = scanner.nextInt();//m行
+            int n = scanner.nextInt();//n列
+            int[][] arr = new int[m][n];
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    arr[i][j] = scanner.nextInt();
+                }
+            }
+            List<Node43> res = new ArrayList<>();//存放正确路径
+            dfs43(arr, 0, 0, res);
+            for (Node43 temp : res) {
+                System.out.println("(" + temp.x + "," + temp.y + ")");
+            }
+        }
+    }
+
+    public static boolean dfs43(int[][] arr, int x, int y, List<Node43> res) {
+        res.add(new Node43(x, y));
+        arr[x][y] = 1;
+        // 结束标志
+        if (x == arr.length - 1 && y == arr[0].length - 1) {
+            return true;
+        }
+        if (x + 1 < arr.length && arr[x + 1][y] == 0) {
+            if (dfs43(arr, x + 1, y, res)) {
+                return true;
+            }
+        }
+        if (x - 1 >= 0 && arr[x - 1][y] == 0) {
+            if (dfs43(arr, x - 1, y, res)) {
+                return true;
+            }
+        }
+        if (y + 1 < arr[0].length && arr[x][y + 1] == 0) {
+            if (dfs43(arr, x, y + 1, res)) {
+                return true;
+            }
+        }
+        if (y - 1 >= 0 && arr[x][y - 1] == 0) {
+            if (dfs43(arr, x, y - 1, res)) {
+                return true;
+            }
+        }
+        //回溯
+        res.remove(res.size() - 1);
+        arr[x][y] = 0;
+        return false;
+    }
+
+    //广度优先遍历：
+    //BFS: https://blog.nowcoder.net/n/6f5802e19a8043ada0f635db088aa226?f=comment
+    //感觉这个不算严格的bfs，因为它用链表串起了结果，参考思路自己用dfs也可实现
+    public static void hj43Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int m = scanner.nextInt();//m行
+            int n = scanner.nextInt();//n列
+            int[][] arr = new int[m][n];
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    arr[i][j] = scanner.nextInt();
+                }
+            }
+            Queue<NodeTwo43> queue = new LinkedList<>();
+            queue.offer(new NodeTwo43(0, 0, null));
+            NodeTwo43 temp;
+            while (true) {
+                temp = queue.poll();
+                if (temp == null) {
+                    break;
+                }
+                int x = temp.x;
+                int y = temp.y;
+                arr[x][y] = 1;
+                //切记注意下面的m，n不要搞反了
+                if (x == m - 1 && y == n - 1) {
+                    break;
+                }
+                if (x + 1 < m && arr[x + 1][y] == 0) {
+                    queue.offer(new NodeTwo43(x + 1, y, temp));
+                }
+                if (x - 1 >= 0 && arr[x - 1][y] == 0) {
+                    queue.offer(new NodeTwo43(x - 1, y, temp));
+                }
+                if (y + 1 < n && arr[x][y + 1] == 0) {
+                    queue.offer(new NodeTwo43(x, y + 1, temp));
+                }
+                if (y - 1 >= 0 && arr[x][y - 1] == 0) {
+                    queue.offer(new NodeTwo43(x, y - 1, temp));
+                }
+            }
+            List<NodeTwo43> res = new ArrayList<>();
+            while (temp != null) {
+                res.add(temp);
+                temp = temp.pre;
+            }
+            for (int i = res.size() - 1; i >= 0; i--) {
+                NodeTwo43 node = res.get(i);
+                System.out.println("(" + node.x + "," + node.y + ")");
+            }
+
+        }
+    }
+
+    public static class NodeTwo43 {
+        int x;
+        int y;
+        NodeTwo43 pre;
+
+        public NodeTwo43(int x, int y, NodeTwo43 pre) {
+            this.x = x;
+            this.y = y;
+            this.pre = pre;
+        }
+    }
+
+    /**
+     * HJ43 迷宫问题
+     * 题目已经提示了 【迷宫只有一条通道】，则直接使用 DFS 找路径就行了，如不有多条路径找最短考虑使用 BFS
+     * DFS做法，自己的思路参考了第二种方法，但是感觉这个不算严格的dfs，因为它没有使用回溯，而是用链表串起了结果
+     */
+    public static void hj43Three() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int m = scanner.nextInt();//m行
+            int n = scanner.nextInt();//n列
+            int[][] arr = new int[m][n];
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    arr[i][j] = scanner.nextInt();
+                }
+            }
+            //Deque做栈(Stack)使用
+            Deque<NodeTwo43> deque = new LinkedList<>();
+            deque.push(new NodeTwo43(0, 0, null));
+            NodeTwo43 temp;
+            while (true) {
+                temp = deque.pop();
+                if (temp == null) {
+                    break;
+                }
+                int x = temp.x;
+                int y = temp.y;
+                arr[x][y] = 1;
+                if (x == m - 1 && y == n - 1) {
+                    break;
+                }
+                if (x + 1 < m && arr[x + 1][y] == 0) {
+                    deque.push(new NodeTwo43(x + 1, y, temp));
+                }
+                if (x - 1 >= 0 && arr[x - 1][y] == 0) {
+                    deque.push(new NodeTwo43(x - 1, y, temp));
+                }
+                if (y + 1 < n && arr[x][y + 1] == 0) {
+                    deque.push(new NodeTwo43(x, y + 1, temp));
+                }
+                if (y - 1 >= 0 && arr[x][y - 1] == 0) {
+                    deque.push(new NodeTwo43(x, y - 1, temp));
+                }
+            }
+
+            List<NodeTwo43> res = new ArrayList<>();//存放正确路径
+            while (temp != null) {
+                res.add(temp);
+                temp = temp.pre;
+            }
+            for (int i = res.size() - 1; i >= 0; i--) {
+                NodeTwo43 node = res.get(i);
+                System.out.println("(" + node.x + "," + node.y + ")");
+            }
+        }
+    }
+
+    public static class Node43 {
+        int x;
+        int y;
+
+        public Node43(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
 
     /**
      * HJ41 称砝码
@@ -398,6 +591,7 @@ public class HuaWeiTest2 {
 
 
     //**********************************简单(不看答案可以做对)***************************************************
+
 
     /**
      * HJ42 学英语

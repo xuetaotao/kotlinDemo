@@ -57,7 +57,7 @@ class CoroutinesActivity : AppCompatActivity() {
 //        scopeConstruct2()
 //        scopeCancelDemo12()
 //        coroutineScopeContextDemo3()
-        exceptionDemo5()
+        exceptionDemo8()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -942,6 +942,57 @@ class CoroutinesActivity : AppCompatActivity() {
         //exceptionDemo5-->B: catch Parent job is Cancelling
         //exceptionDemo5-->C: The child is cancelled
     }
+
+    //异常的捕获
+    //使用 CoroutineExceptionHandler 对协程的异常进行捕获
+    //以下的条件满足时，异常就会被捕获：
+    //时机：异常是被自动抛出异常的协程所抛出的（使用launch，而不是async时）
+    //位置：coroutineExceptionHandler 在 CoroutineScope 的 CoroutineContext 中或在一个根协程（CoroutineScope或者supervisorScope的直接子协程）中
+    fun exceptionDemo6(): Nothing = runBlocking {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "coroutineScopeContextDemo6-->A: Caught $throwable")
+        }
+        val job = GlobalScope.launch(coroutineExceptionHandler) {
+            throw AssertionError()
+        }
+        val deferred = GlobalScope.async(coroutineExceptionHandler) {
+            throw ArithmeticException()
+        }
+        job.join()
+        deferred.await()
+        //结果：会崩溃，ArithmeticException异常没有被捕获导致
+        //coroutineScopeContextDemo6-->A: Caught java.lang.AssertionError
+    }
+
+    fun exceptionDemo7() = runBlocking {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "coroutineScopeContextDemo7-->A: Caught $throwable")
+        }
+        val scope = CoroutineScope(Job())
+        val job = scope.launch(coroutineExceptionHandler) {
+            launch {
+                throw IllegalArgumentException()
+            }
+        }
+        job.join()
+        //结果：异常可以被捕获到
+        //coroutineScopeContextDemo7-->A: Caught java.lang.IllegalArgumentException
+    }
+
+    fun exceptionDemo8() = runBlocking {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "coroutineScopeContextDemo8-->A: Caught $throwable")
+        }
+        val scope = CoroutineScope(Job())
+        val job = scope.launch {
+            launch(coroutineExceptionHandler) {
+                throw IllegalArgumentException()
+            }
+        }
+        job.join()
+        //结果：会崩溃，异常无法被捕获到，原因是coroutineExceptionHandler被放在内部子协程中了。
+    }
+
 
     /**
      * launch方法参数解释：

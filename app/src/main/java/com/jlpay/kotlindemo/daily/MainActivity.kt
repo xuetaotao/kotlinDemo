@@ -23,10 +23,7 @@ import com.jlpay.kotlindemo.study_jetpack.mvvm2.ImageMvvmActivity
 import com.jlpay.kotlindemo.study_jetpack.mvvm3.WanActivity
 import com.jlpay.kotlindemo.study_jetpack.mvvm5.MyLoginActivity
 import com.jlpay.kotlindemo.study_jetpack.mvvm6.ViewModelScopeActivity
-import com.jlpay.kotlindemo.study_kotlin.CoroutinesActivity
-import com.jlpay.kotlindemo.study_kotlin.HigherAndExpandFuncActivity
-import com.jlpay.kotlindemo.study_kotlin.KotlinTestActivity
-import com.jlpay.kotlindemo.study_kotlin.MainScopeActivity
+import com.jlpay.kotlindemo.study_kotlin.*
 import com.jlpay.kotlindemo.study_library.baserecyclerviewadapterhelper.BaseRecyclerViewAdapterHelperActivity
 import com.jlpay.kotlindemo.study_library.blockcanary.BlockCanary2Activity
 import com.jlpay.kotlindemo.study_library.blockcanary.BlockCanaryActivity
@@ -197,6 +194,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Kotlin基础：高阶函数和扩展函数", HigherAndExpandFuncActivity::class.java)
         addButton("Kotlin协程：CoroutinesActivity", CoroutinesActivity::class.java)
         addButton("Kotlin协程：MainScopeActivity", MainScopeActivity::class.java)
+        addButton("Kotlin协程：Flow学习", FlowActivity::class.java)
 
         //Android基础
         addButton("Android基础：文件管理器(未完成)", FileManagerActivity::class.java)

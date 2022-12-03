@@ -57,7 +57,7 @@ class CoroutinesActivity : AppCompatActivity() {
 //        scopeConstruct2()
 //        scopeCancelDemo12()
 //        coroutineScopeContextDemo3()
-        exceptionDemo8()
+        exceptionDemo11()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -991,6 +991,115 @@ class CoroutinesActivity : AppCompatActivity() {
         }
         job.join()
         //结果：会崩溃，异常无法被捕获到，原因是coroutineExceptionHandler被放在内部子协程中了。
+    }
+
+    //取消与异常
+    //取消与异常密切相关，协程内部使用 CancellationException 来进行取消，这个异常会被忽略
+    //当子协程被取消时，不会取消它的父协程
+    fun exceptionDemo9() = runBlocking {
+        val job = launch {
+            val child = launch {
+                try {
+                    delay(Long.MAX_VALUE)
+                } catch (e: Exception) {
+                    Log.e(TAG, "exceptionDemo9-->A: ${e}")
+                } finally {
+                    Log.e(TAG, "exceptionDemo9-->B: child is cancelled")
+                }
+            }
+            yield()
+            Log.e(TAG, "exceptionDemo9-->C: Cancelling child")
+            child.cancelAndJoin()
+            yield()
+            Log.e(TAG, "exceptionDemo9-->D: Parent is not cancelled")
+        }
+        job.join()
+        //结果：
+        //exceptionDemo9-->C: Cancelling child
+        //exceptionDemo9-->A: kotlinx.coroutines.JobCancellationException
+        //exceptionDemo9-->B: child is cancelled
+        //exceptionDemo9-->D: Parent is not cancelled
+    }
+
+    //如果一个协程遇到了 CancellationException 以外的异常，它将使用该异常取消它的父协程。
+    //当父协程的所有子协程都结束后，异常才会被父协程处理。
+    fun exceptionDemo10() = runBlocking {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(TAG, "exceptionDemo10-->A: caught ${throwable}")
+        }
+        val job = GlobalScope.launch(coroutineExceptionHandler) {
+            launch {
+                try {
+                    delay(Long.MAX_VALUE)
+                } catch (e: Exception) {
+                    Log.e(TAG, "exceptionDemo10-->B: ${e}")
+                } finally {
+                    //处于取消中状态的协程不能够挂起（运行不能取消的代码），当协程被取消后需要调用挂起函数，
+                    withContext(NonCancellable) {
+                        Log.e(
+                            TAG,
+                            "exceptionDemo10-->C: Children are cancelled,but exception is not handled"
+                        )
+                        delay(100)
+                        Log.e(TAG, "exceptionDemo10-->D: The first child finished")
+                    }
+                }
+            }
+
+            launch {
+                delay(10)
+                Log.e(TAG, "exceptionDemo10-->E: Second child throws an exception")
+                throw ArithmeticException()
+            }
+        }
+        job.join()
+        //结果：
+        //exceptionDemo10-->E: Second child throws an exception
+        //exceptionDemo10-->B: kotlinx.coroutines.JobCancellationException
+        //exceptionDemo10-->C: Children are cancelled,but exception is not handled
+        //exceptionDemo10-->D: The first child finished
+        //exceptionDemo10-->A: caught java.lang.ArithmeticException
+    }
+
+    //异常聚合
+    //当协程的多个子协程因为异常而失败时，一般情况下取第一个异常进行处理。
+    //在第一个异常之后发生的所有其他异常，都将被绑定到第一个异常之上。
+    fun exceptionDemo11() = runBlocking {
+        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.e(
+                TAG,
+                "exceptionDemo11-->A: caught ${throwable}\t${throwable.suppressed.contentToString()}"
+            )
+        }
+        val job = GlobalScope.launch(coroutineExceptionHandler) {
+            launch {
+                try {
+                    delay(Long.MAX_VALUE)
+                } catch (e: Exception) {
+                    Log.e(TAG, "exceptionDemo11-->B: ${e}")
+                } finally {
+                    throw ArithmeticException()
+                }
+            }
+            launch {
+                try {
+                    delay(Long.MAX_VALUE)
+                } catch (e: Exception) {
+                    Log.e(TAG, "exceptionDemo11-->C: ${e}")
+                } finally {
+                    throw IndexOutOfBoundsException()
+                }
+            }
+            launch {
+                delay(100)
+                throw IOException()
+            }
+        }
+        job.join()
+        //结果：
+        //exceptionDemo11-->B: kotlinx.coroutines.JobCancellationException
+        //exceptionDemo11-->C: kotlinx.coroutines.JobCancellationException
+        //exceptionDemo11-->A: caught java.io.IOException	[java.lang.ArithmeticException, java.lang.IndexOutOfBoundsException]
     }
 
 

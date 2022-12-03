@@ -173,7 +173,76 @@ public class HuaWeiTest2 {
 
 
     //**********************************中等(看答案后可以自己默写写对)***************************************************
-    //********hj6*****hj18****hj26***hj32****hj41***hj43*****************************
+    //********hj6*****hj18****hj26***hj32****hj41***hj43****hj44*************************
+
+
+    /**
+     * HJ44 Sudoku(数独)
+     */
+    public static void hj44() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int[][] arr = new int[9][9];
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    arr[i][j] = scanner.nextInt();
+                }
+            }
+            sudoHelper(arr);
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    System.out.print(arr[i][j] + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    public static boolean sudoHelper(int[][] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[0].length; j++) {
+                if (arr[i][j] == 0) {
+                    for (int k = 1; k < 10; k++) {
+                        if (sudoSuccess(arr, i, j, k)) {
+                            arr[i][j] = k;
+                            if (sudoHelper(arr)) {
+                                return true;
+                            }
+                        }
+                        arr[i][j] = 0;
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    //每一行、每一列、每一个3X3粗线宫内的数字均含1-9，并且不重复
+    //这里不能判断均含1-9且不重复，因为可能某一行/列有多个0
+    public static boolean sudoSuccess(int[][] arr, int x, int y, int val) {
+        for (int i = 0; i < 9; i++) {
+            if (arr[x][i] == val) {
+                return false;
+            }
+        }
+        for (int i = 0; i < 9; i++) {
+            if (arr[i][y] == val) {
+                return false;
+            }
+        }
+        int oriX = (x / 3) * 3;
+        int oriY = (y / 3) * 3;
+        for (int i = oriX; i < oriX + 3; i++) {
+            for (int j = oriY; j < oriY + 3; j++) {
+                if (arr[i][j] == val) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     //题目已经提示了 【迷宫只有一条通道】，则直接使用 DFS 找路径就行了，如不有多条路径找最短考虑使用 BFS
     //dfs实现，不使用栈，使用递归
@@ -592,6 +661,49 @@ public class HuaWeiTest2 {
 
     //**********************************简单(不看答案可以做对)***************************************************
 
+    /**
+     * HJ46 截取字符串
+     */
+    public static void hj46() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s = scanner.nextLine();
+            int k = scanner.nextInt();
+            String subStr = s.substring(0, k);
+            System.out.println(subStr);
+        }
+    }
+
+
+    /**
+     * HJ45 名字的漂亮度
+     */
+    public static void hj45() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int num = Integer.parseInt(scanner.nextLine());
+            for (int i = 0; i < num; i++) {
+                String s = scanner.nextLine();
+                System.out.println(beautyNum(s));
+            }
+        }
+    }
+
+    public static int beautyNum(String str) {
+        int[] arr = new int[26];
+        for (int i = 0; i < str.toCharArray().length; i++) {
+            char c = str.charAt(i);
+            int index = (c - 'a');
+            arr[index]++;
+        }
+        Arrays.sort(arr);
+        int res = 0;
+        int oriBeauty = 26;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            res += arr[i] * (oriBeauty--);
+        }
+        return res;
+    }
 
     /**
      * HJ42 学英语

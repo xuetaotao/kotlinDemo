@@ -55,9 +55,9 @@ class CoroutinesActivity : AppCompatActivity() {
 //        runBlockingDemo3()
 //        startModeDemo5()
 //        scopeConstruct2()
-//        scopeCancelDemo12()
+        scopeCancelDemo12()
 //        coroutineScopeContextDemo3()
-        exceptionDemo11()
+//        exceptionDemo11()
     }
 
     //注：requestBaidu2是一个耗时方法，但是如果requestBaidu这种，customTest方法前就不能加suspend，否则会崩溃
@@ -706,7 +706,7 @@ class CoroutinesActivity : AppCompatActivity() {
     }
 
     fun scopeCancelDemo12() = runBlocking {
-        //会崩溃，抛出TimeoutCancellationException异常
+        //不会崩溃
         val res = withTimeoutOrNull(1300) {
             repeat(1000) { i ->
                 Log.e(

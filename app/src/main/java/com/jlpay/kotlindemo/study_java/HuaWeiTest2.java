@@ -661,6 +661,83 @@ public class HuaWeiTest2 {
 
     //**********************************简单(不看答案可以做对)***************************************************
 
+    public static void hj48Two() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int num = scanner.nextInt();//输入链表结点个数
+            int headValue = scanner.nextInt();//输入头结点的值
+            ListNode head = new ListNode(headValue);//头节点
+            ListNode dummy = head;
+            for (int i = 0; i < num - 1; i++) {
+                int nextValue = scanner.nextInt();
+                int curValue = scanner.nextInt();
+                head = dummy;
+                while (head != null) {
+                    if (head.val == curValue) {
+                        ListNode node = new ListNode(nextValue, head.next);
+                        head.next = node;
+                        break;
+                    }
+                    head = head.next;
+                }
+            }
+            int removeValue = scanner.nextInt();
+            head = dummy;
+            while (true) {
+                if (head.next.val == removeValue) {
+                    head.next = head.next.next;
+                    break;
+                }
+                head = head.next;
+            }
+            head = dummy;
+            while (head != null) {
+                System.out.print(head.val + " ");
+                head = head.next;
+            }
+        }
+    }
+
+    public static class ListNode {
+        int val;
+        ListNode next;
+
+        public ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+
+        public ListNode(int val) {
+            this.val = val;
+        }
+    }
+
+    /**
+     * HJ48 从单向链表中删除指定值的节点
+     * 法一：不需要链表，一个有插入功能的数组就可以了。比如Java中直接用一个ArrayList即可。
+     */
+    public static void hj48() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            int num = scanner.nextInt();//输入链表结点个数
+            int headValue = scanner.nextInt();//输入头结点的值
+            List<Integer> list = new ArrayList<>();
+            list.add(headValue);
+            for (int i = 0; i < num - 1; i++) {
+                int nextValue = scanner.nextInt();
+                int curValue = scanner.nextInt();
+                int index = list.indexOf(curValue);
+                list.add(index + 1, nextValue);
+            }
+            int removeValue = scanner.nextInt();
+            list.remove((Integer) removeValue);
+            for (Integer temp : list) {
+                System.out.print(temp + " ");
+            }
+        }
+    }
+
+
     /**
      * HJ46 截取字符串
      */

@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -34,7 +35,149 @@ public class HuaWeiTest2 {
 
 
     //**********************************困难(看答案后也不太懂)***************************************************
-    //****hj16******hj24****hj28***hj32********************************
+    //****hj16******hj24****hj28***hj32**hj50******************************
+
+    /**
+     * HJ50 四则运算
+     * 先算括号里面的，再算乘除，最后算加减
+     */
+    public static void hj50() {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String s = scanner.nextLine();
+        }
+    }
+
+    //没写完，感觉有问题写不下去了
+    public static int calculate(String str) {
+        Stack<Integer> stack = new Stack<>();
+        HashMap<Character, Character> hashMap = new HashMap<>();
+        hashMap.put('(', ')');
+        hashMap.put('[', ']');
+        hashMap.put('{', '}');
+        StringBuilder temp = new StringBuilder(str);
+
+        while (temp.toString().replaceAll("[0-9]", "").length() != 0) {
+            str = temp.toString();
+            //先算括号里面的，必须把全部括号里的算完了才能算乘除
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == '(' || c == '[' || c == '{') {
+                    String substring = str.substring(i);
+                    int index = substring.indexOf(hashMap.get(c));
+                    String calcStr = str.substring(i + 1, index);
+                    temp.replace(i, index + 1, String.valueOf(calculate(calcStr)));
+                }
+            }
+            str = temp.toString();
+            //再算乘除，必须把所有的乘除算完了才能算加减
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                if (c == '*' || c == '/') {
+                    int numLeftIndex = i;
+                    int numRightIndex = i;
+                    boolean isFuNum = false;
+                    if (i - 1 < 0) {
+                        continue;
+                    }
+                    for (int j = i - 1; j >= 0; j--) {
+                        if (Character.isDigit(str.charAt(j))) {
+                            numLeftIndex = j;
+                        } else {
+                            //负号判断
+                            if (str.charAt(j) == '-') {
+                                if (j - 1 < 0) {
+                                    isFuNum = true;
+                                    break;
+                                } else {
+                                    char leftChar = str.charAt(j - 1);
+                                    if (leftChar == '+' || leftChar == '-' || leftChar == '*' || leftChar == '/'
+                                            || leftChar == '(' || leftChar == '[' || leftChar == '{') {
+                                        isFuNum = true;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    if (i + 1 >= str.length()) {
+                        continue;
+                    }
+                    int j = i + 1;
+                    if (str.charAt(j) == '-') {
+                        j = i + 2;
+                    }
+                    for (; j < str.length(); j++) {
+                        if (Character.isDigit(str.charAt(j))) {
+                            numRightIndex = j;
+                        }
+                    }
+                    //TODO 如果包含小数类型，这里得换成double
+                    int leftNum = Integer.parseInt(str.substring(numLeftIndex, i));
+                    int rightNum = Integer.parseInt(str.substring(i + 1, numRightIndex + 1));
+                    int calcRes = 0;
+                    if (c == '*') {
+                        calcRes = calcRes + leftNum * rightNum;
+                    } else {
+                        calcRes = calcRes + leftNum / rightNum;
+                    }
+                    temp.replace(numLeftIndex, numRightIndex + 1, String.valueOf(calcRes));
+                }
+            }
+            str = temp.toString();
+            //最后算加减
+            for (int i = 0; i < str.length(); i++) {
+                //一个数减去一个负数,负数必须要用括号括起来吗？ 必须括起来。否则在逻辑语言里会报错（会认为两个减号之间还应有数字）
+                char c = str.charAt(i);
+                if (c == '+' || c == '-') {
+                    int numLeftIndex = i;
+                    int numRightIndex = i;
+                    boolean isFuNum = false;
+                    if (i - 1 < 0) {
+                        continue;
+                    }
+                    for (int j = i - 1; j >= 0; j--) {
+                        if (Character.isDigit(str.charAt(j))) {
+                            numLeftIndex = j;
+                        } else {
+                            //负号判断
+                            if (str.charAt(j) == '-') {
+                                if (j - 1 < 0) {
+                                    isFuNum = true;
+                                    break;
+                                } else {
+                                    char leftChar = str.charAt(j - 1);
+                                    if (leftChar == '+' || leftChar == '-' || leftChar == '*' || leftChar == '/'
+                                            || leftChar == '(' || leftChar == '[' || leftChar == '{') {
+                                        isFuNum = true;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return Integer.parseInt(String.valueOf(temp));
+    }
+
+    //暂时没用
+    public static boolean isFuNum(String str, int j) {
+        boolean isFuNum = false;
+        if (str.charAt(j) == '-') {
+            if (j - 1 < 0) {
+                isFuNum = true;
+            } else {
+                char leftChar = str.charAt(j - 1);
+                if (leftChar == '+' || leftChar == '-' || leftChar == '*' || leftChar == '/'
+                        || leftChar == '(' || leftChar == '[' || leftChar == '{') {
+                    isFuNum = true;
+                }
+            }
+        }
+        return isFuNum;
+    }
 
     /**
      * HJ32 密码截取
@@ -660,6 +803,7 @@ public class HuaWeiTest2 {
 
 
     //**********************************简单(不看答案可以做对)***************************************************
+
 
     public static void hj48Two() {
         Scanner scanner = new Scanner(System.in);

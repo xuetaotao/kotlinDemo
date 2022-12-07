@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jlpay.kotlindemo.R
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlin.system.measureTimeMillis
 
 /**
  * Flow-异步流学习
@@ -22,7 +23,7 @@ class FlowActivity : AppCompatActivity() {
 
     fun onClickTest(view: View) {
 //        multipleValues3()
-        flowDemo10()
+        flowDemo17()
     }
 
     //使用集合返回多个值，但不是异步
@@ -325,5 +326,191 @@ class FlowActivity : AppCompatActivity() {
         //flowDemo10: 1	main
         //flowDemo10: 2	main
         //flowDemo10: 3	main
+    }
+
+    //背压：生产者生产效率 > 消费者消费效率，管子不够用了
+    //解决方案：降低生产者生产效率，或者提高消费者消费效率
+    fun flowDemo11() = runBlocking {
+        val flow = flow<Int> {
+            for (i in 1..3) {
+                delay(100)
+                emit(i)
+                Log.e(TAG, "flowDemo11: Emitting $i\t${Thread.currentThread().name}")
+            }
+        }
+        val time = measureTimeMillis {
+            flow.collect {
+                delay(300)
+                Log.e(TAG, "flowDemo11: Collect $it\t${Thread.currentThread().name}")
+            }
+        }
+        Log.e(TAG, "flowDemo11: cost $time ms\t${Thread.currentThread().name}")
+        //结果：(100+300)*3=1200ms
+        //flowDemo11: Collect 1	main
+        //flowDemo11: Emitting 1	main
+        //flowDemo11: Collect 2	main
+        //flowDemo11: Emitting 2	main
+        //flowDemo11: Collect 3	main
+        //flowDemo11: Emitting 3	main
+        //flowDemo11: cost 1211 ms	main
+    }
+
+    //flowDemo11优化一下
+    //处理背压的方式一：加长管子，加缓冲
+    //buffer：并发运行流中发射元素的代码
+    fun flowDemo12() = runBlocking {
+        val flow = flow<Int> {
+            for (i in 1..3) {
+                delay(100)
+                emit(i)
+                Log.e(TAG, "flowDemo11: Emitting $i\t${Thread.currentThread().name}")
+            }
+        }
+        val time = measureTimeMillis {
+            flow
+                //当必须更改CoroutineDispatcher时，flowOn操作符使用了相同的缓冲机制，但是buffer函数显式地请求缓冲而不改变执行上下文
+                //.flowOn(Dispatchers.Default)//并行发射的话也可以使用flowOn，更改流发射的上下文
+                .buffer(50)//加缓冲，加长管子来应对背压
+                .collect {
+                    delay(300)
+                    Log.e(TAG, "flowDemo11: Collect $it\t${Thread.currentThread().name}")
+                }
+        }
+        Log.e(TAG, "flowDemo11: cost $time ms\t${Thread.currentThread().name}")
+        //结果：100+300*3=1000
+        //flowDemo11: Emitting 1	main
+        //flowDemo11: Emitting 2	main
+        //flowDemo11: Emitting 3	main
+        //flowDemo11: Collect 1	main
+        //flowDemo11: Collect 2	main
+        //flowDemo11: Collect 3	main
+        //flowDemo11: cost 1014 ms	main
+    }
+
+    //处理背压的方式二
+    //conflate：合并发射项，不对每个值进行处理
+    fun flowDemo13() = runBlocking {
+        val flow = flow<Int> {
+            for (i in 1..3) {
+                delay(100)
+                emit(i)
+                Log.e(TAG, "flowDemo11: Emitting $i\t${Thread.currentThread().name}")
+            }
+        }
+        val time = measureTimeMillis {
+            flow
+                .conflate()
+                .collect {
+                    delay(300)
+                    Log.e(TAG, "flowDemo11: Collect $it\t${Thread.currentThread().name}")
+                }
+        }
+        Log.e(TAG, "flowDemo11: cost $time ms\t${Thread.currentThread().name}")
+        //结果：合并发射项，不对每个值进行处理，所以会漏掉部分发射的值
+        //flowDemo11: Emitting 1	main
+        //flowDemo11: Emitting 2	main
+        //flowDemo11: Emitting 3	main
+        //flowDemo11: Collect 1	main
+        //flowDemo11: Collect 3	main
+        //flowDemo11: cost 727 ms	main
+    }
+
+    //处理背压的方式三
+    //collectLatest：取消并重新发射最后一个值
+    fun flowDemo14() = runBlocking {
+        val flow = flow<Int> {
+            for (i in 1..3) {
+                delay(100)
+                emit(i)
+                Log.e(TAG, "flowDemo11: Emitting $i\t${Thread.currentThread().name}")
+            }
+        }
+        val time = measureTimeMillis {
+            flow
+                .collectLatest {
+                    delay(300)
+                    Log.e(TAG, "flowDemo11: Collect $it\t${Thread.currentThread().name}")
+                }
+        }
+        Log.e(TAG, "flowDemo11: cost $time ms\t${Thread.currentThread().name}")
+        //结果：只接收了最后一个值
+        //flowDemo11: Emitting 1	main
+        //flowDemo11: Emitting 2	main
+        //flowDemo11: Emitting 3	main
+        //flowDemo11: Collect 3	main
+        //flowDemo11: cost 641 ms	main
+    }
+
+    //操作符
+    //过渡流操作符
+    //可以使用操作符转换流，就像使用集合与序列一样
+    //过渡流操作符应用于上游流，并返回下游流
+    //这些操作符也是冷操作符，就像流一样。这类操作符本身不是挂起函数
+    //它运行的速度很快，返回新的转换流的定义
+    //转换操作符
+    fun flowDemo15() = runBlocking {
+        Log.e(TAG, "*******map转换操作符************\n")
+        (1..3).asFlow()
+            .map { performRequest(it) }
+            .collect { Log.e(TAG, "map转换后：$it") }
+        Log.e(TAG, "*******transform转换操作符************\n")
+        (1..3).asFlow()
+            .transform {
+                emit("post request $it")
+                emit(performRequest(it))
+            }
+            .collect { Log.e(TAG, "transform转换后：$it") }
+        //结果：
+        //map转换后：response 1
+        //map转换后：response 2
+        //map转换后：response 3
+        //transform转换后：post request 1
+        //transform转换后：response 1
+        //transform转换后：post request 2
+        //transform转换后：response 2
+        //transform转换后：post request 3
+        //transform转换后：response 3
+    }
+
+    suspend fun performRequest(request: Int): String {
+        delay(1000)
+        return "response $request"
+    }
+
+    //限长操作符 take
+    fun flowDemo16() = runBlocking {
+        flow<Int> {
+            try {
+                emit(1)
+                emit(2)
+                Log.e(TAG, "flowDemo16: This line will not execute")
+                emit(3)
+            } catch (e: Exception) {
+                Log.e(TAG, "flowDemo16: $e")
+            } finally {
+                Log.e(TAG, "flowDemo16: Finally in numbers")
+            }
+        }
+            .take(2)
+            .collect { Log.e(TAG, "flowDemo16: $it") }
+        //结果：不会崩溃
+        //flowDemo16: 1
+        //flowDemo16: 2
+        //flowDemo16: kotlinx.coroutines.flow.internal.AbortFlowException: Flow was aborted, no more elements needed
+        //flowDemo16: Finally in numbers
+    }
+
+    //末端流操作符
+    //末端操作符是在流上用于启动流收集的挂起函数。collect是最基础的末端操作符，但是
+    //还有另外一些更方便使用的末端操作符：
+    //1)转化为各种集合，例如toList与toSet。
+    //2)获取第一个（first）值与确保流发射单个（single)值的操作符。
+    //3)使用reduce与fold将流规约到单个值。
+    fun flowDemo17() = runBlocking {
+        //计算1到5每个数的平方和
+        val sum = (1..5).asFlow()
+            .map { it * it }
+            .reduce { a, b -> a + b }
+        Log.e(TAG, "flowDemo17: $sum")//55
     }
 }

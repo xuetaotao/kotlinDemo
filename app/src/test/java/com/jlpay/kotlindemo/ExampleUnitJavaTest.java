@@ -3,6 +3,7 @@ package com.jlpay.kotlindemo;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExampleUnitJavaTest {
@@ -11,6 +12,48 @@ public class ExampleUnitJavaTest {
     public void hj01() {
         heapSort(new int[]{3, 2, 5, 8, 1});
     }
+
+
+    public void search(int[] arr, int k) {
+        Arrays.sort(arr);
+        int mid = arr.length / 2;
+        int top = arr.length - 1;
+        int bottom = 0;
+        while (true) {
+            if (arr[mid] == k) {
+                break;
+            }
+            if (arr[mid] > k) {
+                top = mid;
+            } else if (arr[mid] < k) {
+                bottom = mid;
+            }
+            mid = (top - bottom) / 2;
+        }
+    }
+
+
+    public void strFind(String str, Character character) {
+        int index = str.indexOf(character);
+    }
+
+
+    public static class AA {
+
+        public static AA aa;
+
+        public static AA getInstance() {
+            if (aa == null) {
+                synchronized (AA.class) {
+                    if (aa == null) {
+                        aa = new AA();
+                    }
+                }
+            }
+            return aa;
+        }
+    }
+
 
     public void heapSort(int[] arr) {
         if (arr == null || arr.length < 2) {
@@ -67,22 +110,22 @@ public class ExampleUnitJavaTest {
     public static void hj48() {
 //        Scanner scanner = new Scanner(System.in);
 //        while (scanner.hasNext()) {
-            int num = 5;//输入链表结点个数
-            int headValue = 2;//输入头结点的值
-            int[] input = new int[]{3, 2, 4, 3, 5, 2, 1, 4};
-            List<Integer> list = new ArrayList<>();
-            list.add(headValue);
-            for (int i = 0; i < num - 1; i++) {
-                int nextValue = input[i];
-                int curValue = input[i+1];
-                int index = list.indexOf(curValue);
-                list.add(index + 1, nextValue);
-            }
-            int removeValue = 3;
-            list.remove((Integer) removeValue);
-            for (Integer temp : list) {
-                System.out.print(temp + " ");
-            }
+        int num = 5;//输入链表结点个数
+        int headValue = 2;//输入头结点的值
+        int[] input = new int[]{3, 2, 4, 3, 5, 2, 1, 4};
+        List<Integer> list = new ArrayList<>();
+        list.add(headValue);
+        for (int i = 0; i < num - 1; i++) {
+            int nextValue = input[i];
+            int curValue = input[i + 1];
+            int index = list.indexOf(curValue);
+            list.add(index + 1, nextValue);
+        }
+        int removeValue = 3;
+        list.remove((Integer) removeValue);
+        for (Integer temp : list) {
+            System.out.print(temp + " ");
+        }
 //        }
     }
 

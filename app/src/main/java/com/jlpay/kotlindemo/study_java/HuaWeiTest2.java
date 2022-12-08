@@ -40,6 +40,7 @@ public class HuaWeiTest2 {
     /**
      * HJ50 四则运算
      * 先算括号里面的，再算乘除，最后算加减
+     * 未完成
      */
     public static void hj50() {
         Scanner scanner = new Scanner(System.in);
@@ -804,6 +805,19 @@ public class HuaWeiTest2 {
 
     //**********************************简单(不看答案可以做对)***************************************************
 
+    /**
+     * HJ51 输出单向链表中倒数第k个结点
+     * 未完成
+     */
+    public static void hj51() {
+        Scanner scanner = new Scanner(System.in);
+        int nodeNum = scanner.nextInt();
+        for (int i = 0; i < nodeNum; i++) {
+            int nextInt = scanner.nextInt();
+            ListNode head = new ListNode(nextInt);
+        }
+        int k = scanner.nextInt();
+    }
 
     public static void hj48Two() {
         Scanner scanner = new Scanner(System.in);

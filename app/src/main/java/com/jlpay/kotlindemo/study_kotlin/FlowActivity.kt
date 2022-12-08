@@ -23,7 +23,7 @@ class FlowActivity : AppCompatActivity() {
 
     fun onClickTest(view: View) {
 //        multipleValues3()
-        flowDemo17()
+        flowDemo27()
     }
 
     //使用集合返回多个值，但不是异步
@@ -512,5 +512,231 @@ class FlowActivity : AppCompatActivity() {
             .map { it * it }
             .reduce { a, b -> a + b }
         Log.e(TAG, "flowDemo17: $sum")//55
+    }
+
+    //组合操作符zip
+    //就像Kotlin标准库中的Sequence.zip扩展函数一样，流拥有一个zip操作符用于组合两个流中的相关值
+    fun flowDemo18() = runBlocking {
+        val nums = (1..3).asFlow()
+        val strs = flowOf("one", "two", "three")
+        nums.zip(strs) { a, b ->
+            "$a-->$b"
+        }.collect {
+            Log.e(TAG, "flowDemo18: $it")
+        }
+        //结果：
+        //flowDemo18: 1-->one
+        //flowDemo18: 2-->two
+        //flowDemo18: 3-->three
+    }
+
+    //组合操作符zip
+    fun flowDemo19() = runBlocking {
+        val nums = (1..3).asFlow().onEach { delay(300) }
+        val strs = flowOf("one", "two", "three").onEach { delay(500) }
+        val startTime = System.currentTimeMillis()
+        nums.zip(strs) { a, b ->
+            "$a-->$b"
+        }.collect {
+            Log.e(TAG, "flowDemo19: $it at ${System.currentTimeMillis() - startTime} ms from start")
+        }
+        //结果：可以看出，每一次数据组合，速度快的会等待速度慢的执行完后才一起继续往下执行
+        //flowDemo19: 1-->one at 510 ms from start
+        //flowDemo19: 2-->two at 1012 ms from start
+        //flowDemo19: 3-->three at 1516 ms from start
+    }
+
+    //展平操作符（其实就是RxJava的 flatmap 操作符应用）
+    //流表示异步接收的值序列，所以有这种常见场景：每个值都会触发对另一个值序列的请求
+    //然而由于流具有异步的性质，因此需要不同的展平模式(就是后一个网络请求依赖前一个网络请求结果的场景)，
+    //为此存在一系列流展平操作符：
+    //flatMapConcat 连接模式；  flatMapMerge 合并模式；  flatMapLatest 最新展平模式（适用场景极少）；
+    @OptIn(FlowPreview::class)
+    fun flowDemo20() = runBlocking {
+        val startTime = System.currentTimeMillis()
+        (1..3).asFlow()
+            .onEach { delay(100) }
+            .flatMapConcat { requestFlow(it) }
+            .collect {
+                Log.e(
+                    TAG,
+                    "flowDemo20: $it at ${System.currentTimeMillis() - startTime} ms from start"
+                )
+            }
+        //结果：
+        //flowDemo20: 1：First at 110 ms from start
+        //flowDemo20: 1：Second at 612 ms from start
+        //flowDemo20: 2：First at 714 ms from start
+        //flowDemo20: 2：Second at 1216 ms from start
+        //flowDemo20: 3：First at 1318 ms from start
+        //flowDemo20: 3：Second at 1821 ms from start
+    }
+
+    //flatMapMerge 合并模式；
+    @OptIn(FlowPreview::class)
+    fun flowDemo21() = runBlocking {
+        val startTime = System.currentTimeMillis()
+        (1..3).asFlow()
+            .onEach { delay(100) }
+            .flatMapMerge { requestFlow(it) }
+            .collect {
+                Log.e(
+                    TAG,
+                    "flowDemo20: $it at ${System.currentTimeMillis() - startTime} ms from start"
+                )
+            }
+        //结果：
+        //flowDemo20: 1：First at 118 ms from start
+        //flowDemo20: 2：First at 218 ms from start
+        //flowDemo20: 3：First at 319 ms from start
+        //flowDemo20: 1：Second at 619 ms from start
+        //flowDemo20: 2：Second at 719 ms from start
+        //flowDemo20: 3：Second at 821 ms from start
+    }
+
+    //flatMapLatest 最新展平模式（适用场景极少）；
+    @OptIn(FlowPreview::class)
+    fun flowDemo22() = runBlocking {
+        val startTime = System.currentTimeMillis()
+        (1..3).asFlow()
+            .onEach { delay(100) }
+            .flatMapLatest { requestFlow(it) }
+            .collect {
+                Log.e(
+                    TAG,
+                    "flowDemo20: $it at ${System.currentTimeMillis() - startTime} ms from start"
+                )
+            }
+        //结果：
+        //flowDemo20: 1：First at 115 ms from start
+        //flowDemo20: 2：First at 217 ms from start
+        //flowDemo20: 3：First at 321 ms from start
+        //flowDemo20: 3：Second at 822 ms from start
+    }
+
+    fun requestFlow(i: Int): Flow<String> = flow<String> {
+        emit("$i：First")
+        delay(500)
+        emit("$i：Second")
+    }
+
+    //流的异常处理
+    //当运算符中的发射器或代码抛出异常时，有几种处理异常的方法：
+    //try/catch块（上下游都能捕获异常，更适合下游使用）
+    //catch函数（上游捕获异常）
+    fun flowDemo23() = runBlocking {
+        //上游
+        val flow = flow<Int> {
+            for (i in 1..3) {
+                Log.e(TAG, "flowDemo23: Emitting $i")
+                emit(i)
+            }
+        }
+        //下游
+        try {
+            flow.collect {
+                Log.e(TAG, "flowDemo23: $it")
+                check(it <= 1) {
+                    "Collected $it"
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "flowDemo23: caught exception is $e")
+        }
+        //下游不加try..catch的结果：会崩溃，Caused by: java.lang.IllegalStateException: Collected 2
+        //flowDemo23: Emitting 1
+        //flowDemo23: 1
+        //flowDemo23: Emitting 2
+        //flowDemo23: 2
+        //下游加try..catch的结果：不会崩溃
+        //flowDemo23: Emitting 1
+        //flowDemo23: 1
+        //flowDemo23: Emitting 2
+        //flowDemo23: 2
+        //flowDemo23: caught exception is java.lang.IllegalStateException: Collected 2
+    }
+
+    //catch函数（上游捕获异常），try/catch块也可以捕获上游异常
+    fun flowDemo24() = runBlocking {
+        flow {
+            emit(1)
+            throw ArithmeticException("Div 0")
+        }
+            .catch {
+                Log.e(TAG, "flowDemo24: caught exception is $e")
+                emit(10)//也可以不加这个默认值处理
+            }
+            .flowOn(Dispatchers.IO)
+            .collect { Log.e(TAG, "flowDemo24: $it") }
+        //不加catch的结果：会崩溃，Caused by: java.lang.ArithmeticException: Div 0
+        //flowDemo24: 1
+
+        //加catch的结果：不会崩溃
+        //flowDemo24: 1
+        //flowDemo24: caught exception is function method3 (Kotlin reflection is not available)
+        //flowDemo24: 10
+    }
+
+    //流的完成
+    //当流收集完成时（普通情况或异常情况），它可能需要执行一个动作
+    //命令式finally
+    //onCompletion声明式处理
+    fun flowDemo25() = runBlocking {
+        val flow = (1..3).asFlow()
+        try {
+            flow.collect {
+                Log.e(TAG, "flowDemo25: $it")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "flowDemo23: caught exception is $e")
+        } finally {
+            Log.e(TAG, "flowDemo25: Done")
+        }
+        //结果：
+        //flowDemo25: 1
+        //flowDemo25: 2
+        //flowDemo25: 3
+        //flowDemo25: Done
+    }
+
+    fun flowDemo26() = runBlocking {
+        val flow = (1..3).asFlow()
+        flow
+            .onCompletion { Log.e(TAG, "flowDemo26: Done") }
+            .collect {
+                Log.e(TAG, "flowDemo26: $it")
+            }
+        //结果：
+        //flowDemo26: 1
+        //flowDemo26: 2
+        //flowDemo26: 3
+        //flowDemo26: Done
+    }
+
+    fun flowDemo27() = runBlocking {
+        val flow = flow {
+            emit(1)
+            throw RuntimeException("HAHAHA")
+        }
+        flow
+            //可以拿到非正常结束的异常信息(不管上游还是下游的都可以)，但是并不会捕获，所以有异常时还是会崩溃
+            .onCompletion {
+                it?.let { Log.e(TAG, "flowDemo27: 异常结束了： $it") }
+                Log.e(TAG, "flowDemo27: Done")
+            }
+            //可以用catch来进行捕获上游的异常，就不会崩溃了；下游用try...catch
+            .catch {
+                Log.e(TAG, "flowDemo27: caught exception is $e")
+                emit(10)//也可以不加这个默认值处理
+            }
+            .collect {
+                Log.e(TAG, "flowDemo27: $it")
+            }
+        //结果：
+        //flowDemo27: 1
+        //flowDemo27: 异常结束了： java.lang.RuntimeException: HAHAHA
+        //flowDemo27: Done
+        //flowDemo27: caught exception is function method3 (Kotlin reflection is not available)
+        //flowDemo27: 10
     }
 }

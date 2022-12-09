@@ -33,28 +33,6 @@ public class ExampleUnitJavaTest {
     }
 
 
-    public void strFind(String str, Character character) {
-        int index = str.indexOf(character);
-    }
-
-
-    public static class AA {
-
-        public static AA aa;
-
-        public static AA getInstance() {
-            if (aa == null) {
-                synchronized (AA.class) {
-                    if (aa == null) {
-                        aa = new AA();
-                    }
-                }
-            }
-            return aa;
-        }
-    }
-
-
     public void heapSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;

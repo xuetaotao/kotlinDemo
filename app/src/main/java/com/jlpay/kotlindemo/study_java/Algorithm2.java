@@ -45,6 +45,7 @@ public class Algorithm2 {
      * 堆排序
      * 时间复杂度：O(N*logN)，空间复杂度：O(1)，不具有稳定性
      * https://www.runoob.com/w3cnote/heap-sort.html
+     * int a = (0 - 1) / 2;//结果是0
      */
     public void heapSort(int[] arr) {
         if (arr == null || arr.length < 2) {

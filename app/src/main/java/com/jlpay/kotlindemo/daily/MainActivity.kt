@@ -195,6 +195,7 @@ class MainActivity : BaseMediaActivity() {
         addButton("Kotlin协程：CoroutinesActivity", CoroutinesActivity::class.java)
         addButton("Kotlin协程：MainScopeActivity", MainScopeActivity::class.java)
         addButton("Kotlin协程：Flow学习", FlowActivity::class.java)
+        addButton("Kotlin协程：Channel学习", ChannelActivity::class.java)
 
         //Android基础
         addButton("Android基础：文件管理器(未完成)", FileManagerActivity::class.java)

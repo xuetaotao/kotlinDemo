@@ -1,15 +1,17 @@
-package com.jlpay.kotlindemo;
+package com.jlpay.kotlindemo.study_java;
 
-import org.junit.Test;
+/**
+ * 算法的逐步学习
+ * 这块和Algorithm2的区别是：
+ * Algorithm2的代码主要是跟着老师上课学习或者刷题百度等找到的标准答案
+ * 而Algorithm3的代码主要是自己在掌握Algorithm2中的代码时候，自己默写的，中间会有些代码细节不一样
+ */
+public class Algorithm3 {
 
-public class ExampleUnitJavaTest {
-
-    @Test
-    public void hj01() {
-        heapSort(new int[]{3, 2, 5, 8, 1});
-    }
-
-    //时间复杂度：O(N*logN) 空间复杂度：O(1)
+    /**
+     * 堆排序
+     * 时间复杂度：O(N*logN) 空间复杂度：O(1)
+     */
     public void heapSort(int[] arr) {
         if (arr == null || arr.length < 2) {
             return;

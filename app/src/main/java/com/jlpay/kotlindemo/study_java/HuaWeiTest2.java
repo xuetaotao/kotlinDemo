@@ -807,16 +807,32 @@ public class HuaWeiTest2 {
 
     /**
      * HJ51 输出单向链表中倒数第k个结点
-     * 未完成
+     * 链表 双指针
      */
     public static void hj51() {
         Scanner scanner = new Scanner(System.in);
-        int nodeNum = scanner.nextInt();
-        for (int i = 0; i < nodeNum; i++) {
-            int nextInt = scanner.nextInt();
-            ListNode head = new ListNode(nextInt);
+        while (scanner.hasNext()) {
+            int nodeNum = scanner.nextInt();
+            ListNode head = new ListNode(-1);
+            ListNode dummy = head;
+            for (int i = 0; i < nodeNum; i++) {
+                int nextInt = scanner.nextInt();
+                ListNode temp = new ListNode(nextInt);
+                head.next = temp;
+                head = head.next;
+            }
+            ListNode fast = dummy.next;
+            ListNode slow = dummy.next;
+            int k = scanner.nextInt();
+            for (int i = 0; i < k; i++) {
+                fast = fast.next;
+            }
+            while (fast != null) {
+                fast = fast.next;
+                slow = slow.next;
+            }
+            System.out.println(slow.val);
         }
-        int k = scanner.nextInt();
     }
 
     public static void hj48Two() {

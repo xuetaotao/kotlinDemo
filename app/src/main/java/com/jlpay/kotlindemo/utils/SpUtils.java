@@ -1,6 +1,8 @@
 package com.jlpay.kotlindemo.utils;
 
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -8,7 +10,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
-import static android.content.Context.MODE_PRIVATE;
+import com.google.gson.Gson;
 
 
 public class SpUtils {
@@ -186,6 +188,23 @@ public class SpUtils {
 
         encryptPut(key, value);
     }
+
+    public static void setPrefObj(String key, final Object defaultValue) {
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = gson.toJson(defaultValue);
+        settings.edit().putString(key, json).apply();
+    }
+
+    public static <T> T getPrefObj(final String key, final Class<T> clazz) {
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = settings.getString(key, null);
+        if (!TextUtils.isEmpty(json)) {
+            return new Gson().fromJson(json, clazz);
+        }
+        return null;
+    }
+
 
     public static long getPrefLong(final String key, final long defaultValue) {
 //        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);

@@ -59,12 +59,11 @@ class ImageViewActivity : AppCompatActivity() {
     private val TAG: String = ImageViewActivity::class.java.simpleName
 
     private val images: IntArray = intArrayOf(
-        R.mipmap.zhizhuxia,
-        R.mipmap.baby,
-        R.mipmap.cashout
+        R.mipmap.zhizhuxia, R.mipmap.baby, R.mipmap.cashout
     )
     private var currentImg: Int = 0
     private var alpha: Int = 255//定义图片的初始透明度
+    private lateinit var tv_htmlView: TextView
 
     companion object {
         @JvmStatic
@@ -83,7 +82,22 @@ class ImageViewActivity : AppCompatActivity() {
         quickContactbadge()
         //可折叠的悬浮按钮略，FloatingActionButton
         downLoadImg()
+
+        tv_htmlView = findViewById(R.id.tv_htmlView)
         htmlText()
+    }
+
+    //动画，测试代码
+    //属性动画的原理
+    fun animationTest() {
+        var newTranslation: Float = 0F
+        val runnable = Runnable {
+            newTranslation += 5
+            tv_htmlView.translationX = newTranslation
+        }
+        for (i in 1..100) {
+            tv_htmlView.postDelayed(runnable, (i * 10).toLong())
+        }
     }
 
     /**
@@ -91,7 +105,6 @@ class ImageViewActivity : AppCompatActivity() {
      * 两种方式
      */
     fun htmlText() {
-        val tv_htmlView: TextView = findViewById(R.id.tv_htmlView)
         val htmlStr =
             "\u003Cp\u003E尊敬的嘉联合伙人：\u003C/p\u003E\n\u003Cdiv style = \"margin-left: 2em;\"\u003E\n\u003Cp\u003E为保障您与嘉联支付业务合作的健康稳定发展，防范分润提现中存在的虚开、多开增值税发票现象，近期平台开票政策将做出如下调整：\u003C/p\u003E\n\u003Cp\u003E1.自通知发布之日起，嘉联支付对预开发票金额将按“本月预开发票额度不得超过1.5倍上月分润金额”标准进行严格审核。\u003C/p\u003E\n\u003Cp\u003E2.自2021年5月1日起，您在平台提现分润收益前（含分润账户、合作账户、直发账户、合作直发账户），需提供同等金额的含6%税率的增值税专用发票。否则嘉联支付有权退回您所提交的分润发票或从分润收益中扣除税额差额。\u003C/p\u003E\n\u003Cp\u003E请您知悉。如有疑问，请垂询952005客服热线。\u003C/p\u003E\n\u003Cp\u003E感谢您的支持！\u003C/p\u003E\n\u003Cp\u003E\u003Cimg src = \"https://iknow-pic.cdn.bcebos.com/d53f8794a4c27d1e904d81311ad5ad6edcc438df?x-bce-process%3Dimage%2Fresize%2Cm_lfit%2Cw_600%2Ch_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_jpg\"/\u003E\u003C/p\u003E\n\u003C/div\u003E "
 
@@ -99,11 +112,10 @@ class ImageViewActivity : AppCompatActivity() {
         //        tv_htmlView.setText(Html.fromHtml(htmlStr));
         tv_htmlView.setText(
             Html.fromHtml(
-                htmlStr,
-                ImageGetterUtils.MyImageGetter(this, tv_htmlView),
-                null
+                htmlStr, ImageGetterUtils.MyImageGetter(this, tv_htmlView), null
             )
         )
+
 
         //方式二：
 //        Thread(Runnable {
@@ -146,38 +158,33 @@ class ImageViewActivity : AppCompatActivity() {
 
     internal object ImageGetterUtils {
         fun getImageGetter(
-            context: Context?,
-            textView: TextView
+            context: Context?, textView: TextView
         ): MyImageGetter {
             return MyImageGetter(context, textView)
         }
 
         class MyImageGetter(
-            private val context: Context?,
-            private val textView: TextView
-        ) :
-            ImageGetter {
+            private val context: Context?, private val textView: TextView
+        ) : ImageGetter {
             private var urlDrawable: URLDrawable? = null
             override fun getDrawable(source: String): Drawable {
                 Log.e("source", "source:$source")
                 urlDrawable = URLDrawable()
-                Glide.with(context).load(source).asBitmap()
-                    .into(object : SimpleTarget<Bitmap?>() {
-                        override fun onResourceReady(
-                            resource: Bitmap?,
-                            glideAnimation: GlideAnimation<in Bitmap?>?
-                        ) {
-                            urlDrawable!!.bitmap2 = changeBitmapSize(resource)
-                            urlDrawable!!.setBounds(
-                                0,
-                                0,
-                                changeBitmapSize(resource).width,
-                                changeBitmapSize(resource).height
-                            )
-                            textView.invalidate()
-                            textView.text = textView.text //不加这句显示不出来图片，原因不详
-                        }
-                    })
+                Glide.with(context).load(source).asBitmap().into(object : SimpleTarget<Bitmap?>() {
+                    override fun onResourceReady(
+                        resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap?>?
+                    ) {
+                        urlDrawable!!.bitmap2 = changeBitmapSize(resource)
+                        urlDrawable!!.setBounds(
+                            0,
+                            0,
+                            changeBitmapSize(resource).width,
+                            changeBitmapSize(resource).height
+                        )
+                        textView.invalidate()
+                        textView.text = textView.text //不加这句显示不出来图片，原因不详
+                    }
+                })
                 return urlDrawable!!
             }
 
@@ -205,8 +212,7 @@ class ImageViewActivity : AppCompatActivity() {
                 val matrix = Matrix()
                 matrix.postScale(scaleWidth, scaleHeight)
                 //获取新的bitmap
-                bitmap =
-                    Bitmap.createBitmap(bitmap!!, 0, 0, width, height, matrix, true)
+                bitmap = Bitmap.createBitmap(bitmap!!, 0, 0, width, height, matrix, true)
                 bitmap.width
                 bitmap.height
                 Log.e("newWidth", "newWidth" + bitmap.width)
@@ -225,37 +231,33 @@ class ImageViewActivity : AppCompatActivity() {
         val imgUri =
             "https://iknow-pic.cdn.bcebos.com/d53f8794a4c27d1e904d81311ad5ad6edcc438df?x-bce-process%3Dimage%2Fresize%2Cm_lfit%2Cw_600%2Ch_800%2Climit_1%2Fquality%2Cq_85%2Fformat%2Cf_jpg"
         btnGetimg.setOnClickListener {
-            RetrofitClient.get()
-                .getImg(imgUri)
-                .map(object : Function<ResponseBody, Bitmap> {
-                    override fun apply(responseBody: ResponseBody): Bitmap {
-                        val byteStream = responseBody.byteStream()
-                        return BitmapFactory.decodeStream(byteStream)
-                    }
-                })
-                .doOnSubscribe(object : Consumer<Disposable> {
-                    override fun accept(t: Disposable?) {
-                        //TODO
-                    }
-                })
-                .subscribe(object : Observer<Bitmap> {
-                    override fun onComplete() {
-                        Log.e(TAG, "downLoadImg:onComplete")
-                    }
+            RetrofitClient.get().getImg(imgUri).map(object : Function<ResponseBody, Bitmap> {
+                override fun apply(responseBody: ResponseBody): Bitmap {
+                    val byteStream = responseBody.byteStream()
+                    return BitmapFactory.decodeStream(byteStream)
+                }
+            }).doOnSubscribe(object : Consumer<Disposable> {
+                override fun accept(t: Disposable?) {
+                    //TODO
+                }
+            }).subscribe(object : Observer<Bitmap> {
+                override fun onComplete() {
+                    Log.e(TAG, "downLoadImg:onComplete")
+                }
 
-                    override fun onSubscribe(d: Disposable) {
-                        Log.e(TAG, "downLoadImg:onSubscribe")
-                    }
+                override fun onSubscribe(d: Disposable) {
+                    Log.e(TAG, "downLoadImg:onSubscribe")
+                }
 
-                    override fun onNext(t: Bitmap) {
-                        Log.e(TAG, "downLoadImg:onNext")
-                        imageView.setImageBitmap(t)
-                    }
+                override fun onNext(t: Bitmap) {
+                    Log.e(TAG, "downLoadImg:onNext")
+                    imageView.setImageBitmap(t)
+                }
 
-                    override fun onError(e: Throwable) {
-                        Log.e(TAG, "downLoadImg:onError")
-                    }
-                })
+                override fun onError(e: Throwable) {
+                    Log.e(TAG, "downLoadImg:onError")
+                }
+            })
         }
     }
 

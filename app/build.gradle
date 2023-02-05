@@ -7,15 +7,15 @@ apply from: 'tinker-support.gradle'
 //apply plugin: 'com.jakewharton.hugo'
 
 android {
-    compileSdkVersion rootProject.ext.androidId.compileSdkVersion
-    buildToolsVersion rootProject.ext.androidId.buildToolsVersion
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId rootProject.ext.androidId.applicationId
-        minSdkVersion rootProject.ext.androidId.minSdkVersion
-        targetSdkVersion rootProject.ext.androidId.targetSdkVersion
-        versionCode rootProject.ext.androidId.versionCode
-        versionName rootProject.ext.androidId.versionName
+        applicationId "com.jlpay.kotlindemo"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true//开启多 Dex打包
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

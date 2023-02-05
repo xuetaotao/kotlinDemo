@@ -8,6 +8,7 @@ import android.media.AudioManager
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -59,8 +60,9 @@ class BroadcastReceiverActivity : AppCompatActivity() {
         val audioManager: AudioManager = getSystemService(Service.AUDIO_SERVICE) as AudioManager
         //手势
         GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onLongPress(e: MotionEvent?) {
+            override fun onLongPress(e: MotionEvent) {
                 super.onLongPress(e)
+                Log.e("BroadcastReceiver", "onLongPress: ", )
             }
         })
     }

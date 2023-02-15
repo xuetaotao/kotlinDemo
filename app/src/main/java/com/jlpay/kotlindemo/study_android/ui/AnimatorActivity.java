@@ -1,6 +1,7 @@
 package com.jlpay.kotlindemo.study_android.ui;
 
 import android.animation.Animator;
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
@@ -128,6 +129,10 @@ public class AnimatorActivity extends AppCompatActivity {
 
                     }
                 });
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(this,
+                "currentScale", 0, 100);
+        objectAnimator.setEvaluator(new ArgbEvaluator());//颜色属性计算的Evaluator
+        objectAnimator.start();
     }
 
     /**
